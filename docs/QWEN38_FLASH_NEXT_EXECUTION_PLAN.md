@@ -65,3 +65,85 @@ services per profile, and refuses to benchmark if a competing compute context
 remains.  Stop it safely with `systemctl --user stop
 qwen38-flash-next-gguf-cascade.service`; Hugging Face download resumption and
 the JSON state make a later restart safe.
+
+## Repository migration (2026-09-22)
+
+The suite's code, config, and evidence have been **copied** (not moved) to a new
+dedicated repo: `git@github.com:virtuanalytica/virtualv_llm.git` (private), commit
+`783fa5e`. The originals here are unchanged and remain authoritative until a
+deliberate cutover: the active `qwen38-flash-next-gguf-cascade.service` still
+points at this repo's absolute paths (`WorkingDirectory=`, `ExecStart=` in
+`infra/systemd/qwen38-flash-next-gguf-cascade.service`), so **do not** stop/relocate
+it mid-run. Cutover sequence for a future session: (1) let the current cascade reach
+a durable stopping point (winner selected, pruning done), (2) re-run the
+`virtualv_llm` repo's own `build_virtualv_llm_suite_backup.py`/result-sync to pick
+up the final rows, (3) repoint the systemd unit's `WorkingDirectory` at the new
+repo's checkout path, (4) only then remove the duplicated benchmark code from
+`numerai-signals` (never before the new repo's copy is verified running).
+
+## Engine/hardware selection strategy for the next candidates (not yet executed)
+
+Captured from a 2026-09-22 hardware-fit analysis, for use when selecting the next
+model+engine+placement combination to test. Disk headroom is currently tight
+(81GB free of 1.1TB at last check, 93% used) -- do not start a new multi-GiB model
+download without confirming free space first; the GGUF cascade above still has
+priority on the V100 pair via `/tmp/v100_exclusive.lock`.
+
+- **This is an interaction problem, not three independent factors.** The best
+  model on the wrong engine for this exact heterogeneous topology loses to a
+  mediocre model that fits well. Sweep as a combination grid (model x engine x
+  placement), not per-factor.
+- **Engine candidates for the heterogeneous 4-GPU pool** (16/20/32/32 GiB, three
+  generations, PCIe 3.0, no NVLink to CPU, Cascade Lake host):
+  - `llama.cpp` (current baseline): per-tensor placement (`--override-tensor` /
+    `-ot "exps=CUDA2,CUDA3"`), `--n-cpu-moe`, `--tensor-split`, KV-cache
+    quantization, mixed sm_70/86/89 support in one process.
+  - `ik_llama.cpp` (fork): purpose-built hybrid CPU+GPU MoE offload kernels,
+    reportedly 1.5-2x faster than mainline llama.cpp for DeepSeek-style
+    architectures in exactly this CPU+GPU-expert-offload scenario. Verify the
+    fork actually builds for sm_70 before relying on it -- architecture support
+    tends to lag mainline.
+  - `KTransformers`: **not promising on this host.** Its main advantage (AMX
+    kernels for expert GEMMs on CPU) requires Sapphire Rapids+; this host's Xeon
+    8259CL is Cascade Lake (AVX-512, no AMX), so only a fraction of the claimed
+    speedup would apply, and it places attention on a single GPU only.
+  - `vLLM`/`SGLang`: already ruled out (sm_80+ and homogeneous TP pools required).
+  - **MTP (multi-token prediction)** is a real multiplier (1.5-2x t/s) in hybrid
+    setups specifically because verification amortizes over the bandwidth-bound
+    CPU-expert path too. Qwen3.8, GLM-5.3, and DeepSeek-V4 each have an MTP head;
+    whether the GGUF stack already supports it per model needs to be tested, not
+    assumed.
+- **Model-architecture fit on this memory hierarchy:** MLA (DeepSeek) minimizes
+  KV-cache, freeing more V100 HBM for experts; GLM-5.3's hybrid sparse+linear
+  attention has an even smaller cache but a much younger GGUF implementation
+  (immature kernels can erase a theoretical advantage). Active-params x
+  quant-bits-per-token is the literal CPU-pool bandwidth load. On paper,
+  DeepSeek-V4-Flash (13B active, MLA, mature GGUF support) maps best onto this
+  hierarchy; GLM-5.3-Flash is the higher-uncertainty candidate.
+- **Hardware-specific placement rules for this exact host:** attention+KV on the
+  Ada card, helper layers on the A4000, expert tensors on the V100 pair (HBM2
+  ~1100 GB/s matters far more for MoE lookups than V100 compute weakness), rest
+  on CPU. Everything crosses PCIe 3.0 (~16 GB/s, no NVLink to CPU) -- pipeline
+  parallelism does not work here, so per-tensor placement (minimizing cross-PCIe
+  traffic per layer) is the right strategy, not tensor/pipeline parallelism.
+  **NUMA-bind CPU threads** (`--numa` in llama.cpp / `numactl`): with 2 sockets,
+  non-NUMA-aware expert placement can halve effective bandwidth -- flagged as the
+  single biggest free win not yet applied on this host. KV at `q8_0` frees HBM
+  for more expert tensors; the large page cache means CPU-side weights are read
+  from RAM, not re-read from SSD, once warm.
+- **Suggested next sweep** (after the current GGUF cascade reaches a stopping
+  point and disk space is confirmed): {Qwen3.8-Flash-Next IQ4_XS on 2xV100
+  (current baseline winner), DeepSeek-V4-Flash 0731 IQ3 hybrid, GLM-5.3-Flash
+  IQ3 hybrid} x {llama.cpp, ik_llama.cpp} x {2 tensor-placement configurations},
+  recording TG t/s, PP t/s, and quality per cell, with engine version and exact
+  flags pinned per row (a single `-ot` change can reorder the ranking).
+- **DeepSeek-V4-Flash 0731 status (checked 2026-09-22, incomplete):** the
+  304B-parameter `deepseek-ai/DeepSeek-V4-Flash-0731` repo is confirmed to exist
+  publicly with DSpark weights and stronger agentic scores than the prior
+  checkpoint, but no published GGUF/quant artifact implementing the specific
+  "3-bit hybrid, V100s-for-experts + Ada/A4000-for-attention-KV, rest CPU"
+  placement was found before this investigation was interrupted. This placement
+  is a **hypothesis to prove, not an assumed ~15-25 tok/s result** -- the
+  already-measured local DeepSeek-V4-Flash-REAP-150B Q2_K result (5.85 tok/s
+  under heavy CPU offload) is the only real local data point so far. Needs a
+  from-scratch GGUF-availability check before attempting.
