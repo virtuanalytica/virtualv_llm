@@ -184,3 +184,25 @@ Still unproven either way: no local run, no measured tok/s, no quality gate.
 This section only establishes that the artifacts and candidate engines exist;
 the "V100s for experts / Ada+A4000 for attention+KV / rest CPU" 3-bit hybrid
 placement itself remains an untested hypothesis.
+
+## GLM-5.3-Flash-NVFP4 via 1Cat-vLLM SM70 (checked 2026-09-22, NOT present locally)
+
+Verified against the installed `1cat-vllm==1.5.0` package
+(`/media/knight2/EDS2/envs/1cat-vllm-1.5.0/`): its
+`vllm/model_executor/models/` directory has no GLM-5.3-specific model file
+(only generic `glm4*`/`glm_ocr*`/`chatglm` families) -- PR #341 ("[Model] Add
+GLM-5.3-Flash NVFP4 support on SM70", confirmed merged to `main`) is **not**
+in this release. Getting it running here would need a build against a newer
+`main` checkout (or a cherry-pick), not just a config change.
+
+Separately, PR #341's own test plan targets **8xV100 TP4/PP2** with a
+**181GiB** checkpoint -- this host has only 2xV100 (+2 unrelated GPUs) and,
+even after clearing every disposable model, a realistic max disk budget well
+under 181GiB. The upstream validation doesn't map onto this topology at all;
+a working port here (if even possible with 2 V100s instead of 8) would need
+real engineering, not just following the PR's own recipe.
+
+Not pursued further tonight -- flagged for an explicit user decision on
+whether the engineering cost (build 1Cat-vLLM from `main`, then adapt the
+TP4/PP2 8-GPU path down to whatever this 4-GPU host can actually do) is worth
+it before spending time on it, rather than assumed.
