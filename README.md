@@ -63,3 +63,10 @@ for actual GPU runs.
 
 Licensed under Apache-2.0. Third-party models, datasets and runtimes retain
 their own licenses; consult `NOTICE` before redistributing them.
+
+Maintainers can assemble the raw evidence without copying it into Git:
+
+```bash
+python3 scripts/reporting/build_release_evidence.py \
+  --source /path/to/reports/lm_eval_runs
+```

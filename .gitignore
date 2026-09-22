@@ -37,3 +37,4 @@ infra/systemd/generated/
 htmlcov/
 dist/
 build/
+output/releases/
