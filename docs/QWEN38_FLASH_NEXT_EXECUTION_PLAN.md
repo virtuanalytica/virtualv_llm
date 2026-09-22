@@ -620,3 +620,62 @@ hours after that branch's last touch), the other session appears idle,
 but the plan's Fase 2/3 (which also need to edit `build_dual_v100_html.py`)
 are being approached carefully to avoid clobbering that work if it
 resumes.
+
+## Fase 2 complete, but with a real blocker found: `lm_eval_runs/` history is gone
+
+Implemented bottleneck t/s for mixture rows directly in
+`mixture_of_models.py`'s `main()` (not just the frontier script, so
+every caller benefits): `bottleneck_tokens_per_second` = min completion
+t/s across `ensemble_members`, also written to `completion_tokens_per_second`
+itself so `build_dual_v100_html.py`'s existing single-field read picks it
+up with zero changes there beyond a new legend note explaining the
+bottleneck assumption (min-of-members, not measured mixture throughput,
+real shared-hardware latency is higher). Verified with the unit tests
+and a rendered-HTML check (`mixture-optimized-2` shows `16.37`, matching
+`min(16.37, 22.44)` for the two GLM profiles).
+
+**Blocker hit trying to rerun `materialize_mixture_frontier.py`'s full
+exhaustive search (plan step 6):** `optimize_model_mixture.py --size 3`
+failed with `--size 3 exceeds 2 eligible models`. Root cause: `reports/
+lm_eval_runs/` -- the per-question sample logs every model's mixture
+recombination depends on (`mixture_of_models.py`'s `load_samples()`) --
+currently only contains the two directories from today's fresh GLM
+hertest. `stat` shows the whole `lm_eval_runs/` directory tree itself
+has a **Birth time of 2026-09-22 20:48**, i.e. it was wiped/recreated
+from scratch today, not gradually thinned. This directory is gitignored
+(`reports/lm_eval_runs/` in `.gitignore`, always was), so this did not
+happen via any commit -- it was a direct filesystem deletion, with no
+script in the repo that does this (checked `bootstrap_public_data.py`,
+only fetches a public HumanEval dataset; `build_release_evidence.py`
+only reads/archives from that path, doesn't delete). No backup or
+archive of the old logs was found anywhere on `/media/knight2/EDS2`.
+Best guess: manual disk cleanup (volume is 85% full, 157G free) by
+either the other active session (public-release prep, commit `a9fc274`,
+~21:31) or an unrelated process, sometime between ~20:48-21:31 today.
+**This is unconfirmed** -- flagged to the user rather than guessed at
+further.
+
+Practical consequence: a genuine exhaustive re-search across the full
+~30-model historical roster (as literally specified in the approved
+plan/user's choice) is currently impossible -- only GLM's two fresh
+profiles have recombinable sample logs. Worked around the immediate
+Fase 2 goal without depending on the missing data: backfilled
+`bottleneck_tokens_per_second`/`completion_tokens_per_second` directly
+into all 9 already-materialized mixture rows (`mixture-optimized-2..6`,
+`mixture-ultimate-6-explicit`, the 3 oldest `mixture-of-models-4-*`
+variants) using their already-recorded `ensemble_members` list against
+current solo t/s values -- no re-recombination needed, since those
+rows' scores were already finalized before the data loss. All 9 now
+show a real t/s in the rendered table. Did NOT attempt to regenerate
+the missing `lm_eval_runs/` history by re-running `well_known_suite.py`
+for all ~30 historical models -- that would cost many GPU-hours, far
+past the ~3h single-experiment ceiling, and duplicates work already
+done once. Left Fase 2's frontier-rerun step (materially advancing
+*beyond* the already-recorded 0.9586 record) undone pending user
+direction: options are (a) accept the existing frontier as final until
+enough NEW models get a fresh `well_known_suite.py` run (which naturally
+repopulates `lm_eval_runs/` for those going forward), (b) ask the other
+session whether it intentionally cleared this directory and why, or (c)
+accept a partial/GLM-only frontier search now. Committed and pushed
+(`47b6124`) rather than blocking further work on this decision, since
+the backfill already delivers the stated Fase 2 verification goal.
