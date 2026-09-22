@@ -471,7 +471,32 @@ leaving it untested.
 
 **This completes the approved plan's Fase 2** (frontier refresh + the
 explicit ultimate-mixture attempt). Current overall record: **0.9586**
-(`mixture-optimized-5`/`-6`, automatic search). Remaining plan items are
-Fase 3 (repo/dashboard relocation cutover, deferred until this work
-settles) and Fase 4 (public docs, already done; visibility/publish
-decision still pending explicit user go-ahead, not automatic).
+(`mixture-optimized-5`/`-6`, automatic search).
+
+## Fase 3: systemd cutover DONE
+
+Before cutting over, found and fixed two migration gaps that would have
+silently broken the service if missed: `benchmark_local_gguf_tp2.py` was
+missing tonight's `deepseek-v4-flash-0731-iq3xxs` MODELS entry (synced),
+and `infra/vllm_v100/` (1Cat-vLLM serving scripts) had never been copied
+here at all (synced). Verified `--dry-run` works from this repo's
+location before touching anything live. Confirmed the service was
+`inactive` (last run succeeded 12:57 today, no timer -- `Restart=on-
+failure` only, so no risk of an unexpected restart mid-cutover) via
+`systemctl --user status` first. Updated `infra/systemd/qwen38-flash-
+next-gguf-cascade.service`'s `WorkingDirectory` + both log paths to this
+repo, repointed the `~/.config/systemd/user/` symlink here (it previously
+pointed at numerai-signals' copy of the same file), `daemon-reload`d, and
+verified via `systemctl --user cat` that the live unit now reads from
+this repo. Service remains `enabled`/`inactive`, nothing was started.
+
+**Not yet done**: removing the now-duplicated benchmark code from
+numerai-signals, per the plan's own rule ("never before the cutover is
+verified working") -- the cutover is verified, but this is a separate,
+visible deletion across many files; flagging for explicit go-ahead rather
+than doing it automatically in the same pass as the cutover itself.
+
+Remaining plan items: the numerai-signals cleanup above, and Fase 4's
+publish/visibility decision (public docs already written; keeping the
+repo private vs. making it public is still an explicit, pending user
+decision, not automatic).
