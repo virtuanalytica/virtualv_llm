@@ -1,0 +1,19 @@
+[Unit]
+Description=VirtualV GLM-5.3 REAP50 reasoning-fix re-test guardian
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/media/knight2/EDS2/projects/virtualv_llm
+ExecStart=/usr/bin/flock /tmp/v100_exclusive.lock /usr/bin/python3 scripts/benchmarks/resume_glm53_reasoning_retest.py
+Restart=on-failure
+RestartSec=5min
+TimeoutStartSec=infinity
+TimeoutStopSec=90s
+KillMode=control-group
+StandardOutput=append:/media/knight2/EDS2/projects/virtualv_llm/reports/benchmark_logs/glm53_reap50_retest.service.log
+StandardError=append:/media/knight2/EDS2/projects/virtualv_llm/reports/benchmark_logs/glm53_reap50_retest.service.log
+
+[Install]
+WantedBy=default.target
