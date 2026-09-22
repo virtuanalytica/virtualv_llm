@@ -569,3 +569,54 @@ only thing any process writes to.
 This closes the gap that was blocking the numerai-signals code cleanup:
 that item can now proceed once given the go-ahead, without risking a
 divergent second dashboard.
+
+## GLM reasoning_effort hertest: CONFIRMED, massive improvement
+
+First hertest attempt (post `--chat-template-kwargs` fix) silently no-
+opped: `row_complete()` saw the OLD pre-fix row still had valid numbers,
+skipped the actual rerun, and pruned the freshly re-downloaded 67GB of
+weights. Root-caused and fixed with a `--force` flag on `run_glm53_
+reap50_cascade.py` that bypasses the stale-result skip (commit
+`e48872b`/`4b8f087` on `main` via a git-worktree cherry-pick -- see the
+coordination note below for why the worktree was needed). Deleted the
+two stale rows from `well_known_suite_20260917.json` first so `--force`
+had nothing stale to match against either.
+
+Reran with `--force`. Confirmed via `ps aux` that the live llama-server
+process actually carried `--chat-template-kwargs {"reasoning_effort":
+"low"}`. Results, dramatically different from the pre-fix run:
+
+| | v100 (old -> new) | allfour (old -> new) |
+|---|---|---|
+| gsm8k | 0.66 -> 0.92 | 0.68 -> 0.92 |
+| bbh | 0.667 -> 0.875 | 0.75 -> 0.833 |
+| mmlu | 0.606 -> 0.675 | 0.60 -> 0.625 |
+| **humaneval** | **0.05 -> 0.90** | **0.125 -> 0.85** |
+| **composite** | **0.496 -> 0.8425** | **0.539 -> 0.8071** |
+
+GLM moved from dead last among solo models to rank 12 of ~30 (0.8425,
+just behind `qwen38-27b-q4` at 0.8511, ahead of `qwen36-35b-a3b-nvfp4`).
+Fully confirms the `reasoning_effort` root-cause hypothesis: HumanEval's
+512-token budget was indeed being consumed by the forced max-effort
+think block before the model reached actual code.
+
+## Coordination note: a second, active session on `virtualv_llm`
+
+While starting this hertest, found the checked-out `virtualv_llm`
+working copy had been switched to a branch named `virtualv_llm` (not
+`main`) with fresh, uncommitted changes (LICENSE, NOTICE, `.github/`,
+`.env.example`, tests, `README.md`, and -- importantly --
+`scripts/benchmarks/eval_suite.py` and `build_dual_v100_html.py`) last
+touched only ~2-3 minutes before I noticed, clearly an active parallel
+session preparing this repo for public release. Did not touch, stash, or
+overwrite any of it. Instead created a throwaway `git worktree` checked
+out at `main` to cherry-pick just the `--force` fix there, so the
+repo-wide crontab/systemd infrastructure (which points at the original
+`virtualv_llm` checkout path, currently on that other branch) keeps
+working either way. Claimed a coordination lease
+(`~/.claude/coordination/coord.py claim virtualv_llm`) so any other
+session sees this work is in flight. As of the hertest finishing (2+
+hours after that branch's last touch), the other session appears idle,
+but the plan's Fase 2/3 (which also need to edit `build_dual_v100_html.py`)
+are being approached carefully to avoid clobbering that work if it
+resumes.
