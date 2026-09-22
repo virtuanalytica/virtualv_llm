@@ -4,7 +4,7 @@ Documenteigenaar: VirtualV AI Assurance
 Versie: 1.0  
 Peildatum: 22 september 2026  
 Status: operationele standaard van de huidige implementatie  
-Classificatie: intern gebruik
+Classificatie: publiek (onderdeel van de virtualv_llm-repository)
 
 ## 1. Doel en reikwijdte
 
@@ -241,10 +241,10 @@ definitieve verwijdering van modelgewichten moeten aantoonbaar worden gereviewd.
 
 ## A.1 Voorbereiding
 
-Werk vanuit de repository:
+Werk vanuit de repository (het pad naar je eigen kloon):
 
 ```bash
-cd /media/knight2/EDS2/projects/numerai-signals
+cd virtualv_llm
 ```
 
 Controleer vóór iedere handmatige actie de actieve services, GPU-processen,
@@ -254,7 +254,7 @@ vrije ruimte en repositorywijzigingen:
 systemctl --user status qwen38-flash-next-gguf-cascade.service --no-pager
 nvidia-smi --query-compute-apps=gpu_uuid,pid,process_name,used_memory --format=csv,noheader
 nvidia-smi --query-gpu=index,name,memory.used,memory.free,utilization.gpu --format=csv,noheader
-df -h /media/knight2/EDS2
+df -h .   # of het specifieke volume waar je modelgewichten staan
 git status --short
 ```
 
