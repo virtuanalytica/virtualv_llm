@@ -247,3 +247,34 @@ whether the engineering cost (verify NVFP4 weight loading on SM70, possibly
 compile the missing `sm70_*` kernel extension, then adapt the TP4/PP2 8-GPU
 path down to whatever this 4-GPU host can actually do) is worth it before
 spending more time on it, rather than assumed.
+
+## Disk budget for the rest of Fase 1/2 (checked 2026-09-22, 72GB free)
+
+Current `/media/knight2/EDS2` usage (94% full, 72GB free): `deepseek-v4-
+flash-0731-iq3xxs` 98GB (benchmark in progress), `qwen38-flash-next-ap-
+iq4xs` 85GB (proven winner, 91.9% -- keep), `glm53-reap50-iq3m` 68GB
+(re-downloaded for the retry, keep until that completes), `qwen38-27b`
+16GB (low priority, disposable if needed). `ap-q4km` is already gone from
+disk (matches its removal from `CANDIDATES` in commit `ae2e0624`).
+
+The `ap-iq2s` cascade candidate needs ~76GB -- more than the 72GB
+currently free. Planned sequencing to avoid a repeat of tonight's
+near-miss: once DeepSeek's benchmark finishes, prune its 98GB (matching
+the existing disposable-weights pattern -- the result stays in the JSON)
+before starting anything else; that alone clears ~170GB, enough for the
+GLM retry (already on disk, no download needed) and, once GLM's own
+benchmark also completes and its 68GB is pruned, comfortably enough for
+`ap-iq2s`'s download without ever dropping near the disk-full mark again.
+
+## Naming correction for the Fase 2 mixture command
+
+The approved plan's `optimize_model_mixture.py --require-member` example
+(`/home/knight2/.claude/plans/onderzoek-eerst-nog-tussendoor-misty-sky.md`)
+names the sixth member `qwen38-flash-next-ap-iq2xxs-v100`. That name is
+stale: the cascade candidate was swapped from `ap-q4km` to `ap-iq2s` in
+commit `ae2e0624` (`ap-q4km`'s v100 profile was structurally broken, see
+that commit's message), so `model_id()` (`run_qwen38_flash_next_gguf_
+cascade.py:88-89`) will actually produce `qwen38-flash-next-ap-iq2s-
+v100`/`-allfour`. Use that name, not `-iq2xxs-`, when running the Fase 2
+mixture command -- the plan's underlying intent (include the newest
+low-bit Qwen3.8 quant candidate) is unchanged, only the literal key.
