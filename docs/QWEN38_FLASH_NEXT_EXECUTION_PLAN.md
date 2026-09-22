@@ -337,3 +337,17 @@ dropping the inner flock, matching `run_qwen38_flash_next_gguf_cascade.py`
 (which never wrapped its subprocess in flock for the same reason). The
 GLM-5.3-REAP50-IQ3_M v100-profile benchmark itself is running correctly
 as of this fix.
+
+**v100-profile result (completed 2026-09-22, ~93 min at 16.6 t/s)**:
+gsm8k (flexible-extract) 0.66, mmlu_sample 0.6062, humaneval pass@1
+**0.05** (notably low -- a real measured score, not a crash; not
+investigated further tonight, flagged in case it recurs on the
+allfour-profile run). Metadata (`source_repo`, `quantization`,
+`hardware_profile`) was backfilled via `annotate()` after the fact,
+since running `well_known_suite.py` directly (bypassing the cascade
+wrapper, to avoid the nested-flock bug above) skips that step -- the
+cascade's own `row_complete()` check will skip re-running this profile
+and also skip `annotate()` for it, so this was done manually once.
+allfour-profile still needs to run (via the now-fixed
+`run_glm53_reap50_cascade.py --only iq3m`, which will pick up exactly
+that remaining profile plus prune the weights once both are complete).
