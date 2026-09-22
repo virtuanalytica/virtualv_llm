@@ -500,3 +500,40 @@ Remaining plan items: the numerai-signals cleanup above, and Fase 4's
 publish/visibility decision (public docs already written; keeping the
 repo private vs. making it public is still an explicit, pending user
 decision, not automatic).
+
+## Found (and fixed) the real cause of GLM's anomalously low HumanEval score
+
+GLM's recorded scores (0.05 humaneval on v100, 0.125 on allfour, against
+every other model's 0.975-1.0) looked wrong enough to investigate. Grepped
+the allfour server log: 212 responses had empty `message.content` paired
+with a long `message.reasoning_content` -- the same class of bug the
+`--reasoning off` fix (see the `--jinja` comment above) was supposed to
+have already closed for every model. It hadn't, for GLM specifically.
+
+Downloaded just `zai-org/GLM-5.3-Flash`'s `chat_template.jinja` (small
+file, no full model needed) to read the actual template logic:
+```
+{%- set effective_reasoning_effort = reasoning_effort if reasoning_effort
+   is defined and reasoning_effort in ['low', 'high'] else 'max' -%}
+```
+GLM-5.3's template reads a `reasoning_effort` variable, not
+`enable_thinking` (what `--reasoning off` actually sets) -- and its own
+fallback for anything other than the literal strings `'low'` or `'high'`
+is **`'max'`**. There is no "off" value in this template at all. Every
+GLM request in tonight's runs rendered `<|system|>Reasoning Effort: Max`
+regardless of `--reasoning off`, confirmed directly in the server log.
+HumanEval's 512-token budget was very likely being consumed by the forced
+max-effort think block before the model ever got to write code, which
+would fully explain the anomaly (BBH/MMLU/GSM8K have more headroom or
+don't need long generations, so they degraded less).
+
+Fixed in `well_known_suite.py`: added `--chat-template-kwargs
+'{"reasoning_effort": "low"}'` to the GLM-specific command branch --
+`'low'` is the lowest value the template actually accepts. **Not yet
+re-benchmarked** -- GLM's weights were pruned after tonight's run
+completed, and a re-test would mean another ~67GB download plus ~1.5-3h
+for both profiles. Not run automatically; this is a real, positive-
+expected-value experiment (could meaningfully raise GLM's composite,
+which is currently the pool's weakest at 0.50-0.54) but a substantial
+time investment not explicitly requested tonight -- flagged for an
+explicit go-ahead rather than assumed.

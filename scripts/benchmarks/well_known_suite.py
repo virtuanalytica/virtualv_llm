@@ -438,6 +438,26 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
                     "tokenizer.ggml.eom_token_id=int:154829"
                 ),
             ])
+            # 2026-09-22: found by reading the model's actual chat_template.jinja
+            # (zai-org/GLM-5.3-Flash) after noticing 212 empty message.content
+            # responses in the glm53-reap50-iq3m-allfour server log, each paired
+            # with a long message.reasoning_content -- the well-known --reasoning
+            # off / enable_thinking=false fix (see the comment below on --jinja)
+            # does nothing here: GLM-5.3's template only reads a *different*
+            # variable, "reasoning_effort", and its own fallback is
+            # `reasoning_effort if ... in ['low','high'] else 'max'` -- there is
+            # no "off" value, so any unset/unsupported value (including what
+            # --reasoning off actually sets) silently becomes 'max'. Server logs
+            # confirmed every response carried "Reasoning Effort: Max" in the
+            # rendered prompt regardless of --reasoning. "low" is the lowest
+            # value the template accepts; HumanEval's 512-token budget was
+            # likely being consumed by the forced think block before any code,
+            # which would explain GLM's anomalously low humaneval scores (0.05
+            # v100 / 0.125 allfour) against every other model's 0.975-1.0.
+            # Not yet re-benchmarked (weights were pruned after that run) --
+            # flagged for a future GLM retry, not applied retroactively to the
+            # already-recorded rows.
+            command.extend(["--chat-template-kwargs", '{"reasoning_effort": "low"}'])
     else:
         command.extend(["--gpu-layers", "99"])
     # 2026-09-22 fix: this check used to read "glm53-flash-" while the --fit
