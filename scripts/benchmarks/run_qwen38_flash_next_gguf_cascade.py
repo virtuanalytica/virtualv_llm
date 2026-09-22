@@ -44,8 +44,16 @@ SERVICES = ("local-chat-qwen38.service", "llama-qwen.service")
 CANDIDATES: tuple[dict[str, Any], ...] = (
     {"key": "ap-iq4xs", "file": "AP-IQ4_XS/Qwen3.8-Flash-Next-AP-IQ4_XS.gguf",
      "published_vram_gib": 57.42, "published_size_gib": 84.24, "v100_context": 4096},
-    {"key": "ap-q4km", "file": "AP-Q4_K_M/Qwen3.8-Flash-Next-AP-Q4_K_M.gguf",
-     "published_vram_gib": 61.22, "published_size_gib": 88.04, "v100_context": 2048},
+    # ap-q4km removed 2026-09-22: its v100 profile is a structural VRAM-fit
+    # failure (needs 61.22 GiB, the 2xV100 pair has 64 GiB combined including
+    # overhead -- OOM'd even at the smallest 2K context), so it can never get
+    # a valid composite() score (that function requires the v100 profile
+    # specifically). Its allfour result (91.75%, comparable to ap-iq4xs) is
+    # preserved permanently in well_known_suite_20260917.json; weights were
+    # deleted to reclaim 88 GiB. Do not re-add without first fixing the
+    # composite-scoring gate to accept an allfour-only result.
+    {"key": "ap-iq2s", "file": "AP-IQ2_S/Qwen3.8-Flash-Next-AP-IQ2_S.gguf",
+     "published_vram_gib": 49.21, "published_size_gib": 76.03, "v100_context": 4096},
 )
 PROFILES = (
     ("v100", "1,2", "2× Tesla V100-SXM2-32GB · NVLink · layer split", 18031),

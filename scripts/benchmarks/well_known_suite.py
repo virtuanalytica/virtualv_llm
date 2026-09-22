@@ -420,7 +420,13 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
         ])
     else:
         command.extend(["--gpu-layers", "99"])
-    if len(profile["physical"]) > 1 and not name.startswith("glm53-flash-"):
+    # 2026-09-22 fix: this check used to read "glm53-flash-" while the --fit
+    # activation above (line ~412) was widened to "glm53-" to also cover the
+    # REAP50 cascade -- leaving the two checks out of sync meant REAP50 got
+    # BOTH --fit on and --tensor-split 1,1, which llama.cpp's fit logic
+    # refuses to reconcile (aborts the fit, loads unfitted, OOMs). Aligning
+    # both checks on "glm53-" so --tensor-split is never combined with --fit.
+    if len(profile["physical"]) > 1 and not name.startswith("glm53-"):
         command.extend(["--tensor-split", "1,1"])
     import signal
     with log_path.open("w") as log:

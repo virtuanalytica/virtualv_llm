@@ -314,6 +314,8 @@ WELL_KNOWN_LABELS = {
     "qwen38-flash-next-ap-iq4xs-allfour": "Qwen3.8 Flash-Next AP-IQ4_XS · 4 GPU's",
     "qwen38-flash-next-ap-q4km-v100": "Qwen3.8 Flash-Next AP-Q4_K_M · 2×V100",
     "qwen38-flash-next-ap-q4km-allfour": "Qwen3.8 Flash-Next AP-Q4_K_M · 4 GPU's",
+    "qwen38-flash-next-ap-iq2s-v100": "Qwen3.8 Flash-Next AP-IQ2_S · 2×V100",
+    "qwen38-flash-next-ap-iq2s-allfour": "Qwen3.8 Flash-Next AP-IQ2_S · 4 GPU's",
 }
 WELL_KNOWN_ORDER = list(WELL_KNOWN_LABELS)
 ACCESS_PROFILES = (
