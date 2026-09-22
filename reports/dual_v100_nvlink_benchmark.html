@@ -8,7 +8,20 @@ main{max-width:1240px;margin:auto;padding:54px 28px 80px} h1{font-size:clamp(36p
 .badges{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 30px} .badge,.pill{border:1px solid var(--line);background:#0a1c28;border-radius:999px;padding:5px 10px;color:#bcd0dc;font-size:12px} .badge.ok{border-color:#246f67;color:var(--green)}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px} .card{background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 12px 28px #0005} .metric{font-size:29px;font-weight:800;color:var(--orange);letter-spacing:-.03em} .card small,td small,.barlabel small{display:block;color:var(--muted);font-size:12px}
 .callout{border-left:3px solid var(--cyan);padding:15px 18px;background:#0b202b;border-radius:0 12px 12px 0;margin:18px 0;color:#cce0e9}
-.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:16px;background:#091722} table{border-collapse:collapse;width:100%;min-width:980px;table-layout:fixed} th,td{padding:12px 13px;border-bottom:1px solid #173345;text-align:left;white-space:nowrap} th{position:sticky;top:0;background:#102737;color:#9fc0cf;font-size:11px;text-transform:uppercase;letter-spacing:.08em} tr:hover td{background:#0d2130} .num{font-variant-numeric:tabular-nums} .hot{color:var(--orange);font-weight:800}
+/* 2026-09-22: th{position:sticky;top:0} only sticks within ITS OWN scrolling
+   ancestor. .tablewrap previously had overflow:auto but no bounded height, so
+   it never scrolled internally -- the whole page scrolled past it instead,
+   and the header scrolled away with everything else (user report: "header
+   loopt boven uit het scherm"). Bounding the height turns .tablewrap into the
+   actual scroll container, so the sticky header now works, and the resulting
+   scrollbar (styled below) doubles as the horizontal "slider" the user asked
+   for instead of an easy-to-miss thin native one. */
+.tablewrap{overflow:auto;max-height:74vh;border:1px solid var(--line);border-radius:16px;background:#091722;scrollbar-color:#3a6580 #0c1c28;scrollbar-width:thin}
+.tablewrap::-webkit-scrollbar{width:12px;height:12px}
+.tablewrap::-webkit-scrollbar-track{background:#0c1c28}
+.tablewrap::-webkit-scrollbar-thumb{background:#3a6580;border-radius:8px;border:2px solid #0c1c28}
+.tablewrap::-webkit-scrollbar-thumb:hover{background:var(--cyan)}
+table{border-collapse:collapse;width:100%;min-width:980px;table-layout:fixed} th,td{padding:12px 13px;border-bottom:1px solid #173345;text-align:left;white-space:nowrap} th{position:sticky;top:0;background:#102737;color:#9fc0cf;font-size:11px;text-transform:uppercase;letter-spacing:.08em;z-index:2} tr:hover td{background:#0d2130} .num{font-variant-numeric:tabular-nums} .hot{color:var(--orange);font-weight:800}
 /* 2026-09-19: a long "Mixture-of-models -- method (members...)" label was
    forcing the whole table wider than the viewport (white-space:nowrap on
    every cell), pushing t/s/Hardware/Status off-screen without scrolling far
@@ -16,7 +29,13 @@ main{max-width:1240px;margin:auto;padding:54px 28px 80px} h1{font-size:clamp(36p
    wrap; every other column stays nowrap/compact so numbers stay aligned. */
 /* Give the long model/ensemble descriptions a usable default. The right-edge
    grips on every column let the reader trade this space against score columns. */
-.tablewrap table thead th:first-child,.tablewrap table tbody td:first-child{width:440px;min-width:300px;max-width:none;white-space:normal;word-break:break-word}
+/* 2026-09-22: fixed 440px let the model-name column eat well over 25% of a
+   1240px main on any screen size and didn't respond to viewport width at all
+   on narrower ones (user report). max-width:25vw caps it relative to the
+   actual screen; the table's min-width:980px plus every other column staying
+   nowrap is what makes the rest of the row overflow .tablewrap horizontally
+   (scrollable, per the .tablewrap rule above) instead of squeezing. */
+.tablewrap table thead th:first-child,.tablewrap table tbody td:first-child{width:300px;min-width:220px;max-width:25vw;white-space:normal;word-break:break-word}
 .col-resizer{position:absolute;z-index:3;top:0;right:-6px;width:12px;height:100%;cursor:col-resize;touch-action:none}
 .col-resizer::after{content:'';position:absolute;top:28%;bottom:28%;left:5px;border-left:1px solid #4b7892;opacity:.8}
 .col-resizer:hover::after,.col-resizer:focus-visible::after{border-color:var(--cyan);border-left-width:2px;opacity:1}
@@ -41,7 +60,7 @@ table.sortable th{user-select:none} .th-content{display:inline-flex;align-items:
 <p>Een reproduceerbare vergelijking van lokale modellen en hardwareconfiguraties: het
 2×V100-SXM2 NVLink-paar, een RTX A4000, een RTX 4000 Ada en beide RTX-kaarten als
 onafhankelijke parallel-servinglaag. Iedere rij bewaart de werkelijk zichtbare fysieke GPU’s.</p>
-<div class="badges"><span class="badge ok">✓ fysieke GPU-provenance</span><span class="badge ok">✓ PCI_BUS_ID vastgezet</span><span class="badge ok">✓ per-profiel telemetry</span><span class="badge">V100 NV6 · 6 links</span><span class="badge">64 GB HBM2 + 35 GB RTX</span><span class="badge">2026-09-22 17:35 CEST</span></div>
+<div class="badges"><span class="badge ok">✓ fysieke GPU-provenance</span><span class="badge ok">✓ PCI_BUS_ID vastgezet</span><span class="badge ok">✓ per-profiel telemetry</span><span class="badge">V100 NV6 · 6 links</span><span class="badge">64 GB HBM2 + 35 GB RTX</span><span class="badge">2026-09-22 18:40 CEST</span></div>
 <section class="grid"><div class="card"><small>Qwen3.8 tensor split</small><div class="metric">44.87 t/s</div><small>33.8% boven single V100</small></div>
 <div class="card"><small>Dense schaaltest</small><div class="metric">24.29 t/s</div><small>Qwen2.5 72,7B · RIV 6/6</small></div>
 <div class="card"><small>1Cat DFlash2 B1</small><div class="metric">81.59 t/s</div><small>wall output throughput</small></div>
@@ -323,10 +342,20 @@ Secondary lead identified but NOT yet tested: GLM-4.5-Air (already-supported glm
   // Resize is deliberately separate from sorting: drag the thin grip on the
   // right of a header; click the square button to sort. Widths are per-table
   // and persisted locally, so a dashboard refresh keeps the chosen layout.
-  document.querySelectorAll('.tablewrap table').forEach(function(table, tableIndex){
+  // 2026-09-22 fix: the storage key used to be the table's raw DOM position
+  // (tableIndex). Every dashboard rebuild can add/remove/reorder sections
+  // (new models, new tables), so "the 3rd table" stops being the same table
+  // -- a saved narrow width from resizing one table's columns could silently
+  // get applied to a DIFFERENT table's columns next load, squeezing a column
+  // down toward the 110px floor and cramming its sort button into unusable
+  // space (user report: sort square "hidden" on the specialist table).
+  // Keying on the table's own header text is stable across rebuilds as long
+  // as that table's columns don't change.
+  document.querySelectorAll('.tablewrap table').forEach(function(table){
     var headers = Array.prototype.slice.call(table.querySelectorAll('thead th'));
     if (!headers.length) return;
-    var storageKey = 'llm-hardware-column-widths-v1:' + tableIndex;
+    var signature = headers.map(function(th){ return th.textContent.trim(); }).join('|');
+    var storageKey = 'llm-hardware-column-widths-v2:' + signature;
     var saved = {};
     try { saved = JSON.parse(localStorage.getItem(storageKey) || '{}'); } catch (ignore) {}
     headers.forEach(function(th, index){
