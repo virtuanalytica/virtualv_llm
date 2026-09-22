@@ -1,0 +1,45 @@
+{
+  "mode": "target",
+  "model": "qwen38-1cat-target",
+  "engine": "1Cat-vLLM 1.5.0",
+  "tensor_parallel_size": 2,
+  "output_tokens": 256,
+  "wall_seconds": 5.2457,
+  "wall_output_tokens_per_second": 48.8015,
+  "riv_au_score": 5,
+  "riv_au_max": 6,
+  "riv_au_checks": {
+    "event_type": true,
+    "acquirer": true,
+    "control_date": true,
+    "delisted_date": true,
+    "completion_date": false,
+    "successor": true
+  },
+  "riv_au_extracted": {
+    "event_type": "acquisition",
+    "acquirer": "Rio Tinto",
+    "control_date": "2011-04-08",
+    "delisted_date": "2011-07-07",
+    "completion_date": "2011-08-08",
+    "successor": "Rio Tinto Coal Mozambique"
+  },
+  "gpu_telemetry": {
+    "1": {
+      "samples": 17,
+      "max_util_pct": 100.0,
+      "max_memory_mib": 25696.0,
+      "max_power_w": 219.2,
+      "max_temperature_c": 52.0
+    },
+    "2": {
+      "samples": 17,
+      "max_util_pct": 100.0,
+      "max_memory_mib": 25696.0,
+      "max_power_w": 228.88,
+      "max_temperature_c": 51.0
+    }
+  },
+  "both_v100_active": true,
+  "speculative_metrics": []
+}

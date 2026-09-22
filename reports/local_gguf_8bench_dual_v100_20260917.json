@@ -18,8 +18,7 @@
   },
   "cuda_device_order": "PCI_BUS_ID",
   "profiles": [
-    "dual-layer",
-    "all-four-layer"
+    "dual-layer"
   ],
   "note": "each result row records its selected physical GPUs; compare throughput by profile",
   "results": [
@@ -1686,6 +1685,154 @@
       "prompt_tokens_per_second": 137.32432142473982,
       "elapsed_seconds_including_load_and_tests": 91.06,
       "server_log": "/tmp/qwen25-72b-q4-dual-tensor.log"
+    },
+    {
+      "model": "deepseek-v4-flash-0731-iq3xxs",
+      "profile": "dual-layer",
+      "path": "/media/knight2/EDS2/models/llm/deepseek-v4-flash-0731-iq3xxs/UD-IQ3_XXS/DeepSeek-V4-Flash-0731-UD-IQ3_XXS-00001-of-00004.gguf",
+      "bytes": 104207848032,
+      "auto_fit": true,
+      "runtime": "/media/knight2/EDS2/tools/llama.cpp/build-v100/bin/llama-server",
+      "topology": "physical GPU [1, 2], split=layer, CUDA_DEVICE_ORDER=PCI_BUS_ID, interconnect=NVLink",
+      "visible_device_probe": "ggml_cuda_init: found 2 CUDA devices (Total VRAM: 64988 MiB):\n  Device 0: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\n  Device 1: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\nAvailable devices:\n  CUDA0: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n  CUDA1: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n",
+      "loaded_gpu": {
+        "1": {
+          "util_pct": 0.0,
+          "memory_mib": 30955.0,
+          "power_w": 54.65,
+          "temperature_c": 39.0
+        },
+        "2": {
+          "util_pct": 0.0,
+          "memory_mib": 31183.0,
+          "power_w": 68.85,
+          "temperature_c": 42.0
+        }
+      },
+      "selected_gpus_active": true,
+      "selected_v100s_active": true,
+      "both_v100_active": true,
+      "gpu_decode_telemetry": {
+        "1": {
+          "samples": 64,
+          "max_util_pct": 34.0,
+          "mean_util_pct": 15.08,
+          "max_memory_mib": 31055.0,
+          "max_power_w": 168.42,
+          "max_temperature_c": 43.0
+        },
+        "2": {
+          "samples": 64,
+          "max_util_pct": 45.0,
+          "mean_util_pct": 30.78,
+          "max_memory_mib": 31283.0,
+          "max_power_w": 135.25,
+          "max_temperature_c": 48.0
+        }
+      },
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "event_type": "acquisition",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-04-08",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-01",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": true,
+              "delisted_date": true,
+              "completion_date": true,
+              "successor": true
+            }
+          },
+          "raw": "{\"event_type\":\"acquisition\",\"acquirer\":\"Rio Tinto\",\"control_date\":\"2011-04-08\",\"delisted_date\":\"2011-07-07\",\"completion_date\":\"2011-08-01\",\"successor\":\"Rio Tinto Coal Mozambique\"}"
+        },
+        "arithmetic_payout": {
+          "score": 1.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 5332.32
+          },
+          "raw": "12000 * 18.40 = 220800  \n220800 * 0.023 = 5078.4  \n5078.4 * 1.05 = 5332.32  \n\n5332.32"
+        },
+        "code_exec_drawdown": {
+          "score": 1.0,
+          "detail": {
+            "model_result": -0.2584,
+            "reference": -0.2584
+          },
+          "raw": "```python\ndef max_drawdown(returns):\n    peak = 1.0\n    wealth = 1.0\n    max_dd = 0.0\n    for r in returns:\n        wealth *= (1 + r)\n        if wealth > peak:\n            peak = wealth\n        dd = (wealth - peak) / peak\n        if dd < max_dd:\n            max_dd = dd\n    return max_dd\n```"
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "{\"ticker\":\"AAPL\",\"country_iso2\":\"US\",\"is_delisted\":false}"
+        },
+        "gics_format_following": {
+          "score": 1.0,
+          "detail": {
+            "lines": [
+              "Information Technology",
+              "Health Care",
+              "Financials",
+              "Consumer Discretionary",
+              "Energy"
+            ],
+            "line_count_ok": true,
+            "distinct_valid_sectors": 5
+          },
+          "raw": "Information Technology\nHealth Care\nFinancials\nConsumer Discretionary\nEnergy"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "2011-04-08"
+        },
+        "summary_faithfulness": {
+          "score": 1.0,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": true
+          },
+          "raw": "A historical-price recovery audit found that 13,350 of 21,535 tickers (62%) had left the current investable universe. Tiingo retains historical data for delisted securities, so the recovery job queries dated identifiers and preserves the provider response timestamp. Missing records remain explicit and are never replaced by present-day ticker matches without point-in-time evidence."
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "INSUFFICIENT_INFORMATION"
+        },
+        "_mean_score": 1.0
+      },
+      "benchmark_mean_score": 1.0,
+      "benchmark_task_count": 8,
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 12.801141841772063,
+      "prompt_tokens_per_second": 40.63969501875325,
+      "elapsed_seconds_including_load_and_tests": 137.45,
+      "server_log": "/tmp/deepseek-v4-flash-0731-iq3xxs-dual-layer.log"
     }
   ]
 }

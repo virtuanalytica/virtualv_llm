@@ -1,0 +1,153 @@
+{
+  "contract": "same RIV-AU six-field extraction plus forced 256-token decode",
+  "physical_gpus": [
+    1,
+    2
+  ],
+  "excluded_gpus": [
+    "0 (RTX A4000)",
+    "3 (RTX 4000 Ada Generation)"
+  ],
+  "cuda_device_order": "PCI_BUS_ID",
+  "profiles": [
+    "dual-layer",
+    "dual-tensor"
+  ],
+  "note": "row split was unsupported in this build; layer and tensor profiles are tested explicitly",
+  "results": [
+    {
+      "model": "qwen25-72b-q4",
+      "profile": "dual-layer",
+      "path": "/media/knight2/EDS2/models/llm/qwen25-72b-q4km/qwen2.5-72b-instruct-q4_k_m-00001-of-00012.gguf",
+      "bytes": 3986869120,
+      "runtime": "llama.cpp build-v100",
+      "topology": "physical GPU [1, 2], split=layer, CUDA_DEVICE_ORDER=PCI_BUS_ID, NVLink enabled",
+      "visible_device_probe": "ggml_cuda_init: found 2 CUDA devices (Total VRAM: 64988 MiB):\n  Device 0: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\n  Device 1: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\nAvailable devices:\n  CUDA0: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n  CUDA1: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n",
+      "loaded_gpu": {
+        "1": {
+          "util_pct": 0.0,
+          "memory_mib": 22020.0,
+          "power_w": 63.04,
+          "temperature_c": 47.0
+        },
+        "2": {
+          "util_pct": 0.0,
+          "memory_mib": 22014.0,
+          "power_w": 68.4,
+          "temperature_c": 46.0
+        }
+      },
+      "selected_v100s_active": true,
+      "both_v100_active": true,
+      "gpu_decode_telemetry": {
+        "1": {
+          "samples": 55,
+          "max_util_pct": 59.0,
+          "mean_util_pct": 50.16,
+          "max_memory_mib": 22508.0,
+          "max_power_w": 288.2,
+          "max_temperature_c": 58.0
+        },
+        "2": {
+          "samples": 55,
+          "max_util_pct": 66.0,
+          "mean_util_pct": 48.49,
+          "max_memory_mib": 22502.0,
+          "max_power_w": 301.42,
+          "max_temperature_c": 57.0
+        }
+      },
+      "riv_au_score": 6,
+      "riv_au_max": 6,
+      "riv_au_checks": {
+        "event_type": true,
+        "acquirer": true,
+        "control_date": true,
+        "delisted_date": true,
+        "completion_date": true,
+        "successor": true
+      },
+      "riv_au_extracted": {
+        "event_type": "acquisition",
+        "acquirer": "Rio Tinto",
+        "control_date": "2011-04-08",
+        "delisted_date": "2011-07-07",
+        "completion_date": "2011-08-01",
+        "successor": "Rio Tinto Coal Mozambique"
+      },
+      "riv_au_raw": "```json\n{\n  \"event_type\": \"acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-04-08\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}\n```",
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 14.841136113995754,
+      "prompt_tokens_per_second": 132.9234859184182,
+      "elapsed_seconds_including_load_and_tests": 41.87,
+      "server_log": "/tmp/qwen25-72b-q4-dual-layer.log"
+    },
+    {
+      "model": "qwen25-72b-q4",
+      "profile": "dual-tensor",
+      "path": "/media/knight2/EDS2/models/llm/qwen25-72b-q4km/qwen2.5-72b-instruct-q4_k_m-00001-of-00012.gguf",
+      "bytes": 3986869120,
+      "runtime": "llama.cpp build-v100",
+      "topology": "physical GPU [1, 2], split=tensor, CUDA_DEVICE_ORDER=PCI_BUS_ID, NVLink enabled",
+      "visible_device_probe": "ggml_cuda_init: found 2 CUDA devices (Total VRAM: 64988 MiB):\n  Device 0: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\n  Device 1: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\nAvailable devices:\n  CUDA0: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n  CUDA1: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n",
+      "loaded_gpu": {
+        "1": {
+          "util_pct": 0.0,
+          "memory_mib": 21986.0,
+          "power_w": 70.36,
+          "temperature_c": 51.0
+        },
+        "2": {
+          "util_pct": 0.0,
+          "memory_mib": 21986.0,
+          "power_w": 72.28,
+          "temperature_c": 50.0
+        }
+      },
+      "selected_v100s_active": true,
+      "both_v100_active": true,
+      "gpu_decode_telemetry": {
+        "1": {
+          "samples": 35,
+          "max_util_pct": 98.0,
+          "mean_util_pct": 95.23,
+          "max_memory_mib": 22270.0,
+          "max_power_w": 271.55,
+          "max_temperature_c": 65.0
+        },
+        "2": {
+          "samples": 35,
+          "max_util_pct": 98.0,
+          "mean_util_pct": 96.74,
+          "max_memory_mib": 22270.0,
+          "max_power_w": 290.33,
+          "max_temperature_c": 62.0
+        }
+      },
+      "riv_au_score": 6,
+      "riv_au_max": 6,
+      "riv_au_checks": {
+        "event_type": true,
+        "acquirer": true,
+        "control_date": true,
+        "delisted_date": true,
+        "completion_date": true,
+        "successor": true
+      },
+      "riv_au_extracted": {
+        "event_type": "acquisition",
+        "acquirer": "Rio Tinto",
+        "control_date": "2011-04-08",
+        "delisted_date": "2011-07-07",
+        "completion_date": "2011-08-01",
+        "successor": "Rio Tinto Coal Mozambique"
+      },
+      "riv_au_raw": "```json\n{\n  \"event_type\": \"acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-04-08\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}\n```",
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 24.293671041401087,
+      "prompt_tokens_per_second": 140.2487662491344,
+      "elapsed_seconds_including_load_and_tests": 32.76,
+      "server_log": "/tmp/qwen25-72b-q4-dual-tensor.log"
+    }
+  ]
+}

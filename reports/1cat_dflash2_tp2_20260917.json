@@ -1,0 +1,66 @@
+{
+  "mode": "dflash2",
+  "model": "qwen38-1cat-dflash2",
+  "engine": "1Cat-vLLM 1.5.0",
+  "tensor_parallel_size": 2,
+  "output_tokens": 256,
+  "wall_seconds": 2.223,
+  "wall_output_tokens_per_second": 115.1608,
+  "riv_au_score": 5,
+  "riv_au_max": 6,
+  "riv_au_checks": {
+    "event_type": true,
+    "acquirer": true,
+    "control_date": true,
+    "delisted_date": true,
+    "completion_date": false,
+    "successor": true
+  },
+  "riv_au_extracted": {
+    "event_type": "acquisition",
+    "acquirer": "Rio Tinto",
+    "control_date": "2011-04-08",
+    "delisted_date": "2011-07-07",
+    "completion_date": "2011-08-08",
+    "successor": "Rio Tinto Coal Mozambique"
+  },
+  "gpu_telemetry": {
+    "1": {
+      "samples": 8,
+      "max_util_pct": 100.0,
+      "max_memory_mib": 25070.0,
+      "max_power_w": 211.43,
+      "max_temperature_c": 52.0
+    },
+    "2": {
+      "samples": 8,
+      "max_util_pct": 100.0,
+      "max_memory_mib": 25070.0,
+      "max_power_w": 224.54,
+      "max_temperature_c": 52.0
+    }
+  },
+  "both_v100_active": true,
+  "speculative_metrics": [
+    "vllm:spec_decode_num_drafts_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\"} 75.0",
+    "vllm:spec_decode_num_drafts_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\"} 1.789600792236029e+09",
+    "vllm:spec_decode_num_draft_tokens_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\"} 525.0",
+    "vllm:spec_decode_num_draft_tokens_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\"} 1.7896007922360759e+09",
+    "vllm:spec_decode_num_accepted_tokens_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\"} 277.0",
+    "vllm:spec_decode_num_accepted_tokens_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\"} 1.7896007922361126e+09",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"0\"} 66.0",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"1\"} 54.0",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"2\"} 40.0",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"3\"} 37.0",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"4\"} 31.0",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"5\"} 27.0",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"6\"} 22.0",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"0\"} 1.7896007922361543e+09",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"1\"} 1.7896007922361705e+09",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"2\"} 1.7896007922361827e+09",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"3\"} 1.7896007922361963e+09",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"4\"} 1.7896007922362087e+09",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"5\"} 1.789600792236219e+09",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"6\"} 1.7896007922362297e+09"
+  ]
+}

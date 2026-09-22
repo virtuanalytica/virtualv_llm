@@ -1,0 +1,1154 @@
+{
+  "contract": "same 8-task eval_suite battery plus forced 256-token decode",
+  "benchmark_task_ids": [
+    "riv_au_lifecycle",
+    "arithmetic_payout",
+    "code_exec_drawdown",
+    "json_schema_facts",
+    "gics_format_following",
+    "needle_in_haystack",
+    "summary_faithfulness",
+    "refusal_calibration"
+  ],
+  "physical_gpu_inventory": {
+    "0": "NVIDIA RTX A4000",
+    "1": "Tesla V100-SXM2-32GB",
+    "2": "Tesla V100-SXM2-32GB",
+    "3": "NVIDIA RTX 4000 Ada Generation"
+  },
+  "cuda_device_order": "PCI_BUS_ID",
+  "profiles": [
+    "all-four-layer",
+    "single-v100",
+    "single-v100-2",
+    "dual-layer",
+    "single-ada",
+    "single-a4000",
+    "dual-a4000ada"
+  ],
+  "note": "each result row records its selected physical GPUs; compare throughput by profile",
+  "results": [
+    {
+      "model": "glm53-flash-aj-iq2xxs",
+      "profile": "all-four-layer",
+      "path": "/media/knight2/EDS2/models/llm/glm53-flash-aj-iq2xxs/AJ-IQ2_XXS/GLM-5.3-Flash-AJ-IQ2_XXS-00001-of-00002.gguf",
+      "bytes": 87346006560,
+      "auto_fit": true,
+      "runtime": "/media/knight2/EDS2/tools/llama.cpp-glm53-pr27752/build-v100/bin/llama-server",
+      "topology": "physical GPU [0, 1, 2, 3], split=layer, CUDA_DEVICE_ORDER=PCI_BUS_ID, interconnect=mixed: NVLink between V100s, PCIe to RTX GPUs",
+      "visible_device_probe": "ggml_cuda_init: found 4 CUDA devices (Total VRAM: 99954 MiB):\n  Device 0: NVIDIA RTX A4000, compute capability 8.6, VMM: yes, VRAM: 14948 MiB\n  Device 1: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\n  Device 2: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\n  Device 3: NVIDIA RTX 4000 Ada Generation, compute capability 8.9, VMM: yes, VRAM: 20017 MiB\nAvailable devices:\n  CUDA0: NVIDIA RTX A4000 (14948 MiB, 14727 MiB free)\n  CUDA1: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n  CUDA2: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n  CUDA3: NVIDIA RTX 4000 Ada Generation (20017 MiB, 19277 MiB free)\n",
+      "loaded_gpu": {
+        "0": {
+          "util_pct": 3.0,
+          "memory_mib": 9731.0,
+          "power_w": 38.97,
+          "temperature_c": 65.0
+        },
+        "1": {
+          "util_pct": 0.0,
+          "memory_mib": 29913.0,
+          "power_w": 55.17,
+          "temperature_c": 41.0
+        },
+        "2": {
+          "util_pct": 0.0,
+          "memory_mib": 29921.0,
+          "power_w": 57.1,
+          "temperature_c": 44.0
+        },
+        "3": {
+          "util_pct": 8.0,
+          "memory_mib": 17953.0,
+          "power_w": 35.32,
+          "temperature_c": 51.0
+        }
+      },
+      "selected_gpus_active": true,
+      "selected_v100s_active": true,
+      "both_v100_active": false,
+      "gpu_decode_telemetry": {
+        "0": {
+          "samples": 35,
+          "max_util_pct": 22.0,
+          "mean_util_pct": 18.0,
+          "max_memory_mib": 9751.0,
+          "max_power_w": 87.99,
+          "max_temperature_c": 76.0
+        },
+        "1": {
+          "samples": 35,
+          "max_util_pct": 35.0,
+          "mean_util_pct": 28.4,
+          "max_memory_mib": 30057.0,
+          "max_power_w": 141.92,
+          "max_temperature_c": 47.0
+        },
+        "2": {
+          "samples": 35,
+          "max_util_pct": 60.0,
+          "mean_util_pct": 28.26,
+          "max_memory_mib": 30065.0,
+          "max_power_w": 148.47,
+          "max_temperature_c": 51.0
+        },
+        "3": {
+          "samples": 35,
+          "max_util_pct": 38.0,
+          "mean_util_pct": 25.34,
+          "max_memory_mib": 17973.0,
+          "max_power_w": 56.85,
+          "max_temperature_c": 61.0
+        }
+      },
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "event_type": "takeover",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-04-08",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-01",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": true,
+              "delisted_date": true,
+              "completion_date": true,
+              "successor": true
+            }
+          },
+          "raw": "{\"event_type\":\"takeover\",\"acquirer\":\"Rio Tinto\",\"control_date\":\"2011-04-08\",\"delisted_date\":\"2011-07-07\",\"completion_date\":\"2011-08-01\",\"successor\":\"Rio Tinto Coal Mozambique\"}\nWe need to extract lifecycle facts for \"RIV AU ONLY\" — likely ticker RIV (Riversdale Mining Limited, ASX: RIV). We need one compact JSON object with scalar-string keys: event_type, acquirer, control_date, delisted_date, completion_date, successor.\n\nFrom passages:\n- Passage A: Rio Tinto acquired 52.6% on 8 April 2011 (control date = 2011-04-08); on 1 August 2011 interest became 100% (completion date = 2011-08-01); Riversdale delisted 7 July 2011 (delisted_date = 2011-07-07); renamed Rio Tinto Coal Mozambique (successor = \"Rio Tinto Coal Mozambique\").\n- Passage B: takeover completed in August 2011 (completion date Aug"
+        },
+        "arithmetic_payout": {
+          "score": 1.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 5332.32
+          },
+          "raw": "5332.32\nStake notional = 12000 * 18.40 = 220,800 USD.\n\nPayout = 220,800 * 0.023 * 1.05.\n\n220,800 * 0.023 = 5,078.4.\n\n5,078.4 * 1.05 = 5,332.32.\n\nAnswer: 5332.32"
+        },
+        "code_exec_drawdown": {
+          "score": 0.0,
+          "detail": {
+            "reason": "no parseable output",
+            "stdout": "",
+            "stderr": "  File \"/media/knight2/EDS2/tmp/general/tmp7gi6fitl/exec_8bb5cb45537448b3a1fc5d0156030d08.py\", line 13\n    ``\n    ^\nSyntaxError: invalid syntax\n"
+          },
+          "raw": "The user wants a Python function `max_drawdown(returns)` that:\n1. Takes a list of daily simple returns (floats)\n2. Computes the cumulative wealth index starting at 1.0\n3. Returns the maximum drawdown as a negative float (e.g., -0.25 for -25%)\n\nMaximum drawdown is the largest peak-to-trough decline in the cumulative wealth curve. The standard approach:\n- Compute cumulative wealth: wealth[0] = 1.0, wealth[i] = wealth[i-1] * (1 + returns[i])\n- Track running maximum (peak)\n- Drawdown at each point = (wealth - peak) / peak\n- Max drawdown = minimum of drawdowns (which will be ≤ 0)\n\nEdge cases to consider:\n- Empty list: wealth stays at 1.0, no drawdown → return 0.0? Or maybe -0.0? Typically return 0.0 since no drawdown occurred. But the spec says \"returns the maximum drawdown (a negative float)\"."
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "{\"ticker\": \"AAPL\", \"country_iso2\": \"US\", \"is_delisted\": false}\nThe user wants a JSON object with keys: \"ticker\" (string), \"country_iso2\" (2-letter uppercase string), \"is_delisted\" (boolean). For Apple Inc: ticker \"AAPL\", country \"US\", is_delisted false.\n\nReturn only the JSON object, no markdown fence, no commentary."
+        },
+        "gics_format_following": {
+          "score": 0.0,
+          "detail": {
+            "lines": [
+              "The user wants exactly 5 official GICS equity sector names from the real 11-sector classification. The 11 GICS sectors are:",
+              "1. Energy",
+              "2. Materials",
+              "3. Industrials",
+              "4. Consumer Discretionary",
+              "5. Consumer Staples",
+              "6. Health Care",
+              "7. Financials",
+              "8. Information Technology",
+              "9. Communication Services",
+              "10. Utilities",
+              "11. Real Estate",
+              "They want exactly 5 lines, each line only the sector name in Title Case, no numbering, no bullets, no preamble, no closing remarks",
+              "I need to pick 5 of these. Let me pick: Energy, Materials, Industrials, Financials, Health Care. Or any 5. The example given was \"Energy,"
+            ],
+            "line_count_ok": false,
+            "distinct_valid_sectors": 0
+          },
+          "raw": "The user wants exactly 5 official GICS equity sector names from the real 11-sector classification. The 11 GICS sectors are:\n1. Energy\n2. Materials\n3. Industrials\n4. Consumer Discretionary\n5. Consumer Staples\n6. Health Care\n7. Financials\n8. Information Technology\n9. Communication Services\n10. Utilities\n11. Real Estate\n\nThey want exactly 5 lines, each line only the sector name in Title Case, no numbering, no bullets, no preamble, no closing remarks.\n\nI need to pick 5 of these. Let me pick: Energy, Materials, Industrials, Financials, Health Care. Or any 5. The example given was \"Energy,"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "2011-04-08\nThe user asks: according to the NOTE embedded above, on what exact date did Rio Tinto obtain control of Riversdale Mining? The note says 2011-04-08. Answer with only the date."
+        },
+        "summary_faithfulness": {
+          "score": 1.0,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": true
+          },
+          "raw": "The user wants a 2-3 sentence summary of this technical note, preserving key numeric facts exactly, without inventing numbers.\n\nKey numeric facts present:\n- 13,350 of 21,535 train+validation tickers (62%) left the universe before data's end\n- Sample 2026-08-13: 0/60 hits on Yahoo\n- WBMD 3,013 rows, RECN 6,450, CLDA 2,597\n- 4,802 tickers US dead universe block\n- 429 rate limit handling\n\nI need to summarize in 2-3 sentences. Let me pick the most important numbers: 13,350 of 21,535 (62%), 4,802 US tickers, maybe the sample facts. I shouldn't invent numbers.\n\nDraft:\n\n\"This collector backfills full price history for delisted US equities from Tiingo, closing the survivorship gap in the Numerai Signals universe where 13,350 of 21,535 train+validation tickers"
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "The passage says: 'XZQ99 Holdings is a private entity with no public listing history in any available record.'\n\nThe question asks: on what exact date was the company XZQ99 Holdings delisted?\n\nThe passage does not state a delisting date. It says the company is a private"
+        },
+        "_mean_score": 0.75
+      },
+      "benchmark_mean_score": 0.75,
+      "benchmark_task_count": 8,
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 25.973666165663506,
+      "prompt_tokens_per_second": 49.675371447589995,
+      "elapsed_seconds_including_load_and_tests": 120.65,
+      "server_log": "/tmp/glm53-flash-aj-iq2xxs-all-four-layer.log"
+    },
+    {
+      "model": "glm53-flash-aj-iq2xxs",
+      "profile": "single-v100",
+      "path": "/media/knight2/EDS2/models/llm/glm53-flash-aj-iq2xxs/AJ-IQ2_XXS/GLM-5.3-Flash-AJ-IQ2_XXS-00001-of-00002.gguf",
+      "bytes": 87346006560,
+      "auto_fit": true,
+      "runtime": "/media/knight2/EDS2/tools/llama.cpp-glm53-pr27752/build-v100/bin/llama-server",
+      "topology": "physical GPU [1], split=none, CUDA_DEVICE_ORDER=PCI_BUS_ID, interconnect=local GPU",
+      "visible_device_probe": "ggml_cuda_init: found 1 CUDA devices (Total VRAM: 32494 MiB):\n  Device 0: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\nAvailable devices:\n  CUDA0: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n",
+      "loaded_gpu": {
+        "1": {
+          "util_pct": 0.0,
+          "memory_mib": 30887.0,
+          "power_w": 67.42,
+          "temperature_c": 44.0
+        }
+      },
+      "selected_gpus_active": true,
+      "selected_v100s_active": true,
+      "both_v100_active": false,
+      "gpu_decode_telemetry": {
+        "1": {
+          "samples": 89,
+          "max_util_pct": 56.0,
+          "mean_util_pct": 25.78,
+          "max_memory_mib": 31547.0,
+          "max_power_w": 162.84,
+          "max_temperature_c": 47.0
+        }
+      },
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "event_type": "takeover",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-04-08",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-01",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": true,
+              "delisted_date": true,
+              "completion_date": true,
+              "successor": true
+            }
+          },
+          "raw": "```json\n{\n  \"event_type\": \"takeover\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-04-08\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}\n```\nThe user wants lifecycle facts for \"RIV AU ONLY\" — that seems to be Riversdale (ASX code RIV, Australian listing). Extract from passages:\n\n- event_type: takeover/acquisition? The fields: event_type, acquirer, control_date, delisted_date, completion_date, successor.\n\nFrom Passage A:\n- Rio Tinto acquired 52.6% on 8 April 2011 → control_date = 2011-04-08 (acquired majority control)\n- On 1 August 2011 interest became 100% → completion_date = 2011-08-01\n- Riversdale delisted 7 July 2011 → delisted_date = 2011-07-07\n- Renamed Rio Tinto Coal Mozambique → successor = \"Rio Tinto Coal Moza"
+        },
+        "arithmetic_payout": {
+          "score": 1.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 5332.32
+          },
+          "raw": "5332.32\nstake_notional = 12000 * 18.40 = 220,800 USD\npayout = 220800 * 0.023 * 1.05\n\n220800 * 0.023 = 5078.4\n5078.4 * 1.05 = 5332.32"
+        },
+        "code_exec_drawdown": {
+          "score": 1.0,
+          "detail": {
+            "model_result": -0.25839999999999996,
+            "reference": -0.2584
+          },
+          "raw": "The user wants a Python function `max_drawdown(returns)` that:\n1. Takes a list of daily simple returns (floats)\n2. Computes the cumulative wealth index starting at 1.0\n3. Returns the maximum drawdown as a negative float (e.g., -0.25 for -25%)\n\nLet me think about the math:\n- Wealth index: W[0] = 1.0, then W[t] = W[t-1] * (1 + r[t]) for each return r[t]\n- Drawdown at time t: DD[t] = W[t] / running_max(W) - 1, which is ≤ 0\n- Maximum drawdown = min over t of DD[t] (the most negative one)\n\nSo the maximum drawdown is the largest peak-to-trough decline in the cumulative wealth curve.\n\nImplementation:\n```python\ndef max_drawdown(returns):\n    wealth = 1.0\n    peak = 1.0\n    max_dd = 0.0\n    for r in returns:\n        wealth *= (1.0 + r)\n        if wealth > peak:\n            peak = wealth\n        dd "
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "{\"ticker\": \"AAPL\", \"country_iso2\": \"US\", \"is_delisted\": false}\nThe user wants a JSON object with keys: \"ticker\" (string), \"country_iso2\" (2-letter uppercase string), \"is_delisted\" (boolean). For Apple Inc: ticker \"AAPL\", country \"US\", is_delisted false.\n\nReturn only the JSON object, no markdown fence, no commentary."
+        },
+        "gics_format_following": {
+          "score": 0.5,
+          "detail": {
+            "lines": [
+              "The user wants exactly 5 official GICS equity sector names from the real 11-sector classification. The 11 GICS sectors are:",
+              "1. Energy",
+              "2. Materials",
+              "3. Industrials",
+              "4. Consumer Discretionary",
+              "5. Consumer Staples",
+              "6. Health Care",
+              "7. Financials",
+              "8. Information Technology",
+              "9. Communication Services",
+              "10. Utilities",
+              "11. Real Estate",
+              "They want exactly 5 lines, each line only the sector name in Title Case, nothing else. No numbering, no bullets, no preamble, no closing remarks",
+              "I need to pick 5 of these. Let me pick 5 valid ones:",
+              "Energy",
+              "Materials",
+              "Industrials",
+              "Financials",
+              "Information Technology",
+              "Wait — Title Case"
+            ],
+            "line_count_ok": false,
+            "distinct_valid_sectors": 5
+          },
+          "raw": "The user wants exactly 5 official GICS equity sector names from the real 11-sector classification. The 11 GICS sectors are:\n1. Energy\n2. Materials\n3. Industrials\n4. Consumer Discretionary\n5. Consumer Staples\n6. Health Care\n7. Financials\n8. Information Technology\n9. Communication Services\n10. Utilities\n11. Real Estate\n\nThey want exactly 5 lines, each line only the sector name in Title Case, nothing else. No numbering, no bullets, no preamble, no closing remarks.\n\nI need to pick 5 of these. Let me pick 5 valid ones:\nEnergy\nMaterials\nIndustrials\nFinancials\nInformation Technology\n\nWait — Title Case"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "The user is asking about the NOTE embedded in the document. The NOTE says: \"Rio Tinto obtained control of Riversdale Mining (RIV AU) on 2011-04-08.\"\n\nThe question asks for the exact date in YYYY-MM-DD format, and to answer with only the date"
+        },
+        "summary_faithfulness": {
+          "score": 1.0,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": true
+          },
+          "raw": "The user wants a 2-3 sentence summary of this technical note, preserving key numeric facts exactly, without inventing numbers.\n\nKey numeric facts present:\n- 13,350 of 21,535 train+validation tickers (62%) left the universe before data's end\n- Yahoo serves no data for delisted names (sample 2026-08-13: 0/60 hits)\n- Tiingo keeps delisted US history: WBMD 3,013 rows, RECN 6,450, CLDA 2,597\n- US names: 4,802 tickers (largest country block of dead universe)\n- Input: reports/dead_equity_gap_matrix_20260813.parquet\n- Output: data/equity/raw/tiingo_delisted/tiingo_ohlcv_<batch>.parquet in yahoo_full_universe shard schema\n- Resumable state file, 429 rate limit handling\n- Script: scripts/collect_tiingo_delisted_prices.py with --limit N and --sleep SEC"
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "The passage says: 'XZQ99 Holdings is a private entity with no public listing history in any available record.'\n\nThe question asks: on what exact date was the company XZQ99 Holdings delisted? If the passage does not state a delisting date, respond with exactly: INSUFF"
+        },
+        "_mean_score": 0.9375
+      },
+      "benchmark_mean_score": 0.9375,
+      "benchmark_task_count": 8,
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 9.037719934243677,
+      "prompt_tokens_per_second": 19.545349119025964,
+      "elapsed_seconds_including_load_and_tests": 361.25,
+      "server_log": "/tmp/glm53-flash-aj-iq2xxs-single-v100.log"
+    },
+    {
+      "model": "glm53-flash-aj-iq2xxs",
+      "profile": "single-v100-2",
+      "path": "/media/knight2/EDS2/models/llm/glm53-flash-aj-iq2xxs/AJ-IQ2_XXS/GLM-5.3-Flash-AJ-IQ2_XXS-00001-of-00002.gguf",
+      "bytes": 87346006560,
+      "auto_fit": true,
+      "runtime": "/media/knight2/EDS2/tools/llama.cpp-glm53-pr27752/build-v100/bin/llama-server",
+      "topology": "physical GPU [2], split=none, CUDA_DEVICE_ORDER=PCI_BUS_ID, interconnect=local GPU",
+      "visible_device_probe": "ggml_cuda_init: found 1 CUDA devices (Total VRAM: 32494 MiB):\n  Device 0: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\nAvailable devices:\n  CUDA0: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n",
+      "loaded_gpu": {
+        "2": {
+          "util_pct": 0.0,
+          "memory_mib": 30887.0,
+          "power_w": 68.85,
+          "temperature_c": 42.0
+        }
+      },
+      "selected_gpus_active": true,
+      "selected_v100s_active": true,
+      "both_v100_active": false,
+      "gpu_decode_telemetry": {
+        "2": {
+          "samples": 90,
+          "max_util_pct": 56.0,
+          "mean_util_pct": 26.78,
+          "max_memory_mib": 31547.0,
+          "max_power_w": 235.4,
+          "max_temperature_c": 49.0
+        }
+      },
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "event_type": "takeover",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-04-08",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-01",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": true,
+              "delisted_date": true,
+              "completion_date": true,
+              "successor": true
+            }
+          },
+          "raw": "```json\n{\n  \"event_type\": \"takeover\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-04-08\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}\n```\nThe user wants lifecycle facts for \"RIV AU ONLY\" — that seems to be Riversdale (ASX code RIV, Australian listing). Extract from passages:\n\n- event_type: takeover/acquisition? The fields: event_type, acquirer, control_date, delisted_date, completion_date, successor.\n\nFrom Passage A:\n- Rio Tinto acquired 52.6% on 8 April 2011 → control_date = 2011-04-08 (acquired majority control)\n- On 1 August 2011 interest became 100% → completion_date = 2011-08-01\n- Riversdale delisted 7 July 2011 → delisted_date = 2011-07-07\n- Renamed Rio Tinto Coal Mozambique → successor = \"Rio Tinto Coal Moza"
+        },
+        "arithmetic_payout": {
+          "score": 1.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 5332.32
+          },
+          "raw": "5332.32\nstake_notional = 12000 * 18.40 = 220,800 USD\npayout = 220800 * 0.023 * 1.05\n\n220800 * 0.023 = 5078.4\n5078.4 * 1.05 = 5332.32"
+        },
+        "code_exec_drawdown": {
+          "score": 1.0,
+          "detail": {
+            "model_result": -0.25839999999999996,
+            "reference": -0.2584
+          },
+          "raw": "The user wants a Python function `max_drawdown(returns)` that:\n1. Takes a list of daily simple returns (floats)\n2. Computes the cumulative wealth index starting at 1.0\n3. Returns the maximum drawdown as a negative float (e.g., -0.25 for -25%)\n\nLet me think about the math:\n- Wealth index: W[0] = 1.0, then W[t] = W[t-1] * (1 + r[t]) for each return r[t]\n- Drawdown at time t: DD[t] = W[t] / running_max(W) - 1, which is ≤ 0\n- Maximum drawdown = min over t of DD[t] (the most negative one)\n\nSo the maximum drawdown is the largest peak-to-trough decline in the cumulative wealth curve.\n\nImplementation:\n```python\ndef max_drawdown(returns):\n    wealth = 1.0\n    peak = 1.0\n    max_dd = 0.0\n    for r in returns:\n        wealth *= (1.0 + r)\n        if wealth > peak:\n            peak = wealth\n        dd "
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "{\"ticker\": \"AAPL\", \"country_iso2\": \"US\", \"is_delisted\": false}\nThe user wants a JSON object with keys: \"ticker\" (string), \"country_iso2\" (2-letter uppercase string), \"is_delisted\" (boolean). For Apple Inc: ticker \"AAPL\", country \"US\", is_delisted false.\n\nReturn only the JSON object, no markdown fence, no commentary."
+        },
+        "gics_format_following": {
+          "score": 0.5,
+          "detail": {
+            "lines": [
+              "The user wants exactly 5 official GICS equity sector names from the real 11-sector classification. The 11 GICS sectors are:",
+              "1. Energy",
+              "2. Materials",
+              "3. Industrials",
+              "4. Consumer Discretionary",
+              "5. Consumer Staples",
+              "6. Health Care",
+              "7. Financials",
+              "8. Information Technology",
+              "9. Communication Services",
+              "10. Utilities",
+              "11. Real Estate",
+              "They want exactly 5 lines, each line only the sector name in Title Case, nothing else. No numbering, no bullets, no preamble, no closing remarks",
+              "I need to pick 5 of these. Let me pick 5 valid ones:",
+              "Energy",
+              "Materials",
+              "Industrials",
+              "Financials",
+              "Information Technology",
+              "Wait — Title Case"
+            ],
+            "line_count_ok": false,
+            "distinct_valid_sectors": 5
+          },
+          "raw": "The user wants exactly 5 official GICS equity sector names from the real 11-sector classification. The 11 GICS sectors are:\n1. Energy\n2. Materials\n3. Industrials\n4. Consumer Discretionary\n5. Consumer Staples\n6. Health Care\n7. Financials\n8. Information Technology\n9. Communication Services\n10. Utilities\n11. Real Estate\n\nThey want exactly 5 lines, each line only the sector name in Title Case, nothing else. No numbering, no bullets, no preamble, no closing remarks.\n\nI need to pick 5 of these. Let me pick 5 valid ones:\nEnergy\nMaterials\nIndustrials\nFinancials\nInformation Technology\n\nWait — Title Case"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "The user is asking about the NOTE embedded in the document. The NOTE says: \"Rio Tinto obtained control of Riversdale Mining (RIV AU) on 2011-04-08.\"\n\nThe question asks for the exact date in YYYY-MM-DD format, and to answer with only the date"
+        },
+        "summary_faithfulness": {
+          "score": 1.0,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": true
+          },
+          "raw": "The user wants a 2-3 sentence summary of this technical note, preserving key numeric facts exactly, without inventing numbers.\n\nKey numeric facts present:\n- 13,350 of 21,535 train+validation tickers (62%) left the universe before data's end\n- Yahoo serves no data for delisted names (sample 2026-08-13: 0/60 hits)\n- Tiingo keeps delisted US history: WBMD 3,013 rows, RECN 6,450, CLDA 2,597\n- US names: 4,802 tickers (largest country block of dead universe)\n- Input: reports/dead_equity_gap_matrix_20260813.parquet\n- Output: data/equity/raw/tiingo_delisted/tiingo_ohlcv_<batch>.parquet in yahoo_full_universe shard schema\n- Resumable state file, 429 rate limit handling\n- Script: scripts/collect_tiingo_delisted_prices.py with --limit N and --sleep SEC"
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "The passage says: 'XZQ99 Holdings is a private entity with no public listing history in any available record.'\n\nThe question asks: on what exact date was the company XZQ99 Holdings delisted? If the passage does not state a delisting date, respond with exactly: INSUFF"
+        },
+        "_mean_score": 0.9375
+      },
+      "benchmark_mean_score": 0.9375,
+      "benchmark_task_count": 8,
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 9.100883724361427,
+      "prompt_tokens_per_second": 19.84262155424609,
+      "elapsed_seconds_including_load_and_tests": 370.11,
+      "server_log": "/tmp/glm53-flash-aj-iq2xxs-single-v100-2.log"
+    },
+    {
+      "model": "glm53-flash-aj-iq2xxs",
+      "profile": "dual-layer",
+      "path": "/media/knight2/EDS2/models/llm/glm53-flash-aj-iq2xxs/AJ-IQ2_XXS/GLM-5.3-Flash-AJ-IQ2_XXS-00001-of-00002.gguf",
+      "bytes": 87346006560,
+      "auto_fit": true,
+      "runtime": "/media/knight2/EDS2/tools/llama.cpp-glm53-pr27752/build-v100/bin/llama-server",
+      "topology": "physical GPU [1, 2], split=layer, CUDA_DEVICE_ORDER=PCI_BUS_ID, interconnect=NVLink",
+      "visible_device_probe": "ggml_cuda_init: found 2 CUDA devices (Total VRAM: 64988 MiB):\n  Device 0: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\n  Device 1: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\nAvailable devices:\n  CUDA0: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n  CUDA1: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n",
+      "loaded_gpu": {
+        "1": {
+          "util_pct": 0.0,
+          "memory_mib": 31221.0,
+          "power_w": 54.68,
+          "temperature_c": 39.0
+        },
+        "2": {
+          "util_pct": 0.0,
+          "memory_mib": 31431.0,
+          "power_w": 70.36,
+          "temperature_c": 46.0
+        }
+      },
+      "selected_gpus_active": true,
+      "selected_v100s_active": true,
+      "both_v100_active": true,
+      "gpu_decode_telemetry": {
+        "1": {
+          "samples": 63,
+          "max_util_pct": 27.0,
+          "mean_util_pct": 19.02,
+          "max_memory_mib": 31367.0,
+          "max_power_w": 271.86,
+          "max_temperature_c": 47.0
+        },
+        "2": {
+          "samples": 63,
+          "max_util_pct": 64.0,
+          "mean_util_pct": 31.17,
+          "max_memory_mib": 31575.0,
+          "max_power_w": 126.52,
+          "max_temperature_c": 48.0
+        }
+      },
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "event_type": "takeover",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-04-08",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-01",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": true,
+              "delisted_date": true,
+              "completion_date": true,
+              "successor": true
+            }
+          },
+          "raw": "{\"event_type\":\"takeover\",\"acquirer\":\"Rio Tinto\",\"control_date\":\"2011-04-08\",\"delisted_date\":\"2011-07-07\",\"completion_date\":\"2011-08-01\",\"successor\":\"Rio Tinto Coal Mozambique\"}\nWe need to extract lifecycle facts for \"RIV AU ONLY\" — likely ticker RIV (Riversdale Mining Limited, ASX: RIV). We need one compact JSON object with scalar-string keys: event_type, acquirer, control_date, delisted_date, completion_date, successor.\n\nFrom passages:\n- Passage A: Rio Tinto acquired 52.6% on 8 April 2011 (control date = 2011-04-08); on 1 August 2011 interest became 100% (completion date = 2011-08-01); Riversdale delisted 7 July 2011 (delisted_date = 2011-07-07); renamed Rio Tinto Coal Mozambique (successor = Rio Tinto Coal Mozambique).\n- Passage B: takeover completed in August 2011; delisted and renamed."
+        },
+        "arithmetic_payout": {
+          "score": 1.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 5332.32
+          },
+          "raw": "5332.32\nstake_notional = 12000 * 18.40 = 220,800 USD.\n\npayout = 220800 * 0.023 * 1.05.\n\n220800 * 0.023 = 5078.4\n5078.4 * 1.05 = 5332.32"
+        },
+        "code_exec_drawdown": {
+          "score": 0.0,
+          "detail": {
+            "reason": "no max_drawdown function found in output",
+            "code_present": false
+          },
+          "raw": "The user wants a Python function `max_drawdown(returns)` that:\n1. Takes a list of daily simple returns (floats)\n2. Computes the cumulative wealth index starting at 1.0\n3. Returns the maximum drawdown as a negative float (e.g., -0.25 for -25%)\n\nLet me think about the math:\n- Wealth index: W[0] = 1.0, then W[i] = W[i-1] * (1 + returns[i-1]) for each return.\n- Actually, let me be careful with indexing. If returns is a list of daily simple returns, the wealth index starts at 1.0. After day i, wealth = product of (1 + r) for all returns up to and including day i.\n- Maximum drawdown: the largest peak-to-trough decline in the wealth index. Drawdown at time t = (W[t] / max(W[0..t]) - 1), which is ≤ 0. The maximum drawdown is the minimum (most negative) of these drawdown values.\n\nSo the algorithm:\n"
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "{\"ticker\": \"AAPL\", \"country_iso2\": \"US\", \"is_delisted\": false}\nThe user wants a JSON object with keys: \"ticker\" (string), \"country_iso2\" (2-letter uppercase string), \"is_delisted\" (boolean). For Apple Inc: ticker \"AAPL\", country \"US\", is_delisted false.\n\nReturn only the JSON object, no markdown fence, no commentary."
+        },
+        "gics_format_following": {
+          "score": 0.5,
+          "detail": {
+            "lines": [
+              "The user wants exactly 5 official GICS equity sector names from the real 11-sector classification. The 11 GICS sectors are:",
+              "1. Energy",
+              "2. Materials",
+              "3. Industrials",
+              "4. Consumer Discretionary",
+              "5. Consumer Staples",
+              "6. Health Care",
+              "7. Financials",
+              "8. Information Technology",
+              "9. Communication Services",
+              "10. Utilities",
+              "11. Real Estate",
+              "They want exactly 5 lines, each line only the sector name in Title Case, nothing else. No numbering, no bullets, no preamble, no closing remarks",
+              "I need to pick 5 of these. Let me pick 5 valid ones:",
+              "Energy",
+              "Materials",
+              "Industrials",
+              "Financials",
+              "Information Technology"
+            ],
+            "line_count_ok": false,
+            "distinct_valid_sectors": 5
+          },
+          "raw": "The user wants exactly 5 official GICS equity sector names from the real 11-sector classification. The 11 GICS sectors are:\n1. Energy\n2. Materials\n3. Industrials\n4. Consumer Discretionary\n5. Consumer Staples\n6. Health Care\n7. Financials\n8. Information Technology\n9. Communication Services\n10. Utilities\n11. Real Estate\n\nThey want exactly 5 lines, each line only the sector name in Title Case, nothing else. No numbering, no bullets, no preamble, no closing remarks.\n\nI need to pick 5 of these. Let me pick 5 valid ones:\n- Energy\n- Materials\n- Industrials\n- Financials\n- Information Technology"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "The user asks: according to the NOTE embedded above, on what exact date did Rio Tinto obtain control of Riversdale Mining? The note says: \"Rio Tinto obtained control of Riversdale Mining (RIV AU) on 2011-04-08.\"\n\nAnswer with only the date:"
+        },
+        "summary_faithfulness": {
+          "score": 1.0,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": true
+          },
+          "raw": "The user wants a 2-3 sentence summary of this technical note, preserving key numeric facts exactly, without inventing numbers.\n\nKey numeric facts present:\n- 13,350 of 21,535 train+validation tickers (62%) left the universe before data's end\n- Yahoo serves no data for delisted names (sample 2026-08-13: 0/60 hits)\n- Tiingo keeps delisted US history: WBMD 3,013 rows, RECN 6,450, CLDA 2,597\n- US names: 4,802 tickers (largest country block of dead universe)\n- Input: reports/dead_equity_gap_matrix_20260813.parquet\n- Output: data/equity/raw/tiingo_delisted/tiingo_ohlcv_<batch>.parquet in yahoo_full_universe shard schema\n- Resumable state file: data/knowledge/tiingo_delisted_state.json; 429 rate limit aborts cleanly, resumes\n- Usage: python3"
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "INSUFFICIENT_INFORMATION\nThe passage says XZQ99 Holdings is a private entity with no public listing history. It does not state a delisting date. So the answer is INSUFFICIENT_INFORMATION."
+        },
+        "_mean_score": 0.8125
+      },
+      "benchmark_mean_score": 0.8125,
+      "benchmark_task_count": 8,
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 13.119349033335496,
+      "prompt_tokens_per_second": 27.18196422309869,
+      "elapsed_seconds_including_load_and_tests": 254.45,
+      "server_log": "/tmp/glm53-flash-aj-iq2xxs-dual-layer.log"
+    },
+    {
+      "model": "glm53-flash-aj-iq2xxs",
+      "profile": "single-ada",
+      "path": "/media/knight2/EDS2/models/llm/glm53-flash-aj-iq2xxs/AJ-IQ2_XXS/GLM-5.3-Flash-AJ-IQ2_XXS-00001-of-00002.gguf",
+      "bytes": 87346006560,
+      "auto_fit": true,
+      "runtime": "/media/knight2/EDS2/tools/llama.cpp-glm53-pr27752/build-v100/bin/llama-server",
+      "topology": "physical GPU [3], split=none, CUDA_DEVICE_ORDER=PCI_BUS_ID, interconnect=local GPU",
+      "visible_device_probe": "ggml_cuda_init: found 1 CUDA devices (Total VRAM: 20017 MiB):\n  Device 0: NVIDIA RTX 4000 Ada Generation, compute capability 8.9, VMM: yes, VRAM: 20017 MiB\nAvailable devices:\n  CUDA0: NVIDIA RTX 4000 Ada Generation (20017 MiB, 19277 MiB free)\n",
+      "loaded_gpu": {
+        "3": {
+          "util_pct": 7.0,
+          "memory_mib": 18817.0,
+          "power_w": 39.5,
+          "temperature_c": 44.0
+        }
+      },
+      "selected_gpus_active": true,
+      "selected_v100s_active": true,
+      "both_v100_active": false,
+      "gpu_decode_telemetry": {
+        "3": {
+          "samples": 106,
+          "max_util_pct": 38.0,
+          "mean_util_pct": 33.19,
+          "max_memory_mib": 19351.0,
+          "max_power_w": 54.85,
+          "max_temperature_c": 63.0
+        }
+      },
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 0.0,
+          "detail": {
+            "extracted": {},
+            "checks": {
+              "event_type": false,
+              "acquirer": false,
+              "control_date": false,
+              "delisted_date": false,
+              "completion_date": false,
+              "successor": false
+            }
+          },
+          "raw": "We need to extract lifecycle facts for RIV AU ONLY (Riversdale? Actually \"RIV AU\" likely Riversdale Limited, ASX code RIV). We need one compact JSON object with scalar-string keys: event_type, acquirer, control_date, delisted_date, completion_date, successor.\n\nFrom passages:\n- Passage A: Rio Tinto acquired 52.6% on 8 April 2011; on 1 August 2011 interest became 100%; Riversdale delisted 7 July 2011 and subsequently renamed Rio Tinto Coal Mozambique.\n- Passage B: takeover completed in August 2011; delisted and renamed Rio Tinto Coal Mozambique.\n\nFields:\n- event_type: takeover? The event type — likely \"takeover\" (acquisition). We should state what's given: \"takeover\" from Passage B (\"the Rio Tinto takeover\"). Could be \"acquisition\". Use \"takeover\".\n- acquirer: Rio Tinto.\n- control_date: 8 Ap"
+        },
+        "arithmetic_payout": {
+          "score": 1.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 5332.32
+          },
+          "raw": "5332.32\nstake_notional = 12000 * 18.40 = 220,800 USD\npayout = 220800 * 0.023 * 1.05\n\n220800 * 0.023 = 5078.4\n5078.4 * 1.05 = 5332.32"
+        },
+        "code_exec_drawdown": {
+          "score": 1.0,
+          "detail": {
+            "model_result": -0.2584,
+            "reference": -0.2584
+          },
+          "raw": "The user wants a Python function `max_drawdown(returns)` that:\n1. Takes a list of daily simple returns (floats)\n2. Computes the cumulative wealth index starting at 1.0\n3. Returns the maximum drawdown as a negative float (e.g., -0.25 for -25%)\n\nLet me think about the math:\n- Wealth index: W[0] = 1.0, then W[i] = W[i-1] * (1 + returns[i-1]) for each return.\n- Actually, let me be careful with indexing. If returns is a list of daily simple returns, then:\n  - wealth = 1.0\n  - for r in returns: wealth *= (1 + r)\n  - Track the running maximum of wealth, and the drawdown at each point is (wealth - peak) / peak, which is <= 0.\n  - Maximum drawdown is the minimum (most negative) of these drawdowns.\n\nSo:\n```python\ndef max_drawdown(returns):\n    wealth = 1.0\n    peak = 1.0\n    max_dd = 0.0\n    for r i"
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "{\"ticker\": \"AAPL\", \"country_iso2\": \"US\", \"is_delisted\": false}\nThe user wants a JSON object with keys: \"ticker\" (string), \"country_iso2\" (2-letter uppercase string), \"is_delisted\" (boolean). For Apple Inc: ticker \"AAPL\", country \"US\", is_delisted false.\n\nReturn only the JSON object, no markdown fence, no commentary."
+        },
+        "gics_format_following": {
+          "score": 0.5,
+          "detail": {
+            "lines": [
+              "The user wants exactly 5 official GICS equity sector names from the real 11-sector classification. The 11 GICS sectors are:",
+              "1. Energy",
+              "2. Materials",
+              "3. Industrials",
+              "4. Consumer Discretionary",
+              "5. Consumer Staples",
+              "6. Health Care",
+              "7. Financials",
+              "8. Information Technology",
+              "9. Communication Services",
+              "10. Utilities",
+              "11. Real Estate",
+              "They want exactly 5 lines, each line only the sector name in Title Case, nothing else. No numbering, no bullets, no preamble, no closing remarks",
+              "I need to pick 5 of these. Let me pick 5 valid ones:",
+              "Energy",
+              "Financials",
+              "Information Technology",
+              "Health Care",
+              "Consumer Staples"
+            ],
+            "line_count_ok": false,
+            "distinct_valid_sectors": 5
+          },
+          "raw": "The user wants exactly 5 official GICS equity sector names from the real 11-sector classification. The 11 GICS sectors are:\n1. Energy\n2. Materials\n3. Industrials\n4. Consumer Discretionary\n5. Consumer Staples\n6. Health Care\n7. Financials\n8. Information Technology\n9. Communication Services\n10. Utilities\n11. Real Estate\n\nThey want exactly 5 lines, each line only the sector name in Title Case, nothing else. No numbering, no bullets, no preamble, no closing remarks.\n\nI need to pick 5 of these. Let me pick 5 valid ones:\n- Energy\n- Financials\n- Information Technology\n- Health Care\n- Consumer Staples"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "2011-04-08\nThe user asks: according to the NOTE embedded above, on what exact date did Rio Tinto obtain control of Riversdale Mining? The note says 2011-04-08. Answer with only the date."
+        },
+        "summary_faithfulness": {
+          "score": 0.6667,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": false
+          },
+          "raw": "The user wants a 2-3 sentence summary of this technical note, preserving key numeric facts exactly, without inventing numbers.\n\nKey numeric facts present:\n- 13,350 of 21,535 train+validation tickers (62%) left the universe before data's end\n- Yahoo serves 0/60 hits for delisted names (sample 2026-08-13)\n- Tiingo keeps delisted US history: WBMD 3,013 rows, RECN 6,450, CLDA 2,597\n- 4,802 tickers = largest country block of dead universe (US names)\n- Output schema matches yahoo_full_universe shards\n- State file tracks done/empty/error per symbol; 429 rate limit aborts cleanly, resumable\n\nI need to summarize in 2-3 sentences. Let me draft:\n\nSentence 1: This collector fetches full price history for delisted US equities from Tiingo to close the survivorship gap in the Numerai Signals universe, wh"
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "INSUFFICIENT_INFORMATION\nThe passage says XZQ99 Holdings is a private entity with no public listing history. It does not state a delisting date. So the answer is INSUFFICIENT_INFORMATION."
+        },
+        "_mean_score": 0.7708
+      },
+      "benchmark_mean_score": 0.7708,
+      "benchmark_task_count": 8,
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 7.824875721794921,
+      "prompt_tokens_per_second": 18.496585222091582,
+      "elapsed_seconds_including_load_and_tests": 414.35,
+      "server_log": "/tmp/glm53-flash-aj-iq2xxs-single-ada.log"
+    },
+    {
+      "model": "glm53-flash-aj-iq2xxs",
+      "profile": "single-a4000",
+      "path": "/media/knight2/EDS2/models/llm/glm53-flash-aj-iq2xxs/AJ-IQ2_XXS/GLM-5.3-Flash-AJ-IQ2_XXS-00001-of-00002.gguf",
+      "bytes": 87346006560,
+      "auto_fit": true,
+      "runtime": "/media/knight2/EDS2/tools/llama.cpp-glm53-pr27752/build-v100/bin/llama-server",
+      "topology": "physical GPU [0], split=none, CUDA_DEVICE_ORDER=PCI_BUS_ID, interconnect=local GPU",
+      "visible_device_probe": "ggml_cuda_init: found 1 CUDA devices (Total VRAM: 14948 MiB):\n  Device 0: NVIDIA RTX A4000, compute capability 8.6, VMM: yes, VRAM: 14948 MiB\nAvailable devices:\n  CUDA0: NVIDIA RTX A4000 (14948 MiB, 14727 MiB free)\n",
+      "loaded_gpu": {
+        "0": {
+          "util_pct": 3.0,
+          "memory_mib": 13341.0,
+          "power_w": 65.93,
+          "temperature_c": 55.0
+        }
+      },
+      "selected_gpus_active": true,
+      "selected_v100s_active": true,
+      "both_v100_active": false,
+      "gpu_decode_telemetry": {
+        "0": {
+          "samples": 119,
+          "max_util_pct": 30.0,
+          "mean_util_pct": 25.55,
+          "max_memory_mib": 13803.0,
+          "max_power_w": 76.74,
+          "max_temperature_c": 82.0
+        }
+      },
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "event_type": "takeover",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-04-08",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-01",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": true,
+              "delisted_date": true,
+              "completion_date": true,
+              "successor": true
+            }
+          },
+          "raw": "{\"event_type\":\"takeover\",\"acquirer\":\"Rio Tinto\",\"control_date\":\"2011-04-08\",\"delisted_date\":\"2011-07-07\",\"completion_date\":\"2011-08-01\",\"successor\":\"Rio Tinto Coal Mozambique\"}\nWe need to extract lifecycle facts for \"RIV AU ONLY\" — likely ticker RIV.AU (Riversdale Mining listed on ASX, ticker RIV). The task: return one compact JSON object with scalar-string keys: event_type, acquirer, control_date, delisted_date, completion_date, successor.\n\nFrom passages:\n\nPassage A: Rio Tinto acquired 52.6% on 8 April 2011; on 1 August 2011 interest became 100%; Riversdale was delisted 7 July 2011 and subsequently renamed Rio Tinto Coal Mozambique.\n\nPassage B: takeover completed in August 2011; delisted and renamed Rio Tinto Coal Mozambique.\n\nFields:\n- event_type: this is a takeover/acquisition — \"takeov"
+        },
+        "arithmetic_payout": {
+          "score": 1.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 5332.32
+          },
+          "raw": "5332.32\nstake_notional = 12000 * 18.40 = 220,800 USD\npayout = 220800 * 0.023 * 1.05\n\n220800 * 0.023 = 5078.4\n5078.4 * 1.05 = 5332.32"
+        },
+        "code_exec_drawdown": {
+          "score": 0.0,
+          "detail": {
+            "reason": "no parseable output",
+            "stdout": "",
+            "stderr": "  File \"/media/knight2/EDS2/tmp/general/tmp4bcfx9rt/exec_0338aabe554a46dabd2717784cb25f19.py\", line 10\n    if dd\n         ^\nSyntaxError: expected ':'\n"
+          },
+          "raw": "The user wants a Python function `max_drawdown(returns)` that:\n1. Takes a list of daily simple returns (floats)\n2. Computes the cumulative wealth index starting at 1.0\n3. Returns the maximum drawdown as a negative float (e.g., -0.25 for -25%)\n\nMaximum drawdown is the largest peak-to-trough decline in the cumulative wealth curve. The standard approach:\n- Compute cumulative wealth: wealth[0] = 1.0, wealth[i] = wealth[i-1] * (1 + returns[i])\n- Track running maximum (peak)\n- Drawdown at each point = (wealth - peak) / peak\n- Maximum drawdown = minimum of drawdowns (which will be negative or zero)\n\nEdge cases to consider:\n- Empty list: wealth stays at 1.0, no drawdown, return 0.0? Or maybe -0.0? Typically return 0.0. But the spec says \"a negative float\". Hmm. If there are no returns, there's no "
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "{\"ticker\": \"AAPL\", \"country_iso2\": \"US\", \"is_delisted\": false}\nThe user wants a JSON object with keys: \"ticker\" (string), \"country_iso2\" (2-letter uppercase string), \"is_delisted\" (boolean). For Apple Inc: ticker \"AAPL\", country \"US\", is_delisted false.\n\nReturn only the JSON object, no markdown fence, no commentary."
+        },
+        "gics_format_following": {
+          "score": 0.5,
+          "detail": {
+            "lines": [
+              "The user wants exactly 5 official GICS equity sector names from the real 11-sector classification. The 11 GICS sectors are:",
+              "1. Energy",
+              "2. Materials",
+              "3. Industrials",
+              "4. Consumer Discretionary",
+              "5. Consumer Staples",
+              "6. Health Care",
+              "7. Financials",
+              "8. Information Technology",
+              "9. Communication Services",
+              "10. Utilities",
+              "11. Real Estate",
+              "They want exactly 5 lines, each line only the sector name in Title Case, nothing else. No numbering, no bullets, no preamble, no closing remarks",
+              "I need to pick 5 of these. Let me pick 5 valid ones:",
+              "Energy",
+              "Materials",
+              "Industrials",
+              "Financials",
+              "Information Technology",
+              "Wait — Title Case"
+            ],
+            "line_count_ok": false,
+            "distinct_valid_sectors": 5
+          },
+          "raw": "The user wants exactly 5 official GICS equity sector names from the real 11-sector classification. The 11 GICS sectors are:\n1. Energy\n2. Materials\n3. Industrials\n4. Consumer Discretionary\n5. Consumer Staples\n6. Health Care\n7. Financials\n8. Information Technology\n9. Communication Services\n10. Utilities\n11. Real Estate\n\nThey want exactly 5 lines, each line only the sector name in Title Case, nothing else. No numbering, no bullets, no preamble, no closing remarks.\n\nI need to pick 5 of these. Let me pick 5 valid ones:\nEnergy\nMaterials\nIndustrials\nFinancials\nInformation Technology\n\nWait — Title Case"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "The user asks about the NOTE embedded in the document. The NOTE says: \"Rio Tinto obtained control of Riversdale Mining (RIV AU) on 2011-04-08.\" The question asks for the exact date in YYYY-MM-DD format, answer with only the date, nothing else"
+        },
+        "summary_faithfulness": {
+          "score": 0.6667,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": false
+          },
+          "raw": "The user wants a 2-3 sentence summary of this technical note, preserving key numeric facts exactly, without inventing numbers.\n\nKey numeric facts present:\n- 13,350 of 21,535 train+validation tickers (62%) left the universe before data's end\n- Sample 2026-08-13: 0/60 hits on Yahoo\n- WBMD 3,013 rows, RECN 6,450, CLDA 2,597\n- 4,802 tickers US dead universe block\n- 429 rate limit handling\n\nI need to summarize in 2-3 sentences. Let me pick the most important facts. I should preserve numbers exactly. I don't need to include all numbers, but any I include must be exact. Let me draft:\n\n\"This collector fetches full price history for delisted US equities from Tiingo to close the survivorship gap in the Numerai Signals universe, where 13,350 of 21,535 train+validation tickers (62%) left before the da"
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "The passage says: 'XZQ99 Holdings is a private entity with no public listing history in any available record.'\n\nThe question asks: on what exact date was the company XZQ99 Holdings delisted?\n\nThe passage does not state a delisting date. It says the company is a private"
+        },
+        "_mean_score": 0.7708
+      },
+      "benchmark_mean_score": 0.7708,
+      "benchmark_task_count": 8,
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 7.0270139635585664,
+      "prompt_tokens_per_second": 17.4722947646016,
+      "elapsed_seconds_including_load_and_tests": 414.79,
+      "server_log": "/tmp/glm53-flash-aj-iq2xxs-single-a4000.log"
+    },
+    {
+      "model": "glm53-flash-aj-iq2xxs",
+      "profile": "dual-a4000ada",
+      "path": "/media/knight2/EDS2/models/llm/glm53-flash-aj-iq2xxs/AJ-IQ2_XXS/GLM-5.3-Flash-AJ-IQ2_XXS-00001-of-00002.gguf",
+      "bytes": 87346006560,
+      "auto_fit": true,
+      "runtime": "/media/knight2/EDS2/tools/llama.cpp-glm53-pr27752/build-v100/bin/llama-server",
+      "topology": "physical GPU [0, 3], split=layer, CUDA_DEVICE_ORDER=PCI_BUS_ID, interconnect=PCIe",
+      "visible_device_probe": "ggml_cuda_init: found 2 CUDA devices (Total VRAM: 34965 MiB):\n  Device 0: NVIDIA RTX A4000, compute capability 8.6, VMM: yes, VRAM: 14948 MiB\n  Device 1: NVIDIA RTX 4000 Ada Generation, compute capability 8.9, VMM: yes, VRAM: 20017 MiB\nAvailable devices:\n  CUDA0: NVIDIA RTX A4000 (14948 MiB, 14727 MiB free)\n  CUDA1: NVIDIA RTX 4000 Ada Generation (20017 MiB, 19277 MiB free)\n",
+      "loaded_gpu": {
+        "0": {
+          "util_pct": 5.0,
+          "memory_mib": 13811.0,
+          "power_w": 51.45,
+          "temperature_c": 74.0
+        },
+        "3": {
+          "util_pct": 10.0,
+          "memory_mib": 18877.0,
+          "power_w": 39.9,
+          "temperature_c": 49.0
+        }
+      },
+      "selected_gpus_active": true,
+      "selected_v100s_active": true,
+      "both_v100_active": true,
+      "gpu_decode_telemetry": {
+        "0": {
+          "samples": 103,
+          "max_util_pct": 14.0,
+          "mean_util_pct": 10.59,
+          "max_memory_mib": 13831.0,
+          "max_power_w": 58.25,
+          "max_temperature_c": 78.0
+        },
+        "3": {
+          "samples": 103,
+          "max_util_pct": 39.0,
+          "mean_util_pct": 33.23,
+          "max_memory_mib": 18897.0,
+          "max_power_w": 52.5,
+          "max_temperature_c": 64.0
+        }
+      },
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "event_type": "takeover",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-04-08",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-01",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": true,
+              "delisted_date": true,
+              "completion_date": true,
+              "successor": true
+            }
+          },
+          "raw": "{\"event_type\": \"takeover\", \"acquirer\": \"Rio Tinto\", \"control_date\": \"2011-04-08\", \"delisted_date\": \"2011-07-07\", \"completion_date\": \"2011-08-01\", \"successor\": \"Rio Tinto Coal Mozambique\"}\nWe need to extract lifecycle facts for \"RIV AU ONLY\" — likely ticker RIV (Riversdale Mining Limited, ASX: RIV). We need one compact JSON object with scalar-string keys: event_type, acquirer, control_date, delisted_date, completion_date, successor.\n\nFrom passages:\n- Passage A: Rio Tinto acquired 52.6% on 8 April 2011 (control date — acquisition of control/stake). On 1 August 2011 interest became 100% (completion of takeover? completion_date = 2011-08-01). Riversdale delisted 7 July 2011 (delisted_date = 2011-07-07). Renamed Rio Tinto Coal Mozambique (successor = Rio Tinto Coal Mozambique).\n- Passage B: tak"
+        },
+        "arithmetic_payout": {
+          "score": 1.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 5332.32
+          },
+          "raw": "5332.32\nstake_notional = 12000 * 18.40 = 220,800 USD\npayout = 220800 * 0.023 * 1.05\n\n220800 * 0.023 = 5078.4\n5078.4 * 1.05 = 5332.32"
+        },
+        "code_exec_drawdown": {
+          "score": 1.0,
+          "detail": {
+            "model_result": -0.2584,
+            "reference": -0.2584
+          },
+          "raw": "The user wants a Python function `max_drawdown(returns)` that:\n1. Takes a list of daily simple returns (floats)\n2. Computes the cumulative wealth index starting at 1.0\n3. Returns the maximum drawdown as a negative float (e.g., -0.25 for -25%)\n\nMaximum drawdown is the largest peak-to-trough decline in the cumulative wealth curve. The standard approach:\n- Compute cumulative wealth: wealth[0] = 1.0, wealth[i] = wealth[i-1] * (1 + returns[i])\n- Track running maximum (peak)\n- Drawdown at each point = (wealth - peak) / peak\n- Max drawdown = minimum of drawdowns (which will be ≤ 0)\n\nEdge cases to consider:\n- Empty list: wealth stays at 1.0, no drawdown. Should return 0.0? The spec says returns a negative float, but with no returns, there's no drawdown. Returning 0.0 seems reasonable. Actually, le"
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "{\"ticker\": \"AAPL\", \"country_iso2\": \"US\", \"is_delisted\": false}\nThe user wants a JSON object with keys: \"ticker\" (string), \"country_iso2\" (2-letter uppercase string), \"is_delisted\" (boolean). For Apple Inc: ticker \"AAPL\", country \"US\", is_delisted false.\n\nReturn only the JSON object, no markdown fence, no commentary."
+        },
+        "gics_format_following": {
+          "score": 0.0,
+          "detail": {
+            "lines": [
+              "The user wants exactly 5 official GICS equity sector names from the real 11-sector classification. The 11 GICS sectors are:",
+              "1. Energy",
+              "2. Materials",
+              "3. Industrials",
+              "4. Consumer Discretionary",
+              "5. Consumer Staples",
+              "6. Health Care",
+              "7. Financials",
+              "8. Information Technology",
+              "9. Communication Services",
+              "10. Utilities",
+              "11. Real Estate",
+              "They want exactly 5 lines, each line only the sector name in Title Case, no numbering, no bullets, no preamble, no closing remarks",
+              "I need to pick 5 of these. Let me pick: Energy, Materials, Industrials, Financials, Health Care. Or any 5. The example given was \"Energy,"
+            ],
+            "line_count_ok": false,
+            "distinct_valid_sectors": 0
+          },
+          "raw": "The user wants exactly 5 official GICS equity sector names from the real 11-sector classification. The 11 GICS sectors are:\n1. Energy\n2. Materials\n3. Industrials\n4. Consumer Discretionary\n5. Consumer Staples\n6. Health Care\n7. Financials\n8. Information Technology\n9. Communication Services\n10. Utilities\n11. Real Estate\n\nThey want exactly 5 lines, each line only the sector name in Title Case, no numbering, no bullets, no preamble, no closing remarks.\n\nI need to pick 5 of these. Let me pick: Energy, Materials, Industrials, Financials, Health Care. Or any 5. The example given was \"Energy,"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "The user is asking about the NOTE embedded in the document. The NOTE says: \"Rio Tinto obtained control of Riversdale Mining (RIV AU) on 2011-04-08.\"\n\nThe question asks for the exact date in YYYY-MM-DD format, and to answer with only the date"
+        },
+        "summary_faithfulness": {
+          "score": 0.6667,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": false
+          },
+          "raw": "The user wants a 2-3 sentence summary of this technical note, preserving key numeric facts exactly, without inventing numbers.\n\nKey numeric facts present:\n- 13,350 of 21,535 train+validation tickers (62%) left the universe before data's end\n- Yahoo serves 0/60 hits for delisted names (sample 2026-08-13)\n- Tiingo keeps delisted US history: WBMD 3,013 rows, RECN 6,450, CLDA 2,597\n- 4,802 tickers = largest country block of dead universe (US names)\n- Output schema matches yahoo_full_universe shards\n- State file tracks done/empty/error per symbol; 429 rate limit aborts cleanly, resumable\n\nI need to summarize in 2-3 sentences. Let me draft:\n\nSentence 1: This collector fetches full price history for delisted US equities from Tiingo, closing the survivorship gap in the Numerai Signals universe whe"
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "INSUFFICIENT_INFORMATION\nThe passage says XZQ99 Holdings is a private entity with no public listing history in any available record. It does not state a delisting date. So the answer should be exactly: INSUFFICIENT_INFORMATION."
+        },
+        "_mean_score": 0.8333
+      },
+      "benchmark_mean_score": 0.8333,
+      "benchmark_task_count": 8,
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 8.411963752155442,
+      "prompt_tokens_per_second": 20.30103731533669,
+      "elapsed_seconds_including_load_and_tests": 338.34,
+      "server_log": "/tmp/glm53-flash-aj-iq2xxs-dual-a4000ada.log"
+    }
+  ],
+  "created_at": "2026-09-21T18:01:24.962494+00:00",
+  "matrix_model": "glm53-flash-aj-iq2xxs",
+  "provenance": {
+    "requested_family": "GLM-5.3",
+    "tested_model": "GLM-5.3-Flash",
+    "parameter_count": "313.33B stored inference trunk / 17.3B active",
+    "quantization": "AJ-IQ2_XXS hand-mixed GGUF, 2.23 bpw",
+    "source_repo": "aj9o9/GLM-5.3-Flash-GGUF",
+    "source_url": "https://huggingface.co/aj9o9/GLM-5.3-Flash-GGUF",
+    "source_revision": "07c62fcdeaf1c05d22bd123c3da8058a1b1e63e2",
+    "source_last_modified": "2026-09-01T20:10:54Z",
+    "weight_bytes": 87346006560,
+    "weight_shards": {
+      "AJ-IQ2_XXS/GLM-5.3-Flash-AJ-IQ2_XXS-00001-of-00002.gguf": {
+        "bytes": 44665098240,
+        "sha256": "1fa0535ecddaee4ff127eb8ffd47d3855ca7efa1cc29c996c24da699c5fbe3f7"
+      },
+      "AJ-IQ2_XXS/GLM-5.3-Flash-AJ-IQ2_XXS-00002-of-00002.gguf": {
+        "bytes": 42680908320,
+        "sha256": "ab8abbde061254a7f6b1a16b3627c4b77e3084f52e3d9739ebaa515b9365945c"
+      }
+    },
+    "runtime_pr": "https://github.com/ggml-org/llama.cpp/pull/27752",
+    "runtime_commit": "1d0c76f3c6d030fdfc269aa27db6334ea2834cec",
+    "official_base": "https://huggingface.co/zai-org/GLM-5.3-Flash",
+    "selection_reason": "The official 753B GLM-5.3 and higher-bit Flash artifacts do not fit the disk. This public 87.35 GB quant fits, documents its measured quality, and targets the pinned llama.cpp GLM-5.3-Flash implementation."
+  },
+  "profile_policy": "Each row exposes only its named physical GPU(s); single-V100 rows expose GPU1 and GPU2 independently. Layer split is used for heterogeneous and NVLink combinations; unsafe long-running V100 tensor split is excluded."
+}

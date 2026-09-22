@@ -1,0 +1,271 @@
+{
+  "model": "qwen38-1cat-vllm-target",
+  "engine": "1cat-vllm-nvfp4-target",
+  "eval_protocol": "v4-mmlu-fewshot-20260918",
+  "gsm8k": {
+    "name": "gsm8k",
+    "alias": "gsm8k",
+    "sample_len": 50,
+    "exact_match,strict-match": 0.28,
+    "exact_match_stderr,strict-match": 0.06414269805898185,
+    "exact_match,flexible-extract": 0.34,
+    "exact_match_stderr,flexible-extract": 0.0676726816132972
+  },
+  "truthfulqa_gen": {
+    "name": "truthfulqa_gen",
+    "alias": "truthfulqa_gen",
+    "sample_len": 30,
+    "bleu_max,none": 16.02849785219984,
+    "bleu_max_stderr,none": 3.6213396360643246,
+    "bleu_acc,none": 0.3,
+    "bleu_acc_stderr,none": 0.08509629433967632,
+    "bleu_diff,none": -6.7740435134493024,
+    "bleu_diff_stderr,none": 2.8262036824815757,
+    "rouge1_max,none": 35.43357742156623,
+    "rouge1_max_stderr,none": 4.300983113019566,
+    "rouge1_acc,none": 0.3333333333333333,
+    "rouge1_acc_stderr,none": 0.0875376219064817,
+    "rouge1_diff,none": -7.135929097070916,
+    "rouge1_diff_stderr,none": 3.4086617182771954,
+    "rouge2_max,none": 22.312588115870014,
+    "rouge2_max_stderr,none": 4.388502374735969,
+    "rouge2_acc,none": 0.26666666666666666,
+    "rouge2_acc_stderr,none": 0.08211756827352532,
+    "rouge2_diff,none": -7.871693872471934,
+    "rouge2_diff_stderr,none": 3.344371769847924,
+    "rougeL_max,none": 33.40301129021238,
+    "rougeL_max_stderr,none": 4.29853437271927,
+    "rougeL_acc,none": 0.3333333333333333,
+    "rougeL_acc_stderr,none": 0.0875376219064817,
+    "rougeL_diff,none": -6.401946927188781,
+    "rougeL_diff_stderr,none": 3.07579749622017
+  },
+  "bbh": {
+    "per_subtask": {
+      "bbh_cot_fewshot_boolean_expressions": 0.0,
+      "bbh_cot_fewshot_causal_judgement": 0.375,
+      "bbh_cot_fewshot_date_understanding": 0.5,
+      "bbh_cot_fewshot_logical_deduction_five_objects": 0.25,
+      "bbh_cot_fewshot_navigate": 0.75,
+      "bbh_cot_fewshot_temporal_sequences": 0.375
+    },
+    "mean_accuracy": 0.375,
+    "n_samples": 48
+  },
+  "mmlu_sample": {
+    "per_subject": {
+      "abstract_algebra": 0.35,
+      "anatomy": 0.35,
+      "astronomy": 0.6,
+      "college_computer_science": 0.2,
+      "high_school_psychology": 0.65,
+      "formal_logic": 0.2,
+      "professional_law": 0.5,
+      "marketing": 0.75
+    },
+    "mean_accuracy": 0.45,
+    "n_samples": 160
+  },
+  "humaneval": {
+    "benchmark": "humaneval",
+    "n_problems": 40,
+    "n_passed": 9,
+    "per_task": {
+      "HumanEval/0": {
+        "passed": false,
+        "code": "from typing import List\n\n\ndef has_close_elements(numbers: List[float], threshold: float) -> bool:\n    \"\"\" Check if in given list of numbers, are any two numbers closer to each other than\n    given threshold.\n    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)\n    False\n    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)\n    True\n    \"\"\"\nThe user is asking me to implement a function called `has_close_elements` that checks whether any two numbers in a given list are closer to each other than a given threshold.\n\nLet me think about how to implement this function.\n\n\n\nThe user is asking me to implement a function called `has_close_elements` that checks whether any two numbers in a given list are closer to each other than a given threshold.\n\nLet me think about how to implement this function.\n\n\n\nThe user is asking me to implement a function called `has_close_elements` that checks whether any two numbers in a given list are closer to each other than a given threshold.\n\nLet me think about how to implement this function."
+      },
+      "HumanEval/1": {
+        "passed": false,
+        "code": "from typing import List\n\n\ndef separate_paren_groups(paren_string: str) -> List[str]:\n    \"\"\" Input to this function is a string containing multiple groups of nested parentheses. Your goal is to\n    separate those group into separate strings and return the list of those.\n    Separate groups are balanced (each open brace is properly closed) and not nested within each other\n    Ignore any spaces in the input string.\n    >>> separate_paren_groups('( ) (( )) (( )( ))')\n    ['()', '(())', '(()())']\n    \"\"\"\nThe user is asking me to write a function that separates groups of nested parentheses. Let me think about this carefully.\n\n\n\nThe user is asking me to write a function that separates groups of nested parentheses. Let me think about this carefully.\n\n\n\nThe user is asking me to write a function that separates groups of nested parentheses. Let me think about this carefully.\n\n\n\nThe user is asking me to write a function that separates groups of nested parentheses. Let me think about this carefully."
+      },
+      "HumanEval/2": {
+        "passed": true,
+        "code": "\ndef truncate_number(number: float) -> float:\n    \"\"\" Given a positive floating point number, it can be decomposed into\n    and integer part (largest integer smaller than given number) and decimals\n    (leftover part always smaller than 1).\n\n    Return the decimal part of the number.\n    >>> truncate_number(3.5)\n    0.5\n    \"\"\"\n    import math\n    integer_part = math.floor(number)\n    decimal_part = number - integer_part\n    return decimal_part\n"
+      },
+      "HumanEval/3": {
+        "passed": false,
+        "code": "from typing import List\n\n\ndef below_zero(operations: List[int]) -> bool:\n    \"\"\" You're given a list of deposit and withdrawal operations on a bank account that starts with\n    zero balance. Your task is to detect if at any point the balance of account fallls below zero, and\n    at that point function should return True. Otherwise it should return False.\n    >>> below_zero([1, 2, 3])\n    False\n    >>> below_zero([1, 2, -4, 5])\n    True\n    \"\"\"\nThe user is asking me to write a function called `below_zero` that takes a list of integers (representing deposit and withdrawal operations on a bank account that starts with zero balance. The task is to detect if at any point the balance of account falls below zero, and at that point function should return True. Otherwise it should return False.\n\nLet me think about this problem.\n\n\n\nWe start with zero balance. We process operations one by one.\n\nAt each step, we add the operation to the balance. If the operation is negative (withdrawal), the balance decreases. If the operation is positive (deposit), the balance increases.\n\nWe need to detect if at any point the balance falls below zero.\n\n\n\nLet me think about this problem.\n\n\n\nWe start with zero balance. We process operations one by one. At each step, we add the operation to the balance. If the operation is negative (withdrawal), the balance decreases. If the operation is positive (deposit), the balance increases.\n\nWe need to detect if at any point the balance falls below zero.\n\n\n\nLet me think about this problem.\n\n\n\nWe start with zero balance. We process operations one by one. At each step, we add the operation to the balance. If the operation is negative (withdrawal), the balance decreases. If the operation is positive (deposit), the balance increases.\n\nWe need to detect if at any point the balance falls below zero.\n\n\n\nLet me think about this problem.\n\n\n\nWe start with zero balance. We process operations one by one. At each step, we add the operation to the balance. If the operation is negative (withdrawal), the balance decreases. If the operation is positive (deposit), the balance increases.\n\nWe need to detect if at any point the balance falls below zero.\n\n\n\nLet me think about this problem.\n\n\n\nWe start with zero balance. We process operations one by one. At each step, we add the operation to the balance. If the operation is negative (withdrawal), the balance decreases. If the operation is positive (deposit), the balance increases.\n\nWe need to detect if at any point the balance falls below zero."
+      },
+      "HumanEval/4": {
+        "passed": true,
+        "code": "from typing import List\n\n\ndef mean_absolute_deviation(numbers: List[float]) -> float:\n    \"\"\" For a given list of input numbers, calculate Mean Absolute Deviation\n    around the mean of this dataset.\n    Mean Absolute Deviation is the average absolute difference between each\n    element and a centerpoint (mean in this case):\n    MAD = average | x - x_mean |\n    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])\n    1.0\n    \"\"\"\n\ndef mean_absolute_deviation(numbers: List[float]) -> float:\n    \"\"\" For a given list of input numbers, calculate Mean Absolute Deviation\n    around the mean of this dataset.\n    Mean Absolute Deviation is the average absolute difference between each\n    element and a centerpoint (mean in this case):\n    MAD = average | x - x_mean |\n    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])\n    1.0\n    \"\"\"\n    mean = sum(numbers) / len(numbers)\n    return sum(abs(x - mean) for x in numbers) / len(numbers)\n"
+      },
+      "HumanEval/5": {
+        "passed": false,
+        "code": "from typing import List\n\n\ndef intersperse(numbers: List[int], delimeter: int) -> List[int]:\n    \"\"\" Insert a number 'delimeter' between every two consecutive elements of input list `numbers'\n    >>> intersperse([], 4)\n    []\n    >>> intersperse([1, 2, 3], 4)\n    [1, 4, 2, 4, 3]\n    \"\"\"\nThe user is asking me to implement a function called `intersperse` that takes a list of integers and an integer `delimeter`, and returns a new list where the `delimeter` is inserted between every two consecutive elements.\n\nLet me think about how to implement this function.\n\n\n\nThe user is asking me to implement a function called `intersperse` that takes a list of integers and an integer `delimeter`, and returns a new list where the `delimeter` is inserted between every two consecutive elements.\n\nLet me think about how to implement this function.\n\n\n\nThe user is asking me to implement a function called `intersperse` that takes a list of integers and an integer `delimeter`, and returns a new list where the `delimeter` is inserted between every two consecutive elements.\n\nLet me think about how to implement this function."
+      },
+      "HumanEval/6": {
+        "passed": false,
+        "code": "from typing import List\n\n\ndef parse_nested_parens(paren_string: str) -> List[int]:\n    \"\"\" Input to this function is a string represented multiple groups for nested parentheses separated by spaces.\n    For each of the group, output the deepest level of nesting of parentheses.\n    E.g. (()()) has maximum two levels of nesting while ((())) has three.\n\n    >>> parse_nested_parens('(()()) ((())) () ((())()())')\n    [2, 3, 1, 3]\n    \"\"\"\nThe user is asking me to implement a function called `parse_nested_parens` that takes a string of nested parentheses and returns a list of integers representing the maximum depth of nesting for each group.\n\nLet me think about this carefully..\n\n\n\nThe user is asking me to implement a function called `parse_nested_parens` that takes a string of nested parentheses and returns a list of integers representing the maximum depth of nesting for each group.\n\nLet me think about this carefully..\n\n\n\nThe user is asking me to implement a function called `parse_nested_parens` that takes a string of nested parentheses and returns a list of integers representing the maximum depth of nesting for each group.\n\nLet me think about this carefully..\n\n\n\nThe user is asking me to implement a function called `parse_nested_parens` that takes a string of nested parentheses and returns a list of integers representing the maximum depth of nesting for each group.\n\nLet me think about this carefully..\n\n\n\nThe user is asking me to implement a function called `parse_nested_parens` that takes a string of nested parentheses and returns a list of integers representing the maximum depth of nesting for each group.\n\nLet me think about this carefully."
+      },
+      "HumanEval/7": {
+        "passed": false,
+        "code": "from typing import List\n\n\ndef filter_by_substring(strings: List[str], substring: str) -> List[str]:\n    \"\"\" Filter an input list of strings only for ones that contain given substring\n    >>> filter_by_substring([], 'a')\n    []\n    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')\n    ['abc', 'bacd', 'array']\n    \"\"\"\nThe user is asking me to write a function that filters a list of strings, keeping only those that contain a given substring.\n\nLet me think about this:\n\n1. The function takes two parameters: a list of strings and a substring to search for.\n2. It should return a new list containing only the strings that have the substring..\n\nLet me think about edge cases:\n- What if the input list is empty? It should return an empty list.\n- What if the substring is empty? It should return all strings (since every string contains an empty substring).\n- What if the substring is longer than any string? It should return an empty list.\n\nLet me think about time complexity:\n- We need to check each string for the substring, so it's O(n * m) where n is the number of strings and m is the length of the substring.\n- In practice, we can use Python's built-in `in` operator which is efficient.\n\nLet me think about the docstring:\n- The docstring shows examples with empty input and empty substring.\n- The docstring shows examples with empty input and empty substring.\n\nLet me think about the docstring:\n- The docstring shows examples with empty input and empty substring.\n\nLet me think about the docstring:\n- The docstring shows examples with empty input and empty substring.\n\nLet me think about the docstring:\n- The docstring shows examples with empty input and empty substring.\n\nLet me think about the docstring:\n- The docstring shows examples with empty input and empty substring.\n\nLet me think about the docstring:\n- The docstring shows examples with empty input and empty substring.\n\nLet me think about the docstring:\n- The docstring shows examples with empty input and empty substring.\n\nLet me think about the docstring:\n- The docstring shows examples with empty input and empty substring.\n\nLet me think about the docstring:\n- The docstring shows examples with empty input and empty substring.\n\nLet me think about the docstring:\n- The docstring shows examples with empty input and empty substring.\n\nLet me think about the docstring:\n- The docstring shows examples with empty input and empty substring.\n\nLet me think about the docstring:\n- The docstring shows examples with empty input and empty substring.\n\nLet me think about the docstring:\n- The docstring shows examples with empty input and"
+      },
+      "HumanEval/8": {
+        "passed": false,
+        "code": "from typing import List, Tuple\n\n\ndef sum_product(numbers: List[int]) -> Tuple[int, int]:\n    \"\"\" For a given list of integers, return a tuple consisting of a sum and a product of all the integers in a list.\n    Empty sum should be equal to 0 and empty product should be equal to 1.\n    >>> sum_product([])\n    (0, 1)\n    >>> sum_product([1, 2, 3, 4])\n    (10, 24)\n    \"\"\"\nThe user is asking me to complete a function called `sum_product` that takes a list of integers and returns a tuple consisting of a sum and a product of all the integers in a list.\n\nThe function should handle empty lists by returning (0, 1).\n\n\n\nLet me think about how to implement this function.\n\n\n\nI need to iterate through the list and calculate the sum and product of all the integers.\n\n\n\nI can use a loop to iterate through the list and calculate the sum and product.\n\n\n\nI can use a loop to iterate through the list and calculate the sum and product.\n\n\n\nI can use a loop to iterate through the list and calculate the sum and product.\n\n\n\nI can use a loop to iterate through the list and calculate the sum and product.\n\n\n\nI can use a loop to iterate through the list and calculate the sum and product.\n\n\n\nI can use a loop to iterate through the list and calculate the sum and product."
+      },
+      "HumanEval/9": {
+        "passed": false,
+        "code": "from typing import List, Tuple\n\n\ndef rolling_max(numbers: List[int]) -> List[int]:\n    \"\"\" From a given list of integers, generate a list of rolling maximum element found until given moment\n    in the sequence.\n    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])\n    [1, 2, 3, 3, 3, 4, 4]\n    \"\"\"\nThe user is asking me to write a function called `rolling_max` that takes a list of integers and returns a list where each element is the maximum of all elements up to that point in the sequence.\n\nLet me think about this carefully.\n\n\n\nThe user is asking me to write a function called `rolling_max` that takes a list of integers and returns a list where each element is the maximum of all elements up to that point in the sequence.\n\nLet me think about this carefully.\n\n\n\nThe user is asking me to write a function called `rolling_max` that takes a list of integers and returns a list where each element is the maximum of all elements up to that point in the sequence.\n\nLet me think about this carefully."
+      },
+      "HumanEval/10": {
+        "passed": false,
+        "code": "\n\ndef is_palindrome(string: str) -> bool:\n    \"\"\" Test if given string is a palindrome \"\"\"\n    return string == string[::-1]\n\n\ndef make_palindrome(string: str) -> str:\n    \"\"\" Find the shortest palindrome that begins with a supplied string.\n    Algorithm idea is simple:\n    - Find the longest postfix of supplied string that is a palindrome.\n    - Append to the end of the string reverse of a string prefix that comes before the palindromic suffix.\n    >>> make_palindrome('')\n    ''\n    >>> make_palindrome('cat')\n    'catac'\n    >>> make_palindrome('cata')\n    'catac'\n    \"\"\"\nThe user is asking me to explain the code they provided. Let me analyze the code they provided..\n\n\n\nThe user is asking me to explain the code they provided. Let me analyze the code they provided..\n\n\n\nThe user is asking me to explain the code they provided. Let me analyze the code they provided..\n\n\n\nThe user is asking me to explain the code they provided. Let me analyze the code they provided..\n\n\n\nThe user is asking me to explain the code they provided. Let me analyze the code they provided.."
+      },
+      "HumanEval/11": {
+        "passed": false,
+        "code": "from typing import List\n\n\ndef string_xor(a: str, b: str) -> str:\n    \"\"\" Input are two strings a and b consisting only of 1s and 0s.\n    Perform binary XOR on these inputs and return result also as a string.\n    >>> string_xor('010', '110')\n    '100'\n    \"\"\"\nThe user is asking me to implement a function called `string_xor` that takes two strings consisting only of 1s and 0s, and performs binary XOR on these inputs and returns result also as a string.\n\nLet me think about how to implement this.\n\n\n\nThe user is asking me to implement a function called `string_xor` that takes two strings consisting only of 1s and 0s, and performs binary XOR on these inputs and returns result also as a string.\n\nLet me think about how to implement this.\n\n\n\nThe user is asking me to implement a function called `string_xor` that takes two strings consisting only of 1s and 0s, and performs binary XOR on these inputs and returns result also as a string.\n\nLet me think about how to implement this.\n\n\n\nThe user is asking me to implement a function called `string_xor` that takes two strings consisting only of 1s and 0s, and performs binary XOR on these inputs and returns result also as a string.\n\nLet me think about how to implement this.\n\n\n\nThe user is asking me to implement a function called `string_xor` that takes two strings consisting only of 1s and 0s, and performs binary XOR on these inputs and returns result also as a string.\n\nLet me think about how to implement this.\n\n\n\nThe user is asking me to implement a function called `string_xor` that takes two strings consisting only of 1s and 0s, and performs binary XOR on these inputs and returns result also as a string.\n\nLet me think about how to implement this.\n\n\n\nThe user is asking me to implement a function called `string_xor` that takes two strings consisting only of 1s and 0s, and performs binary XOR on these inputs and returns result also as a string.\n\nLet me think about how to implement this.\n\n\n\nThe user is asking me to implement a function called `string_xor` that takes two strings consisting only of 1s and 0s, and performs binary XOR on these inputs and returns result also as a string.\n\nLet me think about how to implement this.\n\n\n\nThe user is asking me to implement a function called `string_xor` that takes two strings consisting only of 1s and 0s, and performs binary XOR on these inputs and returns result also as a string.\n\nLet me think about how to implement this.\n\n\n\nThe user is asking me to implement a"
+      },
+      "HumanEval/12": {
+        "passed": false,
+        "code": "from typing import List, Optional\n\n\ndef longest(strings: List[str]) -> Optional[str]:\n    \"\"\" Out of list of strings, return the longest one. Return the first one in case of multiple\n    strings of the same length. Return None in case the input list is empty.\n    >>> longest([])\n\n    >>> longest(['a', 'b', 'c'])\n    'a'\n    >>> longest(['a', 'bb', 'ccc'])\n    'ccc'\n    \"\"\"\nThe user is asking me to write a function called `longest` that takes a list of strings and returns the longest one. If there are multiple strings of the same length, it should return the first one.. If the input list is empty, it should return None.\n\nLet me think about how to implement this function..\n\n.\n\nThe user is asking me to write a function called `longest` that takes a list of strings and returns the longest one. If there are multiple strings of the same length, it should return the first one.. If the input list is empty, it should return None..\n\nLet me think about how to implement this function..\n\n.\n\nThe user is asking me to write a function called `longest` that takes a list of strings and returns the longest one. If there are multiple strings of the same length, it should return the first one.. If the input list is empty, it should return None..\n\nLet me think about how to implement this function..\n\n.\n\nThe user is asking me to write a function called `longest` that takes a list of strings and returns the longest one. If there are multiple strings of the same length, it should return the first one.. If the input list is empty, it should return None..\n\nLet me think about how to implement this function..\n\n.\n\nThe user is asking me to write a function called `longest` that takes a list of strings and returns the longest one. If there are multiple strings of the same length, it should return the first one.. If the input list is empty, it should return None..\n\nLet me think about how to implement this function..\n\n.\n\nThe user is asking me to write a function called `longest` that takes a list of strings and returns the longest one. If there are multiple strings of the same length, it should return the first one.. If the input list is empty, it should return None..\n\nLet me think about how to implement this function..\n\n.\n\nThe user is asking me to write a function called `longest` that takes a list of strings and returns the longest one. If there are multiple strings of the same length, it should return the first one.. If the input list is empty, it should return None..\n\nLet me think about how to implement this function.."
+      },
+      "HumanEval/13": {
+        "passed": false,
+        "code": "\n\ndef greatest_common_divisor(a: int, b: int) -> int:\n    \"\"\" Return a greatest common divisor of two integers a and b\n    >>> greatest_common_divisor(3, 5)\n    1\n    >>> greatest_common_divisor(25, 15)\n    5\n    \"\"\"\nThe user is asking me to complete a function called `greatest_common_divisor` that returns the greatest common divisor (GCD) of two integers `a` and `b`.\n\nThe docstring shows examples:\n- `greatest_common_divisor(3, 5)` \u2192 `1`\n- `greatest_common_divisor(25, 15)` \u2192 `5`\n\nI need to implement this function. The standard way to compute the GCD of two integers is the the Euclidean algorithm.\n\n\n\nLet me think about the Euclidean algorithm.\n\n\n\nThe Euclidean algorithm works like this:\n1. If `a` is greater than `b`, swap them.\n2. While `b` is not zero:\n   - `a` = `a` % `b`\n   - `b` = `a`\n\nWait, that's not right. Let me think again.\n\n\n\nThe standard Euclidean algorithm is:\n1. While `b` is not zero:\n   - `a` = `a` % `b`\n   - `b` = `a`\n\nWait, that's not right. Let me think again.\n\n\n\nThe standard Euclidean algorithm is:\n1. While `b` is not zero:\n   - `a` = `a` % `b`\n   - `b` = `a`\n\nWait, that's not right. Let me think again.\n\n\n\nThe standard Euclidean algorithm is:\n1. While `b` is not zero:\n   - `a` = `a` % `b`\n   - `b` = `a`\n\nWait, that's not right. Let me think again.\n\n\n\nThe standard Euclidean algorithm is:\n1. While `b` is not zero:\n   - `a` = `a` % `b`\n   - `b` = `a`\n\nWait, that's not right. Let me think again."
+      },
+      "HumanEval/14": {
+        "passed": true,
+        "code": "from typing import List\n\n\ndef all_prefixes(string: str) -> List[str]:\n    \"\"\" Return list of all prefixes from shortest to longest of the input string\n    >>> all_prefixes('abc')\n    ['a', 'ab', 'abc']\n    \"\"\"\n\ndef all_prefixes(string: str) -> List[str]:\n    \"\"\" Return list of all prefixes from shortest to longest of the input string\n    >>> all_prefixes('abc')\n    ['a', 'ab', 'abc']\n    \"\"\"\n    prefixes = []\n    for i in range(1, len(string) + 1):\n        prefixes.append(string[:i])\n    return prefixes\n"
+      },
+      "HumanEval/15": {
+        "passed": false,
+        "code": "\n\ndef string_sequence(n: int) -> str:\n    \"\"\" Return a string containing space-delimited numbers starting from 0 upto n inclusive.\n    >>> string_sequence(0)\n    '0'\n    >>> string_sequence(5)\n    '0 1 2 3 4 5'\n    \"\"\"\nThe user is asking me to write a function called `string_sequence` that takes an integer `n` and returns a string containing space-delimited numbers starting from 0 up to `n` inclusive.\n\nLet me think about this.\n\n\n\nThe user wants a function that takes an integer `n` and returns a string containing space-delimited numbers starting from  up to `n` inclusive.\n\nLet me think about this.\n\n\n\nThe user wants a function that takes an integer `n` and returns a string containing space-delimited numbers starting from  up to `n` inclusive.\n\nLet me think about this.\n\n\n\nThe user wants a function that takes an integer `n` and returns a string containing space-delimited numbers starting from  up to `n` inclusive.\n\nLet me think about this.\n\n\n\nThe user wants a function that takes an integer `n` and returns a string containing space-delimited numbers starting from  up to `n` inclusive.\n\nLet me think about this.\n\n\n\nThe user wants a function that takes an integer `n` and returns a string containing space-delimited numbers starting from  up to `n` inclusive.\n\nLet me think about this.\n\n\n\nThe user wants a function that takes an integer `n` and returns a string containing space-delimited numbers starting from  up to `n` inclusive.\n\nLet me think about this.\n\n\n\nThe user wants a function that takes an integer `n` and returns a string containing space-delimited numbers starting from  up to `n` inclusive.\n\nLet me think about this.\n\n\n\nThe user wants a function that takes an integer `n` and returns a"
+      },
+      "HumanEval/16": {
+        "passed": false,
+        "code": "\n\ndef count_distinct_characters(string: str) -> int:\n    \"\"\" Given a string, find out how many distinct characters (regardless of case) does it consist of\n    >>> count_distinct_characters('xyzXYZ')\n    3\n    >>> count_distinct_characters('Jerry')\n    4\n    \"\"\"\nThe user is asking me to write a function that counts the number of distinct characters in a string, regardless of case.\n\nLet me think about this.\n\n\n\nThe function should:\n1. Take a string as input\n2. Convert it to lowercase (or uppercase) to make it case-insensitive\n3. Count the number of unique characters\n\nLet me think about the implementation:\n\n\n\nI can use a set to store the distinct characters.\n\n\n\nLet me think about the implementation:\n\n\n\nI can use a set to store the distinct characters.\n\n\n\nLet me think about the implementation:\n\n\n\nI can use a set to store the distinct characters.\n\n\n\nLet me think about the implementation:\n\n\n\nI can use a set to store the distinct characters.\n\n\n\nLet me think about the implementation:\n\n\n\nI can use a set to store it distinct characters.\n\n\n\nLet me think about the implementation:"
+      },
+      "HumanEval/17": {
+        "passed": false,
+        "code": "from typing import List\n\n\ndef parse_music(music_string: str) -> List[int]:\n    \"\"\" Input to this function is a string representing musical notes in a special ASCII format.\n    Your task is to parse this string and return list of integers corresponding to how many beats does each\n    not last.\n\n    Here is a legend:\n    'o' - whole note, lasts four beats\n    'o|' - half note, lasts two beats\n    '.|' - quater note, lasts one beat\n\n    >>> parse_music('o o| .| o| o| .| .| .| .| o o')\n    [4, 2, 1, 2, 2, 1, 1, 1, 1, 4, 4]\n    \"\"\"\nThe user wants me to write a function that parses a string representing musical notes in a special ASCII format and returns a list of integers corresponding to how many beats each note lasts.\n\nLet me analyze the format::\n- 'o' - whole note (4 beats))\n- 'o|' - half note (2 beats))\n- '.|' - quarter note (1 beat))\n\nWait, I need to re-read the prompt. The user says:\n- 'o' - whole note (4 beats))\n- 'o|' - half note (2 beats))\n- '.|' - quarter note (1 beat))\n\nWait, I need to re-read the prompt. The user says:\n- 'o' - whole note (4 beats))\n- 'o|' - half note (2 beats))\n- '.|' - quarter note (1 beat))\n\nWait, I need to re-read the prompt. The user says:\n- 'o' - whole note (4 beats))\n- 'o|' - half note (2 beats))\n- '.|' - quarter note (1 beat))\n\nWait, I need to re-read the prompt. The user says:\n- 'o' - whole note (4 beats))\n- 'o|' - half note (2 beats))\n- '.|' - quarter note (1 beat))\n\nWait, I need to re-read the prompt. The user says:\n- 'o' - whole note (4 beats))\n- 'o|' - half note (2 beats))\n- '.|' - quarter note (1 beat))\n\nWait, I need to re-read the prompt. The user says:\n- 'o' - whole note (4 beats))\n- 'o|' - half note (2 beats))\n- '.|' - quarter note (1 beat))\n\nWait, I need to re-read the prompt. The user says:\n- 'o' - whole note (4 beats))\n- 'o|' - half note (2 beats))\n- '.|' - quarter note (1 beat))\n\nWait, I need to re-read the prompt. The user says:\n- 'o' - whole note (4 beats))\n- 'o|' - half note (2 beats))\n-"
+      },
+      "HumanEval/18": {
+        "passed": false,
+        "code": "\n\ndef how_many_times(string: str, substring: str) -> int:\n    \"\"\" Find how many times a given substring can be found in the original string. Count overlaping cases.\n    >>> how_many_times('', 'a')\n    0\n    >>> how_many_times('aaa', 'a')\n    3\n    >>> how_many_times('aaaa', 'aa')\n    3\n    \"\"\"\nThe user is asking me to write a function that counts how many times a given substring can be found in the original string. Count overlaping cases."
+      },
+      "HumanEval/19": {
+        "passed": false,
+        "code": "from typing import List\n\n\ndef sort_numbers(numbers: str) -> str:\n    \"\"\" Input is a space-delimited string of numberals from 'zero' to 'nine'.\n    Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.\n    Return the string with numbers sorted from smallest to largest\n    >>> sort_numbers('three one five')\n    'one three five'\n    \"\"\"\nThe user is asking me to write a function that takes a string of number words (like \"three\", \"one\", \"five\") and returns them sorted from smallest to largest.\n\nLet me think about this. The numbers are::\n- zero = 0\n- one =  1\n- two =  2\n- three =  3\n- four =  4\n- five =  5\n- six =  6\n- seven =  7\n- eight =  8\n- nine =  9\n\nSo I need to map each word to its numeric value, then sort by that value, and return the words in that order.\n\nLet me write this function:\n\n"
+      },
+      "HumanEval/20": {
+        "passed": false,
+        "code": "from typing import List, Tuple\n\n\ndef find_closest_elements(numbers: List[float]) -> Tuple[float, float]:\n    \"\"\" From a supplied list of numbers (of length at least two) select and return two that are the closest to each\n    other and return them in order (smaller number, larger number).\n    >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.2])\n    (2.0, 2.2)\n    >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.0])\n    (2.0, 2.0)\n    \"\"\"\nThe user is asking me to write a function called `find_closest_elements` that takes a list of floats and returns the two closest elements as a tuple.\n\nLet me think about this carefully.\n\n\n\nThe user is asking me to write a function called `find_closest_elements` that takes a list of floats and returns the two closest elements as a tuple.\n\nLet me think about this carefully.\n\n\n\nThe user is asking me to write a function called `find_closest_elements` that takes a list of floats and returns the two closest elements as a tuple."
+      },
+      "HumanEval/21": {
+        "passed": false,
+        "code": "from typing import List\n\n\ndef rescale_to_unit(numbers: List[float]) -> List[float]:\n    \"\"\" Given list of numbers (of at least two elements), apply a linear transform to that list,\n    such that the smallest number will become 0 and the largest will become 1\n    >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \"\"\"\nThe user is asking me to implement a function called `rescale_to_unit` that takes a list of floats and rescales them such that the smallest becomes 0 and the largest becomes  1.\n\nLet me think about how to implement this.\n\nThe user is asking me to implement a function called `rescale_to_unit` that takes a list of floats and rescales them such that the smallest becomes 0 and the largest becomes  1.\n\nLet me think about how to implement this.\n\nThe user is asking me to implement a function called `rescale_to_unit` that takes a list of floats and rescales them such that the smallest becomes 0 and the largest becomes  1.\n\nLet me think about how to implement this."
+      },
+      "HumanEval/22": {
+        "passed": false,
+        "code": "from typing import List, Any\n\n\ndef filter_integers(values: List[Any]) -> List[int]:\n    \"\"\" Filter given list of any python values only for integers\n    >>> filter_integers(['a', 3.14, 5])\n    [5]\n    >>> filter_integers([1, 2, 3, 'abc', {}, []])\n    [1, 2, 3]\n    \"\"\"\nThe user is asking me to write a Python function called `filter_integers` that takes a list of mixed values (strings, floats, dicts, lists, etc.) and returns only the integers (int).\n\nLet me think about this:\n\n- The function should take a list of any Python values (strings, floats, dicts, lists, etc.) and return only the integers (int).\n- The function should take a list of mixed values (strings, floats, dicts, lists, etc.) and return only the integers (int).\n- The function should take a list of mixed values (strings, floats, dicts, lists, etc.) and return only the integers (int).\n\nLet me think about this:\n\n- The function should take a list of mixed values (strings, floats, dicts, lists, etc.) and return only the integers (int).\n\nLet me think about this:\n\n- The function should take a list of mixed values (strings, floats, dicts, lists, etc.) and return only the integers (int).\n\nLet me think about this:\n\n- The function should take a list of mixed values (strings, floats, dicts, lists, etc.) and return only the integers (int).\n\nLet me think about this:\n\n- The function should take a list of mixed values (strings, floats, dicts, lists, etc.) and return only the integers (int).\n\nLet me think about this:\n\n- The function should take a list of mixed values (strings, floats, dicts, lists, etc.) and return only the integers (int).\n\nLet me think about this:\n\n- The function should take a list of mixed values (strings, floats, dicts, lists, etc.) and return only the integers (int).\n\nLet me think about this:"
+      },
+      "HumanEval/23": {
+        "passed": true,
+        "code": "\ndef strlen(string: str) -> int:\n    \"\"\" Return length of given string\n    >>> strlen('')\n    0\n    >>> strlen('abc')\n    3\n    \"\"\"\n    return len(string)\n"
+      },
+      "HumanEval/24": {
+        "passed": false,
+        "code": "\n\ndef largest_divisor(n: int) -> int:\n    \"\"\" For a given number n, find the largest number that divides n evenly, smaller than n\n    >>> largest_divisor(15)\n    5\n    \"\"\"\nThe user is asking me to write a function called `largest_divisor` that finds the largest number that divides `n` evenly, smaller than `n`.\n\nThe user is asking me to write a function called `largest_divisor` that finds the largest number that divides `n` evenly, smaller than `n`.\n\nThe user is asking me to write a function called `largest_divisor` that finds the largest number that divides `n` evenly, smaller than `n`.\n\nThe user is asking me to write a function called `largest_divisor` that finds the largest number that divides `n` evenly, smaller than `n`.\n\nThe user is asking me to write a function called `largest_divisor` that finds the largest number that divides `n` evenly, smaller than `n`.\n\nThe user is asking me to write a function called `largest_divisor` that finds the largest number that divides `n` evenly, smaller than `n`.\n\nThe user is asking me to write a function called `largest_divisor` that finds the largest number that divides `n` evenly, smaller than `n`.\n\nThe user is asking me to write a function called `largest_divisor` that finds the largest number that divides `n` evenly, smaller than `n`.\n\nThe user is asking me to write a function called `largest_divisor` that finds"
+      },
+      "HumanEval/25": {
+        "passed": false,
+        "code": "from typing import List\n\n\ndef factorize(n: int) -> List[int]:\n    \"\"\" Return list of prime factors of given integer in the order from smallest to largest.\n    Each of the factors should be listed number of times corresponding to how many times it appeares in factorization.\n    Input number should be equal to the product of all factors\n    >>> factorize(8)\n    [2, 2, 2]\n    >>> factorize(25)\n    [5, 5]\n    >>> factorize(70)\n    [2, 5, 7]\n    \"\"\"\n\ndef factorize(n: int) -> List[int]:\n    \"\"\" Return list of prime factors of given integer in the order from smallest to largest.\n    Each of the factors should be listed number of times corresponding to how many times it appears in factorization.\n    Input number should be equal to the product of all factors\n    >>> factorize(8)\n    [2, 2, 2]\n    >>> factorize(25)\n    [5, 5]\n    >>> factorize(70)\n    [2, 5, 7]\n    \"\"\"\n    factors = []\n    i = 2\n    while n % i == 0:\n        factors.append(i)\n        n //= i\n    i += 1\n    return factors\n"
+      },
+      "HumanEval/26": {
+        "passed": false,
+        "code": "from typing import List\n\n\ndef remove_duplicates(numbers: List[int]) -> List[int]:\n    \"\"\" From a list of integers, remove all elements that occur more than once.\n    Keep order of elements left the same as in the input.\n    >>> remove_duplicates([1, 2, 3, 2, 4])\n    [1, 3, 4]\n    \"\"\"\n\ndef remove_duplicates(numbers: List[int]) -> List[int]:\n    \"\"\" From a list of integers, remove all elements that occur more than once.\n    Keep order of elements left the same as in the input.\n    >>> remove_duplicates([1, 2, 3, 2, 4])\n    [1, 3, 4]\n    \"\"\"\n    seen = set()\n    result = []\n    for num in numbers:\n        if num in seen:\n            continue\n        seen.add(num)\n        result.append(num)\n    return result\n"
+      },
+      "HumanEval/27": {
+        "passed": false,
+        "code": "\n\ndef flip_case(string: str) -> str:\n    \"\"\" For a given string, flip lowercase characters to uppercase and uppercase to lowercase.\n    >>> flip_case('Hello')\n    'hELLO'\n    \"\"\"\nThe user is asking me to complete a Python function called `flip_case`. This function should take a string and flip the case of each character: lowercase becomes uppercase, and uppercase becomes lowercase.\n\nLet me think about how to implement this.\n\n\n\nI can use Python's built-in string methods. For example, `str.upper()` and `str.lower()`. But those only convert the entire string, not individual characters.. I need to iterate through each character and flip its case individually..\n\nLet me think about the approach. I can iterate through each character and check if it's lowercase or uppercase, and flip accordingly..\n\nI can use `str.islower()` and `str.isupper()` to check the case of each character..\n\nI can use `str.islower()` and `str.isupper()` to check the case of each character..\n\nI can use `str.islower()` and `str.isupper()` to check the case of each character..\n\nI can use `str.islower()` and `str.isupper()` to check the case of each character..\n\nI can use `str.islower()` and `str.isupper()` to check the case of each character..\n\nI can use `str.islower()` and `str.isupper()` to check the case of each character..\n\nI can use `str.islower()` and `str.isupper()` to check the case of each character..\n\nI can use `str.islower()` and `str.isupper()` to check the case of each character..\n\nI can use `str.islower()` and `str.isupper()` to check the case of each character..\n\nI can use `str.islower()` and `str.isupper()` to check the case of each character..\n\nI can use `str.islower()` and `str.isupper()` to check the case of each character"
+      },
+      "HumanEval/28": {
+        "passed": true,
+        "code": "from typing import List\n\n\ndef concatenate(strings: List[str]) -> str:\n    \"\"\" Concatenate list of strings into a single string\n    >>> concatenate([])\n    ''\n    >>> concatenate(['a', 'b', 'c'])\n    'abc'\n    \"\"\"\n\ndef concatenate(strings: List[str]) -> str:\n    \"\"\" Concatenate list of strings into a single string\n    >>> concatenate([])\n    ''\n    >>> concatenate(['a', 'b', 'c'])\n    'abc'\n    \"\"\"\n    return ''.join(strings)\n"
+      },
+      "HumanEval/29": {
+        "passed": true,
+        "code": "\nfrom typing import List\n\n\ndef filter_by_prefix(strings: List[str], prefix: str) -> List[str]:\n    \"\"\" Filter an input list of strings only for ones that start with a given prefix.\n    >>> filter_by_prefix([], 'a')\n    []\n    >>> filter_by_prefix(['abc', 'bcd', 'cde', 'array'], 'a')\n    ['abc', 'array']\n    \"\"\"\n    return [s for s in strings if s.startswith(prefix)]"
+      },
+      "HumanEval/30": {
+        "passed": true,
+        "code": "\ndef get_positive(l: list):\n    \"\"\"Return only positive numbers in the list.\n    >>> get_positive([-1, 2, -4, 5, 6])\n    [2, 5, 6]\n    >>> get_positive([5, 3, -5, 2, -3, 3, 9, 0, 123, 1, -10])\n    [5, 3, 2, 3, 9, 123, 1]\n    \"\"\"\n    return [x for x in l if x > 0]\n"
+      },
+      "HumanEval/31": {
+        "passed": false,
+        "code": "def is_prime(n):\n    \"\"\"Return true if a given number is prime, and false otherwise.\n    >>>is_prime(6)\n    False\n    >>>is_prime(101)\n    True\n    >>>is_prime(11)\n    True\n    >>>is_prime(13441)\n    True\n    >>>is_prime(61)\n    True\n    >>>is_prime(4)\n    False\n    >>>is_prime(1)\n    False\n    \"\"\""
+      },
+      "HumanEval/32": {
+        "passed": false,
+        "code": "\nimport math\n\n\ndef poly(xs: list, x: float):\n    \"\"\"\n    Evaluates polynomial with coefficients xs at point x.\n    return xs[0] + xs[1] * x + xs[1] * x^2 + .... xs[n] * x^n\n    \"\"\"\n    return sum([coeff * math.pow(x, i) for i, coeff in enumerate(xs)])\n\n\ndef find_zero(xs: list):\n    \"\"\" xs are coefficients of a polynomial.\n    find_zero find x such that poly(x) = 0.\n    find_zero returns only only zero point, even if there are many keep.\n    Moreover, find_zero only takes list xs having even number of coefficients\n    and largest non zero coefficient as it guarantees\n    a solution.\n    >>> round(find_zero([1, 2]), 2) # f(x) = 1 + 2x\n    -0.5\n    >>> round(find_zero([-6, 11, -6, 1]), 2) # (x - 1) * (x - 2) * (x - 3) = -6 + 11x - 6x^2 + x^3\n    1.0\n    \"\"\""
+      },
+      "HumanEval/33": {
+        "passed": false,
+        "code": "\n\ndef sort_third(l: list):\n    \"\"\"This function takes a list l and returns a list l' such that\n    l' is identical to l in the indicies that are not divisible by three, while its values at the indicies that are divisible by three are equal\n    to the values of the corresponding indicies of l, but sorted.\n    >>> sort_third([1, 2, 3])\n    [1, 2, 3]\n    >>> sort_third([5, 6, 3, 4, 8, 9, 2])\n    [2, 6, 3, 4, 8, 9, 5]\n    \"\"\"\nThe user is asking me to write a function called `sort_third` that takes a list `l` and returns a list `l'` such that:\n- `l'` is identical to `l` in the indices that are not divisible by three, while its values at the indices that are divisible by three are equal to the values of the corresponding indices of `l`, but sorted.\n\nLet me parse this carefully.\n\n\n\nThe user is asking me to write a function called `sort_third` that takes a list `l` and returns a list `l'` such that:\n- `l'` is identical to `l` in the indices that are not divisible by three, while its values at the indices that are divisible by three are equal to the values of the corresponding indices of `l`, but sorted.\n\nLet me parse this carefully.\n\n\n\nThe user is asking me to write a function called `sort_third` that takes a list `l` and returns a list `l'` such that:\n- `l'` is identical to `l` in the indices that are not divisible by three, while its values at the indices that are divisible by three are equal to the values of the corresponding indices of `l`, but sorted.\n\nLet me parse this carefully."
+      },
+      "HumanEval/34": {
+        "passed": true,
+        "code": "\ndef unique(l: list):\n    \"\"\"Return sorted unique elements in a list\n    >>> unique([5, 3, 5, 2, 3, 3, 9, 0, 123])\n    [0, 2, 3, 5, 9, 123]\n    \"\"\"\n    # Remove duplicates\n    unique_elements = set(l)\n    # Sort\n    return sorted(unique_elements)\n"
+      },
+      "HumanEval/35": {
+        "passed": true,
+        "code": "\ndef max_element(l: list):\n    \"\"\"Return maximum element in the list.\n    >>> max_element([1, 2, 3])\n    3\n    >>> max_element([5, 3, -5, 2, -3, 3, 9, 0, 123, 1, -10])\n    123\n    \"\"\"\n    return max(l)\n"
+      },
+      "HumanEval/36": {
+        "passed": false,
+        "code": "\n\ndef fizz_buzz(n: int):\n    \"\"\"Return the number of times the digit 7 appears in integers less than n which are divisible by 11 or 13.\n    >>> fizz_buzz(50)\n    0\n    >>> fizz_buzz(78)\n    2\n    >>> fizz_buzz(79)\n    3\n    \"\"\"\nThe user is asking me to write a function called `fizz_buzz` that counts how many times the digit `7` appears in integers less than `n` which are divisible by `11` or `13`.\n\nLet me think about this carefully.\n\nWe need to count how many times the digit `7` appears in integers less than `n` which are divisible by `11` or `13`.\n\nSo we need to iterate through all integers from `1` to `n - 1`, and for each integer, check if it's divisible by `11` or `13`, and if so, count how many times the digit `7` appears in that integer.\n\nWait, let me re-read the problem. \"Return the number of times the digit `7` appears in integers less than `n` which are divisible by `11` or `13`.\"\n\nSo we need to count how many times the digit `7` appears in integers less than `n` which are divisible by `11` or `13`.\n\nLet me think about this. For each integer from `1` to `n - 1`, we need to check if it's divisible by `11` or `13`. If so, we count how many times the digit `7` appears in that integer.\n\nWait, let me think about this more carefully. Let me think about what \"divisible by `11` or `13`\" means. Does it mean the integer is divisible by `11` or `13`? Or does it mean the integer is divisible by `11` or `13`?\n\nI think it means the integer is divisible by `11` or `13`. So we need to check if the integer is divisible by `11` or `13`.\n\nLet me think about this. For each integer from `1` to `n - 1`, we need to check if it's divisible by `11` or `13`. If so, we count how many times it digit `7` appears in that integer.\n\nWait, let me think about this more carefully. Let me think about what \"divisible by `11` or `13`\" means. Does it mean the integer is divisible by `11` or `13`? Or does it mean the integer is divisible by `11` or `"
+      },
+      "HumanEval/37": {
+        "passed": false,
+        "code": "\n\ndef sort_even(l: list):\n    \"\"\"This function takes a list l and returns a list l' such that\n    l' is identical to l in the odd indicies, while its values at the even indicies are equal\n    to the values of the even indicies of l, but sorted.\n    >>> sort_even([1, 2, 3])\n    [1, 2, 3]\n    >>> sort_even([5, 6, 3, 4])\n    [3, 6, 5, 4]\n    \"\"\"\nThe user is asking me to write a function called `sort_even` that takes a list `l` and returns a list `l'` such that `l'` is identical to `l` in the odd indices, while its values at the even indices are equal to the values of the even indices of `l`, but sorted.\n\nLet me analyze this carefully.\n\n\n\nThe user is asking me to write a function called `sort_even` that takes a list `l` and returns a list `l'` such that `l'` is identical to `l` in the odd indices, while its values at the even indices are equal to the values of the even indices of `l`, but sorted.\n\nLet me analyze this carefully.\n\n\n\nThe user is asking me to write a function called `sort_even` that takes a list `l` and returns a list `l'` such that `l'` is identical to `l` in the odd indices, while its values at the even indices are equal to the values of the even indices of `l`, but sorted.\n\nLet me analyze this carefully."
+      },
+      "HumanEval/38": {
+        "passed": false,
+        "code": "\ndef encode_cyclic(s: str) -> str:\n    \"\"\"\n    Encodes the string by cycling groups of three characters.\n    \"\"\"\n    # Split the string into groups of three characters\n    groups = [s[i * 3:min(i * 3 + 3, len(s))] for i in range((len(s) + 2) // 3)]\n    # Cycle the elements within each group\n    groups = [(group[1:] + group[0]) if len(group) == 3 else group for group in groups]\n    return \"\".join(groups)\n\n\ndef decode_cyclic(s: str) -> str:\n    \"\"\"\n    Takes the encoded string and returns the decoded string.\n    \"\"\"\n    # Implement the decoding logic\n    pass"
+      },
+      "HumanEval/39": {
+        "passed": false,
+        "code": "\n\ndef prime_fib(n: int):\n    \"\"\"\n    prime_fib returns n-th number that is a Fibonacci number and it's also prime.\n    >>> prime_fib(1)\n    2\n    >>> prime_fib(2)\n    3\n    >>> prime_fib(3)\n    5\n    >>> prime_fib(4)\n    13\n    >>> prime_fib(5)\n    89\n    \"\"\"\nThe user is asking for a function that returns the n-th number that is both a Fibonacci number and a prime number.\n\nLet me think about this problem.\n\n\n\nFibonacci numbers are: 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144, 233, 377, 610, 987, 1597, 2584, 4181, 6765, 10946, 17711, 28657, 46368, 75025, 121393, 196418, 317811, 514229, 831648, 1345877, 2177524, 3523391, 5700915, 9224306, 14925212, 24150523, 39075745, 63226288, 102302533, 165528821, 267831354, 433360178, 701190352, 1134580704, 1835771058, 2970351762, 4805722824, 7781445648, 12587168128, 20374336952, 32961483904, 53335870808, 86297351712, 139623202824, 225820554648, 365441109288, 59"
+      }
+    },
+    "pass_at_1": 0.225,
+    "failed_task_ids": [
+      "HumanEval/0",
+      "HumanEval/1",
+      "HumanEval/3",
+      "HumanEval/5",
+      "HumanEval/6",
+      "HumanEval/7",
+      "HumanEval/8",
+      "HumanEval/9",
+      "HumanEval/10",
+      "HumanEval/11",
+      "HumanEval/12",
+      "HumanEval/13",
+      "HumanEval/15",
+      "HumanEval/16",
+      "HumanEval/17",
+      "HumanEval/18",
+      "HumanEval/19",
+      "HumanEval/20",
+      "HumanEval/21",
+      "HumanEval/22",
+      "HumanEval/24",
+      "HumanEval/25",
+      "HumanEval/26",
+      "HumanEval/27",
+      "HumanEval/31",
+      "HumanEval/32",
+      "HumanEval/33",
+      "HumanEval/36",
+      "HumanEval/37",
+      "HumanEval/38",
+      "HumanEval/39"
+    ]
+  },
+  "runtime_sec": 955.6
+}

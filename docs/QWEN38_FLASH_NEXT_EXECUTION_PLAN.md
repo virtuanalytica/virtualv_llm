@@ -679,3 +679,63 @@ session whether it intentionally cleared this directory and why, or (c)
 accept a partial/GLM-only frontier search now. Committed and pushed
 (`47b6124`) rather than blocking further work on this decision, since
 the backfill already delivers the stated Fase 2 verification goal.
+
+## Fase 3+4 complete; found the 8-task/1Cat tables were never truly dead
+
+GLM's real hertest composite (0.8425/0.8071, rank ~12) confirmed it no
+longer belongs in a top-6 solo-model list -- the four already-planned
+`qwen38-flash-next-ap-{iq2s,iq4xs}-{v100,allfour}` rows still lead
+(0.9103-0.9232), so the top-6 selection simplified to those four plus
+DeepSeek-V4-Flash-0731-IQ3_XXS (only its `dual-layer`/v100 profile is
+valid -- `all-four-layer` hits the confirmed Ada-specific CUDA crash from
+an earlier session). Dropped `qwen38-flash-next-ap-q4km-allfour` from the
+list entirely: its v100 profile is a structural VRAM OOM (needs 61.22 GiB
+against the V100 pair's 64 GiB combined) so it can never get a second
+profile row, and its weights were already pruned (88 GiB) with an explicit
+"do not re-add" note in `run_qwen38_flash_next_gguf_cascade.py` -- not
+worth an 88 GiB redownload for one row when DeepSeek was already the
+plan's stated fallback.
+
+`benchmark_local_gguf_tp2.py`'s own `MODELS` dict had zero entries for any
+`qwen38-flash-next-*` model (it predates that whole campaign) -- added the
+two needed entries pointing at weights already on disk from the
+well-known-suite leaderboard run, no redownload needed for those two.
+Ran the 8-task battery for both quants x both hardware profiles (4 rows,
+composite means 0.85-0.88), committed as `7a7904e`. DeepSeek needed a
+98 GiB re-download (`unsloth/DeepSeek-V4-Flash-0731-GGUF`, `UD-IQ3_XXS`);
+started it in the background and chained an automatic follow-up
+(`scratchpad/fase3_deepseek_chain.sh`, fully detached via `nohup`+`disown`
+so it survives a Claude Code restart) that runs the `dual-layer` benchmark
+and rebuilds the dashboard the moment the download finishes.
+
+While wiring this up, found `onecat_rows()` and `benchmark_score_rows()`
+in `build_dual_v100_html.py` were returning **empty**, not because the
+underlying 1Cat/8-task benchmarks were never run, but because their
+source JSON files (`1cat_target_tp2_8bench_20260917.json`,
+`1cat_dflash2_tp2_8bench_20260917.json`, the four `1cat_*_8k_{verified,b4}`
+files, and the *original* 7-model `local_gguf_8bench_dual_v100_20260917.json`)
+were still sitting, fully intact and dated 2026-09-17, at their
+pre-migration location in `numerai-signals/reports/` -- simply never
+copied over during "Initial migration of VirtualV LLM testsuite from
+numerai-signals" (commit `783fa5e`). Not data loss like the `lm_eval_runs/`
+finding above -- an incomplete migration, now closed. Merged the 7
+historical rows into the (concurrently GPU-job-written)
+`local_gguf_8bench_dual_v100_20260917.json` by de-duplicating on
+`(model, profile)` rather than overwriting, so the running job's fresh
+rows and the recovered historical rows coexist; copied the four 1Cat
+files straight across since nothing else writes those names. Both
+previously-dead sections ("Benchmarkscores (8 taken)" and the full
+1Cat-vLLM table) render real data again. Committed as `7df17ec`.
+
+Also completed Fase 4 in the same pass: the 1Cat-vLLM model-name cell
+(`table()` in `build_dual_v100_html.py`) is now a `benchmark-link`-styled
+anchor to a new `#onecat-uitleg` section (only for rows with
+`engine == "1Cat-vLLM 1.5"`, GGUF rows keep a plain label), explaining
+target-vs-DFlash2 (speculative decoding, a small draft model proposes
+tokens Qwen3.8 verifies in one pass) and B1-vs-B4 (single-stream latency
+vs. 4-way concurrent throughput). Verified in the rendered HTML.
+
+Remaining before Fase 5 (final sync + asking about the Opus 5.5 restart):
+the DeepSeek chain finishing on its own, and a user decision on the
+`lm_eval_runs/` blocker (asked, not yet answered) -- neither blocks
+calling Fase 3/4 functionally done.

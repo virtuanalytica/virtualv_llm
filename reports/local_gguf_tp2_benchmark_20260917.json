@@ -1,0 +1,395 @@
+{
+  "contract": "same RIV-AU six-field extraction plus forced 256-token decode",
+  "physical_gpus": [
+    1,
+    2
+  ],
+  "excluded_gpu": "0 (RTX A4000)",
+  "split_mode": "layer (row split unsupported: device CUDA0 does not support split buffers)",
+  "results": [
+    {
+      "model": "qwen38-27b-q4",
+      "path": "/media/knight2/EDS2/models/llm/qwen38-27b/Qwen3.8-27B-UD-Q4_K_M.gguf",
+      "bytes": 16464440224,
+      "runtime": "llama.cpp build-v100",
+      "topology": "physical GPU 1+2, layer split 1:1, NVLink",
+      "loaded_gpu": {
+        "1": {
+          "util_pct": 22.0,
+          "memory_mib": 7564.0,
+          "power_w": 57.18,
+          "temperature_c": 46.0
+        },
+        "2": {
+          "util_pct": 26.0,
+          "memory_mib": 8656.0,
+          "power_w": 71.35,
+          "temperature_c": 48.0
+        }
+      },
+      "both_v100_active": true,
+      "gpu_decode_telemetry": {
+        "1": {
+          "samples": 27,
+          "max_util_pct": 50.0,
+          "mean_util_pct": 44.96,
+          "max_memory_mib": 7754.0,
+          "max_power_w": 209.14,
+          "max_temperature_c": 52.0
+        },
+        "2": {
+          "samples": 27,
+          "max_util_pct": 54.0,
+          "mean_util_pct": 48.59,
+          "max_memory_mib": 8846.0,
+          "max_power_w": 233.62,
+          "max_temperature_c": 54.0
+        }
+      },
+      "riv_au_score": 5,
+      "riv_au_max": 6,
+      "riv_au_checks": {
+        "event_type": true,
+        "acquirer": true,
+        "control_date": false,
+        "delisted_date": true,
+        "completion_date": true,
+        "successor": true
+      },
+      "riv_au_extracted": {
+        "event_type": "acquisition",
+        "acquirer": "Rio Tinto",
+        "control_date": "2011-08-01",
+        "delisted_date": "2011-07-07",
+        "completion_date": "2011-08-01",
+        "successor": "Rio Tinto Coal Mozambique"
+      },
+      "riv_au_raw": "{\n  \"event_type\": \"acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-08-01\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}",
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 33.53224309271955,
+      "prompt_tokens_per_second": 110.30222810500771,
+      "elapsed_seconds_including_load_and_tests": 18.75,
+      "server_log": "/tmp/qwen38-27b-q4-tp2.log"
+    },
+    {
+      "model": "deepseek-r1-qwen32b-q4",
+      "path": "/media/knight2/EDS2/models/llm/deepseek-r1-qwen32b/DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf",
+      "bytes": 19851335840,
+      "runtime": "llama.cpp build-v100",
+      "topology": "physical GPU 1+2, layer split 1:1, NVLink",
+      "loaded_gpu": {
+        "1": {
+          "util_pct": 22.0,
+          "memory_mib": 10404.0,
+          "power_w": 69.38,
+          "temperature_c": 48.0
+        },
+        "2": {
+          "util_pct": 15.0,
+          "memory_mib": 10456.0,
+          "power_w": 70.86,
+          "temperature_c": 49.0
+        }
+      },
+      "both_v100_active": true,
+      "gpu_decode_telemetry": {
+        "1": {
+          "samples": 29,
+          "max_util_pct": 49.0,
+          "mean_util_pct": 48.66,
+          "max_memory_mib": 10696.0,
+          "max_power_w": 231.34,
+          "max_temperature_c": 57.0
+        },
+        "2": {
+          "samples": 29,
+          "max_util_pct": 50.0,
+          "mean_util_pct": 49.24,
+          "max_memory_mib": 10748.0,
+          "max_power_w": 248.83,
+          "max_temperature_c": 57.0
+        }
+      },
+      "riv_au_score": 6,
+      "riv_au_max": 6,
+      "riv_au_checks": {
+        "event_type": true,
+        "acquirer": true,
+        "control_date": true,
+        "delisted_date": true,
+        "completion_date": true,
+        "successor": true
+      },
+      "riv_au_extracted": {
+        "event_type": "Acquisition",
+        "acquirer": "Rio Tinto",
+        "control_date": "2011-04-08",
+        "delisted_date": "2011-07-07",
+        "completion_date": "2011-08-01",
+        "successor": "Rio Tinto Coal Mozambique"
+      },
+      "riv_au_raw": "```json\n{\n  \"event_type\": \"Acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-04-08\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}\n```\n\nOkay, so I need to extract lifecycle facts for RIV AU only from the given passages. The user wants exactly one compact JSON object with specific scalar-string keys: event_type, acquirer, control_date, delisted_date, completion_date, successor. Dates must be in YYYY-MM-DD format, and I shouldn't infer any fields not stated.\n\nFirst, I'll look at Passage A. It says Rio Tinto acquired 52.6% on 8 April 2011. So the control_date is 2011-04-08. Then, on 1 August 2011, their interest became 100%, which I think is the completion_date, so 2011-08-01. Riversdale was delisted on 7 July 2011, so delisted_date is 2011-07-07. The successor is Rio Tinto Coal Mozambique.\n\nPassage B mentions the Rio Tinto takeover completed in August 2011, which aligns with the completion_date from Passage A. It also says Rio Tinto delisted Riversdale and renamed the assets, which again confirms the successor.\n\nI need to make sure all dates are in the correct format. The event_type is \"Acquisition\" since Rio Tinto is acquiring Riversdale. The acquirer is Rio Tinto. I don't see any other fields mentioned, so I won't add anything else.\n\nPutting it all together, the JSON should include event_type, acquirer, control_date, delisted_date, completion_date, and successor with the corresponding values. I'll double-check each date to ensure they're correctly formatted and that I haven't missed any information from the passages.",
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 29.55881212523338,
+      "prompt_tokens_per_second": 220.2504562330879,
+      "elapsed_seconds_including_load_and_tests": 39.21,
+      "server_log": "/tmp/deepseek-r1-qwen32b-q4-tp2.log"
+    },
+    {
+      "model": "qwen36-27b-iq3",
+      "path": "/media/knight2/EDS2/models/qwen3.6-27b-unsloth-ud-iq3-xxs.gguf",
+      "bytes": 11994777824,
+      "runtime": "llama.cpp build-v100",
+      "topology": "physical GPU 1+2, layer split 1:1, NVLink",
+      "loaded_gpu": {
+        "1": {
+          "util_pct": 22.0,
+          "memory_mib": 5938.0,
+          "power_w": 69.87,
+          "temperature_c": 51.0
+        },
+        "2": {
+          "util_pct": 26.0,
+          "memory_mib": 6514.0,
+          "power_w": 72.33,
+          "temperature_c": 52.0
+        }
+      },
+      "both_v100_active": true,
+      "gpu_decode_telemetry": {
+        "1": {
+          "samples": 26,
+          "max_util_pct": 50.0,
+          "mean_util_pct": 44.27,
+          "max_memory_mib": 6128.0,
+          "max_power_w": 219.92,
+          "max_temperature_c": 57.0
+        },
+        "2": {
+          "samples": 26,
+          "max_util_pct": 52.0,
+          "mean_util_pct": 46.46,
+          "max_memory_mib": 6704.0,
+          "max_power_w": 231.8,
+          "max_temperature_c": 57.0
+        }
+      },
+      "riv_au_score": 6,
+      "riv_au_max": 6,
+      "riv_au_checks": {
+        "event_type": true,
+        "acquirer": true,
+        "control_date": true,
+        "delisted_date": true,
+        "completion_date": true,
+        "successor": true
+      },
+      "riv_au_extracted": {
+        "event_type": "acquisition",
+        "acquirer": "Rio Tinto",
+        "control_date": "2011-04-08",
+        "delisted_date": "2011-07-07",
+        "completion_date": "2011-08-01",
+        "successor": "Rio Tinto Coal Mozambique"
+      },
+      "riv_au_raw": "{\n  \"event_type\": \"acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-04-08\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}",
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 34.170716901640596,
+      "prompt_tokens_per_second": 126.11196802576563,
+      "elapsed_seconds_including_load_and_tests": 27.54,
+      "server_log": "/tmp/qwen36-27b-iq3-tp2.log"
+    },
+    {
+      "model": "qwen35-27b-q4",
+      "path": "/media/knight2/EDS2/lmstudio-models/lmstudio-community/Qwen3.5-27B-GGUF/Qwen3.5-27B-Q4_K_M.gguf",
+      "bytes": 16540271680,
+      "runtime": "llama.cpp build-v100",
+      "topology": "physical GPU 1+2, layer split 1:1, NVLink",
+      "loaded_gpu": {
+        "1": {
+          "util_pct": 0.0,
+          "memory_mib": 8036.0,
+          "power_w": 58.12,
+          "temperature_c": 49.0
+        },
+        "2": {
+          "util_pct": 0.0,
+          "memory_mib": 8592.0,
+          "power_w": 72.82,
+          "temperature_c": 51.0
+        }
+      },
+      "both_v100_active": true,
+      "gpu_decode_telemetry": {
+        "1": {
+          "samples": 27,
+          "max_util_pct": 52.0,
+          "mean_util_pct": 46.48,
+          "max_memory_mib": 8226.0,
+          "max_power_w": 217.0,
+          "max_temperature_c": 56.0
+        },
+        "2": {
+          "samples": 27,
+          "max_util_pct": 55.0,
+          "mean_util_pct": 49.37,
+          "max_memory_mib": 8782.0,
+          "max_power_w": 253.35,
+          "max_temperature_c": 57.0
+        }
+      },
+      "riv_au_score": 5,
+      "riv_au_max": 6,
+      "riv_au_checks": {
+        "event_type": true,
+        "acquirer": true,
+        "control_date": false,
+        "delisted_date": true,
+        "completion_date": true,
+        "successor": true
+      },
+      "riv_au_extracted": {
+        "event_type": "acquisition",
+        "acquirer": "Rio Tinto",
+        "control_date": "2011-08-01",
+        "delisted_date": "2011-07-07",
+        "completion_date": "2011-08-01",
+        "successor": "Rio Tinto Coal Mozambique"
+      },
+      "riv_au_raw": "{\n  \"event_type\": \"acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-08-01\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}",
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 32.81428849936398,
+      "prompt_tokens_per_second": 142.71860648088852,
+      "elapsed_seconds_including_load_and_tests": 33.82,
+      "server_log": "/tmp/qwen35-27b-q4-tp2.log"
+    },
+    {
+      "model": "gemma4-26b-a4b-q4",
+      "path": "/media/knight2/EDS2/lmstudio-models/lmstudio-community/gemma-4-26B-A4B-it-GGUF/gemma-4-26B-A4B-it-Q4_K_M.gguf",
+      "bytes": 16796010624,
+      "runtime": "llama.cpp build-v100",
+      "topology": "physical GPU 1+2, layer split 1:1, NVLink",
+      "loaded_gpu": {
+        "1": {
+          "util_pct": 0.0,
+          "memory_mib": 8864.0,
+          "power_w": 70.36,
+          "temperature_c": 50.0
+        },
+        "2": {
+          "util_pct": 0.0,
+          "memory_mib": 8512.0,
+          "power_w": 71.84,
+          "temperature_c": 50.0
+        }
+      },
+      "both_v100_active": true,
+      "gpu_decode_telemetry": {
+        "1": {
+          "samples": 11,
+          "max_util_pct": 46.0,
+          "mean_util_pct": 44.09,
+          "max_memory_mib": 8928.0,
+          "max_power_w": 113.15,
+          "max_temperature_c": 52.0
+        },
+        "2": {
+          "samples": 11,
+          "max_util_pct": 55.0,
+          "mean_util_pct": 50.45,
+          "max_memory_mib": 8576.0,
+          "max_power_w": 145.06,
+          "max_temperature_c": 53.0
+        }
+      },
+      "riv_au_score": 6,
+      "riv_au_max": 6,
+      "riv_au_checks": {
+        "event_type": true,
+        "acquirer": true,
+        "control_date": true,
+        "delisted_date": true,
+        "completion_date": true,
+        "successor": true
+      },
+      "riv_au_extracted": {
+        "event_type": "takeover",
+        "acquirer": "Rio Tinto",
+        "control_date": "2011-04-08",
+        "delisted_date": "2011-07-07",
+        "completion_date": "2011-08-01",
+        "successor": "Rio Tinto Coal Mozambique"
+      },
+      "riv_au_raw": "```json\n{\n  \"event_type\": \"takeover\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-04-08\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}\n```",
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 84.007479630657,
+      "prompt_tokens_per_second": 432.92785943571556,
+      "elapsed_seconds_including_load_and_tests": 27.85,
+      "server_log": "/tmp/gemma4-26b-a4b-q4-tp2.log"
+    },
+    {
+      "model": "devstral-small2-24b-q4",
+      "path": "/media/knight2/EDS2/lmstudio-models/lmstudio-community/Devstral-Small-2-24B-Instruct-2512-GGUF/Devstral-Small-2-24B-Instruct-2512-Q4_K_M.gguf",
+      "bytes": 14334437504,
+      "runtime": "llama.cpp build-v100",
+      "topology": "physical GPU 1+2, layer split 1:1, NVLink",
+      "loaded_gpu": {
+        "1": {
+          "util_pct": 0.0,
+          "memory_mib": 7696.0,
+          "power_w": 69.87,
+          "temperature_c": 49.0
+        },
+        "2": {
+          "util_pct": 0.0,
+          "memory_mib": 7590.0,
+          "power_w": 71.84,
+          "temperature_c": 50.0
+        }
+      },
+      "both_v100_active": true,
+      "gpu_decode_telemetry": {
+        "1": {
+          "samples": 22,
+          "max_util_pct": 49.0,
+          "mean_util_pct": 47.0,
+          "max_memory_mib": 8040.0,
+          "max_power_w": 220.61,
+          "max_temperature_c": 55.0
+        },
+        "2": {
+          "samples": 22,
+          "max_util_pct": 49.0,
+          "mean_util_pct": 45.68,
+          "max_memory_mib": 7934.0,
+          "max_power_w": 221.14,
+          "max_temperature_c": 55.0
+        }
+      },
+      "riv_au_score": 6,
+      "riv_au_max": 6,
+      "riv_au_checks": {
+        "event_type": true,
+        "acquirer": true,
+        "control_date": true,
+        "delisted_date": true,
+        "completion_date": true,
+        "successor": true
+      },
+      "riv_au_extracted": {
+        "event_type": "acquisition",
+        "acquirer": "Rio Tinto",
+        "control_date": "2011-04-08",
+        "delisted_date": "2011-07-07",
+        "completion_date": "2011-08-01",
+        "successor": "Rio Tinto Coal Mozambique"
+      },
+      "riv_au_raw": "```json\n{\n  \"event_type\": \"acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-04-08\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}\n```",
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 39.460697609424514,
+      "prompt_tokens_per_second": 331.6631723582436,
+      "elapsed_seconds_including_load_and_tests": 28.4,
+      "server_log": "/tmp/devstral-small2-24b-q4-tp2.log"
+    }
+  ]
+}
