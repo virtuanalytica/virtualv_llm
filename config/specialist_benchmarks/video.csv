@@ -1,0 +1,4 @@
+id,discipline,enabled,prompt,author,created_date,notes
+video-001,video,true,"Return only an FFmpeg filter_complex expression for a 6-second 1280x720 MP4: a red circle moves left-to-right while a blue square moves right-to-left; add title CROSSING.",EDS,2026-09-22,"Programmatic video artifact"
+video-002,video,true,"Return only an FFmpeg filter_complex expression for a 5-second 1280x720 MP4 with black background; animate a green sine-wave trace and add a timestamp counter.",EDS,2026-09-22,"Programmatic video artifact"
+video-003,video,true,"Return only an FFmpeg filter_complex expression for a 6-second 1280x720 MP4 with three labelled coloured bars that grow to 25 50 and 75 percent.",EDS,2026-09-22,"Programmatic video artifact"

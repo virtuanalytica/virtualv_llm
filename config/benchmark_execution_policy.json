@@ -1,0 +1,33 @@
+{
+  "policy_version": "2026-09-22",
+  "current_phase": "access_matrix_ready_after_glm53",
+  "matrix_enabled": true,
+  "matrix_unlock": {
+    "model_aliases": ["glm53-flash-aj-iq2xxs", "glm53-reap50-iq3m"],
+    "required_artifact": "reports/well_known_suite_20260917.json",
+    "required_protocol": "v4-mmlu-fewshot-20260918",
+    "required_fields": ["gsm8k", "bbh", "mmlu_sample", "humaneval", "completion_tokens_per_second"],
+    "require_no_error": true,
+    "note": "Do not benchmark sandbox/disk/internet_disk matrices until a GLM-5.3 candidate has a complete current-protocol sandbox result."
+  },
+  "profiles": {
+    "sandbox": "No network or filesystem tool.",
+    "disk": "Only a synthetic read-only benchmark archive; never real home/chat/secrets.",
+    "internet_disk": "Synthetic archive plus logged allow-listed web retrieval."
+  },
+  "queued_models": [
+    {
+      "model": "deepseek-ai/DeepSeek-V4.1-Flash",
+      "requested_runtime": "vLLM tensor_parallel_size=2 on physical V100 GPUs 1,2",
+      "after": "Complete the GLM-5.3 hardware matrix and current sandbox suite.",
+      "preflight": "blocked_on_this_host",
+      "blocker": "Released FP8/FP4/DSpark weights exceed the 64 GiB V100 pair and SM70 lacks native FP8/FP4 inference kernels. CPU offload cannot provide those kernels.",
+      "rule": "Do not download or publish a t/s value unless infra/vllm_v100/preflight.py returns supported=true."
+    }
+  ],
+  "tensor_safety": {
+    "llama_cpp_v100_tensor_split": "Two long decode suites previously ended in a driver-level V100 hang. Causality below the driver boundary is unproven; unattended long runs use layer split.",
+    "glm53_flash": "Uses an experimental GLM runtime plus automatic CPU offload. It deliberately does not pass --tensor-split for the long hardware matrix.",
+    "vllm_tensor_parallel": "A distinct execution path from llama.cpp tensor split. It requires a model-specific SM70/format preflight before use."
+  }
+}

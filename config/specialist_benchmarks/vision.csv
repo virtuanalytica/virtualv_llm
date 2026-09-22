@@ -1,0 +1,4 @@
+id,discipline,enabled,prompt,option_a,option_b,option_c,option_d,answer,asset_path,author,created_date,notes
+vision-001,vision,true,"Which relation between the red circle and blue square is shown?",The circle is left of the square,The circle is above the square,The circle overlaps the square,The circle is inside the square,A,config/specialist_benchmarks/assets/spatial_left_right.svg,EDS,2026-09-22,"Synthetic object-recognition and spatial relation"
+vision-002,vision,true,"Count only the green triangles in the image; what fraction of all visible shapes are green triangles?",1/2,1/3,1/4,2/3,A,config/specialist_benchmarks/assets/count_shapes.svg,EDS,2026-09-22,"Synthetic recognition under distractors"
+vision-003,vision,true,"A robot starts at S facing east. It may move only along dark corridors. Which labelled goal is reachable without crossing a wall?",A,B,C,D,B,config/specialist_benchmarks/assets/maze_spatial.svg,EDS,2026-09-22,"Spatial planning from visual map"

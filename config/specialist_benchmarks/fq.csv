@@ -1,0 +1,3 @@
+id,discipline,enabled,prompt,wheel_radius_m,wheelbase_m,target_x_m,target_y_m,target_heading_deg,max_duration_s,tolerance,author,created_date,notes
+fq-001,fq,true,"A differential-drive robot starts at (0 0) heading 0 degrees. Wheel radius is 0.05 m and wheelbase is 0.30 m. Select actuator velocities and duration to reach (1.00 0.00) at heading 0 degrees.",0.05,0.30,1.00,0.00,0,5,0.03,EDS,2026-09-22,"Deterministic forward-kinematics simulator"
+fq-002,fq,true,"A differential-drive robot starts at (0 0) heading 0 degrees. Wheel radius is 0.05 m and wheelbase is 0.30 m. Select actuator velocities and duration to reach approximately (0.45 0.45) at heading 90 degrees.",0.05,0.30,0.45,0.45,90,5,0.04,EDS,2026-09-22,"Arc trajectory and actuator control"

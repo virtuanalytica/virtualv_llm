@@ -1,0 +1,19 @@
+[Unit]
+Description=Qwen3.8 Flash-Next GGUF benchmark cascade
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=exec
+WorkingDirectory=/media/knight2/EDS2/projects/numerai-signals
+ExecStart=/usr/bin/flock -n /tmp/v100_exclusive.lock /usr/bin/python3 scripts/benchmarks/run_qwen38_flash_next_gguf_cascade.py
+Restart=on-failure
+RestartSec=5min
+TimeoutStartSec=infinity
+TimeoutStopSec=90s
+KillMode=control-group
+StandardOutput=append:/media/knight2/EDS2/projects/numerai-signals/reports/benchmark_logs/qwen38_flash_next_gguf_cascade.service.log
+StandardError=append:/media/knight2/EDS2/projects/numerai-signals/reports/benchmark_logs/qwen38_flash_next_gguf_cascade.service.log
+
+[Install]
+WantedBy=default.target
