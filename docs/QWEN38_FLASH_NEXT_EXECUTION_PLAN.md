@@ -417,3 +417,32 @@ DeepSeek) to refresh the stale `mixture-optimized-6` frontier, then the
 explicit 6-member `--require-member` mixture attempt per the original
 plan (using the correct `qwen38-flash-next-ap-iq2s-v100` name, not the
 stale `-iq2xxs-` one -- see the naming-correction note above).
+
+## Fase 2: mixture frontier refreshed -- NEW overall record 0.9586
+
+`materialize_mixture_frontier.py` (CPU-only, post-hoc, no GPU lock
+needed) ran against the full 31-candidate pool including everything from
+tonight (both GLM profiles, DeepSeek, the new Qwen3.8 ap-iq2s champion).
+`--size 6` (C(31,6) = 736,281 combinations, sample-cached so each
+combination is pure in-memory scoring) took 16 minutes; sizes 2-5 were
+fast. New frontier, all improved over the stale one:
+- size 2: 0.9243 (`ap-iq2s-allfour` + `deepseek-v4-flash-0731-iq3xxs`)
+- size 3: 0.9431 (+ `ap-iq2s-allfour`, `kat-coder-v2.5-dev`, `glm53-flash-aj-iq2xxs`)
+- size 4: 0.9502 (`ap-iq2s-v100`, `qwen35-122b-a10b-iq3s`, `kat-coder-v2.5-dev`, `deepseek-v4-flash-reap150b-q2k-adaa4000`)
+- size 5: **0.9586** (`ap-iq2s-allfour`, `qwen35-122b-a10b-iq3s`, `granite-4.2-30b`, `devstral-small2-24b-q4`, `deepseek-v4-flash-reap150b-q2k-adaa4000`)
+- size 6: **0.9586** (tied with size 5 -- a 6th member, `ap-q4km-allfour` +
+  `deepseek-v4-flash-0731-iq3xxs` + `nemotron35-lightning-30b-a3b` +
+  `mixtral-8x22b-instruct-q3ks`, added no further gain over the best-5)
+
+**New overall record: 0.9586** (`mixture-optimized-5`/`-6`), up from the
+stale 0.9523. Confirms tonight's new Qwen3.8 leader genuinely strengthens
+the frontier, not just the solo ranking. Dashboard rebuilt. Standard
+selection-set caveat applies (see each row's `selection_warning`):
+optimized on the same samples used to measure the members, not yet
+validated on a fresh held-out run.
+
+Next: the explicit 6-member `--require-member` attempt from the original
+plan, using the corrected `qwen38-flash-next-ap-iq2s-v100` name (this
+frontier search already picked `-allfour` for the automatic best-5/6, so
+that attempt is now more of a comparison point than a blind shot at a
+new record).
