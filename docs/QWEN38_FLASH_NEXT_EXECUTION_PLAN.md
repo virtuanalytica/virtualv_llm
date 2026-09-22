@@ -185,15 +185,55 @@ This section only establishes that the artifacts and candidate engines exist;
 the "V100s for experts / Ada+A4000 for attention+KV / rest CPU" 3-bit hybrid
 placement itself remains an untested hypothesis.
 
-## GLM-5.3-Flash-NVFP4 via 1Cat-vLLM SM70 (checked 2026-09-22, NOT present locally)
+## GLM-5.3-Flash-NVFP4 via 1Cat-vLLM SM70 (re-checked 2026-09-22, correction)
 
-Verified against the installed `1cat-vllm==1.5.0` package
-(`/media/knight2/EDS2/envs/1cat-vllm-1.5.0/`): its
-`vllm/model_executor/models/` directory has no GLM-5.3-specific model file
-(only generic `glm4*`/`glm_ocr*`/`chatglm` families) -- PR #341 ("[Model] Add
-GLM-5.3-Flash NVFP4 support on SM70", confirmed merged to `main`) is **not**
-in this release. Getting it running here would need a build against a newer
-`main` checkout (or a cherry-pick), not just a config change.
+**Correction to an earlier same-day finding in this doc**: the first check
+only looked in `vllm/model_executor/models/` (the legacy per-model-file
+location) and concluded GLM-5.3 support was entirely absent from the
+installed `1cat-vllm==1.5.0` (`/media/knight2/EDS2/envs/1cat-vllm-1.5.0/`).
+That was incomplete -- this release ships GLM-5.3-Flash support in a
+*different* location, `vllm/models/glm5next/` (registered in
+`vllm/model_executor/models/registry.py` lines 129/418-420/645 as
+`Glm5NextForCausalLM` / `Glm5NextForConditionalGeneration` / `Glm5NextMTP`),
+which the first pass's directory listing missed entirely.
+
+Verified directly by reading the source, not assumed:
+- `vllm/models/glm5next/nvidia/attention.py:371-374` has explicit runtime
+  SM70 detection (`current_platform.is_device_capability((7, 0))`) selecting
+  an `sm70_fp16_indexer` code path.
+- `vllm/models/glm5next/nvidia/kda.py` imports `vllm._sm70_ops as sm70_ops`
+  and calls SM70-specific custom kernels (`sm70_glm53_fp16_gemv_out`,
+  `sm70_glm_kda_fg_b_out`) for the KDA (gated delta attention) path, each
+  guarded by `hasattr(torch.ops._C, "sm70_...")` with a generic fallback if
+  absent.
+- A dedicated `vllm/models/glm5next/sm70/` package exists with `fp8_kv.py`
+  (packed E4M3 KV-cache) and `sparse.py` (sparse MLA) -- the two other
+  SM70-specific components PR #341's description names -- though neither is
+  currently imported from `nvidia/model.py`/`attention.py`, so they read as
+  present-but-not-yet-wired-in rather than active.
+- **But the compiled kernels themselves are missing**: a `CUDA_VISIBLE_
+  DEVICES="" python3 -c "import torch, vllm; hasattr(torch.ops._C,
+  'sm70_glm53_fp16_gemv_out')"` check against the installed venv's
+  `torch.ops._C` returned `False` for both tested ops. The Python
+  integration is real; the C++/CUDA extension backing it was not compiled
+  into this wheel, so at runtime every SM70 KDA path would silently fall
+  back to the generic kernel (the `hasattr` guards exist precisely for this
+  fallback) -- functional, not SM70-optimized.
+- Still **unverified**: whether NVFP4 *weight* quantization/loading itself
+  (as opposed to the KDA attention kernels checked above) works on SM70 at
+  all in this release -- no `nvfp4`/`NVFP4` string appears anywhere under
+  `vllm/models/glm5next/`, and the actual quantization backend lives
+  elsewhere in `vllm/model_executor/layers/quantization/`. This is the same
+  class of question as the earlier corrected W4A16/SM75 claim (see the
+  "hallucination correction" note elsewhere in this doc) -- do not assume
+  either way without checking that code path specifically before a large
+  download.
+
+Net effect: running GLM-5.3-Flash-NVFP4 here would **not** need a build
+against a newer `main` (the model class and SM70 runtime-detection scaffold
+already ship in the installed 1.5.0); it would run, just without the SM70
+KDA kernel speedups until those are compiled in. Whether NVFP4 weight
+loading itself works on SM70 is still open.
 
 Separately, PR #341's own test plan targets **8xV100 TP4/PP2** with a
 **181GiB** checkpoint -- this host has only 2xV100 (+2 unrelated GPUs) and,
@@ -203,6 +243,7 @@ a working port here (if even possible with 2 V100s instead of 8) would need
 real engineering, not just following the PR's own recipe.
 
 Not pursued further tonight -- flagged for an explicit user decision on
-whether the engineering cost (build 1Cat-vLLM from `main`, then adapt the
-TP4/PP2 8-GPU path down to whatever this 4-GPU host can actually do) is worth
-it before spending time on it, rather than assumed.
+whether the engineering cost (verify NVFP4 weight loading on SM70, possibly
+compile the missing `sm70_*` kernel extension, then adapt the TP4/PP2 8-GPU
+path down to whatever this 4-GPU host can actually do) is worth it before
+spending more time on it, rather than assumed.
