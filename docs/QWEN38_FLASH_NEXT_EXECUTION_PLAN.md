@@ -446,3 +446,32 @@ plan, using the corrected `qwen38-flash-next-ap-iq2s-v100` name (this
 frontier search already picked `-allfour` for the automatic best-5/6, so
 that attempt is now more of a comparison point than a blind shot at a
 new record).
+
+## Explicit 6-member "ultimate" mixture -- ran, materialized, not a new record
+
+Ran the original plan's exact `--require-member` command (with the
+corrected `qwen38-flash-next-ap-iq2s-v100` name): `nemotron35-lightning-
+30b-a3b`, `deepseek-v4-flash-0731-iq3xxs`, `glm53-reap50-iq3m-v100`,
+`kat-coder-v2.5-dev`, `qwen35-122b-a10b-iq3s`, `qwen38-flash-next-ap-
+iq2s-v100` -- all 6 were eligible. Result: **composite 0.9377** (gsm8k=
+0.98, bbh=0.8958, mmlu=0.875, humaneval=1.0). Materialized as
+`mixture-ultimate-6-explicit` via `mixture_of_models.py` (label added to
+`WELL_KNOWN_LABELS`, same missing-label class of issue as DeepSeek
+earlier -- fixed immediately rather than left invisible on the
+dashboard).
+
+This is a strong, complete result but **not** a new record -- it sits
+below the automatic exhaustive search's `mixture-optimized-5`/`-6`
+(0.9586). Expected: this specific hand-picked combination is one of
+736,281 possible size-6 combinations the exhaustive search already
+evaluated and beat. The exercise still had value: it answers the
+original plan's exact question (does *this* specific "ultimate" roster
+beat the prior record) with a definitive, measured no, rather than
+leaving it untested.
+
+**This completes the approved plan's Fase 2** (frontier refresh + the
+explicit ultimate-mixture attempt). Current overall record: **0.9586**
+(`mixture-optimized-5`/`-6`, automatic search). Remaining plan items are
+Fase 3 (repo/dashboard relocation cutover, deferred until this work
+settles) and Fase 4 (public docs, already done; visibility/publish
+decision still pending explicit user go-ahead, not automatic).

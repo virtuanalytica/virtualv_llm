@@ -285,6 +285,7 @@ WELL_KNOWN_LABELS = {
     "mixture-of-models-4-quality": "Mixture-of-models 4 (quality)",
     "mixture-of-models-4-gemma-routed": "Mixture-of-models 4 (Gemma route)",
     "mixture-of-models-4-gemma-direct": "Mixture-of-models 4 (Gemma direct)",
+    "mixture-ultimate-6-explicit": "Mixture ultieme 6 (nemotron+deepseek+glm+kat+qwen35+qwen38-iq2s)",
     "gpt-oss-20b-q4": "gpt-oss-20B",
     "mistral-small4-119b-q4-adaa4000": "Mistral Small 4 (Ada+A4000)",
     "deepseek-v4-flash-reap150b-q2k-adaa4000": "DeepSeek-V4-Flash-REAP-150B (Ada+A4000)",
