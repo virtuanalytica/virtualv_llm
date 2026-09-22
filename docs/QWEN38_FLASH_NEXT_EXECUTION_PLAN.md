@@ -384,3 +384,36 @@ candidate for the Fase 2 frontier search, not (yet) a new solo leader.
 The all-four-layer profile for this model remains unresolved/untried
 again; not a priority to chase given dual-layer already gives a complete,
 usable result.
+
+## Fase 1 COMPLETE: Qwen3.8-Flash-Next AP-IQ2_S cascade -- NEW solo leader
+
+Downloaded (77GB, `agentionai/Qwen3.8-Flash-Next-AP-GGUF`), both profiles
+ran cleanly via `run_qwen38_flash_next_gguf_cascade.py --only ap-iq2s`
+(no bugs hit this time -- `complete()` in that script never had the
+gsm8k-dict bug the GLM cascade had):
+- v100: gsm8k=0.92, bbh=0.875, mmlu=0.875, humaneval=0.975, **composite
+  0.9113**, 42.8 t/s.
+- allfour: gsm8k=0.92, bbh=0.9167, mmlu=0.8812, humaneval=0.975,
+  **composite 0.9232**, 40.8 t/s.
+
+**allfour is the new overall solo leader**, beating the prior champion
+(`qwen38-flash-next-ap-iq4xs-v100`, 0.9191) despite using a lower-bit
+quant (IQ2_S vs IQ4_XS) at comparable throughput. New top-6 solo ranking:
+0.9232 (ap-iq2s-allfour) > 0.9191 (ap-iq4xs-v100) > 0.9177
+(ap-iq4xs-allfour) > 0.9175 (ap-q4km-allfour) > 0.9113 (ap-iq2s-v100) >
+0.9103 (deepseek-v4-flash-0731-iq3xxs). Weights were not auto-pruned
+(the cascade only prunes a losing quant when comparing multiple quants
+within one `--only` run; a single new model has nothing to compare
+against) -- keep `qwen38-flash-next-ap-iq2s` on disk as the new champion,
+same as `ap-iq4xs`. Disk: 62GB free (95% full) after this download; tight
+but Fase 2 (mixture frontier search) is CPU-only/post-hoc and needs no
+further downloads.
+
+**This closes out Fase 1 of the approved plan** (GLM retry, DeepSeek
+retry, new Qwen3.8 cascade candidate -- all three done). Next: Fase 2,
+`materialize_mixture_frontier.py` re-run with the full refreshed
+candidate pool (now including this new leader, both GLM profiles, and
+DeepSeek) to refresh the stale `mixture-optimized-6` frontier, then the
+explicit 6-member `--require-member` mixture attempt per the original
+plan (using the correct `qwen38-flash-next-ap-iq2s-v100` name, not the
+stale `-iq2xxs-` one -- see the naming-correction note above).
