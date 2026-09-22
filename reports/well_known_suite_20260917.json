@@ -8570,115 +8570,6 @@
       "split_policy": "layer; V100 tensor split excluded for unattended long suite"
     },
     {
-      "model": "mixture-optimized-6",
-      "ensemble_members": [
-        "qwen38-flash-next-ap-iq2s-allfour",
-        "qwen38-flash-next-ap-q4km-allfour",
-        "deepseek-v4-flash-0731-iq3xxs",
-        "granite-4.2-30b",
-        "nemotron35-lightning-30b-a3b",
-        "mixtral-8x22b-instruct-q3ks"
-      ],
-      "ensemble_method": "task_router",
-      "ensemble_weights": null,
-      "routing": {
-        "discrete_vote_members": [
-          "qwen38-flash-next-ap-iq2s-allfour",
-          "qwen38-flash-next-ap-q4km-allfour",
-          "deepseek-v4-flash-0731-iq3xxs",
-          "granite-4.2-30b",
-          "nemotron35-lightning-30b-a3b",
-          "mixtral-8x22b-instruct-q3ks"
-        ],
-        "humaneval_best_of_members": [
-          "qwen38-flash-next-ap-iq2s-allfour",
-          "qwen38-flash-next-ap-q4km-allfour",
-          "deepseek-v4-flash-0731-iq3xxs",
-          "granite-4.2-30b",
-          "nemotron35-lightning-30b-a3b",
-          "mixtral-8x22b-instruct-q3ks"
-        ],
-        "truthfulqa_specialist": "qwen38-flash-next-ap-iq2s-allfour"
-      },
-      "eval_protocol": "v4-mmlu-fewshot-20260918",
-      "engine": "mixture(6)",
-      "policy": "sequential task-routed ensemble; majority vote on discrete final answers, best-of-N for HumanEval, optional specialist for free-text TruthfulQA",
-      "evaluation_caveat": "Post-hoc recombination of existing benchmark samples. When members are selected using these same scores, the result is a selection-set estimate and requires a fresh held-out run before production claims.",
-      "benchmark_summary": {
-        "core_composite_4task": 0.95855,
-        "diagnostic_mean_with_truthfulqa": 0.908507
-      },
-      "gsm8k": {
-        "exact_match,flexible-extract": 0.98,
-        "n": 50
-      },
-      "truthfulqa_gen": {
-        "name": "truthfulqa_gen",
-        "alias": "truthfulqa_gen",
-        "sample_len": 30,
-        "bleu_max,none": 27.766399248427998,
-        "bleu_max_stderr,none": 4.7678493819243934,
-        "bleu_acc,none": 0.6666666666666666,
-        "bleu_acc_stderr,none": 0.0875376219064817,
-        "bleu_diff,none": 10.370831124535801,
-        "bleu_diff_stderr,none": 4.476563195908569,
-        "rouge1_max,none": 52.285538780278344,
-        "rouge1_max_stderr,none": 4.9491886375478344,
-        "rouge1_acc,none": 0.8,
-        "rouge1_acc_stderr,none": 0.07427813527082075,
-        "rouge1_diff,none": 13.765184939383243,
-        "rouge1_diff_stderr,none": 4.959087266879471,
-        "rouge2_max,none": 40.10018489514315,
-        "rouge2_max_stderr,none": 5.738567763023648,
-        "rouge2_acc,none": 0.7,
-        "rouge2_acc_stderr,none": 0.08509629433967632,
-        "rouge2_diff,none": 13.26689228587149,
-        "rouge2_diff_stderr,none": 5.442951009483662,
-        "rougeL_max,none": 49.41952154230308,
-        "rougeL_max_stderr,none": 5.264818462356723,
-        "rougeL_acc,none": 0.6666666666666666,
-        "rougeL_acc_stderr,none": 0.0875376219064817,
-        "rougeL_diff,none": 12.289667277113693,
-        "rougeL_diff_stderr,none": 5.0881281649218835,
-        "policy": "task-routed to one measured free-text specialist",
-        "specialist": "qwen38-flash-next-ap-iq2s-allfour"
-      },
-      "bbh": {
-        "per_subtask": {
-          "bbh_cot_fewshot_boolean_expressions": 1.0,
-          "bbh_cot_fewshot_causal_judgement": 1.0,
-          "bbh_cot_fewshot_date_understanding": 0.875,
-          "bbh_cot_fewshot_logical_deduction_five_objects": 1.0,
-          "bbh_cot_fewshot_navigate": 1.0,
-          "bbh_cot_fewshot_temporal_sequences": 1.0
-        },
-        "mean_accuracy": 0.9792,
-        "n_samples": 48
-      },
-      "mmlu_sample": {
-        "per_subject": {
-          "abstract_algebra": 0.65,
-          "anatomy": 0.9,
-          "astronomy": 0.95,
-          "college_computer_science": 0.75,
-          "high_school_psychology": 1.0,
-          "formal_logic": 0.85,
-          "professional_law": 0.9,
-          "marketing": 1.0
-        },
-        "mean_accuracy": 0.875,
-        "n_samples": 160
-      },
-      "humaneval": {
-        "n_problems": 40,
-        "n_passed": 40,
-        "pass_at_1": 1.0,
-        "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
-      },
-      "bottleneck_tokens_per_second": 13.891050475556028,
-      "completion_tokens_per_second": 13.891050475556028
-    },
-    {
       "model": "mixture-ultimate-6-explicit",
       "ensemble_members": [
         "qwen38-flash-next-ap-iq2s-v100",
@@ -9765,6 +9656,115 @@
           "marketing": 1.0
         },
         "mean_accuracy": 0.9,
+        "n_samples": 160
+      },
+      "humaneval": {
+        "n_problems": 40,
+        "n_passed": 39,
+        "pass_at_1": 0.975,
+        "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
+      }
+    },
+    {
+      "model": "mixture-optimized-6",
+      "ensemble_members": [
+        "qwen38-flash-next-ap-iq2s-allfour",
+        "qwen35-122b-a10b-iq3s",
+        "kat-coder-v2.5-dev",
+        "llama3-70b-instruct-q4",
+        "glm53-reap50-iq3m-v100",
+        "devstral-small2-24b-q4"
+      ],
+      "ensemble_method": "task_router",
+      "ensemble_weights": null,
+      "routing": {
+        "discrete_vote_members": [
+          "qwen38-flash-next-ap-iq2s-allfour",
+          "qwen35-122b-a10b-iq3s",
+          "kat-coder-v2.5-dev",
+          "llama3-70b-instruct-q4",
+          "glm53-reap50-iq3m-v100",
+          "devstral-small2-24b-q4"
+        ],
+        "humaneval_best_of_members": [
+          "qwen38-flash-next-ap-iq2s-allfour",
+          "qwen35-122b-a10b-iq3s",
+          "kat-coder-v2.5-dev",
+          "llama3-70b-instruct-q4",
+          "glm53-reap50-iq3m-v100",
+          "devstral-small2-24b-q4"
+        ],
+        "truthfulqa_specialist": "qwen38-flash-next-ap-iq2s-allfour"
+      },
+      "eval_protocol": "v4-mmlu-fewshot-20260918",
+      "engine": "mixture(6)",
+      "policy": "sequential task-routed ensemble; majority vote on discrete final answers, best-of-N for HumanEval, optional specialist for free-text TruthfulQA",
+      "bottleneck_tokens_per_second": 15.502076700749553,
+      "completion_tokens_per_second": 15.502076700749553,
+      "evaluation_caveat": "Post-hoc recombination of existing benchmark samples. When members are selected using these same scores, the result is a selection-set estimate and requires a fresh held-out run before production claims.",
+      "benchmark_summary": {
+        "core_composite_4task": 0.959575,
+        "diagnostic_mean_with_truthfulqa": 0.909327
+      },
+      "gsm8k": {
+        "exact_match,flexible-extract": 0.98,
+        "n": 50
+      },
+      "truthfulqa_gen": {
+        "name": "truthfulqa_gen",
+        "alias": "truthfulqa_gen",
+        "sample_len": 30,
+        "bleu_max,none": 27.766399248427998,
+        "bleu_max_stderr,none": 4.7678493819243934,
+        "bleu_acc,none": 0.6666666666666666,
+        "bleu_acc_stderr,none": 0.0875376219064817,
+        "bleu_diff,none": 10.370831124535801,
+        "bleu_diff_stderr,none": 4.476563195908569,
+        "rouge1_max,none": 52.285538780278344,
+        "rouge1_max_stderr,none": 4.9491886375478344,
+        "rouge1_acc,none": 0.8,
+        "rouge1_acc_stderr,none": 0.07427813527082075,
+        "rouge1_diff,none": 13.765184939383243,
+        "rouge1_diff_stderr,none": 4.959087266879471,
+        "rouge2_max,none": 40.10018489514315,
+        "rouge2_max_stderr,none": 5.738567763023648,
+        "rouge2_acc,none": 0.7,
+        "rouge2_acc_stderr,none": 0.08509629433967632,
+        "rouge2_diff,none": 13.26689228587149,
+        "rouge2_diff_stderr,none": 5.442951009483662,
+        "rougeL_max,none": 49.41952154230308,
+        "rougeL_max_stderr,none": 5.264818462356723,
+        "rougeL_acc,none": 0.6666666666666666,
+        "rougeL_acc_stderr,none": 0.0875376219064817,
+        "rougeL_diff,none": 12.289667277113693,
+        "rougeL_diff_stderr,none": 5.0881281649218835,
+        "policy": "task-routed to one measured free-text specialist",
+        "specialist": "qwen38-flash-next-ap-iq2s-allfour"
+      },
+      "bbh": {
+        "per_subtask": {
+          "bbh_cot_fewshot_boolean_expressions": 1.0,
+          "bbh_cot_fewshot_causal_judgement": 0.875,
+          "bbh_cot_fewshot_date_understanding": 0.875,
+          "bbh_cot_fewshot_logical_deduction_five_objects": 1.0,
+          "bbh_cot_fewshot_navigate": 1.0,
+          "bbh_cot_fewshot_temporal_sequences": 1.0
+        },
+        "mean_accuracy": 0.9583,
+        "n_samples": 48
+      },
+      "mmlu_sample": {
+        "per_subject": {
+          "abstract_algebra": 0.8,
+          "anatomy": 0.85,
+          "astronomy": 1.0,
+          "college_computer_science": 0.95,
+          "high_school_psychology": 1.0,
+          "formal_logic": 0.9,
+          "professional_law": 0.9,
+          "marketing": 1.0
+        },
+        "mean_accuracy": 0.925,
         "n_samples": 160
       },
       "humaneval": {

@@ -739,3 +739,47 @@ Remaining before Fase 5 (final sync + asking about the Opus 5.5 restart):
 the DeepSeek chain finishing on its own, and a user decision on the
 `lm_eval_runs/` blocker (asked, not yet answered) -- neither blocks
 calling Fase 3/4 functionally done.
+
+## The `lm_eval_runs/` blocker resolved: it was never lost, just never migrated
+
+The user's next message clarified the standing expectation directly:
+numerai-signals must contain zero LLM/suite/benchmarking data going
+forward -- it all belongs in virtualv_llm. Auditing numerai-signals'
+`reports/` and `infra/` to actually enforce that turned up the real
+explanation for the morning's `lm_eval_runs/` mystery: the **full**
+191MB/~30-model raw sample-log history was still sitting there, intact,
+with a directory birth time of 2026-09-17 -- untouched since the original
+benchmark runs. The "wiped at 20:48 today" directory in virtualv_llm was
+never the only copy; it was simply the first `lm_eval_runs/` this repo
+ever had, because the original migration (commit `783fa5e`,
+"Initial migration of VirtualV LLM testsuite from numerai-signals") never
+copied this gitignored, untracked directory at all. Same root cause as
+every other "missing" file found today (the four 1Cat report files, the
+7-model `local_gguf_8bench` rows, both `*_nvlink_profiles_*` sources for
+`gguf_rows()`, both `hardware_scaling_*` reports) -- an incomplete
+migration, not data loss, each time.
+
+Merged numerai-signals' `lm_eval_runs/` into virtualv_llm's via
+`rsync -a --ignore-existing` (so the two directories written by *today's*
+correctly-fixed GLM reasoning_effort retest, `glm53-reap50-iq3m-{v100,
+allfour}`, were never touched -- confirmed their content stayed the
+larger/newer versions, not overwritten by numerai-signals' earlier,
+pre-fix samples for those same two model keys). Verified the merge was
+clean by rerunning `optimize_model_mixture.py --size 2`: `eligible_models`
+jumped from 2 to 30, and the top result (0.92425,
+`ap-iq2s-allfour`+`deepseek-v4-flash-0731-iq3xxs`) matches the
+0.9243 already on record from before today's disruption -- consistent,
+not corrupted.
+
+With the real data back, reran `materialize_mixture_frontier.py`'s full
+exhaustive search (sizes 2-6) exactly as originally planned -- no
+partial/GLM-only fallback needed after all. Also fully removed every
+LLM-benchmark remnant from numerai-signals per the user's instruction:
+the 191MB `lm_eval_runs/` (after confirming the merge), the dozen-plus
+leftover report JSONs (each copied into virtualv_llm first), and
+byte-identical duplicates of `infra/vllm_v100/`, `infra/model_serve_
+configs/`, `infra/systemd/qwen38-flash-next-gguf-cascade.service`
+(confirmed the *actually installed* user systemd unit already points at
+virtualv_llm, not this copy), and `scripts/benchmarks/eval_suite.py`
+(its only consumer, `infra/vllm_v100/benchmark_1cat_tp2.py`, was removed
+in the same pass). Committed in numerai-signals as `7d19d940`.
