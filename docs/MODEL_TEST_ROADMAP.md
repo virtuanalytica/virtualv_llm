@@ -19,7 +19,10 @@ engines, contexts and topologies remain separate rows.
 
 1. **GLM correctness re-test, no download.** Re-run the existing AJ-IQ2_XXS
    weights after the `reasoning_effort` fix. Preserve the old result as
-   superseded evidence and use a new run identifier.
+   superseded evidence and use a new run identifier. The current REAP50 IQ3_M
+   forced re-test is guarded by `glm53-reap50-retest.service`; the guardian
+   waits for the shared GPU lock and resumes only if the active attempt lacks
+   two post-download `benchmark_complete` events.
 2. **DeepSeek-V4-Flash-0731 placement matrix, existing weights first.** Use the
    measured 13.89 tok/s row as baseline. Test V100 layer split and the supported
    all-four layer split with identical context and prompts. Treat “V100 experts,
