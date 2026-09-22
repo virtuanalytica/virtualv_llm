@@ -537,3 +537,35 @@ expected-value experiment (could meaningfully raise GLM's composite,
 which is currently the pool's weakest at 0.50-0.54) but a substantial
 time investment not explicitly requested tonight -- flagged for an
 explicit go-ahead rather than assumed.
+
+## Crontab migration: the systemd cutover was incomplete, now fixed
+
+Found while re-checking before the numerai-signals cleanup (which this
+blocked): two crontab entries, tagged `llm-bench-20260918`, ran every 15
+minutes directly from `numerai-signals` -- `run_next_benchmark.py`
+(effectively a no-op now: all 7 `LOCAL_ONLY` models already have a
+current-protocol result) and `build_dual_v100_html.py` (rebuilds the
+dashboard). Neither was touched by the earlier systemd-only cutover, so
+they would have broken the moment numerai-signals' copies were removed,
+and would have kept numerai-signals' `reports/` as a second, silently
+diverging "source of truth" for the dashboard even before any cleanup.
+
+Checked first whether anything else writes to `well_known_suite_20260917.
+json`: no other cron/systemd entry does; the only other reader
+(`scripts/reporting/build_virtualv_llm_suite_document.py`) is read-only
+and never cron-scheduled. So this really was the only gap.
+
+Backed up the full crontab (`~/.claude/crontab_backup_20260922_llm_bench_
+virtualv_llm_cutover.txt`), changed only the `cd` target on both
+`llm-bench-20260918` lines from `numerai-signals` to `virtualv_llm`
+(diff-verified: exactly those two lines changed, same 469-line total),
+and manually ran both commands from the new location before the next
+real cron tick to confirm they work (`run_next_benchmark.py`: same no-op
+status; `build_dual_v100_html.py`: rebuilt cleanly, dashboard shows
+current results). `numerai-signals`' `reports/` is from this point a
+static snapshot, not a second live source -- `virtualv_llm` is now the
+only thing any process writes to.
+
+This closes the gap that was blocking the numerai-signals code cleanup:
+that item can now proceed once given the go-ahead, without risking a
+divergent second dashboard.
