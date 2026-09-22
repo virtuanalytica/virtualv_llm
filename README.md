@@ -13,7 +13,7 @@ not universal performance claims.
 
 ## Current results
 
-- [Interactive benchmark dashboard](reports/dual_v100_nvlink_benchmark.html)
+- [Interactive benchmark dashboard](https://virtuanalytica.github.io/virtualv_llm/)
 - [Curated machine-readable evidence](reports/well_known_suite_20260917.json)
 - [Business standard and operator manual](docs/VIRTUALV_LLM_TESTSUITE_STANDARD.md)
 - [Current model and runtime roadmap](docs/MODEL_TEST_ROADMAP.md)
