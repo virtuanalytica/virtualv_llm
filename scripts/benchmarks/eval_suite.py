@@ -7,10 +7,9 @@ same prompts and the exact same deterministic, programmatic scoring -- no LLM
 judge, no subjective grading. Each task returns a score in [0, 1] plus a detail
 dict so failures are inspectable, not just a number.
 
-Every prompt is grounded in real repository content (the RIV AU/Riversdale
-lifecycle fact, real docstrings, the real GICS sector list, a real doc used as
-needle-in-haystack filler) -- nothing here is fabricated Numerai training data;
-these are benchmark *prompts*, the same category as the pre-existing RIV_PROMPT.
+Every prompt is grounded in a versioned public fixture or an explicit synthetic
+case. The fixtures live in this repository so importing the suite from a clean
+clone cannot silently change prompt semantics.
 """
 from __future__ import annotations
 
@@ -215,7 +214,7 @@ def score_gics_format(raw: str) -> tuple[float, dict[str, Any]]:
 # RIV AU fact as the needle)
 # ---------------------------------------------------------------------------
 
-_HAYSTACK_DOC = ROOT / "docs/HISTORICAL_GLOBAL_HOLDINGS_ACQUISITION.md"
+_HAYSTACK_DOC = ROOT / "config/benchmark_fixtures/needle_haystack.md"
 _NEEDLE = (
     "\n\nNOTE (unrelated corporate-lifecycle fact, ignore for the rest of this document): "
     "Rio Tinto obtained control of Riversdale Mining (RIV AU) on 2011-04-08.\n\n"
@@ -223,10 +222,7 @@ _NEEDLE = (
 
 
 def _build_needle_prompt() -> str:
-    if not _HAYSTACK_DOC.exists():
-        haystack = "Padding text about fund holdings and PIT recovery. " * 200
-    else:
-        haystack = _HAYSTACK_DOC.read_text(encoding="utf-8", errors="ignore")[:4000]
+    haystack = _HAYSTACK_DOC.read_text(encoding="utf-8", errors="strict")[:4000]
     mid = len(haystack) // 2
     body = haystack[:mid] + _NEEDLE + haystack[mid:]
     question = (
@@ -245,19 +241,14 @@ def score_needle_haystack(raw: str) -> tuple[float, dict[str, Any]]:
 
 
 # ---------------------------------------------------------------------------
-# Task 7: summarization faithfulness on a real docstring
+# Task 7: summarization faithfulness on a versioned technical fixture
 # ---------------------------------------------------------------------------
 
-_SUMMARY_SOURCE = ROOT / "scripts/collect_tiingo_delisted_prices.py"
+_SUMMARY_SOURCE = ROOT / "config/benchmark_fixtures/summary_source.md"
 
 
 def _build_summary_prompt() -> str:
-    if _SUMMARY_SOURCE.exists():
-        text = _SUMMARY_SOURCE.read_text(encoding="utf-8", errors="ignore")
-        match = re.search(r'"""(.*?)"""', text, re.S)
-        note = match.group(1).strip() if match else text[:1500]
-    else:
-        note = "13,350 of 21,535 train+validation tickers (62%) left the universe. Tiingo keeps delisted history."
+    note = _SUMMARY_SOURCE.read_text(encoding="utf-8", errors="strict")[:1500]
     return (
         "Summarize the following technical note in 2-3 sentences. Preserve the key numeric facts exactly; "
         "do not invent any number that is not present below.\n\n" + note

@@ -1,0 +1,11 @@
+VirtualV LLM Testsuite
+Copyright 2026 VirtuAnalytica
+
+This product includes benchmark integrations and interoperability code for
+third-party projects and datasets. Those dependencies are not relicensed by
+this repository. In particular, model weights, llama.cpp, vLLM/1Cat-vLLM,
+lm-evaluation-harness and HumanEval remain subject to their respective source
+licenses and terms.
+
+Published benchmark results identify the model repository, revision, runtime,
+quantization and hardware contract where that information is available.

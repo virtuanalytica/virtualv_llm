@@ -1,3 +1,40 @@
 __pycache__/
 *.pyc
 .DS_Store
+
+# Local environments, secrets and host-specific overrides
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.venv/
+venv/
+
+# Model weights and Hugging Face caches never belong in Git
+*.gguf
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.onnx
+.cache/
+data/eval_cache/
+data/private/
+
+# Raw evidence is distributed as a checksummed release artifact. Curated
+# result JSON and the rendered dashboard remain tracked.
+reports/benchmark_logs/
+reports/llama_logs/
+reports/lm_eval_runs/
+reports/*_cascade_*.json
+reports/*.tmp
+
+# Generated local service units and build/test caches
+infra/systemd/generated/
+.pytest_cache/
+.ruff_cache/
+htmlcov/
+dist/
+build/
+output/releases/

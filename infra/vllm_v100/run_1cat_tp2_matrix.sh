@@ -2,8 +2,10 @@
 # Compare target-only and DFlash2 under one local TP=2 contract.
 set -euo pipefail
 
-ROOT=/media/knight2/EDS2/projects/numerai-signals
-LOG_ROOT=/media/knight2/EDS2/logs/vllm-1cat
+SCRIPT_DIR=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
+ROOT=${VIRTUALV_LLM_ROOT:-$(cd -- "$SCRIPT_DIR/../.." && pwd)}
+DATA_ROOT=${VIRTUALV_DATA_ROOT:-/media/knight2/EDS2}
+LOG_ROOT=${VIRTUALV_1CAT_LOG_ROOT:-$DATA_ROOT/logs/vllm-1cat}
 PORT=18012
 MAX_MODEL_LEN=${MAX_MODEL_LEN:-8192}
 PROFILE_TAG=${PROFILE_TAG:-8k}

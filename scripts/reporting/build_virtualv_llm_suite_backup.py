@@ -60,7 +60,7 @@ def main() -> int:
             "Executable benchmark code, controlled configuration, service unit, tests and "
             "documentation; excludes model weights, private evaluation packs, logs and secrets."
         ),
-        "root_hint": "/media/knight2/EDS2/projects/numerai-signals",
+        "root_hint": ".",
         "files": [
             {
                 "path": path.relative_to(ROOT).as_posix(),
