@@ -160,14 +160,22 @@ def annotate(candidate: dict[str, Any], model: str, profile: str) -> None:
     temp.replace(REPORT)
 
 
-def benchmark(candidate: dict[str, Any], state: dict[str, Any]) -> None:
+def benchmark(candidate: dict[str, Any], state: dict[str, Any], force: bool = False) -> None:
     env = os.environ.copy()
     env.update({"LLAMA_SERVER": str(RUNTIME / "bin/llama-server"),
                 "LLAMA_BENCH": str(RUNTIME / "bin/llama-bench"),
                 "CUDA_DEVICE_ORDER": "PCI_BUS_ID"})
     for suffix, profile in PROFILES:
         model = f"glm53-reap50-{candidate['key']}-{suffix}"
-        if row_complete(model):
+        # 2026-09-22: row_complete() only checks that the 4 core metrics are
+        # numeric -- it has no way to know a benchmark command changed (e.g.
+        # the reasoning_effort fix below) since the row was last written.
+        # A GLM reasoning_effort hertest hit this: the cascade re-downloaded
+        # 67GB, saw the OLD row still had valid numbers, skipped the actual
+        # rerun, and pruned the freshly-downloaded weights -- the fix was
+        # never tested. --force lets a deliberate rerun bypass the skip
+        # without changing the normal resumable behavior for everyone else.
+        if row_complete(model) and not force:
             event(state, candidate, "benchmark_already_complete", model=model, profile=profile)
             continue
         event(state, candidate, "benchmark_started", model=model, profile=profile)
@@ -206,6 +214,9 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--only", choices=[candidate["key"] for candidate in CANDIDATES])
     parser.add_argument("--keep-weights", action="store_true")
+    parser.add_argument("--force", action="store_true",
+                        help="rerun both profiles even if a prior result already has valid metrics "
+                             "(use after a benchmark-command change that a stale row wouldn't reflect)")
     args = parser.parse_args()
     if not (RUNTIME / "bin/llama-server").exists():
         raise SystemExit(f"missing isolated GLM runtime: {RUNTIME}")
@@ -213,7 +224,7 @@ def main() -> int:
     selected = [candidate for candidate in CANDIDATES if not args.only or candidate["key"] == args.only]
     for candidate in selected:
         download(candidate, state)
-        benchmark(candidate, state)
+        benchmark(candidate, state, force=args.force)
         if not args.keep_weights:
             prune(candidate, state)
     subprocess.run(["python3", str(RENDER)], cwd=ROOT, check=True)
