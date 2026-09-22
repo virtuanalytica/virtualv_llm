@@ -568,6 +568,410 @@
           ]
         }
       }
+    },
+    {
+      "model": "glm53-reap50-iq3m-v100",
+      "protocol": "v2-private-specialist-packs-vision-video-iq-eq-fq-qq-20260922",
+      "sources": {
+        "chemistry": {
+          "name": "EDS editable private chemistry holdout v1; difficulty target GPQA Diamond",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2311.12022",
+          "samples": "enabled CSV rows"
+        },
+        "physics": {
+          "name": "EDS editable private physics holdout v1; difficulty target GPQA Diamond",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2311.12022",
+          "samples": "enabled CSV rows"
+        },
+        "vision": {
+          "name": "EDS synthetic object recognition + spatial reasoning holdout; MMMU-Pro difficulty reference",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2409.02813",
+          "samples": "enabled CSV rows",
+          "max_wall_sec": 300
+        },
+        "video": {
+          "name": "EDS programmatic MP4 artifact holdout; VBench metric reference",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2408.06072",
+          "samples": "enabled CSV rows",
+          "max_wall_sec": 300
+        },
+        "iq": {
+          "name": "EDS abstract/rule reasoning holdout (not a clinical IQ test)",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "eq": {
+          "name": "EDS social-emotional reasoning holdout (not a clinical EQ test)",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "fq": {
+          "name": "EDS actuator/robot physics simulation holdout",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "qq": {
+          "name": "EDS quantum systems and quantum chemistry holdout",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        }
+      },
+      "access_profile": "sandbox",
+      "results": {
+        "chemistry": {
+          "status": "unavailable",
+          "reason": "RuntimeError: missing editable question CSV: /media/knight2/EDS2/projects/virtualv_llm/config/benchmark_specialist_holdout_v1.csv",
+          "n_samples": 0
+        },
+        "physics": {
+          "status": "unavailable",
+          "reason": "RuntimeError: missing editable question CSV: /media/knight2/EDS2/projects/virtualv_llm/config/benchmark_specialist_holdout_v1.csv",
+          "n_samples": 0
+        },
+        "vision": {
+          "status": "unsupported",
+          "reason": "text-only endpoint; requires --vision-capable and a VLM adapter",
+          "n_samples": 0
+        },
+        "video": {
+          "status": "complete",
+          "accuracy": 0.0,
+          "n_samples": 3,
+          "elapsed_sec": 88.0,
+          "samples": [
+            {
+              "passed": false,
+              "duration_sec": 0.0
+            },
+            {
+              "passed": false,
+              "duration_sec": 0.0
+            },
+            {
+              "passed": false,
+              "duration_sec": 0.0
+            }
+          ]
+        },
+        "iq": {
+          "status": "complete",
+          "accuracy": 0.6667,
+          "n_samples": 3,
+          "question_pack": "config/specialist_benchmarks/iq.csv",
+          "pack_version": "iq",
+          "pack_sha256": "fb7a38220cac82529911671e647f4d764c8958092763aec582156d4751679b41",
+          "samples": [
+            {
+              "id": "iq-001",
+              "correct": false,
+              "target": "D",
+              "prediction": null
+            },
+            {
+              "id": "iq-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "iq-003",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            }
+          ]
+        },
+        "eq": {
+          "status": "complete",
+          "accuracy": 1.0,
+          "n_samples": 3,
+          "question_pack": "config/specialist_benchmarks/eq.csv",
+          "pack_version": "eq",
+          "pack_sha256": "eecae15256f18e3e2d67489c677f9276ce02e712eaf7d474e7df28bc2a1858c5",
+          "samples": [
+            {
+              "id": "eq-001",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "eq-002",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "eq-003",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "fq": {
+          "status": "complete",
+          "accuracy": 0.0,
+          "n_samples": 2,
+          "samples": [
+            {
+              "id": "fq-001",
+              "correct": false,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq-002",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            }
+          ],
+          "simulator": "differential_drive_v1"
+        },
+        "qq": {
+          "status": "complete",
+          "accuracy": 0.75,
+          "n_samples": 4,
+          "question_pack": "config/specialist_benchmarks/qq.csv",
+          "pack_version": "qq",
+          "pack_sha256": "2820da6fa7b05d0bef6adcd2fcb8a1aa9fa86970185605bcaea60b8fac81f769",
+          "samples": [
+            {
+              "id": "qq-001",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "qq-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "qq-003",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "qq-004",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "model": "glm53-reap50-iq3m-allfour",
+      "protocol": "v2-private-specialist-packs-vision-video-iq-eq-fq-qq-20260922",
+      "sources": {
+        "chemistry": {
+          "name": "EDS editable private chemistry holdout v1; difficulty target GPQA Diamond",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2311.12022",
+          "samples": "enabled CSV rows"
+        },
+        "physics": {
+          "name": "EDS editable private physics holdout v1; difficulty target GPQA Diamond",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2311.12022",
+          "samples": "enabled CSV rows"
+        },
+        "vision": {
+          "name": "EDS synthetic object recognition + spatial reasoning holdout; MMMU-Pro difficulty reference",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2409.02813",
+          "samples": "enabled CSV rows",
+          "max_wall_sec": 300
+        },
+        "video": {
+          "name": "EDS programmatic MP4 artifact holdout; VBench metric reference",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2408.06072",
+          "samples": "enabled CSV rows",
+          "max_wall_sec": 300
+        },
+        "iq": {
+          "name": "EDS abstract/rule reasoning holdout (not a clinical IQ test)",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "eq": {
+          "name": "EDS social-emotional reasoning holdout (not a clinical EQ test)",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "fq": {
+          "name": "EDS actuator/robot physics simulation holdout",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "qq": {
+          "name": "EDS quantum systems and quantum chemistry holdout",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        }
+      },
+      "access_profile": "sandbox",
+      "results": {
+        "chemistry": {
+          "status": "unavailable",
+          "reason": "RuntimeError: missing editable question CSV: /media/knight2/EDS2/projects/virtualv_llm/config/benchmark_specialist_holdout_v1.csv",
+          "n_samples": 0
+        },
+        "physics": {
+          "status": "unavailable",
+          "reason": "RuntimeError: missing editable question CSV: /media/knight2/EDS2/projects/virtualv_llm/config/benchmark_specialist_holdout_v1.csv",
+          "n_samples": 0
+        },
+        "vision": {
+          "status": "unsupported",
+          "reason": "text-only endpoint; requires --vision-capable and a VLM adapter",
+          "n_samples": 0
+        },
+        "video": {
+          "status": "complete",
+          "accuracy": 0.0,
+          "n_samples": 3,
+          "elapsed_sec": 72.2,
+          "samples": [
+            {
+              "passed": false,
+              "duration_sec": 0.0
+            },
+            {
+              "passed": false,
+              "duration_sec": 0.0
+            },
+            {
+              "passed": false,
+              "duration_sec": 0.0
+            }
+          ]
+        },
+        "iq": {
+          "status": "complete",
+          "accuracy": 0.3333,
+          "n_samples": 3,
+          "question_pack": "config/specialist_benchmarks/iq.csv",
+          "pack_version": "iq",
+          "pack_sha256": "fb7a38220cac82529911671e647f4d764c8958092763aec582156d4751679b41",
+          "samples": [
+            {
+              "id": "iq-001",
+              "correct": false,
+              "target": "D",
+              "prediction": null
+            },
+            {
+              "id": "iq-002",
+              "correct": false,
+              "target": "A",
+              "prediction": null
+            },
+            {
+              "id": "iq-003",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            }
+          ]
+        },
+        "eq": {
+          "status": "complete",
+          "accuracy": 1.0,
+          "n_samples": 3,
+          "question_pack": "config/specialist_benchmarks/eq.csv",
+          "pack_version": "eq",
+          "pack_sha256": "eecae15256f18e3e2d67489c677f9276ce02e712eaf7d474e7df28bc2a1858c5",
+          "samples": [
+            {
+              "id": "eq-001",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "eq-002",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "eq-003",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "fq": {
+          "status": "complete",
+          "accuracy": 0.5,
+          "n_samples": 2,
+          "samples": [
+            {
+              "id": "fq-001",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq-002",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            }
+          ],
+          "simulator": "differential_drive_v1"
+        },
+        "qq": {
+          "status": "complete",
+          "accuracy": 0.75,
+          "n_samples": 4,
+          "question_pack": "config/specialist_benchmarks/qq.csv",
+          "pack_version": "qq",
+          "pack_sha256": "2820da6fa7b05d0bef6adcd2fcb8a1aa9fa86970185605bcaea60b8fac81f769",
+          "samples": [
+            {
+              "id": "qq-001",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "qq-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "qq-003",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "qq-004",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        }
+      }
     }
   ],
   "protocol": "v2-private-specialist-packs-vision-video-iq-eq-fq-qq-20260922"
