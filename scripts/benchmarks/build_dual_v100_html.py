@@ -168,8 +168,17 @@ def table(rows: list[dict]) -> str:
     body = []
     for row in rows:
         speedup = "—" if row["speedup"] is None else f"{row['speedup']:.2f}×"
+        # 2026-09-22 (user feedback): "als we op het model klikken willen we de
+        # uitleg" -- only the 1Cat-vLLM rows (target vs. +DFlash2, B1 vs. B4)
+        # have a matching explanation section; GGUF rows keep a plain label.
+        model_cell = (f'<td><a class="benchmark-link" href="#onecat-uitleg" '
+                      f'title="Ga naar uitleg van {html.escape(row["model"])}">'
+                      f'<strong>{html.escape(row["model"])}</strong></a>'
+                      f'<small>{html.escape(row["params"])}</small></td>'
+                      if row["engine"] == "1Cat-vLLM 1.5" else
+                      f'<td><strong>{html.escape(row["model"])}</strong><small>{html.escape(row["params"])}</small></td>')
         body.append("<tr>" + "".join([
-            f"<td><strong>{html.escape(row['model'])}</strong><small>{html.escape(row['params'])}</small></td>",
+            model_cell,
             f"<td>{html.escape(row['engine'])}<small>{html.escape(row['quant'])}</small></td>",
             f"<td><span class='pill'>{html.escape(row['profile'])}</span></td>",
             f"<td class='num hot'>{fmt(row['tps'])}</td>",
@@ -1013,6 +1022,25 @@ onafhankelijke parallel-servinglaag. Iedere rij bewaart de werkelijk zichtbare f
 <div class="callout"><strong>Hoofdconclusie.</strong> Layer split vergroot vooral capaciteit. Tensor split gebruikt beide V100’s echt parallel: Qwen3.8 wint {fmt(q_gain,1)}%, terwijl de 72,7B dense Qwen van 14,84 naar 24,29 t/s gaat (+63,7%). Voor Qwen3.8 single-stream latency blijft 1Cat + DFlash2 de snelste route; bij batch 4 wint target-only.</div>
 <h2>Alle lokale resultaten</h2><p>Decode-t/s van llama.cpp en wall-output-t/s van 1Cat zijn apart gemeten; batch-4 is aggregaat. RIV is een brongebonden zesveldentest, geen algemene modelaccuracy.</p>
 <div class="tablewrap"><table class="sortable"><thead><tr><th>Model</th><th>Engine</th><th>Profiel</th><th data-sort-dir="desc">Output t/s</th><th>Prompt t/s</th><th>Qwen3.8 speedup</th><th>RIV</th><th>VRAM GiB</th><th>GPU util.</th></tr></thead><tbody>{table(rows)}</tbody></table></div>
+<section id="onecat-uitleg" class="benchmark-explanations" aria-labelledby="onecat-uitleg-title">
+<h3 id="onecat-uitleg-title">Uitleg van de 1Cat-vLLM-rijen</h3>
+<div class="explanation-grid">
+<article id="onecat-target"><h4>Qwen3.8 target</h4><p>Het model draait alleen, zonder
+hulpmodel. Elke token komt rechtstreeks uit één forward pass van Qwen3.8 zelf.</p>
+<a href="#onecat-uitleg-title">Terug naar boven</a></article>
+<article id="onecat-dflash2"><h4>Qwen3.8 + DFlash2</h4><p>Speculative decoding: een klein
+draft-model (DFlash2) stelt meerdere tokens tegelijk voor, die Qwen3.8 in één stap
+verifieert/accepteert. Bij lage gelijktijdigheid (B1) verlaagt dit de latency per
+request merkbaar; bij hoge gelijktijdigheid (B4) verdwijnt dat voordeel omdat de
+GPU dan toch al vol staat met werk van andere requests.</p>
+<a href="#onecat-uitleg-title">Terug naar boven</a></article>
+<article id="onecat-b1"><h4>B1 (batchgrootte 1)</h4><p>Eén gelijktijdig verzoek: meet
+single-stream latency/doorvoer, het scenario van één interactieve gebruiker die op
+antwoord wacht.</p><a href="#onecat-uitleg-title">Terug naar boven</a></article>
+<article id="onecat-b4"><h4>B4 (batchgrootte 4)</h4><p>Vier gelijktijdige verzoeken:
+meet aggregate doorvoer onder concurrency, het scenario van meerdere gebruikers of
+achtergrondtaken tegelijk.</p><a href="#onecat-uitleg-title">Terug naar boven</a></article>
+</div></section>
 <h2>Throughputprofiel: alle gemeten modellen en configuraties</h2>
 <p>Elke balk is een werkelijk gemeten configuratie, niet een afgeleide schatting. Het onderschrift
 onder de modelnaam vermeldt steeds de fysieke GPU’s. <strong>Aggregate 2 requests</strong> telt
