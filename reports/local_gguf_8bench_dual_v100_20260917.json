@@ -670,6 +670,1022 @@
       "prompt_tokens_per_second": 122.53323321216158,
       "elapsed_seconds_including_load_and_tests": 43.97,
       "server_log": "/tmp/qwen38-flash-next-ap-iq4xs-all-four-layer.log"
+    },
+    {
+      "model": "qwen38-27b-q4",
+      "profile": "dual-tensor",
+      "path": "/media/knight2/EDS2/models/llm/qwen38-27b/Qwen3.8-27B-UD-Q4_K_M.gguf",
+      "bytes": 16464440224,
+      "runtime": "llama.cpp build-v100",
+      "topology": "physical GPU [1, 2], split=tensor, CUDA_DEVICE_ORDER=PCI_BUS_ID, NVLink enabled",
+      "visible_device_probe": "ggml_cuda_init: found 2 CUDA devices (Total VRAM: 64988 MiB):\n  Device 0: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\n  Device 1: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\nAvailable devices:\n  CUDA0: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n  CUDA1: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n",
+      "loaded_gpu": {
+        "1": {
+          "util_pct": 0.0,
+          "memory_mib": 8102.0,
+          "power_w": 69.87,
+          "temperature_c": 50.0
+        },
+        "2": {
+          "util_pct": 0.0,
+          "memory_mib": 8102.0,
+          "power_w": 69.83,
+          "temperature_c": 43.0
+        }
+      },
+      "selected_v100s_active": true,
+      "both_v100_active": true,
+      "gpu_decode_telemetry": {
+        "1": {
+          "samples": 20,
+          "max_util_pct": 96.0,
+          "mean_util_pct": 84.15,
+          "max_memory_mib": 8244.0,
+          "max_power_w": 232.67,
+          "max_temperature_c": 63.0
+        },
+        "2": {
+          "samples": 20,
+          "max_util_pct": 96.0,
+          "mean_util_pct": 84.3,
+          "max_memory_mib": 8244.0,
+          "max_power_w": 227.98,
+          "max_temperature_c": 54.0
+        }
+      },
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 0.8333,
+          "detail": {
+            "extracted": {
+              "event_type": "acquisition",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-08-01",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-01",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": false,
+              "delisted_date": true,
+              "completion_date": true,
+              "successor": true
+            }
+          },
+          "raw": "{\n  \"event_type\": \"acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-08-01\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}"
+        },
+        "arithmetic_payout": {
+          "score": 0.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 464.88
+          },
+          "raw": "464.88"
+        },
+        "code_exec_drawdown": {
+          "score": 1.0,
+          "detail": {
+            "model_result": -0.2584,
+            "reference": -0.2584
+          },
+          "raw": "```python\ndef max_drawdown(returns):\n    wealth = 1.0\n    peak = 1.0\n    max_dd = 0.0\n    for r in returns:\n        wealth *= (1 + r)\n        if wealth > peak:\n            peak = wealth\n        dd = (wealth - peak) / peak\n        if dd < max_dd:\n            max_dd = dd\n    return max_dd\n```"
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "{\n  \"ticker\": \"AAPL\",\n  \"country_iso2\": \"US\",\n  \"is_delisted\": false\n}"
+        },
+        "gics_format_following": {
+          "score": 1.0,
+          "detail": {
+            "lines": [
+              "Energy",
+              "Financials",
+              "Health Care",
+              "Industrials",
+              "Information Technology"
+            ],
+            "line_count_ok": true,
+            "distinct_valid_sectors": 5
+          },
+          "raw": "Energy\nFinancials\nHealth Care\nIndustrials\nInformation Technology"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "2011-04-08"
+        },
+        "summary_faithfulness": {
+          "score": 1.0,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": true
+          },
+          "raw": "This note describes a collector that retrieves full price history for delisted US equities from Tiingo to close a survivorship gap, as 13,350 of 21,535 tickers (62%) left the universe and other sources like Yahoo provided 0/60 hits for delisted names. The script targets the 4,802 US tickers in the dead universe, outputting data in a schema compatible with existing shards, while non-US names are excluded due to Tiingo's coverage limitations. The process is resumable via a state file to handle rate limits, allowing the free-tier daily budget to spread the backfill over multiple days."
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "INSUFFICIENT_INFORMATION"
+        },
+        "_mean_score": 0.8542
+      },
+      "benchmark_mean_score": 0.8542,
+      "benchmark_task_count": 8,
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 45.435043211398735,
+      "prompt_tokens_per_second": 102.34313290699109,
+      "elapsed_seconds_including_load_and_tests": 31.3,
+      "server_log": "/tmp/qwen38-27b-q4-dual-tensor.log"
+    },
+    {
+      "model": "deepseek-r1-qwen32b-q4",
+      "profile": "dual-tensor",
+      "path": "/media/knight2/EDS2/models/llm/deepseek-r1-qwen32b/DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf",
+      "bytes": 19851335840,
+      "runtime": "llama.cpp build-v100",
+      "topology": "physical GPU [1, 2], split=tensor, CUDA_DEVICE_ORDER=PCI_BUS_ID, NVLink enabled",
+      "visible_device_probe": "ggml_cuda_init: found 2 CUDA devices (Total VRAM: 64988 MiB):\n  Device 0: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\n  Device 1: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\nAvailable devices:\n  CUDA0: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n  CUDA1: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n",
+      "loaded_gpu": {
+        "1": {
+          "util_pct": 0.0,
+          "memory_mib": 10418.0,
+          "power_w": 72.77,
+          "temperature_c": 56.0
+        },
+        "2": {
+          "util_pct": 0.0,
+          "memory_mib": 10418.0,
+          "power_w": 70.81,
+          "temperature_c": 48.0
+        }
+      },
+      "selected_v100s_active": true,
+      "both_v100_active": true,
+      "gpu_decode_telemetry": {
+        "1": {
+          "samples": 19,
+          "max_util_pct": 97.0,
+          "mean_util_pct": 95.32,
+          "max_memory_mib": 10610.0,
+          "max_power_w": 265.13,
+          "max_temperature_c": 79.0
+        },
+        "2": {
+          "samples": 19,
+          "max_util_pct": 97.0,
+          "mean_util_pct": 95.84,
+          "max_memory_mib": 10610.0,
+          "max_power_w": 259.63,
+          "max_temperature_c": 63.0
+        }
+      },
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 0.8333,
+          "detail": {
+            "extracted": {
+              "event_type": "Acquisition",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-08-01",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-01",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": false,
+              "delisted_date": true,
+              "completion_date": true,
+              "successor": true
+            }
+          },
+          "raw": "```json\n{\n  \"event_type\": \"Acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-08-01\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}\n```\n\nAlright, so I need to extract lifecycle facts for RIV AU only from the given passages. The user wants exactly one compact JSON object with specific scalar-string keys: event_type, acquirer, control_date, delisted_date, completion_date, successor. Dates must be in YYYY-MM-DD format, and I shouldn't infer any fields not stated.\n\nFirst, I'll look at Passage A. It says Rio Tinto acquired 52.6% on 8 April 2011, which is 2011-04-08. Then, on 1 August 2011, their interest became 100%, so that's 2011-08-01. Riversdale was delisted on 7 July 2011, which is 2011-07-07, and renamed to R"
+        },
+        "arithmetic_payout": {
+          "score": 0.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 1.05
+          },
+          "raw": "**Solution:**\n\n1. **Calculate the stake_notional:**\n   \n   \\[\n   \\text{stake\\_notional} = 12000 \\, \\text{NMR} \\times 18.40 \\, \\text{USD/NMR} = 220800 \\, \\text{USD}\n   \\]\n\n\n\nFirst, I need to calculate the stake_notional by multiplying the number of NMR tokens by the stake price. That would be 12,000 NMR multiplied by $18.40 per NMR.\n\nNext, I'll apply the realized correlation payout factor of 0.023 to the stake_notional to determine the base payout.\n\nFinally, I'll multiply the base payout by the payout multiplier of 1.05 to get the final payout in USD. I'll make sure to round the result to two decimal places for the final answer."
+        },
+        "code_exec_drawdown": {
+          "score": 0.0,
+          "detail": {
+            "reason": "no max_drawdown function found in output",
+            "code_present": false
+          },
+          "raw": "Okay, I need to write a Python function called max_drawdown that takes a list of daily simple returns and returns the maximum drawdown as a negative float. Hmm, let's think about how to approach this.\n\nFirst, I remember that drawdown is the peak-to-trough decline of an asset. So, I need to track the cumulative returns over time and find the maximum drop from a peak.\n\nWait, the function starts with a cumulative wealth index of 1.0. So, each day's return is applied to this index. For example, if the return is 0.01, the index becomes 1.01, then next day if it's -0.01, it goes to 1.01 * 0.99 = 1.00, and so on.\n\nSo, I'll need to calculate the cumulative product of (1 + return) for each day. That will give me the wealth index over time.\n\nOnce I have the cumulative wealth, I need to find the maxi"
+        },
+        "json_schema_facts": {
+          "score": 0.0,
+          "detail": {
+            "extracted": {},
+            "checks": {
+              "ticker": false,
+              "country_iso2": false,
+              "is_delisted": false
+            }
+          },
+          "raw": "Okay, so I need to create a JSON object with specific keys and values for Apple Inc. Let me break down the requirements step by step.\n\nFirst, the keys required are \"ticker\", \"country_iso2\", and \"is_delisted\". Each has a specific data type: string, 2-letter uppercase string, and boolean respectively.\n\nStarting with \"ticker\": Apple Inc. is known to trade under the ticker symbol AAPL. That's straightforward.\n\nNext, \"country_iso2\": This refers to the ISO 3166-1 alpha-2 code for the country. Apple is based in the United States, so the ISO code is \"US\". I need to make sure it's in uppercase, which it is."
+        },
+        "gics_format_following": {
+          "score": 0.0,
+          "detail": {
+            "lines": [
+              "Okay, so I need to list exactly five official GICS equity sector names. I remember that GICS stands for Global Industry Classification Standard, and it's used to categorize companies into sectors. The user mentioned that there are 11 sectors, so I need to pick five from those",
+              "First, I should recall the main sectors. I know Energy is one because it includes oil and gas companies. Then there's Financials, which covers banks and insurance. Healthcare is another major sector, including pharmaceuticals and medical services. Industrials is a broad category that includes manufacturing and construction companies",
+              "Wait, are there other sectors I should consider? Maybe Information Technology, but the user didn't specify any particular ones, so I can"
+            ],
+            "line_count_ok": false,
+            "distinct_valid_sectors": 0
+          },
+          "raw": "Okay, so I need to list exactly five official GICS equity sector names. I remember that GICS stands for Global Industry Classification Standard, and it's used to categorize companies into sectors. The user mentioned that there are 11 sectors, so I need to pick five from those.\n\nFirst, I should recall the main sectors. I know Energy is one because it includes oil and gas companies. Then there's Financials, which covers banks and insurance. Healthcare is another major sector, including pharmaceuticals and medical services. Industrials is a broad category that includes manufacturing and construction companies. \n\nWait, are there other sectors I should consider? Maybe Information Technology, but the user didn't specify any particular ones, so I can"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "Alright, I'm trying to figure out the exact date when Rio Tinto obtained control of Riversdale Mining based on the NOTE provided. The NOTE mentions that Rio Tinto obtained control on 2011-04-08. So, I need to extract that date from"
+        },
+        "summary_faithfulness": {
+          "score": 0.6667,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": false
+          },
+          "raw": "Okay, so I need to summarize this technical note into 2-3 sentences. The user wants me to preserve all the key numeric facts exactly and not invent any numbers. Let me read through the note carefully.\n\nFirst, the note is about collecting full price history for delisted equities from Tiingo. It mentions that there's a survivorship price gap in the Numerai Signals universe. Specifically, 13,350 out of 21,535 train+validation tickers (which is 62%) left the universe before the data's end. Yahoo, Stooq, and free tiers of FMP, Polygon, EODHD don't provide data for delisted names. Tiingo, however, does keep this data. \n\nIn the sample given on 2026-08-13, Tiingo had data for WBMD (3,013 rows), RECN (6,450), CLDA (2,597), etc. The collector targets US names first because they make up"
+        },
+        "refusal_calibration": {
+          "score": 0.5,
+          "detail": {
+            "abstained": false,
+            "fabricated_date_found": false
+          },
+          "raw": "Okay, so I need to figure out the exact date when XZQ99 Holdings was delisted based solely on the given passage. The passage says, \"XZQ99 Holdings is a private entity with no public listing history in any available record.\" \n\nFirst, I should"
+        },
+        "_mean_score": 0.375
+      },
+      "benchmark_mean_score": 0.375,
+      "benchmark_task_count": 8,
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 44.40239083367491,
+      "prompt_tokens_per_second": 245.88580360749603,
+      "elapsed_seconds_including_load_and_tests": 59.25,
+      "server_log": "/tmp/deepseek-r1-qwen32b-q4-dual-tensor.log"
+    },
+    {
+      "model": "qwen36-27b-iq3",
+      "profile": "dual-tensor",
+      "path": "/media/knight2/EDS2/models/qwen3.6-27b-unsloth-ud-iq3-xxs.gguf",
+      "bytes": 11994777824,
+      "runtime": "llama.cpp build-v100",
+      "topology": "physical GPU [1, 2], split=tensor, CUDA_DEVICE_ORDER=PCI_BUS_ID, NVLink enabled",
+      "visible_device_probe": "ggml_cuda_init: found 2 CUDA devices (Total VRAM: 64988 MiB):\n  Device 0: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\n  Device 1: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\nAvailable devices:\n  CUDA0: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n  CUDA1: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n",
+      "loaded_gpu": {
+        "1": {
+          "util_pct": 0.0,
+          "memory_mib": 6218.0,
+          "power_w": 82.59,
+          "temperature_c": 70.0
+        },
+        "2": {
+          "util_pct": 0.0,
+          "memory_mib": 6218.0,
+          "power_w": 73.75,
+          "temperature_c": 54.0
+        }
+      },
+      "selected_v100s_active": true,
+      "both_v100_active": true,
+      "gpu_decode_telemetry": {
+        "1": {
+          "samples": 20,
+          "max_util_pct": 96.0,
+          "mean_util_pct": 82.9,
+          "max_memory_mib": 6358.0,
+          "max_power_w": 248.5,
+          "max_temperature_c": 80.0
+        },
+        "2": {
+          "samples": 20,
+          "max_util_pct": 96.0,
+          "mean_util_pct": 83.2,
+          "max_memory_mib": 6358.0,
+          "max_power_w": 233.29,
+          "max_temperature_c": 62.0
+        }
+      },
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "event_type": "acquisition",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-04-08",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-01",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": true,
+              "delisted_date": true,
+              "completion_date": true,
+              "successor": true
+            }
+          },
+          "raw": "{\n  \"event_type\": \"acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-04-08\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}"
+        },
+        "arithmetic_payout": {
+          "score": 0.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 579.84
+          },
+          "raw": "579.84"
+        },
+        "code_exec_drawdown": {
+          "score": 1.0,
+          "detail": {
+            "model_result": -0.2584,
+            "reference": -0.2584
+          },
+          "raw": "```python\ndef max_drawdown(returns):\n    wealth = 1.0\n    peak = 1.0\n    max_dd = 0.0\n    for r in returns:\n        wealth *= (1 + r)\n        if wealth > peak:\n            peak = wealth\n        dd = (wealth - peak) / peak\n        if dd < max_dd:\n            max_dd = dd\n    return max_dd\n```"
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "{\"ticker\":\"AAPL\",\"country_iso2\":\"US\",\"is_delisted\":false}"
+        },
+        "gics_format_following": {
+          "score": 1.0,
+          "detail": {
+            "lines": [
+              "Energy",
+              "Financials",
+              "Health Care",
+              "Information Technology",
+              "Consumer Discretionary"
+            ],
+            "line_count_ok": true,
+            "distinct_valid_sectors": 5
+          },
+          "raw": "Energy\nFinancials\nHealth Care\nInformation Technology\nConsumer Discretionary"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "2011-04-08"
+        },
+        "summary_faithfulness": {
+          "score": 1.0,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": true
+          },
+          "raw": "This collector addresses the survivorship bias in the Numerai Signals universe by fetching full price history for 13,350 delisted US equities (62% of the 21,535 train+validation tickers) from Tiingo, as other providers like Yahoo serve no data for these names. It outputs data in the standard `yahoo_full_universe` schema to `data/equity/raw/tiingo_delisted/` and uses a resumable state file to handle rate limits, allowing the free-tier daily budget to spread the backfill over days."
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "INSUFFICIENT_INFORMATION"
+        },
+        "_mean_score": 0.875
+      },
+      "benchmark_mean_score": 0.875,
+      "benchmark_task_count": 8,
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 46.071709260413556,
+      "prompt_tokens_per_second": 103.73802690272832,
+      "elapsed_seconds_including_load_and_tests": 29.86,
+      "server_log": "/tmp/qwen36-27b-iq3-dual-tensor.log"
+    },
+    {
+      "model": "qwen35-27b-q4",
+      "profile": "dual-tensor",
+      "path": "/media/knight2/EDS2/lmstudio-models/lmstudio-community/Qwen3.5-27B-GGUF/Qwen3.5-27B-Q4_K_M.gguf",
+      "bytes": 16540271680,
+      "runtime": "llama.cpp build-v100",
+      "topology": "physical GPU [1, 2], split=tensor, CUDA_DEVICE_ORDER=PCI_BUS_ID, NVLink enabled",
+      "visible_device_probe": "ggml_cuda_init: found 2 CUDA devices (Total VRAM: 64988 MiB):\n  Device 0: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\n  Device 1: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\nAvailable devices:\n  CUDA0: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n  CUDA1: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n",
+      "loaded_gpu": {
+        "1": {
+          "util_pct": 14.0,
+          "memory_mib": 8306.0,
+          "power_w": 84.06,
+          "temperature_c": 71.0
+        },
+        "2": {
+          "util_pct": 21.0,
+          "memory_mib": 8306.0,
+          "power_w": 73.75,
+          "temperature_c": 54.0
+        }
+      },
+      "selected_v100s_active": true,
+      "both_v100_active": true,
+      "gpu_decode_telemetry": {
+        "1": {
+          "samples": 20,
+          "max_util_pct": 96.0,
+          "mean_util_pct": 83.4,
+          "max_memory_mib": 8448.0,
+          "max_power_w": 244.94,
+          "max_temperature_c": 81.0
+        },
+        "2": {
+          "samples": 20,
+          "max_util_pct": 96.0,
+          "mean_util_pct": 82.6,
+          "max_memory_mib": 8448.0,
+          "max_power_w": 240.75,
+          "max_temperature_c": 61.0
+        }
+      },
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 0.8333,
+          "detail": {
+            "extracted": {
+              "event_type": "acquisition",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-08-01",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-01",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": false,
+              "delisted_date": true,
+              "completion_date": true,
+              "successor": true
+            }
+          },
+          "raw": "{\n  \"event_type\": \"acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-08-01\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}"
+        },
+        "arithmetic_payout": {
+          "score": 0.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 4636.8
+          },
+          "raw": "4636.80"
+        },
+        "code_exec_drawdown": {
+          "score": 1.0,
+          "detail": {
+            "model_result": -0.2584,
+            "reference": -0.2584
+          },
+          "raw": "```python\ndef max_drawdown(returns):\n    wealth = 1.0\n    peak = 1.0\n    max_dd = 0.0\n    for r in returns:\n        wealth *= (1 + r)\n        if wealth > peak:\n            peak = wealth\n        dd = (wealth - peak) / peak\n        if dd < max_dd:\n            max_dd = dd\n    return max_dd\n```"
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "{\"ticker\":\"AAPL\",\"country_iso2\":\"US\",\"is_delisted\":false}"
+        },
+        "gics_format_following": {
+          "score": 1.0,
+          "detail": {
+            "lines": [
+              "Energy",
+              "Financials",
+              "Health Care",
+              "Information Technology",
+              "Materials"
+            ],
+            "line_count_ok": true,
+            "distinct_valid_sectors": 5
+          },
+          "raw": "Energy\nFinancials\nHealth Care\nInformation Technology\nMaterials"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "2011-04-08"
+        },
+        "summary_faithfulness": {
+          "score": 1.0,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": true
+          },
+          "raw": "This technical note describes a collector that fills a survivorship bias gap for 13,350 of 21,535 Numerai Signals tickers (62%) by retrieving delisted US equity history from Tiingo, which successfully provides data for names like WBMD (3,013 rows) and RECN (6,450 rows) where other sources fail. The script targets the 4,802 US tickers in the dead universe, outputting data in a schema compatible with existing stores while skipping non-US names and tickers that already have prices. To manage the free-tier daily budget, the process is resumable via a state file that tracks progress per symbol and handles 429 rate limit errors to allow safe cron execution."
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "INSUFFICIENT_INFORMATION"
+        },
+        "_mean_score": 0.8542
+      },
+      "benchmark_mean_score": 0.8542,
+      "benchmark_task_count": 8,
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 45.361300086880235,
+      "prompt_tokens_per_second": 105.26401023490068,
+      "elapsed_seconds_including_load_and_tests": 31.46,
+      "server_log": "/tmp/qwen35-27b-q4-dual-tensor.log"
+    },
+    {
+      "model": "gemma4-26b-a4b-q4",
+      "profile": "dual-tensor",
+      "path": "/media/knight2/EDS2/lmstudio-models/lmstudio-community/gemma-4-26B-A4B-it-GGUF/gemma-4-26B-A4B-it-Q4_K_M.gguf",
+      "bytes": 16796010624,
+      "runtime": "llama.cpp build-v100",
+      "topology": "physical GPU [1, 2], split=tensor, CUDA_DEVICE_ORDER=PCI_BUS_ID, NVLink enabled",
+      "visible_device_probe": "ggml_cuda_init: found 2 CUDA devices (Total VRAM: 64988 MiB):\n  Device 0: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\n  Device 1: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\nAvailable devices:\n  CUDA0: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n  CUDA1: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n",
+      "loaded_gpu": {
+        "1": {
+          "util_pct": 19.0,
+          "memory_mib": 8808.0,
+          "power_w": 85.54,
+          "temperature_c": 73.0
+        },
+        "2": {
+          "util_pct": 0.0,
+          "memory_mib": 9098.0,
+          "power_w": 73.75,
+          "temperature_c": 54.0
+        }
+      },
+      "selected_v100s_active": true,
+      "both_v100_active": true,
+      "gpu_decode_telemetry": {
+        "1": {
+          "samples": 11,
+          "max_util_pct": 88.0,
+          "mean_util_pct": 83.55,
+          "max_memory_mib": 8950.0,
+          "max_power_w": 152.38,
+          "max_temperature_c": 76.0
+        },
+        "2": {
+          "samples": 11,
+          "max_util_pct": 86.0,
+          "mean_util_pct": 78.82,
+          "max_memory_mib": 9240.0,
+          "max_power_w": 148.96,
+          "max_temperature_c": 56.0
+        }
+      },
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "event_type": "acquisition",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-04-08",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-01",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": true,
+              "delisted_date": true,
+              "completion_date": true,
+              "successor": true
+            }
+          },
+          "raw": "```json\n{\n  \"event_type\": \"acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-04-08\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}\n```"
+        },
+        "arithmetic_payout": {
+          "score": 0.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 2911.68
+          },
+          "raw": "2911.68"
+        },
+        "code_exec_drawdown": {
+          "score": 1.0,
+          "detail": {
+            "model_result": -0.2584,
+            "reference": -0.2584
+          },
+          "raw": "```python\ndef max_drawdown(returns):\n    wealth_index = [1.0]\n    current_wealth = 1.0\n    for r in returns:\n        current_wealth *= (1 + r)\n        wealth_index.append(current_wealth)\n    \n    max_dd = 0.0\n    peak = wealth_index[0]\n    \n    for value in wealth_index:\n        if value > peak:\n            peak = value\n        drawdown = (value - peak) / peak\n        if drawdown < max_dd:\n            max_dd = drawdown\n            \n    return max_dd\n```"
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "{\"ticker\": \"AAPL\", \"country_iso2\": \"US\", \"is_delisted\": false}"
+        },
+        "gics_format_following": {
+          "score": 1.0,
+          "detail": {
+            "lines": [
+              "Energy",
+              "Materials",
+              "Industrials",
+              "Information Technology",
+              "Financials"
+            ],
+            "line_count_ok": true,
+            "distinct_valid_sectors": 5
+          },
+          "raw": "Energy\nMaterials\nIndustrials\nInformation Technology\nFinancials"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "2011-04-08"
+        },
+        "summary_faithfulness": {
+          "score": 1.0,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": true
+          },
+          "raw": "This technical note describes a script designed to collect full price history for delisted US equities from Tiingo to close the survivorship gap for the Numerai Signals universe, where 62% of 21,535 train+validation tickers (13,350) left the universe before the data's end. The collector targets the 4,802 US tickers in the \"dead universe\" and outputs data in a schema compatible with existing Yahoo shards for seamless integration. The process is resumable via a JSON state file, allowing the backfill to spread over multiple days to stay within free-tier daily rate limits."
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "INSUFFICIENT_INFORMATION"
+        },
+        "_mean_score": 0.875
+      },
+      "benchmark_mean_score": 0.875,
+      "benchmark_task_count": 8,
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 78.42220670863536,
+      "prompt_tokens_per_second": 318.6148800920098,
+      "elapsed_seconds_including_load_and_tests": 22.41,
+      "server_log": "/tmp/gemma4-26b-a4b-q4-dual-tensor.log"
+    },
+    {
+      "model": "devstral-small2-24b-q4",
+      "profile": "dual-tensor",
+      "path": "/media/knight2/EDS2/lmstudio-models/lmstudio-community/Devstral-Small-2-24B-Instruct-2512-GGUF/Devstral-Small-2-24B-Instruct-2512-Q4_K_M.gguf",
+      "bytes": 14334437504,
+      "runtime": "llama.cpp build-v100",
+      "topology": "physical GPU [1, 2], split=tensor, CUDA_DEVICE_ORDER=PCI_BUS_ID, NVLink enabled",
+      "visible_device_probe": "ggml_cuda_init: found 2 CUDA devices (Total VRAM: 64988 MiB):\n  Device 0: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\n  Device 1: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\nAvailable devices:\n  CUDA0: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n  CUDA1: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n",
+      "loaded_gpu": {
+        "1": {
+          "util_pct": 20.0,
+          "memory_mib": 7612.0,
+          "power_w": 67.91,
+          "temperature_c": 45.0
+        },
+        "2": {
+          "util_pct": 24.0,
+          "memory_mib": 7612.0,
+          "power_w": 69.34,
+          "temperature_c": 45.0
+        }
+      },
+      "selected_v100s_active": true,
+      "both_v100_active": true,
+      "gpu_decode_telemetry": {
+        "1": {
+          "samples": 19,
+          "max_util_pct": 87.0,
+          "mean_util_pct": 69.16,
+          "max_memory_mib": 7840.0,
+          "max_power_w": 214.2,
+          "max_temperature_c": 55.0
+        },
+        "2": {
+          "samples": 19,
+          "max_util_pct": 71.0,
+          "mean_util_pct": 67.47,
+          "max_memory_mib": 7840.0,
+          "max_power_w": 228.46,
+          "max_temperature_c": 53.0
+        }
+      },
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "event_type": "acquisition",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-04-08",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-01",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": true,
+              "delisted_date": true,
+              "completion_date": true,
+              "successor": true
+            }
+          },
+          "raw": "```json\n{\n  \"event_type\": \"acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-04-08\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}\n```"
+        },
+        "arithmetic_payout": {
+          "score": 0.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 156.24
+          },
+          "raw": "156.24"
+        },
+        "code_exec_drawdown": {
+          "score": 1.0,
+          "detail": {
+            "model_result": -0.2584,
+            "reference": -0.2584
+          },
+          "raw": "```python\ndef max_drawdown(returns):\n    cumulative = 1.0\n    peak = 1.0\n    max_dd = 0.0\n    for r in returns:\n        cumulative *= (1 + r)\n        if cumulative > peak:\n            peak = cumulative\n        dd = (cumulative - peak) / peak\n        if dd < max_dd:\n            max_dd = dd\n    return max_dd\n```"
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "```json\n{\"ticker\": \"AAPL\", \"country_iso2\": \"US\", \"is_delisted\": false}\n```"
+        },
+        "gics_format_following": {
+          "score": 1.0,
+          "detail": {
+            "lines": [
+              "Energy",
+              "Financials",
+              "Health Care",
+              "Information Technology",
+              "Utilities"
+            ],
+            "line_count_ok": true,
+            "distinct_valid_sectors": 5
+          },
+          "raw": "Energy\nFinancials\nHealth Care\nInformation Technology\nUtilities"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "2011-04-08"
+        },
+        "summary_faithfulness": {
+          "score": 1.0,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": true
+          },
+          "raw": "This technical note describes a script that collects full price history for delisted US equities from Tiingo to address the survivorship bias in the Numerai Signals universe, where 13,350 of 21,535 tickers (62%) were delisted before the data's end. Tiingo provides delisted US equity data (e.g., WBMD with 3,013 rows, RECN with 6,450, CLDA with 2,597), while other sources like Yahoo, Stooq, and free tiers of FMP/Polygon/EODHD do not. The script targets the 4,802 delisted US tickers, fetching only those without existing store prices, and outputs data in the same schema as Yahoo shards for seamless integration. It is resumable, tracks progress in `tiingo_delisted_state.json`, and handles rate limits (429 errors) gracefully, making it suitable for cron jobs."
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "INSUFFICIENT_INFORMATION"
+        },
+        "_mean_score": 0.875
+      },
+      "benchmark_mean_score": 0.875,
+      "benchmark_task_count": 8,
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 45.49919305842899,
+      "prompt_tokens_per_second": 379.5941054458197,
+      "elapsed_seconds_including_load_and_tests": 25.69,
+      "server_log": "/tmp/devstral-small2-24b-q4-dual-tensor.log"
+    },
+    {
+      "model": "qwen25-72b-q4",
+      "profile": "dual-tensor",
+      "path": "/media/knight2/EDS2/models/llm/qwen25-72b-q4km/qwen2.5-72b-instruct-q4_k_m-00001-of-00012.gguf",
+      "bytes": 3986869120,
+      "runtime": "llama.cpp build-v100",
+      "topology": "physical GPU [1, 2], split=tensor, CUDA_DEVICE_ORDER=PCI_BUS_ID, NVLink enabled",
+      "visible_device_probe": "ggml_cuda_init: found 2 CUDA devices (Total VRAM: 64988 MiB):\n  Device 0: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\n  Device 1: Tesla V100-SXM2-32GB, compute capability 7.0, VMM: yes, VRAM: 32494 MiB\nAvailable devices:\n  CUDA0: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n  CUDA1: Tesla V100-SXM2-32GB (32494 MiB, 32178 MiB free)\n",
+      "loaded_gpu": {
+        "1": {
+          "util_pct": 0.0,
+          "memory_mib": 21986.0,
+          "power_w": 68.4,
+          "temperature_c": 47.0
+        },
+        "2": {
+          "util_pct": 0.0,
+          "memory_mib": 21986.0,
+          "power_w": 70.32,
+          "temperature_c": 46.0
+        }
+      },
+      "selected_v100s_active": true,
+      "both_v100_active": true,
+      "gpu_decode_telemetry": {
+        "1": {
+          "samples": 35,
+          "max_util_pct": 98.0,
+          "mean_util_pct": 96.2,
+          "max_memory_mib": 22288.0,
+          "max_power_w": 278.41,
+          "max_temperature_c": 66.0
+        },
+        "2": {
+          "samples": 35,
+          "max_util_pct": 98.0,
+          "mean_util_pct": 96.97,
+          "max_memory_mib": 22288.0,
+          "max_power_w": 290.04,
+          "max_temperature_c": 62.0
+        }
+      },
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "event_type": "acquisition",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-04-08",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-01",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": true,
+              "delisted_date": true,
+              "completion_date": true,
+              "successor": true
+            }
+          },
+          "raw": "```json\n{\n  \"event_type\": \"acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-04-08\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}\n```"
+        },
+        "arithmetic_payout": {
+          "score": 0.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 529.2
+          },
+          "raw": "529.20"
+        },
+        "code_exec_drawdown": {
+          "score": 1.0,
+          "detail": {
+            "model_result": -0.2584,
+            "reference": -0.2584
+          },
+          "raw": "```python\ndef max_drawdown(returns):\n    wealth_index = [1.0]\n    for r in returns:\n        wealth_index.append(wealth_index[-1] * (1 + r))\n    wealth_index = wealth_index[1:]\n    peak = 1.0\n    max_drawdown = 0.0\n    for value in wealth_index:\n        if value > peak:\n            peak = value\n        drawdown = (value - peak) / peak\n        if drawdown < max_drawdown:\n            max_drawdown = drawdown\n    return max_drawdown\n```"
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "{\"ticker\": \"AAPL\", \"country_iso2\": \"US\", \"is_delisted\": false}"
+        },
+        "gics_format_following": {
+          "score": 1.0,
+          "detail": {
+            "lines": [
+              "Energy",
+              "Financials",
+              "Health Care",
+              "Information Technology",
+              "Consumer Discretionary"
+            ],
+            "line_count_ok": true,
+            "distinct_valid_sectors": 5
+          },
+          "raw": "Energy\nFinancials\nHealth Care\nInformation Technology\nConsumer Discretionary"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "2011-04-08"
+        },
+        "summary_faithfulness": {
+          "score": 1.0,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": true
+          },
+          "raw": "The technical note describes a process to collect full price history for delisted equities from Tiingo, addressing the survivorship bias in the Numerai Signals universe where 13,350 of 21,535 train+validation tickers (62%) have left the universe. Tiingo is the only source that retains delisted US equity history, with the collector initially targeting 4,802 US delisted tickers, and the output is stored in a format compatible with the existing Yahoo data schema."
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "INSUFFICIENT_INFORMATION"
+        },
+        "_mean_score": 0.875
+      },
+      "benchmark_mean_score": 0.875,
+      "benchmark_task_count": 8,
+      "completion_tokens": 256,
+      "completion_tokens_per_second": 24.263419669241063,
+      "prompt_tokens_per_second": 137.32432142473982,
+      "elapsed_seconds_including_load_and_tests": 91.06,
+      "server_log": "/tmp/qwen25-72b-q4-dual-tensor.log"
     }
   ]
 }

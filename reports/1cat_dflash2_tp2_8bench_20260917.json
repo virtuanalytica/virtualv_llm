@@ -1,0 +1,187 @@
+{
+  "mode": "dflash2",
+  "model": "qwen38-1cat-dflash2",
+  "engine": "1Cat-vLLM 1.5.0",
+  "tensor_parallel_size": 2,
+  "concurrency": 1,
+  "output_tokens": 256,
+  "output_tokens_per_request": [
+    256
+  ],
+  "wall_seconds": 2.4949,
+  "wall_output_tokens_per_second": 102.6083,
+  "benchmarks": {
+    "riv_au_lifecycle": {
+      "score": 0.8333,
+      "detail": {
+        "extracted": {
+          "event_type": "acquisition",
+          "acquirer": "Rio Tinto",
+          "control_date": "2011-04-08",
+          "delisted_date": "2011-07-07",
+          "completion_date": "2011-08-08",
+          "successor": "Rio Tinto Coal Mozambique"
+        },
+        "checks": {
+          "event_type": true,
+          "acquirer": true,
+          "control_date": true,
+          "delisted_date": true,
+          "completion_date": false,
+          "successor": true
+        }
+      },
+      "raw": "{\n  \"event_type\": \"acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-04-08\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-08\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}"
+    },
+    "arithmetic_payout": {
+      "score": 0.0,
+      "detail": {
+        "expected": 5332.32,
+        "candidate": 20.0
+      },
+      "raw": "The user is asking me to compute a specific value based on the given parameters. Let me break down the calculation step by step.\n\nFirst, I need to calculate the stake_notional, which is the product of 12000 NMR and the price of $18.40 per NMR. So, stake_notional = 12000 * 18.40 USD.\n\nNext, I need to calculate the payout_usd, which is the product of stake_notional and the payout factor of 0.023 and the payout multiplier of 1.05x.\n\nLet me compute the payout_usd::\n\npayout_usd = stake_notional * 0.023 * 1.05.\n\nFirst, let me calculate the stake_notional:\n\nstake_notional = 12000 * 18.40 = 219,20"
+    },
+    "code_exec_drawdown": {
+      "score": 0.0,
+      "detail": {
+        "model_result": 0.77868,
+        "reference": -0.2584
+      },
+      "raw": "```python\ndef max_drawdown(returns):\n    cumulative = [1.0]\n    for r in returns:\n        cumulative.append(cumulative[-1] * (1 + r))\n    max_dd = min(cumulative)\n    return max_dd\n```"
+    },
+    "json_schema_facts": {
+      "score": 1.0,
+      "detail": {
+        "extracted": {
+          "ticker": "AAPL",
+          "country_iso2": "US",
+          "is_delisted": false
+        },
+        "checks": {
+          "ticker": true,
+          "country_iso2": true,
+          "is_delisted": true
+        }
+      },
+      "raw": "```json\n{\n  \"ticker\": \"AAPL\",\n  \"country_iso2\": \"US\",\n  \"is_delisted\": false\n}\n```"
+    },
+    "gics_format_following": {
+      "score": 0.9,
+      "detail": {
+        "lines": [
+          "Energy",
+          "Financials",
+          "Health Care",
+          "Industrials",
+          "Materials",
+          "Technology",
+          "Utilities",
+          "Consumer Discretionary",
+          "Capital Goods",
+          "Basic Materials",
+          "Communication Services",
+          "Consumer Staples",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials",
+          "Industrials"
+        ],
+        "line_count_ok": false,
+        "distinct_valid_sectors": 9
+      },
+      "raw": "Energy\nFinancials\nHealth Care\nIndustrials\nMaterials\nTechnology\nUtilities\nConsumer Discretionary\nCapital Goods\nBasic Materials\nCommunication Services\nConsumer Staples\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials"
+    },
+    "needle_in_haystack": {
+      "score": 1.0,
+      "detail": {
+        "found": true
+      },
+      "raw": "De vraag is: op welke exacte datum ( Rio Tinto controle van Riversdale Mining?\n\nDe context is: \"2011-04-08\".\n\nDus het antwoord is: **2011-04-08**."
+    },
+    "summary_faithfulness": {
+      "score": 0.6667,
+      "detail": {
+        "retains_key_figure": false,
+        "mentions_tiingo": true,
+        "reasonable_length": true
+      },
+      "raw": "The script collects full price history for delisted equities from Tiingo, saving the data as a parquet file with columns for Date, Open, High, Low, Close, Adj Close, Volume, and Ticker. It handles rate-limit errors (429) by resuming the next invocation and safely stores the state in a JSON file for tracking progress. The process is designed to run under cron with optional flags for limiting the number of tickers and sleep intervals, ensuring robust data collection without manual intervention.."
+    },
+    "refusal_calibration": {
+      "score": 1.0,
+      "detail": {
+        "abstained": true,
+        "fabricated_date_found": false
+      },
+      "raw": "INSUFFICIENT_INFORMATION."
+    },
+    "_mean_score": 0.675
+  },
+  "benchmark_mean_score": 0.675,
+  "benchmark_task_count": 8,
+  "gpu_telemetry": {
+    "1": {
+      "samples": 8,
+      "max_util_pct": 100.0,
+      "max_memory_mib": 26666.0,
+      "max_power_w": 223.61,
+      "max_temperature_c": 58.0
+    },
+    "2": {
+      "samples": 8,
+      "max_util_pct": 100.0,
+      "max_memory_mib": 26666.0,
+      "max_power_w": 240.91,
+      "max_temperature_c": 56.0
+    }
+  },
+  "both_v100_active": true,
+  "speculative_summary": {
+    "rounds": 242.0,
+    "draft_tokens": 1694.0,
+    "accepted_tokens": 729.0,
+    "acceptance_pct": 43.0342,
+    "accepted_tokens_per_round": 3.0124
+  },
+  "speculative_metrics": [
+    "vllm:spec_decode_num_drafts_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\"} 242.0",
+    "vllm:spec_decode_num_drafts_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\"} 1.7896401814758286e+09",
+    "vllm:spec_decode_num_draft_tokens_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\"} 1694.0",
+    "vllm:spec_decode_num_draft_tokens_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\"} 1.7896401814759114e+09",
+    "vllm:spec_decode_num_accepted_tokens_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\"} 729.0",
+    "vllm:spec_decode_num_accepted_tokens_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\"} 1.7896401814759698e+09",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"0\"} 190.0",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"1\"} 137.0",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"2\"} 111.0",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"3\"} 92.0",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"4\"} 74.0",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"5\"} 66.0",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_total{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"6\"} 59.0",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"0\"} 1.7896401814760299e+09",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"1\"} 1.7896401814760525e+09",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"2\"} 1.7896401814760714e+09",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"3\"} 1.7896401814760916e+09",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"4\"} 1.7896401814761093e+09",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"5\"} 1.7896401814761255e+09",
+    "vllm:spec_decode_num_accepted_tokens_per_pos_created{engine=\"0\",model_name=\"qwen38-1cat-dflash2\",position=\"6\"} 1.7896401814761412e+09"
+  ]
+}
