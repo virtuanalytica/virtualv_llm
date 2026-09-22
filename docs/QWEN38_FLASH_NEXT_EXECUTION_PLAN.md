@@ -351,3 +351,19 @@ and also skip `annotate()` for it, so this was done manually once.
 allfour-profile still needs to run (via the now-fixed
 `run_glm53_reap50_cascade.py --only iq3m`, which will pick up exactly
 that remaining profile plus prune the weights once both are complete).
+
+## DeepSeek-V4-Flash-0731-IQ3_XXS: dual-layer retry CONFIRMS Ada-specific crash
+
+Retried with `--profile dual-layer` (V100 pair only, no Ada/A4000) per the
+plan above. Completed cleanly, exit code 0, no crash: gsm8k (flexible)
+0.96, bbh 0.875, mmlu_sample 0.8313, **humaneval 0.975**, composite
+**0.9103**, 13.9 t/s. This confirms the earlier CUDA kernel-launch failure
+(`invalid argument` in `ggml_cuda_mul_mat_vec_q` on device 3 = RTX 4000
+Ada) was specific to that device/topology, not a general IQ3_XXS or SM70
+problem -- the exact same weights ran ~11000+ tasks further on the V100
+pair without incident. Composite (0.9103) is just under the current solo
+leader (`qwen38-flash-next-ap-iq4xs`, 0.919) -- a strong new mixture
+candidate for the Fase 2 frontier search, not (yet) a new solo leader.
+The all-four-layer profile for this model remains unresolved/untried
+again; not a priority to chase given dual-layer already gives a complete,
+usable result.
