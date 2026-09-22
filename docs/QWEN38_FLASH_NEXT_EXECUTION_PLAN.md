@@ -147,3 +147,40 @@ priority on the V100 pair via `/tmp/v100_exclusive.lock`.
   already-measured local DeepSeek-V4-Flash-REAP-150B Q2_K result (5.85 tok/s
   under heavy CPU offload) is the only real local data point so far. Needs a
   from-scratch GGUF-availability check before attempting.
+
+## DeepSeek-V4-Flash 0731 GGUF availability (checked 2026-09-22, web research only, no download)
+
+Confirmed GGUF quants of `deepseek-ai/DeepSeek-V4-Flash-0731` (284B, 13B active,
+MLA) exist from multiple publishers:
+
+- `unsloth/DeepSeek-V4-Flash-0731-GGUF`: UD-IQ3_XXS (~104 GiB), UD-IQ3_S
+  (~116 GiB), UD-Q3_K_M/UD-Q3_K_XL (~128 GiB).
+- `bullerwins/DeepSeek-V4-Flash-0731-GGUF`: expert-focused quantizations,
+  Pareto-pruned by size/KLD.
+- `ox-ox/DeepSeek-V4-Flash-0731-gguf-ds4`: IQ2_XXS variant unpacking the
+  model's native FP4/FP8 tensors before re-quantizing.
+
+**Disk gate:** at last check (2026-09-22) this host has 81GiB free of 1.1TiB
+(93% used) -- even the smallest available quant (104GiB) does not currently
+fit. It should fit once the active GGUF cascade prunes its lower-scoring Qwen
+quant (frees ~84-88GiB, per `run_qwen38_flash_next_gguf_cascade.py`'s own
+prune step) -- do not attempt a DeepSeek-V4-Flash download before that
+happens and free space is re-verified.
+
+**Engine gate:** V100 is SM70; native FP8 needs SM89+ (Ada/Hopper/Blackwell),
+so V100 would use llama.cpp's software-emulated FP8 path automatically for any
+FP8-native tensors -- expect this to be slower than a card with native FP8.
+`ik_llama.cpp` (checked: `github.com/RodriMora/ik_llama.cpp` fork) claims
+better hybrid CPU/GPU MoE performance via MLA/FlashMLA/fused-MoE/tensor
+overrides, but its sm_70 build support was not confirmed by this search --
+verify by attempting a local build before relying on it. Also found
+`antirez/llama.cpp-deepseek-v4-flash`, a fork with dedicated DeepSeek-V4-Flash
+architecture support (mainline llama.cpp's own V4 support is still WIP per
+`ggml-org/llama.cpp` discussion #22376) -- worth checking as the actual engine
+to use for this architecture rather than assuming mainline or the MoE-offload
+fork alone covers it.
+
+Still unproven either way: no local run, no measured tok/s, no quality gate.
+This section only establishes that the artifacts and candidate engines exist;
+the "V100s for experts / Ada+A4000 for attention+KV / rest CPU" 3-bit hybrid
+placement itself remains an untested hypothesis.
