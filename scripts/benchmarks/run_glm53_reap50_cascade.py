@@ -15,9 +15,14 @@ import json
 import os
 import shutil
 import subprocess
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+import rank_models as rm  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 MODELS = Path("/media/knight2/EDS2/models/llm")
@@ -78,12 +83,25 @@ def complete_rows(candidate: dict[str, Any]) -> bool:
         row = rows.get(f"glm53-reap50-{candidate['key']}-{suffix}")
         if not row or row.get("error"):
             return False
-        checks = (row.get("gsm8k"), row.get("bbh", {}).get("mean_accuracy"),
-                  row.get("mmlu_sample", {}).get("mean_accuracy"), row.get("humaneval", {}).get("pass_at_1"),
-                  row.get("completion_tokens_per_second"))
-        if not all(isinstance(value, (int, float)) for value in checks):
+        if not _row_has_full_composite(row):
             return False
     return True
+
+
+# 2026-09-22 fix: this used to check isinstance(row.get("gsm8k"), (int, float))
+# directly, but "gsm8k" is always a nested dict (e.g. {"exact_match,flexible-
+# extract": 0.66, ...}), never a bare number -- so this was False for every
+# possible result, complete or not. row_complete() therefore always reran an
+# already-complete v100 profile (confirmed: it restarted glm53-reap50-iq3m-v100
+# from scratch immediately after that profile finished cleanly), and
+# complete_rows() could never authorize prune() either. Use the same
+# gsm8k_score() extraction rank_models.py/build_dual_v100_html.py already use
+# elsewhere instead of reading the raw dict.
+def _row_has_full_composite(row: dict[str, Any]) -> bool:
+    checks = (rm.gsm8k_score(row), (row.get("bbh") or {}).get("mean_accuracy"),
+              (row.get("mmlu_sample") or {}).get("mean_accuracy"), (row.get("humaneval") or {}).get("pass_at_1"),
+              row.get("completion_tokens_per_second"))
+    return all(isinstance(value, (int, float)) for value in checks)
 
 
 def row_complete(model: str) -> bool:
@@ -93,10 +111,7 @@ def row_complete(model: str) -> bool:
     row = next((item for item in load(REPORT).get("results", []) if item.get("model") == model), None)
     if not row or row.get("error"):
         return False
-    checks = (row.get("gsm8k"), row.get("bbh", {}).get("mean_accuracy"),
-              row.get("mmlu_sample", {}).get("mean_accuracy"), row.get("humaneval", {}).get("pass_at_1"),
-              row.get("completion_tokens_per_second"))
-    return all(isinstance(value, (int, float)) for value in checks)
+    return _row_has_full_composite(row)
 
 
 def hash_file(path: Path) -> str:
