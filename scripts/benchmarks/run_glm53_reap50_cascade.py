@@ -156,7 +156,20 @@ def benchmark(candidate: dict[str, Any], state: dict[str, Any]) -> None:
             event(state, candidate, "benchmark_already_complete", model=model, profile=profile)
             continue
         event(state, candidate, "benchmark_started", model=model, profile=profile)
-        subprocess.run(["flock", "-n", "/tmp/v100_exclusive.lock", "python3", str(WKS), model,
+        # 2026-09-22 fix: this used to wrap the subprocess in its own
+        # "flock -n /tmp/v100_exclusive.lock" on top of the outer
+        # "flock /tmp/v100_exclusive.lock python3 run_glm53_reap50_cascade.py"
+        # this script is meant to run under (see this repo's runbook / the
+        # systemd unit). A second, non-blocking flock on the same lock file
+        # from a child process can never acquire it while the parent already
+        # holds it, so every invocation failed instantly with a generic
+        # "returned non-zero exit status 1" before well_known_suite.py ever
+        # started the server -- no server log, no result row, and two retries
+        # were spent chasing stale/misleading error output before this was
+        # found. run_qwen38_flash_next_gguf_cascade.py's run_profile() never
+        # wrapped its own subprocess in flock for the same reason; match that
+        # pattern and rely entirely on the caller's outer flock.
+        subprocess.run(["python3", str(WKS), model,
                         "--profile", profile, "--out", str(REPORT)], cwd=ROOT, env=env, check=True)
         annotate(candidate, model, profile)
         event(state, candidate, "benchmark_complete", model=model, profile=profile)

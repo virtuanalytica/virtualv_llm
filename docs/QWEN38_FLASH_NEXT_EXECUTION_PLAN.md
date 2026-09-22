@@ -312,3 +312,28 @@ cascade.py:88-89`) will actually produce `qwen38-flash-next-ap-iq2s-
 v100`/`-allfour`. Use that name, not `-iq2xxs-`, when running the Fase 2
 mixture command -- the plan's underlying intent (include the newest
 low-bit Qwen3.8 quant candidate) is unchanged, only the literal key.
+
+## GLM-5.3-REAP50-IQ3_M: RESOLVED -- root cause was a nested flock, not fit/tensor_split
+
+Full chain of this bug across three misdiagnoses, for anyone reading the
+history above: (1) first retry attempt was blamed on a `--fit`/
+`--tensor-split` conflict (wrong -- that was reading a stale pre-fix log,
+see the correction above); (2) an isolated `llama-fit-params` build
+confirmed the fit logic itself was fine; (3) the real cause: `run_glm53_
+reap50_cascade.py`'s `benchmark()` wrapped its own `well_known_suite.py`
+subprocess call in `flock -n /tmp/v100_exclusive.lock`, but this script is
+meant to run under an *outer* `flock /tmp/v100_exclusive.lock python3
+run_glm53_reap50_cascade.py` already (per its own runbook usage and the
+`glm53_reap50_iq3m_retry.log` invocation) -- a second, non-blocking flock
+on the same lock file from a child process can never acquire it while the
+parent already holds it. Every retry failed in well under a second with a
+generic `subprocess.CalledProcessError...exit status 1`, before
+`well_known_suite.py` ever started the server -- no fresh server log, no
+result row, which is exactly what made this look like a silent/mysterious
+failure across two earlier (wrong) diagnoses. Confirmed by running
+`well_known_suite.py` directly (bypassing the cascade script): the model
+loaded and began decoding immediately. Fixed in commit `9f5572a5` by
+dropping the inner flock, matching `run_qwen38_flash_next_gguf_cascade.py`
+(which never wrapped its subprocess in flock for the same reason). The
+GLM-5.3-REAP50-IQ3_M v100-profile benchmark itself is running correctly
+as of this fix.
