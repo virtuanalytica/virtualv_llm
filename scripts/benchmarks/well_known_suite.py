@@ -409,24 +409,45 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
                "--parallel", "1", "--split-mode", str(profile["split_mode"]),
                "--main-gpu", "0", "--flash-attn", "on", "--reasoning", "off",
                "--cache-type-k", "q8_0", "--cache-type-v", "q8_0", "--jinja"]
-    if name.startswith("glm53-"):
+    # 2026-09-22: --fit needs to cover any model too large to gpu-layers=99
+    # onto the available VRAM without automatic CPU-offload distribution --
+    # not just GLM. deepseek-v4-flash-0731-iq3xxs is ~104GiB, larger than
+    # even all 4 GPUs combined (~100GiB), so it structurally needs --fit too.
+    NEEDS_FIT_PREFIXES = ("glm53-", "deepseek-v4-flash-0731-")
+    if name.startswith(NEEDS_FIT_PREFIXES):
         margins = ",".join("1024" for _ in profile["physical"])
-        command.extend(["--fit", "on", "--fit-ctx", "4096", "--fit-target", margins])
-        command.extend([
-            "--override-kv", (
-                "tokenizer.ggml.eot_token_id=int:154827,"
-                "tokenizer.ggml.eom_token_id=int:154829"
-            ),
-        ])
+        # 2026-09-22: a retry of glm53-reap50-iq3m-v100 (dual-layer) after the
+        # tensor_split fix below still failed. First diagnosis wrongly blamed
+        # a tensor_split regression -- that was reading a stale server log
+        # from the *pre-fix* attempt (log mtime 01:13, retry's own
+        # benchmark_started event fired at 13:22, well_known_suite_
+        # 20260917.json's mtime 12:57 predates the retry entirely -- neither
+        # file was ever touched by the post-fix attempt, so its real failure
+        # was never captured). An isolated llama-fit-params build (same
+        # runtime, same args minus server-only flags) confirmed --fit +
+        # --split-mode layer with no --tensor-split succeeds cleanly here,
+        # ruling the tensor_split path back out. Real cause of the retry's
+        # failure is still open. --verbose forces GGML_LOG_LEVEL_DEBUG so the
+        # next attempt's server log has real diagnostics instead of guessing
+        # further from a stale file.
+        command.extend(["--fit", "on", "--fit-ctx", "4096", "--fit-target", margins, "--verbose"])
+        if name.startswith("glm53-"):
+            command.extend([
+                "--override-kv", (
+                    "tokenizer.ggml.eot_token_id=int:154827,"
+                    "tokenizer.ggml.eom_token_id=int:154829"
+                ),
+            ])
     else:
         command.extend(["--gpu-layers", "99"])
     # 2026-09-22 fix: this check used to read "glm53-flash-" while the --fit
-    # activation above (line ~412) was widened to "glm53-" to also cover the
-    # REAP50 cascade -- leaving the two checks out of sync meant REAP50 got
-    # BOTH --fit on and --tensor-split 1,1, which llama.cpp's fit logic
-    # refuses to reconcile (aborts the fit, loads unfitted, OOMs). Aligning
-    # both checks on "glm53-" so --tensor-split is never combined with --fit.
-    if len(profile["physical"]) > 1 and not name.startswith("glm53-"):
+    # activation above was widened to "glm53-" to also cover the REAP50
+    # cascade -- leaving the two checks out of sync meant REAP50 got BOTH
+    # --fit on and --tensor-split 1,1, which llama.cpp's fit logic refuses to
+    # reconcile (aborts the fit, loads unfitted, OOMs). Both checks must stay
+    # aligned with NEEDS_FIT_PREFIXES so --tensor-split is never combined
+    # with --fit for any model that uses it.
+    if len(profile["physical"]) > 1 and not name.startswith(NEEDS_FIT_PREFIXES):
         command.extend(["--tensor-split", "1,1"])
     import signal
     with log_path.open("w") as log:
