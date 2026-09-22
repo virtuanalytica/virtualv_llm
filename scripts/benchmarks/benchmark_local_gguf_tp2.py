@@ -36,6 +36,11 @@ PORT = 18011
 
 MODELS = {
     "qwen38-27b-q4": Path("/media/knight2/EDS2/models/llm/qwen38-27b/Qwen3.8-27B-UD-Q4_K_M.gguf"),
+    # 2026-09-22: 4-shard GGUF (unsloth UD-IQ3_XXS, ~104GiB total) -- point at
+    # shard 1, llama.cpp discovers the other 3 via GGUF split metadata.
+    "deepseek-v4-flash-0731-iq3xxs": Path(
+        "/media/knight2/EDS2/models/llm/deepseek-v4-flash-0731-iq3xxs/UD-IQ3_XXS/"
+        "DeepSeek-V4-Flash-0731-UD-IQ3_XXS-00001-of-00004.gguf"),
     "deepseek-r1-qwen32b-q4": Path("/media/knight2/EDS2/models/llm/deepseek-r1-qwen32b/DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf"),
     "qwen36-27b-iq3": Path("/media/knight2/EDS2/models/qwen3.6-27b-unsloth-ud-iq3-xxs.gguf"),
     "qwen35-27b-q4": Path("/media/knight2/EDS2/lmstudio-models/lmstudio-community/Qwen3.5-27B-GGUF/Qwen3.5-27B-Q4_K_M.gguf"),
