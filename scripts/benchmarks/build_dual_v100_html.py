@@ -5,9 +5,10 @@ from __future__ import annotations
 
 import html
 import json
+import os
 import shutil
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
@@ -17,7 +18,7 @@ import benchmark_phase_gate as bpg  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 REPORTS = ROOT / "reports"
-OUT = REPORTS / "dual_v100_nvlink_benchmark.html"
+OUT = Path(os.environ.get("VIRTUALV_DASHBOARD_OUT", REPORTS / "dual_v100_nvlink_benchmark.html"))
 
 
 def load(name: str) -> dict:
@@ -678,26 +679,25 @@ reinstall-opdracht in het cascade-JSON is niet afhankelijk van een rate-limited 
 
 
 def qwen38_flash_next_vllm_section() -> str:
-    """Show the two requested Flash-Next hardware protocols without inventing scores."""
+    """Separate measured GGUF results from reproducible 1Cat research targets."""
     return """
-<h2>Qwen3.8-Flash-Next · vLLM-testmatrix</h2>
-<p>Twee afzonderlijke rijen worden pas met t/s en benchmarks gevuld nadat een native
-W4A16-safetensors-quant volledig op lokale opslag staat en 1Cat-vLLM succesvol is gestart.
-Dit is geen combinatie-score: iedere rij is een zelfstandige runtime-/hardwaremeting.</p>
+<h2>Qwen3.8-Flash-Next · volgende runtimeproeven</h2>
+<p>De AP-GGUF-metingen in de hoofdtabel zijn lokale llama.cpp-resultaten. De hieronder
+genoemde 1Cat-routes zijn afzonderlijke experimenten en krijgen pas een score na een
+lokale run met vastgelegde checkpoint-, runtime- en hardware-revisie.</p>
 <div class="tablewrap"><table class="sortable"><thead><tr><th>Profiel</th><th>Fysieke GPU’s</th>
 <th>vLLM-configuratie</th><th>t/s</th><th>Benchmarks</th><th>Status</th></tr></thead><tbody>
 <tr><td><strong>V100-only</strong></td><td>GPU 1 + 2 · 2× Tesla V100-SXM2-32GB · NVLink</td>
-<td><code>CUDA_VISIBLE_DEVICES=1,2</code> · TP=2</td><td class="num">—</td><td>GSM8K · BBH · MMLU · TruthfulQA · HumanEval</td>
-<td>Geteste Merlin-backend wees SM70 af (SM75-eis); geen algemene 1Cat-W4A16-uitspraak</td></tr>
-<tr><td><strong>Alle vier GPU’s</strong></td><td>GPU 0 A4000 + GPU 1/2 V100 NVLink + GPU 3 RTX 4000 Ada</td>
-<td><code>CUDA_VISIBLE_DEVICES=0,1,2,3</code> · TP=4 + CPU-offload-validatie</td><td class="num">—</td>
-<td>identieke suite; afzonderlijk gerapporteerd</td><td>Merlin uitgesloten: A4000-werker OOM bij gewichtsallocatie</td></tr>
+<td><code>CUDA_VISIBLE_DEVICES=1,2</code> · TP=2</td><td class="num">—</td><td>smoke · kwaliteit · pure decode</td>
+<td>1Cat-vLLM 1.5.0 baseline eerst; alleen publiceren indien SM70-preflight slaagt</td></tr>
+<tr><td><strong>Heterogeen onderzoek</strong></td><td>GPU 0 A4000 + GPU 1/2 V100 NVLink + GPU 3 RTX 4000 Ada</td>
+<td>alleen een backend die ongelijke compute capabilities expliciet ondersteunt</td><td class="num">—</td>
+<td>identieke suite; afzonderlijk gerapporteerd</td><td>geen TP=4-claim zolang de mixed-GPU preflight niet slaagt</td></tr>
 </tbody></table></div>
-<div class="callout"><strong>Actuele opslagstatus.</strong> De host heeft circa 818 GiB DDR4 en genoeg
-vrije EDS2-ruimte voor één W4A16-quant tegelijk. De oorspronkelijke Intel AutoRound-variant is 278 GB
-en wordt daarom niet gedownload. De cascade test eerst de 123,7-GB Merlin-variant en daarna de
-180,7-GB AWQ-variant, met minstens 24 GB vrije veiligheidsmarge. Host-RAM wordt als CPU-offload
-gemeten en nooit als VRAM meegerekend.</div>
+<div class="callout"><strong>Bewijsregel.</strong> De upstream 1Cat-snelheden zijn gemeten onder
+andere topologieën en workloads. Ze zijn onderzoeksdoelen, geen lokale resultaten. MTP krijgt
+altijd een eigen rij en vervangt de normale decode-score nooit. Zie
+<a href="../docs/MODEL_TEST_ROADMAP.md">de actuele model-roadmap</a>.</div>
 """
 
 
@@ -932,8 +932,12 @@ def main() -> int:
     q_tensor = q.get("dual-tensor", {}).get("tps")
     q_gain = 100 * (q_tensor / q_single - 1) if q_single and q_tensor else None
     dense72 = next((row for row in rows if row["model"] == "Qwen2.5-72B" and row["profile"] == "dual-tensor"), {})
-    free_gb = shutil.disk_usage("/media/knight2/EDS2").free / 1_000_000_000
-    created = datetime.now().astimezone().strftime("%Y-%m-%d %H:%M %Z")
+    disk_root = Path(os.environ.get("VIRTUALV_DATA_ROOT", "/media/knight2/EDS2"))
+    free_override = os.environ.get("VIRTUALV_DISK_FREE_GB")
+    free_gb = (float(free_override) if free_override is not None else
+               shutil.disk_usage(disk_root).free / 1_000_000_000 if disk_root.exists() else None)
+    created_override = os.environ.get("VIRTUALV_DASHBOARD_CREATED")
+    created = created_override or datetime.now(timezone.utc).astimezone().strftime("%Y-%m-%d %H:%M %Z")
     document = f"""<!doctype html>
 <html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Node2 LLM hardware benchmark · V100 NVLink + RTX</title>
@@ -1000,7 +1004,7 @@ onafhankelijke parallel-servinglaag. Iedere rij bewaart de werkelijk zichtbare f
 <section class="grid"><div class="card"><small>Qwen3.8 tensor split</small><div class="metric">{fmt(q_tensor)} t/s</div><small>{fmt(q_gain,1)}% boven single V100</small></div>
 <div class="card"><small>Dense schaaltest</small><div class="metric">{fmt(dense72.get('tps'))} t/s</div><small>Qwen2.5 72,7B · RIV {dense72.get('quality','—')}</small></div>
 <div class="card"><small>1Cat DFlash2 B1</small><div class="metric">{fmt(next((r['tps'] for r in rows if r['model']=='Qwen3.8 + DFlash2' and 'B1' in r['profile']),None))} t/s</div><small>wall output throughput</small></div>
-<div class="card"><small>Vrije EDS2-ruimte</small><div class="metric">{fmt(free_gb, 1)} GB</div><small>live bij genereren; cascade bewaart één grote winnaar</small></div></section>
+<div class="card"><small>Vrije modelopslag</small><div class="metric">{fmt(free_gb, 1)} GB</div><small>live bij lokale generatie; niet beschikbaar op CI</small></div></section>
 <div class="callout"><strong>Hoofdconclusie.</strong> Layer split vergroot vooral capaciteit. Tensor split gebruikt beide V100’s echt parallel: Qwen3.8 wint {fmt(q_gain,1)}%, terwijl de 72,7B dense Qwen van 14,84 naar 24,29 t/s gaat (+63,7%). Voor Qwen3.8 single-stream latency blijft 1Cat + DFlash2 de snelste route; bij batch 4 wint target-only.</div>
 <h2>Alle lokale resultaten</h2><p>Decode-t/s van llama.cpp en wall-output-t/s van 1Cat zijn apart gemeten; batch-4 is aggregaat. RIV is een brongebonden zesveldentest, geen algemene modelaccuracy.</p>
 <div class="tablewrap"><table class="sortable"><thead><tr><th>Model</th><th>Engine</th><th>Profiel</th><th data-sort-dir="desc">Output t/s</th><th>Prompt t/s</th><th>Qwen3.8 speedup</th><th>RIV</th><th>VRAM GiB</th><th>GPU util.</th></tr></thead><tbody>{table(rows)}</tbody></table></div>

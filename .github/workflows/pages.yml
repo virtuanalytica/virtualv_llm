@@ -1,0 +1,42 @@
+name: publish-dashboard
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'reports/**'
+      - 'docs/**'
+      - 'scripts/benchmarks/build_dual_v100_html.py'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - name: Assemble immutable public site
+        run: |
+          mkdir -p _site/results _site/docs
+          cp reports/dual_v100_nvlink_benchmark.html _site/index.html
+          cp reports/well_known_suite_20260917.json _site/results/
+          cp reports/optimized_mixture_frontier_20260921.json _site/results/
+          cp docs/MODEL_TEST_ROADMAP.md _site/docs/
+          cp docs/VIRTUALV_LLM_TESTSUITE_STANDARD.md _site/docs/
+      - uses: actions/upload-pages-artifact@v3
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
