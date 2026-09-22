@@ -266,6 +266,40 @@ GLM retry (already on disk, no download needed) and, once GLM's own
 benchmark also completes and its 68GB is pruned, comfortably enough for
 `ap-iq2s`'s download without ever dropping near the disk-full mark again.
 
+## DeepSeek-V4-Flash-0731-IQ3_XXS: real CUDA crash on Ada, not a benchmark failure
+
+The all-four-layer run got much further than GLM's attempts -- model
+loaded, and the suite completed dozens of GSM8K/HumanEval-style tasks
+successfully (task 10361 through 10436, normal ~18 t/s decode) before
+crashing at task 11463. The result JSON only recorded `URLError:
+<urlopen error [Errno 111] Connection refused>` (the lm-eval client's
+view once the server died) -- same class of misleading-generic-error
+problem as GLM's `RuntimeError: llama-server exited with code 1`. The
+real cause is in the server log:
+```
+ggml-cuda.cu:108: CUDA error
+CUDA error: invalid argument
+current device: 3, in function ggml_cuda_kernel_launch at common.cuh:1710
+cudaGetLastError()
+```
+Device 3 in the all-four-layer topology is the RTX 4000 Ada (physical
+GPU 3), not either V100. GDB backtrace confirms it's a genuine CUDA
+kernel-launch failure inside `ggml_cuda_mul_mat_vec_q` (the fused
+mat-vec-times-quant kernel), not an OOM or a Python-side bug. Plausible
+cause: a kernel-launch parameter (grid/block dims or the fused
+multi-device args struct visible in the backtrace) that's valid on the
+other three devices' architectures but invalid on Ada (SM89) specifically
+for this IQ3_XXS quant, triggered only by whatever batch shape task 11463
+happened to produce -- not reproducible from the first ~11000 tasks.
+
+Not retried yet. Next attempt should try `--profile dual-layer` (V100
+pair only, no Ada/A4000 in the mix) to isolate whether this is
+Ada-specific or a heterogeneous-4-GPU-topology issue; --fit will offload
+more to CPU without Ada/A4000 in the split, so expect a slower run but
+one that either reproduces the same crash on the V100s (real IQ3_XXS/
+SM70 kernel bug) or completes cleanly (confirms it's Ada/heterogeneous-
+specific).
+
 ## Naming correction for the Fase 2 mixture command
 
 The approved plan's `optimize_model_mixture.py --require-member` example
