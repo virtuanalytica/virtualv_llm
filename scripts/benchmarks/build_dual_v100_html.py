@@ -288,6 +288,7 @@ WELL_KNOWN_LABELS = {
     "gpt-oss-20b-q4": "gpt-oss-20B",
     "mistral-small4-119b-q4-adaa4000": "Mistral Small 4 (Ada+A4000)",
     "deepseek-v4-flash-reap150b-q2k-adaa4000": "DeepSeek-V4-Flash-REAP-150B (Ada+A4000)",
+    "deepseek-v4-flash-0731-iq3xxs": "DeepSeek-V4-Flash-0731 UD-IQ3_XXS",
     "llama3-70b-instruct-q4": "Llama-3-70B-Instruct Q4_K_M",
     "qwen35-122b-a10b-iq3s": "Qwen3.5-122B-A10B IQ3_S",
     "command-r-plus-104b-0824-iq3m": "Command R+ 104B 08-2024 IQ3_M",
