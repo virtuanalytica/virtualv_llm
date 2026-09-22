@@ -487,7 +487,12 @@ gelogde samples. Lege scorecellen betekenen “nog niet voltooid”, niet 0%.</d
 de ruwe respons.</span><span>BBH-fix: lm-eval liet model-eindtokens/punctuatie in het
 gefilterde antwoord staan (<code>False.&lt;|im_end|&gt;</code> versus target <code>False</code>).
 <code>normalized_logged_answer_v1</code> vergelijkt de eerste getypeerde keuze uit de bewaarde
-samplelogs; alle beschikbare historische rijen zijn daarmee offline herwaardeerd.</span></div>
+samplelogs; alle beschikbare historische rijen zijn daarmee offline herwaardeerd.</span>
+<span>t/s bij mixture-rijen (Mixture-of-models — ...): geen gemeten mixture-doorvoer -- leden
+worden sequentieel bevraagd, nooit gelijktijdig bediend. De getoonde waarde is de t/s van het
+traagste lid (bottleneck), oftewel het plafond als elk lid parallel op aparte hardware zou
+draaien. Praktische latency op gedeelde hardware, met laden/wisselen tussen leden, ligt
+hoger.</span></div>
 <section id="benchmark-uitleg" class="benchmark-explanations" aria-labelledby="benchmark-uitleg-title">
 <h3 id="benchmark-uitleg-title">Uitleg van de benchmarks</h3>
 <div class="explanation-grid">

@@ -219,6 +219,17 @@ def main() -> int:
     if missing:
         raise SystemExit(f"these models have no well_known_suite.py entry yet in {args.out}: {missing}")
 
+    member_rows = {r.get("model"): r for r in report.get("results", []) if r.get("model") in args.models}
+    member_tps = {name: row.get("completion_tokens_per_second") for name, row in member_rows.items()}
+    # A mixture is never served concurrently on this hardware (members are
+    # queried sequentially -- see the module docstring), so there is no
+    # measured mixture throughput to report. The minimum member t/s is the
+    # best available proxy: it is the throughput the mixture COULD sustain if
+    # every member ran in parallel on separate hardware (the bottleneck being
+    # its slowest member); real sequential latency on shared hardware is
+    # higher (model load/switch overhead between members).
+    bottleneck_tps = min((v for v in member_tps.values() if isinstance(v, (int, float))), default=None)
+
     from well_known_suite import BBH_SUBTASKS, EVAL_PROTOCOL, MMLU_SUBJECT_SAMPLE  # noqa: E402
 
     gsm8k = score_final_answer_task(vote_models, "gsm8k")
@@ -280,6 +291,14 @@ def main() -> int:
         "engine": f"mixture({len(args.models)})",
         "policy": ("sequential task-routed ensemble; majority vote on discrete final answers, "
                    "best-of-N for HumanEval, optional specialist for free-text TruthfulQA"),
+        # Not a measured mixture throughput (members are queried sequentially,
+        # never served concurrently -- see module docstring). This is the
+        # slowest member's own completion_tokens_per_second: the ceiling the
+        # mixture could sustain if every member ran in parallel on separate
+        # hardware. Real latency on shared hardware, switching between
+        # members, is higher. None when a member has no recorded t/s.
+        "bottleneck_tokens_per_second": bottleneck_tps,
+        "completion_tokens_per_second": bottleneck_tps,
         "evaluation_caveat": (
             "Post-hoc recombination of existing benchmark samples. When members are selected "
             "using these same scores, the result is a selection-set estimate and requires a "

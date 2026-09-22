@@ -4166,7 +4166,9 @@
         "n_passed": 39,
         "pass_at_1": 0.975,
         "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
-      }
+      },
+      "bottleneck_tokens_per_second": 32.321984767599226,
+      "completion_tokens_per_second": 32.321984767599226
     },
     {
       "model": "mistral-small4-119b-q4-adaa4000",
@@ -4810,7 +4812,9 @@
         "n_passed": 39,
         "pass_at_1": 0.975,
         "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
-      }
+      },
+      "bottleneck_tokens_per_second": 5.852406574992886,
+      "completion_tokens_per_second": 5.852406574992886
     },
     {
       "model": "mixture-of-models-4-gemma-direct",
@@ -4911,7 +4915,9 @@
         "n_passed": 39,
         "pass_at_1": 0.975,
         "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
-      }
+      },
+      "bottleneck_tokens_per_second": 5.852406574992886,
+      "completion_tokens_per_second": 5.852406574992886
     },
     {
       "model": "mixture-of-models-4-gemma-routed",
@@ -5011,7 +5017,9 @@
         "n_passed": 39,
         "pass_at_1": 0.975,
         "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
-      }
+      },
+      "bottleneck_tokens_per_second": 5.852406574992886,
+      "completion_tokens_per_second": 5.852406574992886
     },
     {
       "model": "llama3-70b-instruct-q4",
@@ -8562,101 +8570,6 @@
       "split_policy": "layer; V100 tensor split excluded for unattended long suite"
     },
     {
-      "model": "mixture-optimized-2",
-      "ensemble_members": [
-        "qwen38-flash-next-ap-iq2s-allfour",
-        "deepseek-v4-flash-0731-iq3xxs"
-      ],
-      "ensemble_method": "task_router",
-      "ensemble_weights": null,
-      "routing": {
-        "discrete_vote_members": [
-          "qwen38-flash-next-ap-iq2s-allfour",
-          "deepseek-v4-flash-0731-iq3xxs"
-        ],
-        "humaneval_best_of_members": [
-          "qwen38-flash-next-ap-iq2s-allfour",
-          "deepseek-v4-flash-0731-iq3xxs"
-        ],
-        "truthfulqa_specialist": "qwen38-flash-next-ap-iq2s-allfour"
-      },
-      "eval_protocol": "v4-mmlu-fewshot-20260918",
-      "engine": "mixture(2)",
-      "policy": "sequential task-routed ensemble; majority vote on discrete final answers, best-of-N for HumanEval, optional specialist for free-text TruthfulQA",
-      "evaluation_caveat": "Post-hoc recombination of existing benchmark samples. When members are selected using these same scores, the result is a selection-set estimate and requires a fresh held-out run before production claims.",
-      "benchmark_summary": {
-        "core_composite_4task": 0.92425,
-        "diagnostic_mean_with_truthfulqa": 0.881067
-      },
-      "gsm8k": {
-        "exact_match,flexible-extract": 0.92,
-        "n": 50
-      },
-      "truthfulqa_gen": {
-        "name": "truthfulqa_gen",
-        "alias": "truthfulqa_gen",
-        "sample_len": 30,
-        "bleu_max,none": 27.766399248427998,
-        "bleu_max_stderr,none": 4.7678493819243934,
-        "bleu_acc,none": 0.6666666666666666,
-        "bleu_acc_stderr,none": 0.0875376219064817,
-        "bleu_diff,none": 10.370831124535801,
-        "bleu_diff_stderr,none": 4.476563195908569,
-        "rouge1_max,none": 52.285538780278344,
-        "rouge1_max_stderr,none": 4.9491886375478344,
-        "rouge1_acc,none": 0.8,
-        "rouge1_acc_stderr,none": 0.07427813527082075,
-        "rouge1_diff,none": 13.765184939383243,
-        "rouge1_diff_stderr,none": 4.959087266879471,
-        "rouge2_max,none": 40.10018489514315,
-        "rouge2_max_stderr,none": 5.738567763023648,
-        "rouge2_acc,none": 0.7,
-        "rouge2_acc_stderr,none": 0.08509629433967632,
-        "rouge2_diff,none": 13.26689228587149,
-        "rouge2_diff_stderr,none": 5.442951009483662,
-        "rougeL_max,none": 49.41952154230308,
-        "rougeL_max_stderr,none": 5.264818462356723,
-        "rougeL_acc,none": 0.6666666666666666,
-        "rougeL_acc_stderr,none": 0.0875376219064817,
-        "rougeL_diff,none": 12.289667277113693,
-        "rougeL_diff_stderr,none": 5.0881281649218835,
-        "policy": "task-routed to one measured free-text specialist",
-        "specialist": "qwen38-flash-next-ap-iq2s-allfour"
-      },
-      "bbh": {
-        "per_subtask": {
-          "bbh_cot_fewshot_boolean_expressions": 1.0,
-          "bbh_cot_fewshot_causal_judgement": 0.875,
-          "bbh_cot_fewshot_date_understanding": 0.625,
-          "bbh_cot_fewshot_logical_deduction_five_objects": 0.875,
-          "bbh_cot_fewshot_navigate": 1.0,
-          "bbh_cot_fewshot_temporal_sequences": 1.0
-        },
-        "mean_accuracy": 0.8958,
-        "n_samples": 48
-      },
-      "mmlu_sample": {
-        "per_subject": {
-          "abstract_algebra": 0.6,
-          "anatomy": 0.95,
-          "astronomy": 0.95,
-          "college_computer_science": 0.85,
-          "high_school_psychology": 1.0,
-          "formal_logic": 0.85,
-          "professional_law": 0.85,
-          "marketing": 1.0
-        },
-        "mean_accuracy": 0.8812,
-        "n_samples": 160
-      },
-      "humaneval": {
-        "n_problems": 40,
-        "n_passed": 40,
-        "pass_at_1": 1.0,
-        "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
-      }
-    },
-    {
       "model": "mixture-optimized-3",
       "ensemble_members": [
         "qwen38-flash-next-ap-iq2s-allfour",
@@ -8752,7 +8665,9 @@
         "n_passed": 39,
         "pass_at_1": 0.975,
         "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
-      }
+      },
+      "bottleneck_tokens_per_second": 21.49075918424449,
+      "completion_tokens_per_second": 21.49075918424449
     },
     {
       "model": "mixture-optimized-4",
@@ -8853,7 +8768,9 @@
         "n_passed": 39,
         "pass_at_1": 0.975,
         "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
-      }
+      },
+      "bottleneck_tokens_per_second": 5.852406574992886,
+      "completion_tokens_per_second": 5.852406574992886
     },
     {
       "model": "mixture-optimized-5",
@@ -8957,7 +8874,9 @@
         "n_passed": 39,
         "pass_at_1": 0.975,
         "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
-      }
+      },
+      "bottleneck_tokens_per_second": 5.852406574992886,
+      "completion_tokens_per_second": 5.852406574992886
     },
     {
       "model": "mixture-optimized-6",
@@ -9064,7 +8983,9 @@
         "n_passed": 40,
         "pass_at_1": 1.0,
         "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
-      }
+      },
+      "bottleneck_tokens_per_second": 13.891050475556028,
+      "completion_tokens_per_second": 13.891050475556028
     },
     {
       "model": "mixture-ultimate-6-explicit",
@@ -9171,7 +9092,9 @@
         "n_passed": 40,
         "pass_at_1": 1.0,
         "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
-      }
+      },
+      "bottleneck_tokens_per_second": 13.891050475556028,
+      "completion_tokens_per_second": 13.891050475556028
     },
     {
       "model": "glm53-reap50-iq3m-v100",
@@ -9753,6 +9676,103 @@
       "weight_bytes": 72132392352,
       "glm5_runtime_commit": "2a4a41238175cc5d0ee3e591865653e49096c782",
       "hardware_profile": "all-four-layer"
+    },
+    {
+      "model": "mixture-optimized-2",
+      "ensemble_members": [
+        "glm53-reap50-iq3m-v100",
+        "glm53-reap50-iq3m-allfour"
+      ],
+      "ensemble_method": "task_router",
+      "ensemble_weights": null,
+      "routing": {
+        "discrete_vote_members": [
+          "glm53-reap50-iq3m-v100",
+          "glm53-reap50-iq3m-allfour"
+        ],
+        "humaneval_best_of_members": [
+          "glm53-reap50-iq3m-v100",
+          "glm53-reap50-iq3m-allfour"
+        ],
+        "truthfulqa_specialist": "glm53-reap50-iq3m-allfour"
+      },
+      "eval_protocol": "v4-mmlu-fewshot-20260918",
+      "engine": "mixture(2)",
+      "policy": "sequential task-routed ensemble; majority vote on discrete final answers, best-of-N for HumanEval, optional specialist for free-text TruthfulQA",
+      "bottleneck_tokens_per_second": 16.374126270865656,
+      "completion_tokens_per_second": 16.374126270865656,
+      "evaluation_caveat": "Post-hoc recombination of existing benchmark samples. When members are selected using these same scores, the result is a selection-set estimate and requires a fresh held-out run before production claims.",
+      "benchmark_summary": {
+        "core_composite_4task": 0.855,
+        "diagnostic_mean_with_truthfulqa": 0.760667
+      },
+      "gsm8k": {
+        "exact_match,flexible-extract": 0.92,
+        "n": 50
+      },
+      "truthfulqa_gen": {
+        "name": "truthfulqa_gen",
+        "alias": "truthfulqa_gen",
+        "sample_len": 30,
+        "bleu_max,none": 31.941361699756193,
+        "bleu_max_stderr,none": 6.81456165189301,
+        "bleu_acc,none": 0.4,
+        "bleu_acc_stderr,none": 0.0909717652294684,
+        "bleu_diff,none": 10.19933331012036,
+        "bleu_diff_stderr,none": 7.984988908462928,
+        "rouge1_max,none": 43.79157695678461,
+        "rouge1_max_stderr,none": 6.856867165538526,
+        "rouge1_acc,none": 0.4,
+        "rouge1_acc_stderr,none": 0.0909717652294684,
+        "rouge1_diff,none": 13.73361464174978,
+        "rouge1_diff_stderr,none": 8.046846556637869,
+        "rouge2_max,none": 36.11983511371742,
+        "rouge2_max_stderr,none": 7.048993564984208,
+        "rouge2_acc,none": 0.3333333333333333,
+        "rouge2_acc_stderr,none": 0.0875376219064817,
+        "rouge2_diff,none": 11.459097336039047,
+        "rouge2_diff_stderr,none": 8.452793996135547,
+        "rougeL_max,none": 42.889659429867066,
+        "rougeL_max_stderr,none": 6.829245703183337,
+        "rougeL_acc,none": 0.4,
+        "rougeL_acc_stderr,none": 0.0909717652294684,
+        "rougeL_diff,none": 13.2814325645677,
+        "rougeL_diff_stderr,none": 8.0580272504774,
+        "policy": "task-routed to one measured free-text specialist",
+        "specialist": "glm53-reap50-iq3m-allfour"
+      },
+      "bbh": {
+        "per_subtask": {
+          "bbh_cot_fewshot_boolean_expressions": 1.0,
+          "bbh_cot_fewshot_causal_judgement": 0.375,
+          "bbh_cot_fewshot_date_understanding": 0.875,
+          "bbh_cot_fewshot_logical_deduction_five_objects": 1.0,
+          "bbh_cot_fewshot_navigate": 1.0,
+          "bbh_cot_fewshot_temporal_sequences": 1.0
+        },
+        "mean_accuracy": 0.875,
+        "n_samples": 48
+      },
+      "mmlu_sample": {
+        "per_subject": {
+          "abstract_algebra": 0.75,
+          "anatomy": 0.55,
+          "astronomy": 0.6,
+          "college_computer_science": 0.8,
+          "high_school_psychology": 0.75,
+          "formal_logic": 0.65,
+          "professional_law": 0.45,
+          "marketing": 0.85
+        },
+        "mean_accuracy": 0.675,
+        "n_samples": 160
+      },
+      "humaneval": {
+        "n_problems": 40,
+        "n_passed": 38,
+        "pass_at_1": 0.95,
+        "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
+      }
     }
   ],
   "bbh_scoring_fix": {
