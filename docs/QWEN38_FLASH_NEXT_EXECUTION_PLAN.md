@@ -352,6 +352,23 @@ allfour-profile still needs to run (via the now-fixed
 `run_glm53_reap50_cascade.py --only iq3m`, which will pick up exactly
 that remaining profile plus prune the weights once both are complete).
 
+**Update: GLM-5.3-REAP50-IQ3_M cascade is now fully COMPLETE end-to-end.**
+A second bug was found and fixed first -- `row_complete()`/`complete_rows()`
+checked `isinstance(row.get("gsm8k"), (int, float))` directly, but `gsm8k`
+is always a nested dict, never a bare number, so this check was `False` for
+every possible result (including the just-completed v100 profile, which the
+fixed cascade immediately tried to rerun from scratch). Fixed in commit
+`514b874d` using `rank_models.gsm8k_score()`, same as every other script in
+this directory. With both fixes in place the cascade ran cleanly: v100
+profile correctly recognized as already complete and skipped, allfour
+profile ran and passed (`gsm8k=0.68, bbh=0.75, mmlu=0.6, humaneval=0.125,
+t/s=22.71, composite=0.539` -- notably better than the v100 profile's
+0.496 composite, and almost 40% faster), then `prune_authorized`/`pruned`
+fired automatically and removed the 68GB weight directory. Disk: 139GB
+free after pruning (was 72GB at the start of tonight's disk-budget
+concerns), comfortably enough for the `ap-iq2s` cascade's ~76GB without
+needing to prune DeepSeek's weights first.
+
 ## DeepSeek-V4-Flash-0731-IQ3_XXS: dual-layer retry CONFIRMS Ada-specific crash
 
 Retried with `--profile dual-layer` (V100 pair only, no Ada/A4000) per the
