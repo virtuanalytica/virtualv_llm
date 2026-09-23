@@ -5,16 +5,24 @@ broken ~/.claude.json symlink is fixed -- see NOTES.md) Claude -- using the
 exact same well_known_suite.py entry point local GGUF models go through, so
 every table in build_dual_v100_html.py treats these rows identically.
 
-Two connection shapes:
-  * "http": the provider has a real OpenAI-compatible endpoint (Gemini's
-    /v1beta/openai layer). well_known_suite.py talks to it directly with the
-    new --external-api-key-env/--completions-path support.
+Two connection shapes, both proxied through a local server this script starts
+per model and tears down afterward:
   * "cli": the provider is an agent CLI with no HTTP surface (codex exec,
-    claude -p). This script starts external_cli_agent_proxy.py on a free
-    local port first, points well_known_suite.py at that, and tears the
-    proxy down afterwards -- one proxy process per model, sequential, so two
-    concurrent CLI subprocess trees never fight over the same sandbox/session
-    state.
+    claude -p). external_cli_agent_proxy.py shells out to it per request.
+  * "sanitizing_http": the provider has a real OpenAI-compatible endpoint,
+    but is stricter than lm-eval's LocalChatCompletion model assumes.
+    Confirmed 2026-09-23: Gemini's /v1beta/openai layer 400s on the "seed"
+    field lm-eval always sends, and on a null entry inside "stop" (sent when
+    a task has no explicit stop sequence) -- this broke gsm8k/bbh/mmlu_sample/
+    truthfulqa_gen (all routed through lm-eval) while complete_text-based
+    tasks (humaneval, specialists) worked fine going straight to the real
+    endpoint. sanitizing_proxy.py strips the fields the target rejects and
+    injects reasoning_effort=none universally (previously only applied to
+    complete_text/complete_vision via well_known_suite.py's own
+    --external-extra-body-json, missing the lm-eval-routed tasks entirely).
+    A provider with a genuinely compliant endpoint would use well_known_suite.py's
+    --external-api-key-env/--completions-path directly instead -- this kind
+    exists specifically for endpoints that need request massaging.
 
 Z.ai has no key or CLI installed on this machine (checked 2026-09-23) -- not
 included here; add a PROVIDERS entry once credentials exist.
@@ -32,7 +40,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 WKS = ROOT / "scripts/benchmarks/well_known_suite.py"
-PROXY = ROOT / "scripts/benchmarks/external_cli_agent_proxy.py"
+CLI_PROXY = ROOT / "scripts/benchmarks/external_cli_agent_proxy.py"
+SANITIZING_PROXY = ROOT / "scripts/benchmarks/sanitizing_proxy.py"
 REPORT = ROOT / "reports/well_known_suite_20260917.json"
 
 # Deliberately a small representative slice per provider, not the full model
@@ -46,17 +55,12 @@ PROVIDERS = {
         "models": ["gpt-6-astra", "gpt-6-sol", "gpt-6-luna"],
     },
     "antigravity-gemini": {
-        "kind": "http",
-        "base_url": "https://generativelanguage.googleapis.com/v1beta/openai",
-        "completions_path": "/chat/completions", "api_key_env": "GEMINI_API_KEY",
+        "kind": "sanitizing_http",
+        "target_base_url": "https://generativelanguage.googleapis.com/v1beta/openai",
+        "target_path": "/chat/completions", "api_key_env": "GEMINI_API_KEY",
+        "strip_fields": "seed", "inject_fields_json": '{"reasoning_effort": "none"}',
         "engine": "Google Antigravity (Gemini API)",
         "models": ["gemini-3.6-flash", "gemini-3.1-pro-preview", "gemini-3.5-flash"],
-        # Gemini 3's reasoning tokens share max_tokens with the visible answer
-        # (confirmed 2026-09-23: truncated a correct short answer without
-        # this). Only covers complete_text/complete_vision-based scoring
-        # (humaneval, specialists, contamination_audit) -- see well_known_suite.py's
-        # EXTRA_CHAT_BODY comment for what this does not cover yet.
-        "extra_body_json": '{"reasoning_effort": "none"}',
     },
 }
 
@@ -74,7 +78,24 @@ def wait_for_proxy(port: int, timeout: float = 15.0) -> None:
             if sock.connect_ex(("127.0.0.1", port)) == 0:
                 return
         time.sleep(0.3)
-    raise TimeoutError(f"external_cli_agent_proxy did not open port {port} within {timeout}s")
+    raise TimeoutError(f"proxy did not open port {port} within {timeout}s")
+
+
+def proxy_command(provider: dict, model: str, port: int) -> list[str]:
+    if provider["kind"] == "cli":
+        return ["python3", str(CLI_PROXY), "--backend", provider["backend"], "--model", model,
+               "--port", str(port)]
+    if provider["kind"] == "sanitizing_http":
+        cmd = ["python3", str(SANITIZING_PROXY), "--port", str(port),
+              "--target-base-url", provider["target_base_url"],
+              "--target-path", provider["target_path"],
+              "--api-key-env", provider["api_key_env"]]
+        if provider.get("strip_fields"):
+            cmd += ["--strip-fields", provider["strip_fields"]]
+        if provider.get("inject_fields_json"):
+            cmd += ["--inject-fields-json", provider["inject_fields_json"]]
+        return cmd
+    raise ValueError(f"unknown provider kind: {provider['kind']}")
 
 
 def run_one(row_name: str, provider_key: str, model: str, specialists: str) -> int:
@@ -85,19 +106,8 @@ def run_one(row_name: str, provider_key: str, model: str, specialists: str) -> i
               "--topology", f"cloud/agent-CLI provider; no local GPU ({provider_key})",
               "--specialists", specialists]
 
-    if provider["kind"] == "http":
-        cmd = common + ["--external-url", provider["base_url"], "--external-model", model,
-                        "--completions-path", provider["completions_path"],
-                        "--external-api-key-env", provider["api_key_env"]]
-        if provider.get("extra_body_json"):
-            cmd += ["--external-extra-body-json", provider["extra_body_json"]]
-        return subprocess.run(cmd, cwd=ROOT).returncode
-
     port = free_port()
-    proxy_proc = subprocess.Popen(
-        ["python3", str(PROXY), "--backend", provider["backend"], "--model", model, "--port", str(port)],
-        cwd=ROOT,
-    )
+    proxy_proc = subprocess.Popen(proxy_command(provider, model, port), cwd=ROOT)
     try:
         wait_for_proxy(port)
         cmd = common + ["--external-url", f"http://127.0.0.1:{port}", "--external-model", model]
