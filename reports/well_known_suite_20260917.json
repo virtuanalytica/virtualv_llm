@@ -10090,6 +10090,106 @@
         2
       ],
       "model_release_date_status": "missing; add primary source before temporal contamination comparison"
+    },
+    {
+      "model": "mixture-ensemble-v1-jev-candidate",
+      "ensemble_members": [
+        "qwen38-flash-next-ap-q4kxl-v100",
+        "qwen35-122b-a10b-iq3s",
+        "kat-coder-v2.5-dev"
+      ],
+      "ensemble_method": "task_router",
+      "ensemble_weights": null,
+      "routing": {
+        "discrete_vote_members": [
+          "qwen38-flash-next-ap-q4kxl-v100",
+          "qwen35-122b-a10b-iq3s",
+          "kat-coder-v2.5-dev"
+        ],
+        "humaneval_best_of_members": [
+          "qwen38-flash-next-ap-q4kxl-v100",
+          "qwen35-122b-a10b-iq3s",
+          "kat-coder-v2.5-dev"
+        ],
+        "truthfulqa_specialist": "qwen35-122b-a10b-iq3s"
+      },
+      "eval_protocol": "v4-mmlu-fewshot-20260918",
+      "engine": "mixture(3)",
+      "policy": "sequential task-routed ensemble; majority vote on discrete final answers, best-of-N for HumanEval, optional specialist for free-text TruthfulQA",
+      "bottleneck_tokens_per_second": 34.59045444532104,
+      "completion_tokens_per_second": 34.59045444532104,
+      "evaluation_caveat": "Post-hoc recombination of existing benchmark samples. When members are selected using these same scores, the result is a selection-set estimate and requires a fresh held-out run before production claims.",
+      "benchmark_summary": {
+        "core_composite_4task": 0.9402,
+        "diagnostic_mean_with_truthfulqa": 0.843827
+      },
+      "gsm8k": {
+        "exact_match,flexible-extract": 0.94,
+        "n": 50
+      },
+      "truthfulqa_gen": {
+        "name": "truthfulqa_gen",
+        "alias": "truthfulqa_gen",
+        "sample_len": 30,
+        "bleu_max,none": 13.667092790714772,
+        "bleu_max_stderr,none": 2.094062865233611,
+        "bleu_acc,none": 0.5,
+        "bleu_acc_stderr,none": 0.09284766908852593,
+        "bleu_diff,none": -1.7254462146251497,
+        "bleu_diff_stderr,none": 2.3127731300092758,
+        "rouge1_max,none": 38.26152899759874,
+        "rouge1_max_stderr,none": 3.347757627646513,
+        "rouge1_acc,none": 0.4666666666666667,
+        "rouge1_acc_stderr,none": 0.09264111117062016,
+        "rouge1_diff,none": -0.8971113170302597,
+        "rouge1_diff_stderr,none": 3.184653268832577,
+        "rouge2_max,none": 26.186439063315888,
+        "rouge2_max_stderr,none": 3.460360022038707,
+        "rouge2_acc,none": 0.4666666666666667,
+        "rouge2_acc_stderr,none": 0.09264111117062016,
+        "rouge2_diff,none": -1.8785732089350229,
+        "rouge2_diff_stderr,none": 3.4349733370980067,
+        "rougeL_max,none": 34.276649094912344,
+        "rougeL_max_stderr,none": 3.3793053389425056,
+        "rougeL_acc,none": 0.4,
+        "rougeL_acc_stderr,none": 0.0909717652294684,
+        "rougeL_diff,none": -2.426047031011727,
+        "rougeL_diff_stderr,none": 3.010730129485685,
+        "policy": "task-routed to one measured free-text specialist",
+        "specialist": "qwen35-122b-a10b-iq3s"
+      },
+      "bbh": {
+        "per_subtask": {
+          "bbh_cot_fewshot_boolean_expressions": 1.0,
+          "bbh_cot_fewshot_causal_judgement": 0.875,
+          "bbh_cot_fewshot_date_understanding": 0.875,
+          "bbh_cot_fewshot_logical_deduction_five_objects": 1.0,
+          "bbh_cot_fewshot_navigate": 1.0,
+          "bbh_cot_fewshot_temporal_sequences": 1.0
+        },
+        "mean_accuracy": 0.9583,
+        "n_samples": 48
+      },
+      "mmlu_sample": {
+        "per_subject": {
+          "abstract_algebra": 0.7,
+          "anatomy": 0.85,
+          "astronomy": 1.0,
+          "college_computer_science": 0.75,
+          "high_school_psychology": 1.0,
+          "formal_logic": 0.9,
+          "professional_law": 0.9,
+          "marketing": 1.0
+        },
+        "mean_accuracy": 0.8875,
+        "n_samples": 160
+      },
+      "humaneval": {
+        "n_problems": 40,
+        "n_passed": 39,
+        "pass_at_1": 0.975,
+        "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
+      }
     }
   ],
   "bbh_scoring_fix": {
