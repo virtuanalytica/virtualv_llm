@@ -51,8 +51,14 @@ MODELS = {
         "/media/knight2/EDS2/models/llm/qwen38-flash-next-ap-iq4xs/AP-IQ4_XS/"
         "Qwen3.8-Flash-Next-AP-IQ4_XS.gguf"),
     # 2026-09-23: MODEL_TEST_ROADMAP.md item 3 (next GGUF quality candidate).
-    # 101.14 GB, single-shard.
-    "qwen38-flash-next-ap-q4kxl": Path(
+    # 101.14 GB, single-shard. Two profile-suffixed keys (not one bare name)
+    # -- reusing one name for both dual-layer/all-four-layer runs silently
+    # overwrote the dual-layer row under the same well_known_suite.json
+    # model key the first time this was tried.
+    "qwen38-flash-next-ap-q4kxl-v100": Path(
+        "/media/knight2/EDS2/models/llm/qwen38-flash-next-ap-q4kxl/AP-Q4_K_XL/"
+        "Qwen3.8-Flash-Next-AP-Q4_K_XL.gguf"),
+    "qwen38-flash-next-ap-q4kxl-allfour": Path(
         "/media/knight2/EDS2/models/llm/qwen38-flash-next-ap-q4kxl/AP-Q4_K_XL/"
         "Qwen3.8-Flash-Next-AP-Q4_K_XL.gguf"),
     # 2026-09-23: re-pointed at a fresh, correctly-labelled Q4_K_M download
