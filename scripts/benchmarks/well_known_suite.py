@@ -58,6 +58,19 @@ API_KEY: str | None = None
 # /chat/completions directly under its own /v1beta/openai base (no extra /v1
 # segment), so this is overridable per --external-url invocation instead of hardcoded.
 CHAT_COMPLETIONS_PATH = "/v1/chat/completions"
+# 2026-09-23: confirmed via curl that Gemini 3's reasoning tokens are drawn
+# from the SAME max_tokens budget as the visible answer -- max_tokens=50
+# truncated a correct "56" down to a bare "5" before the model finished
+# thinking; max_tokens=500 fixed it, and a plain top-level "reasoning_effort":
+# "none" body field ALSO fixes it at max_tokens=50 with finish_reason=stop.
+# Same failure class as this repo's earlier GLM reasoning_effort and
+# DeepSeek-R1 empty-content bugs. Only wired into complete_text/complete_vision
+# below (HumanEval, specialists, contamination_audit -- the paths this module
+# itself builds the request body for); gsm8k/bbh/mmlu_sample/truthfulqa_gen go
+# through lm-eval's own local-chat-completions request builder instead, which
+# has no equivalent passthrough here yet -- left open rather than patching the
+# installed lm_eval package.
+EXTRA_CHAT_BODY: dict[str, Any] = {}
 
 MMLU_SUBJECT_SAMPLE = [
     "abstract_algebra", "anatomy", "astronomy", "college_computer_science",
@@ -94,7 +107,7 @@ def request_json(path: str, payload: dict[str, Any] | None = None, timeout: int 
 
 def complete_text(prompt: str, max_tokens: int, stop: list[str] | None = None) -> str:
     payload = {"model": MODEL_ALIAS, "messages": [{"role": "user", "content": prompt}],
-               "max_tokens": max_tokens, "temperature": 0}
+               "max_tokens": max_tokens, "temperature": 0, **EXTRA_CHAT_BODY}
     if stop:
         payload["stop"] = stop
     resp = request_json(CHAT_COMPLETIONS_PATH, payload)
@@ -108,7 +121,7 @@ def complete_vision(prompt: str, image_path: Path, max_tokens: int) -> str:
     payload = {"model": MODEL_ALIAS, "messages": [{"role": "user", "content": [
         {"type": "text", "text": prompt},
         {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{encoded}"}},
-    ]}], "max_tokens": max_tokens, "temperature": 0}
+    ]}], "max_tokens": max_tokens, "temperature": 0, **EXTRA_CHAT_BODY}
     resp = request_json(CHAT_COMPLETIONS_PATH, payload)
     return resp["choices"][0]["message"]["content"]
 
@@ -541,7 +554,7 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
 
 
 def main() -> int:
-    global BASE_URL, MODEL_ALIAS, API_KEY, CHAT_COMPLETIONS_PATH
+    global BASE_URL, MODEL_ALIAS, API_KEY, CHAT_COMPLETIONS_PATH, EXTRA_CHAT_BODY
     parser = argparse.ArgumentParser()
     parser.add_argument("models", nargs="*")
     # Tensor split has twice reproduced a driver-level V100 hang during long
@@ -556,6 +569,12 @@ def main() -> int:
     parser.add_argument("--completions-path", default="/v1/chat/completions",
                         help="Chat-completions path under --external-url (Gemini's OpenAI-compat layer "
                              "uses /chat/completions with no extra /v1 segment)")
+    parser.add_argument("--external-extra-body-json", metavar="JSON",
+                        help='Extra top-level fields merged into every complete_text/complete_vision '
+                             'chat-completions body, e.g. \'{"reasoning_effort": "none"}\' to stop a '
+                             'reasoning model\'s thinking tokens from eating the visible-answer budget '
+                             '(confirmed needed for Gemini 3 models). Not applied to gsm8k/bbh/'
+                             'mmlu_sample/truthfulqa_gen, which go through lm-eval\'s own request builder.')
     parser.add_argument("--physical-gpus", help="Comma-separated physical GPU indexes for telemetry")
     parser.add_argument("--topology", help="Human-readable topology for an external server")
     parser.add_argument("--engine", default="vLLM", help="Runtime label for an external server")
@@ -611,6 +630,8 @@ def main() -> int:
             API_KEY = os.environ.get(args.external_api_key_env)
             if not API_KEY:
                 raise SystemExit(f"--external-api-key-env {args.external_api_key_env} is unset or empty")
+        if args.external_extra_body_json:
+            EXTRA_CHAT_BODY = json.loads(args.external_extra_body_json)
     default_report: dict[str, Any] = {
         "suite": "gsm8k+bbh+truthfulqa_gen+mmlu_sample(8 subjects)+humaneval(40)",
         "results": [],

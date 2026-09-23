@@ -51,6 +51,12 @@ PROVIDERS = {
         "completions_path": "/chat/completions", "api_key_env": "GEMINI_API_KEY",
         "engine": "Google Antigravity (Gemini API)",
         "models": ["gemini-3.6-flash", "gemini-3.1-pro-preview", "gemini-3.5-flash"],
+        # Gemini 3's reasoning tokens share max_tokens with the visible answer
+        # (confirmed 2026-09-23: truncated a correct short answer without
+        # this). Only covers complete_text/complete_vision-based scoring
+        # (humaneval, specialists, contamination_audit) -- see well_known_suite.py's
+        # EXTRA_CHAT_BODY comment for what this does not cover yet.
+        "extra_body_json": '{"reasoning_effort": "none"}',
     },
 }
 
@@ -83,6 +89,8 @@ def run_one(row_name: str, provider_key: str, model: str, specialists: str) -> i
         cmd = common + ["--external-url", provider["base_url"], "--external-model", model,
                         "--completions-path", provider["completions_path"],
                         "--external-api-key-env", provider["api_key_env"]]
+        if provider.get("extra_body_json"):
+            cmd += ["--external-extra-body-json", provider["extra_body_json"]]
         return subprocess.run(cmd, cwd=ROOT).returncode
 
     port = free_port()
