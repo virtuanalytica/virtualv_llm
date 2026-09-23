@@ -11,80 +11,80 @@
   "results": [
     {
       "members": [
-        "qwen38-flash-next-ap-iq2s-allfour",
+        "qwen38-flash-next-ap-q4kxl-v100",
         "deepseek-v4-flash-0731-iq3xxs"
       ],
-      "core_composite_4task": 0.92425,
-      "gsm8k": 0.92,
+      "core_composite_4task": 0.933425,
+      "gsm8k": 0.94,
       "humaneval": 1.0,
-      "mmlu": 0.8812,
-      "bbh": 0.8958,
+      "mmlu": 0.8562,
+      "bbh": 0.9375,
       "name": "mixture-optimized-2",
-      "truthfulqa_specialist": "qwen38-flash-next-ap-iq2s-allfour",
+      "truthfulqa_specialist": "qwen38-flash-next-ap-q4kxl-v100",
       "selection_warning": "Optimized on these same samples; validate on a fresh held-out run before treating the score as a production estimate."
     },
     {
       "members": [
-        "qwen38-flash-next-ap-iq2s-allfour",
-        "granite-4.2-30b",
-        "glm53-reap50-iq3m-v100"
+        "qwen38-flash-next-ap-q4kxl-v100",
+        "deepseek-v4-flash-0731-iq3xxs",
+        "qwen35-122b-a10b-iq3s"
       ],
-      "core_composite_4task": 0.947075,
-      "gsm8k": 0.98,
-      "humaneval": 0.975,
-      "mmlu": 0.875,
+      "core_composite_4task": 0.944875,
+      "gsm8k": 0.94,
+      "humaneval": 1.0,
+      "mmlu": 0.8812,
       "bbh": 0.9583,
       "name": "mixture-optimized-3",
-      "truthfulqa_specialist": "qwen38-flash-next-ap-iq2s-allfour",
+      "truthfulqa_specialist": "qwen38-flash-next-ap-q4kxl-v100",
+      "selection_warning": "Optimized on these same samples; validate on a fresh held-out run before treating the score as a production estimate."
+    },
+    {
+      "members": [
+        "qwen38-flash-next-ap-q4kxl-v100",
+        "deepseek-v4-flash-0731-iq3xxs",
+        "kat-coder-v2.5-dev",
+        "mistral-small4-119b-q4-adaa4000"
+      ],
+      "core_composite_4task": 0.954575,
+      "gsm8k": 0.96,
+      "humaneval": 1.0,
+      "mmlu": 0.9,
+      "bbh": 0.9583,
+      "name": "mixture-optimized-4",
+      "truthfulqa_specialist": "qwen38-flash-next-ap-q4kxl-v100",
       "selection_warning": "Optimized on these same samples; validate on a fresh held-out run before treating the score as a production estimate."
     },
     {
       "members": [
         "qwen38-flash-next-ap-iq2s-v100",
-        "qwen35-122b-a10b-iq3s",
         "kat-coder-v2.5-dev",
-        "deepseek-v4-flash-reap150b-q2k-adaa4000"
+        "qwen35-122b-a10b-iq3s",
+        "deepseek-v4-flash-reap150b-q2k-adaa4000",
+        "glm53-flash-aj-iq2xxs"
       ],
-      "core_composite_4task": 0.9502,
+      "core_composite_4task": 0.9601,
       "gsm8k": 0.98,
       "humaneval": 0.975,
-      "mmlu": 0.8875,
-      "bbh": 0.9583,
-      "name": "mixture-optimized-4",
+      "mmlu": 0.9062,
+      "bbh": 0.9792,
+      "name": "mixture-optimized-5",
       "truthfulqa_specialist": "qwen38-flash-next-ap-iq2s-v100",
       "selection_warning": "Optimized on these same samples; validate on a fresh held-out run before treating the score as a production estimate."
     },
     {
       "members": [
+        "qwen38-flash-next-ap-q4kxl-v100",
         "qwen38-flash-next-ap-iq2s-allfour",
-        "qwen35-122b-a10b-iq3s",
-        "granite-4.2-30b",
-        "devstral-small2-24b-q4",
-        "deepseek-v4-flash-reap150b-q2k-adaa4000"
-      ],
-      "core_composite_4task": 0.95855,
-      "gsm8k": 0.98,
-      "humaneval": 0.975,
-      "mmlu": 0.9,
-      "bbh": 0.9792,
-      "name": "mixture-optimized-5",
-      "truthfulqa_specialist": "qwen38-flash-next-ap-iq2s-allfour",
-      "selection_warning": "Optimized on these same samples; validate on a fresh held-out run before treating the score as a production estimate."
-    },
-    {
-      "members": [
-        "qwen38-flash-next-ap-iq2s-allfour",
-        "qwen35-122b-a10b-iq3s",
+        "deepseek-v4-flash-0731-iq3xxs",
         "kat-coder-v2.5-dev",
-        "llama3-70b-instruct-q4",
-        "glm53-reap50-iq3m-v100",
-        "devstral-small2-24b-q4"
+        "nemotron35-lightning-30b-a3b",
+        "mistral-small4-119b-q4-adaa4000"
       ],
-      "core_composite_4task": 0.959575,
+      "core_composite_4task": 0.96635,
       "gsm8k": 0.98,
-      "humaneval": 0.975,
-      "mmlu": 0.925,
-      "bbh": 0.9583,
+      "humaneval": 1.0,
+      "mmlu": 0.9062,
+      "bbh": 0.9792,
       "name": "mixture-optimized-6",
       "truthfulqa_specialist": "qwen38-flash-next-ap-iq2s-allfour",
       "selection_warning": "Optimized on these same samples; validate on a fresh held-out run before treating the score as a production estimate."
