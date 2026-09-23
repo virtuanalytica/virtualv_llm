@@ -39,6 +39,7 @@ from benchmark_local_gguf_tp2 import (  # noqa: E402
 )
 from humaneval_harness import run_humaneval  # noqa: E402
 from specialist_suite import SPECIALISTS, run_specialists  # noqa: E402
+from contamination_audit import METHODS as CONTAMINATION_METHODS, run_contamination_audit  # noqa: E402
 from result_store import upsert_result  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -327,7 +328,8 @@ def run_suite_against_running_server(model_name: str,
                                      physical_gpus: tuple[int, ...] | list[int] = (1, 2),
                                      specialists: tuple[str, ...] = (),
                                      vision_capable: bool = False,
-                                     access_profile: str = "sandbox") -> dict[str, Any]:
+                                     access_profile: str = "sandbox",
+                                     contamination_audit: tuple[str, ...] = ()) -> dict[str, Any]:
     out_root = REPORTS / "lm_eval_runs" / model_name
     started = time.time()
 
@@ -345,6 +347,11 @@ def run_suite_against_running_server(model_name: str,
     specialist = run_specialists(model_name, complete_text, specialists,
                                  complete_vision if vision_capable else None,
                                  access_profile=access_profile) if specialists else None
+    # Same rationale as specialist scores above: its own artifact, excluded
+    # from the general composite so historical rows stay blank rather than
+    # acquiring a retroactive, incomparable score.
+    contamination = run_contamination_audit(model_name, complete_text, contamination_audit,
+                                            access_profile=access_profile) if contamination_audit else None
 
     samples: list[dict[int, dict[str, float]]] = []
     stop = threading.Event()
@@ -386,7 +393,8 @@ def run_suite_against_running_server(model_name: str,
 
 def benchmark_model(name: str, model_path: Path, profile_name: str,
                     specialists: tuple[str, ...] = (), vision_capable: bool = False,
-                    access_profile: str = "sandbox") -> dict[str, Any]:
+                    access_profile: str = "sandbox",
+                    contamination_audit: tuple[str, ...] = ()) -> dict[str, Any]:
     profile = PROFILES[profile_name]
     log_path = REPORTS / "lm_eval_runs" / f"{name}-wellknown-{profile_name}-server.log"
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -509,7 +517,8 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
         proc = subprocess.Popen(command, env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
         try:
             wait_ready(proc)
-            result = run_suite_against_running_server(name, profile["physical"], specialists, vision_capable, access_profile)
+            result = run_suite_against_running_server(name, profile["physical"], specialists, vision_capable,
+                                                      access_profile, contamination_audit)
             result["visible_device_probe"] = visible
             result["engine"] = "llama.cpp"
             result["hardware_profile"] = profile_name
@@ -552,6 +561,8 @@ def main() -> int:
     parser.add_argument("--engine", default="vLLM", help="Runtime label for an external server")
     parser.add_argument("--specialists", default="all", metavar="LIST",
                         help="all (default), none, or comma-separated " + ",".join(SPECIALISTS))
+    parser.add_argument("--contamination-audit", default="all", metavar="LIST",
+                        help="all (default), none, or comma-separated " + ",".join(CONTAMINATION_METHODS))
     parser.add_argument("--vision-capable", action="store_true",
                         help="declare an image-capable endpoint (requires a configured VLM adapter)")
     parser.add_argument("--model-release-date", help="ISO publication/release date; stored with this result")
@@ -572,6 +583,16 @@ def main() -> int:
         unknown = set(selected_specialists) - set(SPECIALISTS)
         if unknown:
             raise SystemExit(f"unknown --specialists: {sorted(unknown)}; use all, none, or {','.join(SPECIALISTS)}")
+    if args.contamination_audit == "all":
+        selected_contamination = CONTAMINATION_METHODS
+    elif args.contamination_audit in ("none", "off", ""):
+        selected_contamination = ()
+    else:
+        selected_contamination = tuple(item.strip() for item in args.contamination_audit.split(",") if item.strip())
+        unknown = set(selected_contamination) - set(CONTAMINATION_METHODS)
+        if unknown:
+            raise SystemExit(f"unknown --contamination-audit: {sorted(unknown)}; use all, none, or "
+                             f"{','.join(CONTAMINATION_METHODS)}")
     if not args.external_url and not SERVER.exists():
         raise SystemExit(f"missing V100 llama-server: {SERVER}")
     if args.external_url and not args.models:
@@ -602,7 +623,8 @@ def main() -> int:
                 physical = tuple(int(value) for value in (args.physical_gpus or "").split(",") if value.strip())
                 if not physical:
                     raise ValueError("--physical-gpus is required with --external-url")
-                result = run_suite_against_running_server(name, physical, selected_specialists, args.vision_capable, args.access_profile)
+                result = run_suite_against_running_server(name, physical, selected_specialists, args.vision_capable,
+                                                          args.access_profile, selected_contamination)
                 result.update({
                     "engine": args.engine,
                     "hardware_profile": args.profile,
@@ -614,7 +636,8 @@ def main() -> int:
                     "excluded_physical_gpus": [idx for idx in (0, 1, 2, 3) if idx not in physical],
                 })
             else:
-                result = benchmark_model(name, MODELS[name], args.profile, selected_specialists, args.vision_capable, args.access_profile)
+                result = benchmark_model(name, MODELS[name], args.profile, selected_specialists, args.vision_capable,
+                                         args.access_profile, selected_contamination)
             if args.model_release_date:
                 result["model_release_date"] = args.model_release_date
                 result["model_release_source"] = args.model_release_source

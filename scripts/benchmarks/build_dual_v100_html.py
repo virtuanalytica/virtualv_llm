@@ -583,8 +583,10 @@ def contamination_section() -> str:
     """Separate mitigation/audit table; never infer training exposure from a score alone."""
     standard = {r.get("model"): r for r in load("well_known_suite_20260917.json").get("results", [])}
     specialist = {r.get("model"): r for r in load("specialist_suite_20260922.json").get("results", [])}
+    audit = {r.get("model"): r for r in load("contamination_audit_20260923.json").get("results", [])}
+    names = list(WELL_KNOWN_ORDER) + [name for name in audit if name not in WELL_KNOWN_ORDER]
     body = ""
-    for name in WELL_KNOWN_ORDER:
+    for name in names:
         base = standard.get(name, {})
         parts = [rm.gsm8k_score(base), (base.get("bbh") or {}).get("mean_accuracy"),
                  (base.get("mmlu_sample") or {}).get("mean_accuracy"), (base.get("humaneval") or {}).get("pass_at_1")]
@@ -598,23 +600,39 @@ def contamination_section() -> str:
         release_source = base.get("model_release_source")
         release_html = html.escape(release) + (" <small>bron opgeslagen</small>" if release_source else "")
         status = "vergelijkbaar" if gap is not None else "wacht op private/live score + releasebron"
+
+        methods = (audit.get(name, {}).get("results") or {})
+        canary = methods.get("canary_recall", {})
+        paraphrase = methods.get("paraphrase_invariance", {})
+        holdout = methods.get("post_cutoff_holdout", {})
+        canary_cell = pct_cell(canary.get("recall_rate") if canary.get("status") == "complete" else None)
+        paraphrase_cell = ("<td class='num'>—</td>" if paraphrase.get("status") != "complete"
+                           else f"<td class='num'>{paraphrase.get('accuracy_gap', 0):+.1%}</td>")
+        holdout_cell = pct_cell(holdout.get("accuracy") if holdout.get("status") == "complete" else None)
+
         body += ("<tr><td><strong>" + html.escape(WELL_KNOWN_LABELS.get(name, name)) + "</strong></td>" +
                  f"<td>{release_html}</td>{pct_cell(static_score)}{pct_cell(private_score)}" +
-                 f"<td class='num'>{'—' if gap is None else f'{gap:+.1%}'}</td><td>{status}</td></tr>")
+                 f"<td class='num'>{'—' if gap is None else f'{gap:+.1%}'}</td>" +
+                 f"{canary_cell}{paraphrase_cell}{holdout_cell}<td>{status}</td></tr>")
     return f"""
 <h2>Data-contaminatie: mitigaties en audit</h2>
 <p>Publieke benchmarks kunnen in pretraining, post-training of benchmark-optimalisatie terechtkomen. Een hoge publieke score is daarom geen zelfstandig bewijs van algemene vaardigheid. De audit vergelijkt dezelfde modelconfiguratie pas nadat zowel standaard- als private/live-resultaat bestaan; de gap is een <em>onderzoekssignaal</em>, geen bewijs van memorisatie of fraude.</p>
-<div class="tablewrap"><table class="sortable"><thead><tr>{sortable_header("Model")}{sortable_header("Modelpublicatie")}{sortable_header("Standaard composite", "contamination-static")}{sortable_header("Private/live score", "contamination-private")}{sortable_header("Verschil")}{sortable_header("Auditstatus")}</tr></thead><tbody>{body}</tbody></table></div>
+<div class="tablewrap"><table class="sortable"><thead><tr>{sortable_header("Model")}{sortable_header("Modelpublicatie")}{sortable_header("Standaard composite", "contamination-static")}{sortable_header("Private/live score", "contamination-private")}{sortable_header("Verschil")}{sortable_header("Canary-recall", "contamination-canary")}{sortable_header("Parafrase-gap", "contamination-paraphrase")}{sortable_header("Post-cutoff holdout", "contamination-holdout")}{sortable_header("Auditstatus")}</tr></thead><tbody>{body}</tbody></table></div>
 <div class="tablewrap"><table><thead><tr><th>Maatregel</th><th>Waarom</th><th>Bron / publicatiedatum</th><th>Lokale uitvoering</th></tr></thead><tbody>
 <tr><td>Private held-out set</td><td>Modelbouwers zien vragen/antwoorden niet vóór de eindmeting.</td><td>ARC-AGI-2 private eval · 2025</td><td>Private CSV-packs met SHA-256; publiceer een nieuwe pack niet vóór de run.</td></tr>
 <tr><td>Dynamische benchmark</td><td>Vragen ontstaan na de bekende modelcutoff.</td><td>LiveBench · 2024-06-27</td><td>Optionele live-lane; score, bron- en vraagdatum opslaan.</td></tr>
 <tr><td>Recente code-opgaven</td><td>Publicatiedatum van de opgave kan tegen modelrelease worden afgezet.</td><td>LiveCodeBench · 2024-03-12</td><td>Alleen opgaven ná release/cutoff; apart rapporteren.</td></tr>
-<tr><td>Canary-string probe</td><td>Onwaarschijnlijke string kan trainingsblootstelling detecteren.</td><td>BIG-bench GUID canary · 2022</td><td>Alleen logprob-geschikte engines; vergelijk met willekeurige GUID-controls.</td></tr>
+<tr><td>Canary-string probe <strong>(geïmplementeerd 2026-09-23)</strong></td><td>Woordelijke reproductie van een korte, bekende vraagfragment zonder de vraag zelf te geven, is een direct memorisatiesignaal.</td><td>BIG-bench GUID canary · 2022</td><td><code>contamination_audit.py::canary_recall</code> — 10 vaste GSM8K-testvragen, fragment-completion, tokenoverlap-drempel 0,6.</td></tr>
+<tr><td>Parafrase-invariantie <strong>(geïmplementeerd 2026-09-23)</strong></td><td>Grote accuraatheidsval bij een oppervlakkige herformulering (MC-opties omgekeerd) wijst op memorisatie van de exacte vorm, niet op redeneren.</td><td>Contaminatie-literatuur, algemeen erkende techniek</td><td><code>contamination_audit.py::paraphrase_invariance</code> — 15 vaste MMLU-vragen, deterministisch omgekeerde opties.</td></tr>
+<tr><td>Post-cutoff holdout <strong>(geïmplementeerd 2026-09-23)</strong></td><td>Nooit eerder gepubliceerde vragen kunnen per definitie niet in trainingsdata zitten.</td><td>Eigen EDS-pack, aangemaakt 2026-09-23</td><td><code>contamination_audit.py::post_cutoff_holdout</code> — 12 originele reken-/logica-opgaven, nooit online gepubliceerd.</td></tr>
 <tr><td>Modelprovenance</td><td>Release- en trainingscutoff maken tijdsvergelijking controleerbaar.</td><td>Modelcard/release note</td><td>Elke nieuwe run bewaart datum plus primaire bron-URL.</td></tr>
 </tbody></table></div>
 <section id="contamination-uitleg" class="benchmark-explanations"><h3>Interpretatie</h3><div class="explanation-grid">
 <article id="contamination-static"><h4>Standaard composite</h4><p>De bestaande publieke GSM8K/BBH/MMLU/HumanEval-composite.</p></article>
 <article id="contamination-private"><h4>Private/live score</h4><p>Gemiddelde van vergelijkbare, voltooide private of tijdgebonden lanes; video blijft apart wegens andere metriek.</p></article>
+<article id="contamination-canary"><h4>Canary-recall</h4><p>Fractie van 10 bekende GSM8K-testvragen die het model woord-voor-woord kon aanvullen vanaf alleen een kort fragment. Hoog = sterk memorisatiesignaal, niet per se een probleem voor de kernvaardigheid maar wel voor de betrouwbaarheid van de GSM8K-score zelf.</p></article>
+<article id="contamination-paraphrase"><h4>Parafrase-gap</h4><p>Accuraatheid op 15 originele MMLU-vragen minus accuraatheid op dezelfde vragen met omgekeerde antwoordopties. Positief en groot = afhankelijk van de exacte, oorspronkelijke vorm.</p></article>
+<article id="contamination-holdout"><h4>Post-cutoff holdout</h4><p>Accuraatheid op 12 nooit-gepubliceerde eigen opgaven. Vergelijk met de standaard composite: een grote kloof (publiek hoog, holdout laag) op vergelijkbare moeilijkheid is het onderzoekssignaal.</p></article>
 </div></section>
 """
 
