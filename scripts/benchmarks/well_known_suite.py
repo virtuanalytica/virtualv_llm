@@ -413,7 +413,18 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
     # onto the available VRAM without automatic CPU-offload distribution --
     # not just GLM. deepseek-v4-flash-0731-iq3xxs is ~104GiB, larger than
     # even all 4 GPUs combined (~100GiB), so it structurally needs --fit too.
-    NEEDS_FIT_PREFIXES = ("glm53-", "deepseek-v4-flash-0731-")
+    # 2026-09-23: qwen38-flash-next-ap-q4kxl (101.14 GiB) hit the same
+    # allocate-99-layers-without-fitting OOM as the other two prefixes below
+    # (cudaMalloc failed on CUDA0, 37.1 GiB requested) on dual-layer (64 GiB
+    # combined V100 VRAM) -- same root cause, extending the same allowlist
+    # rather than the size-based check the 2026-09-22 comment above wanted,
+    # since IQ4_XS's own on-disk size (90.45 GiB) does NOT predict it needing
+    # --fit (it loads fine at ~60 GiB VRAM without it) -- file size doesn't
+    # reliably predict VRAM footprint for this model family, so a real
+    # size-based rule would need actual measured-VRAM data per quant, not
+    # file size, to be safe. Deferred; allowlist is the same trade the two
+    # existing entries already made.
+    NEEDS_FIT_PREFIXES = ("glm53-", "deepseek-v4-flash-0731-", "qwen38-flash-next-ap-q4kxl")
     if name.startswith(NEEDS_FIT_PREFIXES):
         margins = ",".join("1024" for _ in profile["physical"])
         # 2026-09-22: a retry of glm53-reap50-iq3m-v100 (dual-layer) after the
