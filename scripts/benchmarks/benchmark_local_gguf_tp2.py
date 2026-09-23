@@ -50,6 +50,11 @@ MODELS = {
     "qwen38-flash-next-ap-iq4xs": Path(
         "/media/knight2/EDS2/models/llm/qwen38-flash-next-ap-iq4xs/AP-IQ4_XS/"
         "Qwen3.8-Flash-Next-AP-IQ4_XS.gguf"),
+    # 2026-09-23: MODEL_TEST_ROADMAP.md item 3 (next GGUF quality candidate).
+    # 101.14 GB, single-shard.
+    "qwen38-flash-next-ap-q4kxl": Path(
+        "/media/knight2/EDS2/models/llm/qwen38-flash-next-ap-q4kxl/AP-Q4_K_XL/"
+        "Qwen3.8-Flash-Next-AP-Q4_K_XL.gguf"),
     "deepseek-r1-qwen32b-q4": Path("/media/knight2/EDS2/models/llm/deepseek-r1-qwen32b/DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf"),
     "qwen36-27b-iq3": Path("/media/knight2/EDS2/models/qwen3.6-27b-unsloth-ud-iq3-xxs.gguf"),
     "qwen35-27b-q4": Path("/media/knight2/EDS2/lmstudio-models/lmstudio-community/Qwen3.5-27B-GGUF/Qwen3.5-27B-Q4_K_M.gguf"),
