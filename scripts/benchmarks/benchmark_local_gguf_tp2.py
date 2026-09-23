@@ -67,6 +67,13 @@ MODELS = {
     # name -- a JEV-conversation session recommended this exact upgrade).
     "deepseek-r1-qwen32b-q4": Path("/media/knight2/EDS2/models/llm/deepseek-r1-qwen32b-q4km/DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf"),
     "qwen36-27b-iq3": Path("/media/knight2/EDS2/models/qwen3.6-27b-unsloth-ud-iq3-xxs.gguf"),
+    # 2026-09-23: MoE (35B total / ~3B active) -- testing the hypothesis that
+    # its low active-param count lets it hit useful speed on the weaker
+    # A4000/RTX4000Ada cards even though dense ~30B models (Granite,
+    # DeepSeek-R1-32B) couldn't clear 25 t/s there.
+    "kat-coder-v2.5-dev": Path(
+        "/media/knight2/EDS2/models/llm/kat-coder-v2.5-dev/"
+        "Kwaipilot_KAT-Coder-V2.5-Dev-Q4_K_M.gguf"),
     # 2026-09-23: re-downloaded (weights were pruned after the 2026-09-18 sweep)
     # to test a lone single-ada placement for the requested ensemble/mixture
     # (main Qwen3.8 occupies the V100 pair; this candidate needs to fit and
