@@ -55,7 +55,11 @@ MODELS = {
     "qwen38-flash-next-ap-q4kxl": Path(
         "/media/knight2/EDS2/models/llm/qwen38-flash-next-ap-q4kxl/AP-Q4_K_XL/"
         "Qwen3.8-Flash-Next-AP-Q4_K_XL.gguf"),
-    "deepseek-r1-qwen32b-q4": Path("/media/knight2/EDS2/models/llm/deepseek-r1-qwen32b/DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf"),
+    # 2026-09-23: re-pointed at a fresh, correctly-labelled Q4_K_M download
+    # (old path/weights gone; the prior "-q4" key's 0.33 composite result
+    # strongly suggests it was actually IQ3_XXS-quality weights despite the
+    # name -- a JEV-conversation session recommended this exact upgrade).
+    "deepseek-r1-qwen32b-q4": Path("/media/knight2/EDS2/models/llm/deepseek-r1-qwen32b-q4km/DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf"),
     "qwen36-27b-iq3": Path("/media/knight2/EDS2/models/qwen3.6-27b-unsloth-ud-iq3-xxs.gguf"),
     # 2026-09-23: re-downloaded (weights were pruned after the 2026-09-18 sweep)
     # to test a lone single-ada placement for the requested ensemble/mixture
