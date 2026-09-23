@@ -39,6 +39,7 @@ from benchmark_local_gguf_tp2 import (  # noqa: E402
 )
 from humaneval_harness import run_humaneval  # noqa: E402
 from specialist_suite import SPECIALISTS, run_specialists  # noqa: E402
+from result_store import upsert_result  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 REPORTS = ROOT / "reports"
@@ -47,6 +48,15 @@ BASE_URL = f"http://127.0.0.1:{PORT}"
 MODEL_ALIAS = "x"
 LM_EVAL_BIN = str(Path.home() / ".local/bin/lm-eval")
 EVAL_PROTOCOL = "v4-mmlu-fewshot-20260918"
+# Set only for --external-url endpoints that need a bearer token (cloud providers
+# behind an OpenAI-compatible surface, e.g. Gemini/Antigravity's /v1beta/openai). Local
+# llama-server/vLLM endpoints have no auth, so this stays None for every existing caller.
+API_KEY: str | None = None
+# Most OpenAI-compatible servers, local and cloud, serve chat completions at
+# /v1/chat/completions -- but Gemini's OpenAI-compat layer serves it at
+# /chat/completions directly under its own /v1beta/openai base (no extra /v1
+# segment), so this is overridable per --external-url invocation instead of hardcoded.
+CHAT_COMPLETIONS_PATH = "/v1/chat/completions"
 
 MMLU_SUBJECT_SAMPLE = [
     "abstract_algebra", "anatomy", "astronomy", "college_computer_science",
@@ -73,7 +83,10 @@ PERF_PROMPT = ("Write a continuous technical explanation of point-in-time valida
 
 def request_json(path: str, payload: dict[str, Any] | None = None, timeout: int = 240) -> dict[str, Any]:
     body = None if payload is None else json.dumps(payload).encode()
-    req = Request(f"{BASE_URL}{path}", data=body, headers={"Content-Type": "application/json"})
+    headers = {"Content-Type": "application/json"}
+    if API_KEY:
+        headers["Authorization"] = f"Bearer {API_KEY}"
+    req = Request(f"{BASE_URL}{path}", data=body, headers=headers)
     with urlopen(req, timeout=timeout) as response:
         return json.loads(response.read())
 
@@ -83,7 +96,7 @@ def complete_text(prompt: str, max_tokens: int, stop: list[str] | None = None) -
                "max_tokens": max_tokens, "temperature": 0}
     if stop:
         payload["stop"] = stop
-    resp = request_json("/v1/chat/completions", payload)
+    resp = request_json(CHAT_COMPLETIONS_PATH, payload)
     return resp["choices"][0]["message"]["content"]
 
 
@@ -95,7 +108,7 @@ def complete_vision(prompt: str, image_path: Path, max_tokens: int) -> str:
         {"type": "text", "text": prompt},
         {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{encoded}"}},
     ]}], "max_tokens": max_tokens, "temperature": 0}
-    resp = request_json("/v1/chat/completions", payload)
+    resp = request_json(CHAT_COMPLETIONS_PATH, payload)
     return resp["choices"][0]["message"]["content"]
 
 
@@ -116,10 +129,13 @@ def run_lm_eval_task(
     num_fewshot: int | None = None,
 ) -> dict[str, Any]:
     out_dir = out_root / task
+    model_args = (f"model={MODEL_ALIAS},base_url={BASE_URL}{CHAT_COMPLETIONS_PATH},"
+                  f"num_concurrent=1,tokenized_requests=False,tokenizer_backend=None")
+    if API_KEY:
+        model_args += f",api_key={API_KEY}"
     args = [
         LM_EVAL_BIN, "--model", "local-chat-completions", "--apply_chat_template",
-        "--model_args", f"model={MODEL_ALIAS},base_url={BASE_URL}/v1/chat/completions,"
-                        f"num_concurrent=1,tokenized_requests=False,tokenizer_backend=None",
+        "--model_args", model_args,
         "--tasks", task, "--limit", str(limit), "--output_path", str(out_dir),
     ]
     if log_samples:
@@ -335,9 +351,17 @@ def run_suite_against_running_server(model_name: str,
     thread = threading.Thread(target=monitor_gpu, args=(stop, samples, physical_gpus), daemon=True)
     thread.start()
     try:
-        perf = request_json("/v1/completions", {
-            "model": MODEL_ALIAS, "prompt": PERF_PROMPT, "max_tokens": 256, "temperature": 0, "ignore_eos": True,
-        })
+        # Local llama-server/vLLM always serve raw /v1/completions with a
+        # llama.cpp-style "timings" block. Cloud chat-only providers (proxied
+        # or direct) often don't implement the legacy non-chat completions
+        # endpoint at all -- t/s is then simply unavailable rather than fatal,
+        # since the suite's actual scoring never depended on this call.
+        try:
+            perf = request_json("/v1/completions", {
+                "model": MODEL_ALIAS, "prompt": PERF_PROMPT, "max_tokens": 256, "temperature": 0, "ignore_eos": True,
+            })
+        except Exception as exc:
+            perf = {"error": f"{type(exc).__name__}: {exc}"}
     finally:
         stop.set()
         thread.join(timeout=2)
@@ -487,6 +511,9 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
             wait_ready(proc)
             result = run_suite_against_running_server(name, profile["physical"], specialists, vision_capable, access_profile)
             result["visible_device_probe"] = visible
+            result["engine"] = "llama.cpp"
+            result["hardware_profile"] = profile_name
+            result["physical_gpus"] = list(profile["physical"])
             result["topology"] = f"physical GPU {profile['physical']}, split={profile['split_mode']}"
             result["cuda_device_order"] = "PCI_BUS_ID"
             result["cuda_visible_devices"] = str(profile["visible"])
@@ -504,15 +531,8 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
                     proc.wait()
 
 
-def write_result(path: Path, payload: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_suffix(path.suffix + ".tmp")
-    tmp.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n")
-    tmp.replace(path)
-
-
 def main() -> int:
-    global BASE_URL, MODEL_ALIAS
+    global BASE_URL, MODEL_ALIAS, API_KEY, CHAT_COMPLETIONS_PATH
     parser = argparse.ArgumentParser()
     parser.add_argument("models", nargs="*")
     # Tensor split has twice reproduced a driver-level V100 hang during long
@@ -522,6 +542,11 @@ def main() -> int:
     parser.add_argument("--out", type=Path, default=REPORTS / "well_known_suite_20260917.json")
     parser.add_argument("--external-url", help="Base URL of an already-running OpenAI-compatible server")
     parser.add_argument("--external-model", default="x", help="Model alias accepted by --external-url")
+    parser.add_argument("--external-api-key-env", metavar="ENVVAR",
+                        help="Env var holding a bearer token to send as Authorization; unset for local servers")
+    parser.add_argument("--completions-path", default="/v1/chat/completions",
+                        help="Chat-completions path under --external-url (Gemini's OpenAI-compat layer "
+                             "uses /chat/completions with no extra /v1 segment)")
     parser.add_argument("--physical-gpus", help="Comma-separated physical GPU indexes for telemetry")
     parser.add_argument("--topology", help="Human-readable topology for an external server")
     parser.add_argument("--engine", default="vLLM", help="Runtime label for an external server")
@@ -560,18 +585,15 @@ def main() -> int:
     if args.external_url:
         BASE_URL = args.external_url.rstrip("/")
         MODEL_ALIAS = args.external_model
-    # Merge into any existing report rather than overwrite: this script is invoked
-    # once per model across a long multi-model sweep, and each invocation must not
-    # discard results already recorded for other models.
-    if args.out.exists():
-        payload: dict[str, Any] = json.loads(args.out.read_text())
-        payload.setdefault("results", [])
-    else:
-        payload = {
-            "suite": "gsm8k+bbh+truthfulqa_gen+mmlu_sample(8 subjects)+humaneval(40)",
-            "physical_gpus": [1, 2], "results": [],
-        }
-    payload["profile"] = args.profile
+        CHAT_COMPLETIONS_PATH = args.completions_path
+        if args.external_api_key_env:
+            API_KEY = os.environ.get(args.external_api_key_env)
+            if not API_KEY:
+                raise SystemExit(f"--external-api-key-env {args.external_api_key_env} is unset or empty")
+    default_report: dict[str, Any] = {
+        "suite": "gsm8k+bbh+truthfulqa_gen+mmlu_sample(8 subjects)+humaneval(40)",
+        "results": [],
+    }
     failures = 0
     for name in selected:
         print(f"START {name}", flush=True)
@@ -583,6 +605,8 @@ def main() -> int:
                 result = run_suite_against_running_server(name, physical, selected_specialists, args.vision_capable, args.access_profile)
                 result.update({
                     "engine": args.engine,
+                    "hardware_profile": args.profile,
+                    "physical_gpus": list(physical),
                     "topology": args.topology or f"physical GPU {list(physical)} · external server",
                     "cuda_device_order": "PCI_BUS_ID",
                     "external_base_url": BASE_URL,
@@ -596,16 +620,15 @@ def main() -> int:
                 result["model_release_source"] = args.model_release_source
             else:
                 result["model_release_date_status"] = "missing; add primary source before temporal contamination comparison"
-            payload["results"] = [r for r in payload["results"] if r.get("model") != name] + [result]
             print(f"DONE {name}: gsm8k={result['gsm8k']} humaneval={result['humaneval']['pass_at_1']} "
                   f"mmlu={result['mmlu_sample']['mean_accuracy']} t/s={result['completion_tokens_per_second']}",
                   flush=True)
         except Exception as exc:
             failures += 1
-            payload["results"] = [r for r in payload["results"] if r.get("model") != name] + [
-                {"model": name, "error": f"{type(exc).__name__}: {exc}"}]
+            result = {"model": name, "error": f"{type(exc).__name__}: {exc}",
+                      "hardware_profile": args.profile, "access_profile": args.access_profile}
             print(f"FAIL {name}: {type(exc).__name__}: {exc}", flush=True)
-        write_result(args.out, payload)
+        upsert_result(args.out, result, default_report)
     return 1 if failures else 0
 
 
