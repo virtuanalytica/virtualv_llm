@@ -57,6 +57,11 @@ MODELS = {
         "Qwen3.8-Flash-Next-AP-Q4_K_XL.gguf"),
     "deepseek-r1-qwen32b-q4": Path("/media/knight2/EDS2/models/llm/deepseek-r1-qwen32b/DeepSeek-R1-Distill-Qwen-32B-Q4_K_M.gguf"),
     "qwen36-27b-iq3": Path("/media/knight2/EDS2/models/qwen3.6-27b-unsloth-ud-iq3-xxs.gguf"),
+    # 2026-09-23: re-downloaded (weights were pruned after the 2026-09-18 sweep)
+    # to test a lone single-ada placement for the requested ensemble/mixture
+    # (main Qwen3.8 occupies the V100 pair; this candidate needs to fit and
+    # run fast on the RTX 4000 Ada alone, ~18GB weight vs 20GB VRAM).
+    "granite-4.2-30b": Path("/media/knight2/EDS2/models/llm/granite-4.2-30b/granite-4.2-30b-Q4_K_M.gguf"),
     "qwen35-27b-q4": Path("/media/knight2/EDS2/lmstudio-models/lmstudio-community/Qwen3.5-27B-GGUF/Qwen3.5-27B-Q4_K_M.gguf"),
     "gemma4-26b-a4b-q4": Path("/media/knight2/EDS2/lmstudio-models/lmstudio-community/gemma-4-26B-A4B-it-GGUF/gemma-4-26B-A4B-it-Q4_K_M.gguf"),
     "devstral-small2-24b-q4": Path("/media/knight2/EDS2/lmstudio-models/lmstudio-community/Devstral-Small-2-24B-Instruct-2512-GGUF/Devstral-Small-2-24B-Instruct-2512-Q4_K_M.gguf"),
