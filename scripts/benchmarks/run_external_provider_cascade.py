@@ -60,7 +60,16 @@ PROVIDERS = {
         "target_path": "/chat/completions", "api_key_env": "GEMINI_API_KEY",
         "strip_fields": "seed", "inject_fields_json": '{"reasoning_effort": "none"}',
         "engine": "Google Antigravity (Gemini API)",
-        "models": ["gemini-3.6-flash", "gemini-3.1-pro-preview", "gemini-3.5-flash"],
+        # 2026-09-23: "pro" model variants (e.g. gemini-3.1-pro-preview) 400 on
+        # reasoning_effort=none -- "Budget 0 is invalid. This model only works
+        # in thinking mode." "low" fixes that but then eats the same small
+        # max_tokens budget the "none" fix was for in the first place (flash
+        # models tested empty/wrong at max_tokens=50 with "low"). Rather than
+        # inject_fields per-model, stick to "flash" variants here, confirmed
+        # to work with reasoning_effort=none at well_known_suite.py's normal
+        # token budgets: gemini-3.6-flash (0.96/0.975/0.925 gsm8k/humaneval/
+        # mmlu) and gemini-3.5-flash (0.90-0.94/0.975/0.9125) both verified.
+        "models": ["gemini-3.6-flash", "gemini-3.5-flash", "gemini-3.8-flash"],
     },
 }
 
