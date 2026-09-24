@@ -57,6 +57,8 @@ def main() -> int:
     parser.add_argument("--report", type=Path, default=mixture.DEFAULT_OUT)
     parser.add_argument("--size", type=int, default=4)
     parser.add_argument("--top", type=int, default=10)
+    parser.add_argument("--min-sequential-tps", type=float, default=3.0,
+                        help="Skip combinations whose one-machine sequential rate is below this. 0 disables.")
     parser.add_argument("--require-member", action="append", default=[])
     args = parser.parse_args()
     if args.size < 2:
@@ -91,9 +93,21 @@ def main() -> int:
              for model in models for task in tasks}
     mixture.load_samples = lambda model, task: cache[(model, task)]
 
+    def sequential_rate(members: tuple[str, ...]) -> float | None:
+        rates: list[float] = []
+        for name in members:
+            value = rows[name].get("completion_tokens_per_second")
+            if not isinstance(value, (int, float)) or value <= 0:
+                return None
+            rates.append(float(value))
+        return 1.0 / sum(1.0 / value for value in rates)
+
     required = set(args.require_member)
-    candidates = (members for members in combinations(models, args.size)
-                  if required.issubset(members))
+    candidates = (
+        members for members in combinations(models, args.size)
+        if required.issubset(members)
+        and (args.min_sequential_tps <= 0 or (sequential_rate(members) or 0) >= args.min_sequential_tps)
+    )
     scored = [score_members(members, report) for members in candidates]
     scored.sort(key=lambda row: row["core_composite_4task"], reverse=True)
     output = {
@@ -102,6 +116,7 @@ def main() -> int:
         "eligible_models": len(models),
         "combinations_scored": len(scored),
         "required_members": args.require_member,
+        "min_sequential_tps": args.min_sequential_tps,
         "tie_break_order": models,
         "results": scored[:args.top],
     }
