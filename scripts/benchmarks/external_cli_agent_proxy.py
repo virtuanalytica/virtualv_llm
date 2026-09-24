@@ -144,9 +144,13 @@ def _timings(usage: dict[str, Any] | None) -> dict[str, Any] | None:
 BACKENDS = {"codex": complete_via_codex, "claude-cli": complete_via_claude_cli}
 
 
+_usage_log_lock = threading.Lock()
+
+
 class Handler(BaseHTTPRequestHandler):
     backend_name: str = ""
     default_model: str = ""
+    usage_log: str | None = None
 
     def log_message(self, fmt: str, *args: Any) -> None:  # quiet; caller's own log captures stdout
         pass
@@ -202,6 +206,9 @@ class Handler(BaseHTTPRequestHandler):
         }
         if usage:
             body["cost_usd"] = usage["cost_usd"]
+            if self.usage_log:
+                with _usage_log_lock, open(self.usage_log, "a") as fh:
+                    fh.write(json.dumps({"path": self.path, "elapsed_sec": round(elapsed, 2), **usage}) + "\n")
             timings = _timings(usage)
             if timings:
                 body["timings"] = timings
@@ -213,12 +220,14 @@ def main() -> int:
     parser.add_argument("--backend", required=True, choices=sorted(BACKENDS))
     parser.add_argument("--model", required=True, help="Model slug passed through to the backend CLI")
     parser.add_argument("--port", type=int, required=True)
+    parser.add_argument("--usage-log", help="append one JSON line of real token/cost accounting per request")
     args = parser.parse_args()
     for name in ("codex", "claude"):
         if name in args.backend and shutil.which(name) is None:
             raise SystemExit(f"{name} CLI not found on PATH")
 
-    handler = type("BoundHandler", (Handler,), {"backend_name": args.backend, "default_model": args.model})
+    handler = type("BoundHandler", (Handler,), {"backend_name": args.backend, "default_model": args.model,
+                                           "usage_log": args.usage_log})
     server = ThreadingHTTPServer(("127.0.0.1", args.port), handler)
     print(f"external_cli_agent_proxy: backend={args.backend} model={args.model} "
           f"listening on 127.0.0.1:{args.port}", flush=True)

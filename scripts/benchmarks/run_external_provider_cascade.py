@@ -30,6 +30,7 @@ included here; add a PROVIDERS entry once credentials exist.
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import socket
 import subprocess
@@ -98,10 +99,11 @@ def wait_for_proxy(port: int, timeout: float = 15.0) -> None:
     raise TimeoutError(f"proxy did not open port {port} within {timeout}s")
 
 
-def proxy_command(provider: dict, model: str, port: int) -> list[str]:
+def proxy_command(provider: dict, model: str, port: int, usage_log: Path | None = None) -> list[str]:
     if provider["kind"] == "cli":
-        return ["python3", str(CLI_PROXY), "--backend", provider["backend"], "--model", model,
+        cmd = ["python3", str(CLI_PROXY), "--backend", provider["backend"], "--model", model,
                "--port", str(port)]
+        return cmd + (["--usage-log", str(usage_log)] if usage_log else [])
     if provider["kind"] == "sanitizing_http":
         cmd = ["python3", str(SANITIZING_PROXY), "--port", str(port),
               "--target-base-url", provider["target_base_url"],
@@ -115,6 +117,36 @@ def proxy_command(provider: dict, model: str, port: int) -> list[str]:
     raise ValueError(f"unknown provider kind: {provider['kind']}")
 
 
+def usage_log_path(name: str) -> Path:
+    return ROOT / "reports/benchmark_logs" / f"{name}_cli_usage.jsonl"
+
+
+def record_cli_usage(name: str) -> None:
+    """Sum the proxy's per-request accounting into the finished row.
+
+    Also states that the row ran without the per-request output budget local
+    models get (the Claude CLI cannot truncate; see external_cli_agent_proxy.py).
+    """
+    log = usage_log_path(name)
+    if not log.exists():
+        return
+    entries = [json.loads(line) for line in log.read_text().splitlines() if line.strip()]
+    sys.path.insert(0, str(ROOT / "scripts/benchmarks"))
+    from result_store import locked_report  # same lock every suite writer uses
+    with locked_report(REPORT) as payload:
+        row = next((r for r in payload.get("results", []) if r.get("model") == name), None)
+        if row is None:
+            return
+        row["cli_usage"] = {
+            "requests": len(entries),
+            "prompt_tokens": sum(e.get("prompt_tokens") or 0 for e in entries),
+            "completion_tokens": sum(e.get("completion_tokens") or 0 for e in entries),
+            "cost_usd_list_price": round(sum(e.get("cost_usd") or 0 for e in entries), 4),
+            "source": str(log.relative_to(ROOT)),
+        }
+        row["output_budget"] = "uncapped: claude -p cannot truncate at max_tokens (local rows are capped)"
+
+
 def run_one(row_name: str, provider_key: str, model: str, specialists: str) -> int:
     provider = PROVIDERS[provider_key]
     name = f"{row_name}-{model}"
@@ -124,11 +156,15 @@ def run_one(row_name: str, provider_key: str, model: str, specialists: str) -> i
               "--specialists", specialists]
 
     port = free_port()
-    proxy_proc = subprocess.Popen(proxy_command(provider, model, port), cwd=ROOT)
+    usage_log = usage_log_path(name) if provider.get("backend") == "claude-cli" else None
+    proxy_proc = subprocess.Popen(proxy_command(provider, model, port, usage_log), cwd=ROOT)
     try:
         wait_for_proxy(port)
         cmd = common + ["--external-url", f"http://127.0.0.1:{port}", "--external-model", model]
-        return subprocess.run(cmd, cwd=ROOT).returncode
+        rc = subprocess.run(cmd, cwd=ROOT).returncode
+        if provider.get("backend") == "claude-cli":
+            record_cli_usage(name)
+        return rc
     finally:
         proxy_proc.terminate()
         try:
