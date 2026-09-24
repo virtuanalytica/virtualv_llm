@@ -40,10 +40,12 @@ from benchmark_local_gguf_tp2 import (  # noqa: E402
 from humaneval_harness import run_humaneval  # noqa: E402
 from specialist_suite import SPECIALISTS, run_specialists  # noqa: E402
 from contamination_audit import METHODS as CONTAMINATION_METHODS, run_contamination_audit  # noqa: E402
-from result_store import upsert_result  # noqa: E402
+from result_store import locked_report, upsert_result  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 REPORTS = ROOT / "reports"
+NUMERAI_DASHBOARD = Path(
+    "/media/knight2/EDS2/projects/numerai-signals/reports/dual_v100_nvlink_benchmark.html")
 PORT = 18011
 BASE_URL = f"http://127.0.0.1:{PORT}"
 MODEL_ALIAS = "x"
@@ -291,7 +293,39 @@ def score_bbh_logged_samples(out_dir: Path, task: str) -> dict[str, Any] | None:
     return {"accuracy": round(correct / total, 4) if total else None, "n": total}
 
 
-def run_mmlu_sample(out_root: Path) -> dict[str, Any]:
+def publish_partial(report_path: Path, model: str, note: str, **fields: Any) -> None:
+    """Write the scores finished so far and rebuild the dashboard.
+
+    A later task may still be running. The row stays ``status=running`` until
+    the caller replaces it with the finished suite result.
+    """
+    try:
+        with locked_report(report_path) as payload:
+            rows = payload.setdefault("results", [])
+            row = next((item for item in rows if item.get("model") == model), None)
+            if row is None:
+                row = {"model": model}
+                rows.append(row)
+            row.pop("error", None)
+            row["status"] = "running"
+            row["progress_note"] = note
+            row.update(fields)
+        dest = Path(os.environ.get("VIRTUALV_DASHBOARD_OUT", str(NUMERAI_DASHBOARD)))
+        env = os.environ.copy()
+        env["VIRTUALV_DASHBOARD_OUT"] = str(dest)
+        subprocess.run(
+            [sys.executable, str(ROOT / "scripts/benchmarks/build_dual_v100_html.py")],
+            cwd=ROOT, env=env, check=False,
+        )
+        local = REPORTS / "dual_v100_nvlink_benchmark.html"
+        if dest.exists() and dest.resolve() != local.resolve():
+            local.write_bytes(dest.read_bytes())
+        print(f"dashboard {note}", flush=True)
+    except Exception as exc:
+        print(f"dashboard update failed: {type(exc).__name__}: {exc}", flush=True)
+
+
+def run_mmlu_sample(out_root: Path, on_subject: Any = None) -> dict[str, Any]:
     per_subject = {}
     correct_total = 0
     n_total = 0
@@ -314,6 +348,8 @@ def run_mmlu_sample(out_root: Path) -> dict[str, Any]:
         if acc_key and metrics.get(acc_key) is not None:
             correct_total += metrics[acc_key] * MMLU_LIMIT_PER_SUBJECT
             n_total += MMLU_LIMIT_PER_SUBJECT
+        if on_subject is not None:
+            on_subject(subject, per_subject, n_total)
     return {
         "per_subject": per_subject,
         "mean_accuracy": round(correct_total / n_total, 4) if n_total else None,
@@ -321,7 +357,7 @@ def run_mmlu_sample(out_root: Path) -> dict[str, Any]:
     }
 
 
-def run_bbh_sample(out_root: Path) -> dict[str, Any]:
+def run_bbh_sample(out_root: Path, on_subtask: Any = None) -> dict[str, Any]:
     per_subtask: dict[str, Any] = {}
     correct_total = 0.0
     n_total = 0
@@ -336,6 +372,8 @@ def run_bbh_sample(out_root: Path) -> dict[str, Any]:
             count = rescored["n"] if rescored is not None else BBH_LIMIT
             correct_total += acc * count
             n_total += count
+        if on_subtask is not None:
+            on_subtask(subtask, per_subtask, n_total)
     return {
         "per_subtask": per_subtask,
         "mean_accuracy": round(correct_total / n_total, 4) if n_total else None,
@@ -349,18 +387,44 @@ def run_suite_against_running_server(model_name: str,
                                      specialists: tuple[str, ...] = (),
                                      vision_capable: bool = False,
                                      access_profile: str = "sandbox",
-                                     contamination_audit: tuple[str, ...] = ()) -> dict[str, Any]:
+                                     contamination_audit: tuple[str, ...] = (),
+                                     report_path: Path | None = None) -> dict[str, Any]:
     out_root = REPORTS / "lm_eval_runs" / model_name
     started = time.time()
+    report = report_path or (REPORTS / "well_known_suite_20260917.json")
+
+    def publish(note: str, **fields: Any) -> None:
+        publish_partial(report, model_name, note, **fields)
 
     # log_samples on every task (not just MMLU): scripts/benchmarks/mixture_of_models.py
     # builds a post-hoc per-question ensemble across already-tested models by reading
     # these logged samples back, so no extra GPU time is needed for the mixture step.
     gsm8k = run_lm_eval_task("gsm8k", GSM8K_LIMIT, out_root, log_samples=True)
+    publish("bezig · GSM8K af", gsm8k=gsm8k.get("metrics", gsm8k))
     truthfulqa = run_lm_eval_task("truthfulqa_gen", TRUTHFULQA_LIMIT, out_root, log_samples=True)
-    bbh = run_bbh_sample(out_root)
-    mmlu = run_mmlu_sample(out_root)
+    publish("bezig · TruthfulQA af", truthfulqa_gen=truthfulqa.get("metrics", truthfulqa))
+
+    def publish_bbh(subtask: str, per_subtask: dict[str, Any], n_total: int) -> None:
+        done = [value for value in per_subtask.values() if isinstance(value, (int, float))]
+        mean = round(sum(done) / len(done), 4) if done else None
+        publish(
+            f"bezig · BBH {subtask} ({len(per_subtask)}/{len(BBH_SUBTASKS)})",
+            bbh={"per_subtask": dict(per_subtask), "mean_accuracy": mean, "n_samples": n_total},
+        )
+
+    bbh = run_bbh_sample(out_root, on_subtask=publish_bbh)
+
+    def publish_mmlu(subject: str, per_subject: dict[str, Any], n_total: int) -> None:
+        done = [value for value in per_subject.values() if isinstance(value, (int, float))]
+        mean = round(sum(done) / len(done), 4) if done else None
+        publish(
+            f"bezig · MMLU {subject} ({len(per_subject)}/{len(MMLU_SUBJECT_SAMPLE)})",
+            mmlu_sample={"per_subject": dict(per_subject), "mean_accuracy": mean, "n_samples": n_total},
+        )
+
+    mmlu = run_mmlu_sample(out_root, on_subject=publish_mmlu)
     humaneval = run_humaneval(complete_text, limit=HUMANEVAL_LIMIT)
+    publish("bezig · HumanEval af", humaneval=humaneval)
     # Specialist scores have their own artifact/table. They are intentionally
     # excluded from the general composite: all historical models stay blank
     # rather than acquiring an incomparable zero or a retroactive score.
@@ -414,7 +478,8 @@ def run_suite_against_running_server(model_name: str,
 def benchmark_model(name: str, model_path: Path, profile_name: str,
                     specialists: tuple[str, ...] = (), vision_capable: bool = False,
                     access_profile: str = "sandbox",
-                    contamination_audit: tuple[str, ...] = ()) -> dict[str, Any]:
+                    contamination_audit: tuple[str, ...] = (),
+                    report_path: Path | None = None) -> dict[str, Any]:
     global LM_EVAL_TIMEOUT, REQUEST_TIMEOUT
     if name.startswith("mimo-v26-pro-"):
         # 42B-active weights mostly on CPU: a 256-token decode and a 50-item
@@ -549,8 +614,9 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
         try:
             # 320GB MiMo shards take far longer than the 180s default to mmap.
             wait_ready(proc, 3600 if name.startswith("mimo-v26-pro-") else 180)
-            result = run_suite_against_running_server(name, profile["physical"], specialists, vision_capable,
-                                                      access_profile, contamination_audit)
+            result = run_suite_against_running_server(
+                name, profile["physical"], specialists, vision_capable,
+                access_profile, contamination_audit, report_path)
             result["visible_device_probe"] = visible
             result["engine"] = "llama.cpp"
             result["hardware_profile"] = profile_name
@@ -663,8 +729,9 @@ def main() -> int:
                 physical = tuple(int(value) for value in (args.physical_gpus or "").split(",") if value.strip())
                 if not physical:
                     raise ValueError("--physical-gpus is required with --external-url")
-                result = run_suite_against_running_server(name, physical, selected_specialists, args.vision_capable,
-                                                          args.access_profile, selected_contamination)
+                result = run_suite_against_running_server(
+                    name, physical, selected_specialists, args.vision_capable,
+                    args.access_profile, selected_contamination, args.out)
                 result.update({
                     "engine": args.engine,
                     "hardware_profile": args.profile,
@@ -676,8 +743,9 @@ def main() -> int:
                     "excluded_physical_gpus": [idx for idx in (0, 1, 2, 3) if idx not in physical],
                 })
             else:
-                result = benchmark_model(name, MODELS[name], args.profile, selected_specialists, args.vision_capable,
-                                         args.access_profile, selected_contamination)
+                result = benchmark_model(
+                    name, MODELS[name], args.profile, selected_specialists, args.vision_capable,
+                    args.access_profile, selected_contamination, args.out)
             if args.model_release_date:
                 result["model_release_date"] = args.model_release_date
                 result["model_release_source"] = args.model_release_source
