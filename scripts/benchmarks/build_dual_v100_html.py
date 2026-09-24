@@ -388,7 +388,9 @@ def well_known_rows() -> list[dict]:
         # completeness is judged on the composite's 4 metrics only.
         is_complete_current = current_protocol and composite is not None
         error = str(r.get("error", ""))
-        if (name.startswith("qwen38-flash-next-merlin-w4a16-") and name.endswith("-v100")) or (
+        if r.get("status") == "running":
+            status = str(r.get("progress_note") or "bezig · suite loopt")
+        elif (name.startswith("qwen38-flash-next-merlin-w4a16-") and name.endswith("-v100")) or (
                 "Min capability: 75" in error and "Current capability: 70" in error):
             status = "geteste backend onverenigbaar · SM75 vereist; 1Cat-herbeoordeling volgt"
         elif (name.startswith("qwen38-flash-next-merlin-w4a16-") and name.endswith("-allfour")) or (
@@ -691,7 +693,9 @@ def large_model_provenance_section() -> str:
     for row in results:
         name = row.get("model", "—")
         source = row.get("model_source") or f"https://huggingface.co/{row['source_repo']}"
-        if row.get("status") == "blocked" or "geblokkeerd" in str(row.get("error", "")).lower():
+        if row.get("status") == "running":
+            status = str(row.get("progress_note") or "bezig · suite loopt")
+        elif row.get("status") == "blocked" or "geblokkeerd" in str(row.get("error", "")).lower():
             status = "geblokkeerd · niet gedownload"
         elif name == winner:
             status = "winnaar · weights behouden"
