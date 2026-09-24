@@ -107,6 +107,11 @@ MODELS = {
     "glm53-reap50-iq4xs-allfour": Path("/media/knight2/EDS2/models/llm/glm53-reap50-iq4xs/GLM-5.3-Flash-REAP50-IQ4_XS.gguf"),
     "glm53-reap50-q4km-v100": Path("/media/knight2/EDS2/models/llm/glm53-reap50-q4km/GLM-5.3-Flash-REAP50-Q4_K_M.gguf"),
     "glm53-reap50-q4km-allfour": Path("/media/knight2/EDS2/models/llm/glm53-reap50-q4km/GLM-5.3-Flash-REAP50-Q4_K_M.gguf"),
+    # 2026-09-24: Xiaomi MiMo-V2.6-Pro 1.02T/42B. Only AesSedai BPW2.5 is on
+    # disk; point at shard 1 so llama.cpp opens the split set.
+    "mimo-v26-pro-bpw2.5": Path(
+        "/media/knight2/EDS2/models/llm/mimo-v26-pro-bpw2.5/BPW2.5/"
+        "MiMo-V2.6-Pro-RL-BPW2.5-00001-of-00008.gguf"),
 }
 
 PROFILES = {

@@ -328,6 +328,11 @@ WELL_KNOWN_LABELS = {
     "qwen38-flash-next-ap-q4km-allfour": "Qwen3.8 Flash-Next AP-Q4_K_M · 4 GPU's",
     "qwen38-flash-next-ap-iq2s-v100": "Qwen3.8 Flash-Next AP-IQ2_S · 2×V100",
     "qwen38-flash-next-ap-iq2s-allfour": "Qwen3.8 Flash-Next AP-IQ2_S · 4 GPU's",
+    "qwen38-flash-next-ap-q4kxl-v100": "Qwen3.8 Flash-Next AP-Q4_K_XL · 2×V100",
+    "qwen38-flash-next-ap-q4kxl-allfour": "Qwen3.8 Flash-Next AP-Q4_K_XL · 4 GPU's",
+    "mimo-v26-pro-mxfp4": "MiMo-V2.6-Pro 1T MXFP4 (q4)",
+    "mimo-v26-pro-bpw3": "MiMo-V2.6-Pro 1T BPW3.0 (q3)",
+    "mimo-v26-pro-bpw2.5": "MiMo-V2.6-Pro 1T BPW2.5 (q2.5)",
 }
 WELL_KNOWN_ORDER = list(WELL_KNOWN_LABELS)
 ACCESS_PROFILES = (
@@ -391,6 +396,8 @@ def well_known_rows() -> list[dict]:
             status = "onverenigbaar · onvoldoende VRAM voor dit profiel"
         elif name.startswith("qwen38-flash-next-ap-") and r.get("error"):
             status = "mislukt · GGUF diagnose/herpoging gepland"
+        elif r.get("status") == "blocked" or "geblokkeerd" in error.lower():
+            status = "geblokkeerd · gewicht niet publiceerbaar op deze schijf"
         elif r.get("error"):
             status = "mislukt · diagnose/herpoging gepland"
         elif is_complete_current:
@@ -684,10 +691,14 @@ def large_model_provenance_section() -> str:
     for row in results:
         name = row.get("model", "—")
         source = row.get("model_source") or f"https://huggingface.co/{row['source_repo']}"
-        if name == winner:
+        if row.get("status") == "blocked" or "geblokkeerd" in str(row.get("error", "")).lower():
+            status = "geblokkeerd · niet gedownload"
+        elif name == winner:
             status = "winnaar · weights behouden"
         elif name in pruned:
             status = "volledig getest · veilig verwijderd"
+        elif row.get("error"):
+            status = "mislukt · geen volledige suite"
         else:
             status = "volledig getest · cascade actief"
         rows.append("<tr>" + "".join([

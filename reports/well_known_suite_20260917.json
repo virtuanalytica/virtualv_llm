@@ -11227,6 +11227,40 @@
         3
       ],
       "model_release_date_status": "missing; add primary source before temporal contamination comparison"
+    },
+    {
+      "model": "mimo-v26-pro-mxfp4",
+      "status": "blocked",
+      "error": "geblokkeerd: q4-klasse MXFP4 van MiMo-V2.6-Pro (1.02T/42B) is niet uitvoerbaar op deze machine. AesSedai/MiMo-V2.6-Pro-RL-GGUF revisie a0af536b79b0b312eaddb7fea6a3f56e50e739c0 publiceert MXFP4 niet (alleen KLD-metadata, 577.7 GB, 4.52 bpw). kernelpool/MiMo-V2.6-Pro-RL-MXFP4-GGUF revisie c3d772ed7225b75c00c69c1da96429c9f630e3fe heeft part1 480000000000 bytes + part2 77146510560 bytes (~557 GB). Na verwijderen van niet-actieve gewichten blijft 382 GB vrij. Officiële Xiaomi-checkpoint is mxfp4-opslag met FP8-compute (~566 GB) en V100 SM70 heeft daar geen kernel voor. Geen score.",
+      "access_profile": "sandbox",
+      "eval_protocol": "v4-mmlu-fewshot-20260918",
+      "source_repo": "kernelpool/MiMo-V2.6-Pro-RL-MXFP4-GGUF",
+      "source_revision": "c3d772ed7225b75c00c69c1da96429c9f630e3fe",
+      "model_source": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL",
+      "model_release_date": "2026-09-21",
+      "model_release_source": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL",
+      "quantization": "MXFP4",
+      "weight_bytes": 557146510560,
+      "engine": "niet geladen",
+      "topology": "niet geladen · 2× V100 64 GB, schijf 382 GB vrij",
+      "checked_at": "2026-09-24"
+    },
+    {
+      "model": "mimo-v26-pro-bpw3",
+      "status": "blocked",
+      "error": "geblokkeerd: q3-klasse BPW3.0/BPW3.5 van MiMo-V2.6-Pro staat niet als gewicht online. AesSedai/MiMo-V2.6-Pro-RL-GGUF revisie a0af536b79b0b312eaddb7fea6a3f56e50e739c0 heeft op 2026-09-24 alleen de mappen BPW2.0 en BPW2.5. De KLD-tabel noemt BPW3.0 (383.67 GB, mean KLD 0.184) en BPW3.5 (447.62 GB, mean KLD 0.141); beide directory's geven HTTP 404. 383 GB past ook niet in de 382 GB vrije ruimte met marge. Geen bartowski/unsloth/mradermacher Q3_K_M. Geen score.",
+      "access_profile": "sandbox",
+      "eval_protocol": "v4-mmlu-fewshot-20260918",
+      "source_repo": "AesSedai/MiMo-V2.6-Pro-RL-GGUF",
+      "source_revision": "a0af536b79b0b312eaddb7fea6a3f56e50e739c0",
+      "model_source": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL",
+      "model_release_date": "2026-09-21",
+      "model_release_source": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL",
+      "quantization": "BPW3.0",
+      "weight_bytes": 383669428552,
+      "engine": "niet geladen",
+      "topology": "niet geladen · directory 404 en groter dan vrije schijf",
+      "checked_at": "2026-09-24"
     }
   ],
   "bbh_scoring_fix": {

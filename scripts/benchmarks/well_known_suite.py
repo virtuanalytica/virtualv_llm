@@ -95,7 +95,12 @@ PERF_PROMPT = ("Write a continuous technical explanation of point-in-time valida
                "machine learning. Use complete sentences and keep writing until the token budget ends.")
 
 
-def request_json(path: str, payload: dict[str, Any] | None = None, timeout: int = 240) -> dict[str, Any]:
+REQUEST_TIMEOUT = 240
+
+
+def request_json(path: str, payload: dict[str, Any] | None = None, timeout: int | None = None) -> dict[str, Any]:
+    if timeout is None:
+        timeout = REQUEST_TIMEOUT
     body = None if payload is None else json.dumps(payload).encode()
     headers = {"Content-Type": "application/json"}
     if API_KEY:
@@ -147,6 +152,8 @@ def run_lm_eval_task(
                   f"num_concurrent=1,tokenized_requests=False,tokenizer_backend=None")
     if API_KEY:
         model_args += f",api_key={API_KEY}"
+    if REQUEST_TIMEOUT > 300:
+        model_args += f",timeout={REQUEST_TIMEOUT}"
     args = [
         LM_EVAL_BIN, "--model", "local-chat-completions", "--apply_chat_template",
         "--model_args", model_args,
@@ -408,6 +415,12 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
                     specialists: tuple[str, ...] = (), vision_capable: bool = False,
                     access_profile: str = "sandbox",
                     contamination_audit: tuple[str, ...] = ()) -> dict[str, Any]:
+    global LM_EVAL_TIMEOUT, REQUEST_TIMEOUT
+    if name.startswith("mimo-v26-pro-"):
+        # 42B-active weights mostly on CPU: a 256-token decode and a 50-item
+        # GSM8K batch both exceed the fast-model ceilings.
+        LM_EVAL_TIMEOUT = 6 * 3600
+        REQUEST_TIMEOUT = 3600
     profile = PROFILES[profile_name]
     log_path = REPORTS / "lm_eval_runs" / f"{name}-wellknown-{profile_name}-server.log"
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -469,7 +482,7 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
     # size-based rule would need actual measured-VRAM data per quant, not
     # file size, to be safe. Deferred; allowlist is the same trade the two
     # existing entries already made.
-    NEEDS_FIT_PREFIXES = ("glm53-", "deepseek-v4-flash-0731-", "qwen38-flash-next-ap-q4kxl")
+    NEEDS_FIT_PREFIXES = ("glm53-", "deepseek-v4-flash-0731-", "qwen38-flash-next-ap-q4kxl", "mimo-v26-pro-")
     if name.startswith(NEEDS_FIT_PREFIXES):
         margins = ",".join("1024" for _ in profile["physical"])
         # 2026-09-22: a retry of glm53-reap50-iq3m-v100 (dual-layer) after the
@@ -529,7 +542,8 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
     with log_path.open("w") as log:
         proc = subprocess.Popen(command, env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
         try:
-            wait_ready(proc)
+            # 320GB MiMo shards take far longer than the 180s default to mmap.
+            wait_ready(proc, 3600 if name.startswith("mimo-v26-pro-") else 180)
             result = run_suite_against_running_server(name, profile["physical"], specialists, vision_capable,
                                                       access_profile, contamination_audit)
             result["visible_device_probe"] = visible
