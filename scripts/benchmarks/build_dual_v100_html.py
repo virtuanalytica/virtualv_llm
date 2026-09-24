@@ -544,6 +544,7 @@ SPECIALIST_LABELS = {
     "eq": "EQ · social reasoning",
     "fq": "FQ · robot simulatie",
     "qq": "QQ · quantum",
+    "finance": "Finance · feiten en modellering",
 }
 
 
@@ -575,7 +576,7 @@ def specialist_section() -> str:
     profile_tables = "".join(f"<h3>{title}</h3>{table(key)}" for key, title in ACCESS_PROFILES)
     return f"""
 <h2>Eigen specialistische suite</h2>
-<p>Optionele expert-suite. Bestaande modelrijen blijven bewust leeg: een em-dash betekent <em>niet gedraaid</em>, nooit 0%. Elke specialist heeft een eigen lokale, bewerkbare CSV waarvan antwoord- en rubricvelden nooit naar het model gaan. Vision bevat synthetische object- en ruimtelijke assets; Video meet een lokaal gerenderd MP4-artifact; FQ valideert actuatorcommando’s in een deterministische differential-drive-simulator. Vision en Video hebben elk een harde grens van vijf minuten. IQ/EQ zijn taaklabels voor abstract respectievelijk sociaal-emotioneel redeneren, geen klinische persoonsmetingen. Geen score telt mee in de algemene Composite.</p>
+<p>Optionele expert-suite. Bestaande modelrijen blijven bewust leeg: een em-dash betekent <em>niet gedraaid</em>, nooit 0%. Elke specialist heeft een eigen lokale, bewerkbare CSV waarvan antwoord- en rubricvelden nooit naar het model gaan. Vision bevat synthetische object- en ruimtelijke assets; Video meet een lokaal gerenderd MP4-artifact; FQ valideert actuatorcommando’s in een deterministische differential-drive-simulator. Vision en Video hebben elk een harde grens van vijf minuten. IQ/EQ zijn taaklabels voor abstract respectievelijk sociaal-emotioneel redeneren, geen klinische persoonsmetingen. Finance leest feiten uit de identifier- en cryptobestanden en toetst financiële modellering. Geen score telt mee in de algemene Composite.</p>
 {profile_tables}
 <section id="specialist-uitleg" class="benchmark-explanations"><h3>Specialistische meetdefinities</h3><div class="explanation-grid">
 <article id="specialist-chemistry"><h4>Chemistry · eigen holdout</h4><p>Lokale CSV met eigen vragen en antwoordletters; de GPQA-publicatie (2023-11-20) is alleen de moeilijkheidsreferentie.</p></article>
@@ -586,6 +587,7 @@ def specialist_section() -> str:
 <article id="specialist-eq"><h4>EQ · social reasoning</h4><p>Kalibratie, empathische triage en conflicthantering met expliciete rubrics; geen klinische EQ-diagnose.</p></article>
 <article id="specialist-fq"><h4>FQ · robot simulatie</h4><p>Het model produceert wielactuator-JSON; de scorer berekent positie en heading met differential-drive-kinematica.</p></article>
 <article id="specialist-qq"><h4>QQ · quantum</h4><p>Quantumtoestanden, meting, communicatie, metrologie en quantumchemie/VQE.</p></article>
+<article id="specialist-finance"><h4>Finance · feiten en modellering</h4><p>Feiten uit EDS_latest.csv, crypto_metadata.parquet en crypto_gics_extended.parquet (namen, ISIN, GICS, domicile, valuta, genesis, labels) plus methodevragen: OLS, integratie van tijdreeksen, correlatiematrices, CVaR, duration, lookahead en EUR-marktkapitalisatie.</p></article>
 </div></section>
 """
 
