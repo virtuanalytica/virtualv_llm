@@ -484,7 +484,10 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
     # existing entries already made.
     NEEDS_FIT_PREFIXES = ("glm53-", "deepseek-v4-flash-0731-", "qwen38-flash-next-ap-q4kxl", "mimo-v26-pro-")
     if name.startswith(NEEDS_FIT_PREFIXES):
-        margins = ",".join("1024" for _ in profile["physical"])
+        # MiMo-V2.6-Pro BPW2.5 is 320 GB. A 1024 MiB fit margin asked CUDA0
+        # for 33463 MiB and cudaMalloc failed on the 32 GB V100 (2026-09-24).
+        # Keep every expert on CPU and leave 4 GB free on each V100.
+        margins = ",".join("4096" if name.startswith("mimo-v26-pro-") else "1024" for _ in profile["physical"])
         # 2026-09-22: a retry of glm53-reap50-iq3m-v100 (dual-layer) after the
         # tensor_split fix below still failed. First diagnosis wrongly blamed
         # a tensor_split regression -- that was reading a stale server log
@@ -500,6 +503,8 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
         # next attempt's server log has real diagnostics instead of guessing
         # further from a stale file.
         command.extend(["--fit", "on", "--fit-ctx", "4096", "--fit-target", margins, "--verbose"])
+        if name.startswith("mimo-v26-pro-"):
+            command.append("--cpu-moe")
         if name.startswith("glm53-"):
             command.extend([
                 "--override-kv", (
