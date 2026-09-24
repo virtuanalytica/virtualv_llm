@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import subprocess
 import tempfile
@@ -71,21 +72,73 @@ def complete_via_codex(prompt: str, model: str) -> str:
                            f"{(proc.stderr or proc.stdout)[-500:]}")
 
 
+CLAUDE_BENCH_SYSTEM_PROMPT = "You are a helpful assistant. Answer the user's question directly."
+# Last per-request accounting from the claude backend, returned in the HTTP
+# response. Handler threads each run one request at a time per backend call,
+# so the value is read back right after the call on the same thread.
+_claude_usage = threading.local()
+
+
+def _isolated_claude_env() -> dict[str, str]:
+    # A parent Claude Code session exports CLAUDE_CODE_* / CLAUDECODE; a child
+    # inheriting them attaches to the parent's messaging socket instead of
+    # running as an independent, stateless benchmark call.
+    env = {k: v for k, v in os.environ.items()
+           if not (k.startswith("CLAUDE_CODE_") or k == "CLAUDECODE")}
+    return env
+
+
 def complete_via_claude_cli(prompt: str, model: str) -> str:
-    # --disallowed-tools blocks every tool this repo's Claude Code install
-    # knows about, so a benchmark prompt can only ever produce text, never a
-    # real file/shell side effect. --permission-mode default (not "plan")
-    # avoids the plan-mode detour seen when testing this integration.
-    proc = subprocess.run(
-        ["claude", "-p", "--model", model,
-         "--disallowed-tools", "Bash", "Read", "Write", "Edit", "NotebookEdit",
-         "WebFetch", "WebSearch", "Agent", "Artifact", "Skill",
-         prompt],
-        text=True, capture_output=True, timeout=CLI_TIMEOUT_SEC,
-    )
-    if proc.returncode == 0 and proc.stdout.strip():
-        return proc.stdout
+    # --bare would be the ideal isolation but only accepts ANTHROPIC_API_KEY
+    # (never OAuth), so the same effect is built from parts: no settings
+    # sources (so no user hooks such as an autonomous Stop-hook loop), no
+    # CLAUDE.md (the user's global instructions would otherwise steer
+    # language/format), no MCP servers, no tools, no persisted session, and an
+    # empty cwd. Verified 2026-09-24: 314 input tokens for a one-line prompt,
+    # model reports no CLAUDE.md/user instructions.
+    # max_tokens is NOT forwarded: CLAUDE_CODE_MAX_OUTPUT_TOKENS turns reaching
+    # the budget into an API error with no partial text (checked 2026-09-24),
+    # so Claude rows run uncapped while local rows get the request budget.
+    with tempfile.TemporaryDirectory() as cwd:
+        proc = subprocess.run(
+            ["claude", "-p", "--model", model, "--setting-sources", "", "--strict-mcp-config",
+             "--no-session-persistence", "--tools", "", "--output-format", "json",
+             "--system-prompt", CLAUDE_BENCH_SYSTEM_PROMPT, prompt],
+            text=True, capture_output=True, timeout=CLI_TIMEOUT_SEC, cwd=cwd, env=_isolated_claude_env(),
+        )
+    try:
+        data = json.loads(proc.stdout)
+    except json.JSONDecodeError:
+        data = {}
+    if proc.returncode == 0 and not data.get("is_error") and str(data.get("result", "")).strip():
+        usage = data.get("usage") or {}
+        _claude_usage.value = {
+            "prompt_tokens": int(usage.get("input_tokens") or 0),
+            "completion_tokens": int(usage.get("output_tokens") or 0),
+            "duration_api_ms": data.get("duration_api_ms"),
+            # ttft_ms lands at ~the full API duration (not first token); the
+            # streamed first-token/first-content timestamps are the real split
+            # between prefill and decode (checked 2026-09-24: 1041 of 1658 ms).
+            "ttft_ms": data.get("ttft_stream_ms") or data.get("first_content_frame_ms"),
+            "cost_usd": data.get("total_cost_usd"),
+        }
+        return str(data["result"])
     raise RuntimeError(f"claude -p failed (rc={proc.returncode}): {(proc.stderr or proc.stdout)[-500:]}")
+
+
+def _timings(usage: dict[str, Any] | None) -> dict[str, Any] | None:
+    """llama.cpp-style timings from real CLI accounting (API-side decode, not local)."""
+    if not usage or not usage.get("duration_api_ms") or not usage.get("ttft_ms"):
+        return None
+    decode_sec = (usage["duration_api_ms"] - usage["ttft_ms"]) / 1000
+    prefill_sec = usage["ttft_ms"] / 1000
+    return {
+        "predicted_n": usage["completion_tokens"],
+        "predicted_per_second": round(usage["completion_tokens"] / decode_sec, 2) if decode_sec > 0 else None,
+        "prompt_n": usage["prompt_tokens"],
+        "prompt_per_second": round(usage["prompt_tokens"] / prefill_sec, 2) if prefill_sec > 0 else None,
+        "source": "claude -p --output-format json (API decode after first token; network included)",
+    }
 
 
 BACKENDS = {"codex": complete_via_codex, "claude-cli": complete_via_claude_cli}
@@ -107,9 +160,12 @@ class Handler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def do_POST(self) -> None:  # noqa: N802 (BaseHTTPRequestHandler naming)
-        if self.path not in ("/v1/chat/completions", "/chat/completions"):
+        chat = self.path in ("/v1/chat/completions", "/chat/completions")
+        # Legacy /v1/completions exists only so well_known_suite.py's throughput
+        # probe gets llama.cpp-style "timings"; the prompt is still answered as one chat turn.
+        if not chat and not (self.path == "/v1/completions" and self.backend_name == "claude-cli"):
             self._send_json(404, {"error": f"unsupported path {self.path}; this proxy only implements "
-                                            "chat completions (no legacy /v1/completions)"})
+                                            "chat completions (legacy /v1/completions: claude-cli only)"})
             return
         length = int(self.headers.get("Content-Length", 0))
         try:
@@ -117,26 +173,39 @@ class Handler(BaseHTTPRequestHandler):
         except json.JSONDecodeError as exc:
             self._send_json(400, {"error": f"invalid JSON body: {exc}"})
             return
-        model = payload.get("model") or self.default_model
-        prompt = _extract_prompt(payload.get("messages", []))
+        # The alias well_known_suite.py sends (MODEL_ALIAS) is not a real model slug;
+        # the proxy is bound to exactly one model at startup.
+        model = self.default_model
+        prompt = str(payload.get("prompt", "")) if not chat else _extract_prompt(payload.get("messages", []))
         started = time.time()
+        _claude_usage.value = None
         try:
             content = BACKENDS[self.backend_name](prompt, model)
         except Exception as exc:
             self._send_json(502, {"error": f"{type(exc).__name__}: {exc}"})
             return
         elapsed = time.time() - started
-        self._send_json(200, {
+        # Real accounting only exists for claude-cli (--output-format json); codex stays zero.
+        usage = getattr(_claude_usage, "value", None)
+        tokens = {"prompt_tokens": usage["prompt_tokens"] if usage else 0,
+                  "completion_tokens": usage["completion_tokens"] if usage else 0}
+        tokens["total_tokens"] = tokens["prompt_tokens"] + tokens["completion_tokens"]
+        body: dict[str, Any] = {
             "id": f"cli-proxy-{int(started)}",
-            "object": "chat.completion",
+            "object": "chat.completion" if chat else "text_completion",
             "model": model,
             "choices": [{"index": 0, "message": {"role": "assistant", "content": content},
-                        "finish_reason": "stop"}],
-            # Not real token accounting -- these CLIs don't expose it uniformly. Downstream
-            # composite scoring never reads usage, only choices[0].message.content.
-            "usage": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0},
+                        "finish_reason": "stop"} if chat else
+                        {"index": 0, "text": content, "finish_reason": "stop"}],
+            "usage": tokens,
             "cli_proxy_elapsed_sec": round(elapsed, 2),
-        })
+        }
+        if usage:
+            body["cost_usd"] = usage["cost_usd"]
+            timings = _timings(usage)
+            if timings:
+                body["timings"] = timings
+        self._send_json(200, body)
 
 
 def main() -> int:

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Run the well-known + specialist (+ contamination-audit, once wired) suites
-against cloud/agent-CLI providers -- Codex, Gemini/Antigravity, and (once the
-broken ~/.claude.json symlink is fixed -- see NOTES.md) Claude -- using the
+against cloud/agent-CLI providers -- Codex, Gemini/Antigravity, and (wired
+since 2026-09-24) Claude -- using the
 exact same well_known_suite.py entry point local GGUF models go through, so
 every table in build_dual_v100_html.py treats these rows identically.
 
@@ -50,6 +50,14 @@ REPORT = ROOT / "reports/well_known_suite_20260917.json"
 # the GGUF sweep. Widen this once these rows are reviewed and more coverage
 # is explicitly wanted.
 PROVIDERS = {
+    # Claude has no downloadable weights; it is driven through the scripted
+    # `claude -p` CLI (OAuth subscription, no API key on this box), isolated
+    # from the user's hooks/CLAUDE.md -- see external_cli_agent_proxy.py.
+    # Ordered newest/current-session model first; run one with --model.
+    "claude": {
+        "kind": "cli", "backend": "claude-cli", "engine": "Anthropic Claude Code CLI (claude -p)",
+        "models": ["claude-opus-5-5", "claude-fable-5-1", "claude-sonnet-5", "claude-haiku-4-5-20251001"],
+    },
     "codex": {
         "kind": "cli", "backend": "codex", "engine": "OpenAI Codex CLI",
         "models": ["gpt-6-astra", "gpt-6-sol", "gpt-6-luna"],
@@ -135,12 +143,16 @@ def main() -> int:
                         help="repeatable; default: all configured providers")
     parser.add_argument("--specialists", default="all")
     parser.add_argument("--row-prefix", default="cloud")
+    parser.add_argument("--model", action="append",
+                        help="repeatable; only run these model slugs of the selected providers")
     args = parser.parse_args()
     providers = args.provider or sorted(PROVIDERS)
 
     failures = 0
     for provider_key in providers:
         for model in PROVIDERS[provider_key]["models"]:
+            if args.model and model not in args.model:
+                continue
             row_name = f"{args.row_prefix}-{provider_key}"
             print(f"=== {provider_key} / {model} ===", flush=True)
             rc = run_one(row_name, provider_key, model, args.specialists)
