@@ -330,8 +330,6 @@ WELL_KNOWN_LABELS = {
     "qwen38-flash-next-ap-iq2s-allfour": "Qwen3.8 Flash-Next AP-IQ2_S · 4 GPU's",
     "qwen38-flash-next-ap-q4kxl-v100": "Qwen3.8 Flash-Next AP-Q4_K_XL · 2×V100",
     "qwen38-flash-next-ap-q4kxl-allfour": "Qwen3.8 Flash-Next AP-Q4_K_XL · 4 GPU's",
-    "mimo-v26-pro-mxfp4": "MiMo-V2.6-Pro 1T MXFP4 (q4)",
-    "mimo-v26-pro-bpw3": "MiMo-V2.6-Pro 1T BPW3.0 (q3)",
     "mimo-v26-pro-bpw2.5": "MiMo-V2.6-Pro 1T BPW2.5 (q2.5)",
 }
 WELL_KNOWN_ORDER = list(WELL_KNOWN_LABELS)
@@ -436,8 +434,12 @@ def well_known_rows() -> list[dict]:
             "model": label,
             "gsm8k": gsm8k, "bbh": bbh, "mmlu": mmlu, "truthfulqa": truthfulqa,
             "humaneval": humaneval, "composite": composite,
-            "tps": r.get("completion_tokens_per_second", throughput.get(name)), "status": status,
-            "hardware": r.get("topology") or rm.hardware_label(r) if r else "—",
+            "tps": (r.get("usable_sequential_tokens_per_second")
+                    if str(name).startswith("mixture") and r.get("usable_sequential_tokens_per_second") is not None
+                    else r.get("completion_tokens_per_second", throughput.get(name))),
+            "status": status,
+            "hardware": ("één machine · leden na elkaar" if str(name).startswith("mixture")
+                         else (r.get("topology") or rm.hardware_label(r) if r else "—")),
             # Old results predate access provenance and were raw chat-server
             # measurements, hence they are sandbox-only by construction.
             "access_profile": r.get("access_profile", "sandbox"),

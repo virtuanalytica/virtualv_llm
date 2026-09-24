@@ -221,14 +221,12 @@ def main() -> int:
 
     member_rows = {r.get("model"): r for r in report.get("results", []) if r.get("model") in args.models}
     member_tps = {name: row.get("completion_tokens_per_second") for name, row in member_rows.items()}
-    # A mixture is never served concurrently on this hardware (members are
-    # queried sequentially -- see the module docstring), so there is no
-    # measured mixture throughput to report. The minimum member t/s is the
-    # best available proxy: it is the throughput the mixture COULD sustain if
-    # every member ran in parallel on separate hardware (the bottleneck being
-    # its slowest member); real sequential latency on shared hardware is
-    # higher (model load/switch overhead between members).
-    bottleneck_tps = min((v for v in member_tps.values() if isinstance(v, (int, float))), default=None)
+    # Members run one after another on this machine. The usable rate is the
+    # harmonic combination: one token from every member costs the sum of their
+    # per-token times. The minimum is only the parallel-hardware ceiling.
+    rates = [v for v in member_tps.values() if isinstance(v, (int, float)) and v > 0]
+    bottleneck_tps = min(rates) if rates else None
+    usable_sequential_tps = (1.0 / sum(1.0 / v for v in rates)) if len(rates) == len(member_tps) and rates else None
 
     from well_known_suite import BBH_SUBTASKS, EVAL_PROTOCOL, MMLU_SUBJECT_SAMPLE  # noqa: E402
 
@@ -291,14 +289,13 @@ def main() -> int:
         "engine": f"mixture({len(args.models)})",
         "policy": ("sequential task-routed ensemble; majority vote on discrete final answers, "
                    "best-of-N for HumanEval, optional specialist for free-text TruthfulQA"),
-        # Not a measured mixture throughput (members are queried sequentially,
-        # never served concurrently -- see module docstring). This is the
-        # slowest member's own completion_tokens_per_second: the ceiling the
-        # mixture could sustain if every member ran in parallel on separate
-        # hardware. Real latency on shared hardware, switching between
-        # members, is higher. None when a member has no recorded t/s.
+        # completion_tokens_per_second is the sequential rate on this one
+        # machine: 1 / sum(1/member_t/s). bottleneck_tokens_per_second remains
+        # the slowest member, which is only a ceiling if each member had its
+        # own hardware. None when any member has no recorded t/s.
         "bottleneck_tokens_per_second": bottleneck_tps,
-        "completion_tokens_per_second": bottleneck_tps,
+        "usable_sequential_tokens_per_second": usable_sequential_tps,
+        "completion_tokens_per_second": usable_sequential_tps,
         "evaluation_caveat": (
             "Post-hoc recombination of existing benchmark samples. When members are selected "
             "using these same scores, the result is a selection-set estimate and requires a "
@@ -327,11 +324,8 @@ def main() -> int:
         "truthfulqa_gen": truthfulqa,
         "bbh": bbh, "mmlu_sample": mmlu, "humaneval": humaneval,
     }
-    report["results"] = [r for r in report.get("results", [])
-                         if r.get("model") != args.name] + [result]
-    tmp = args.out.with_suffix(args.out.suffix + ".tmp")
-    tmp.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n")
-    tmp.replace(args.out)
+    from result_store import upsert_result
+    upsert_result(args.out, result)
     print(json.dumps(result, indent=2))
     return 0
 

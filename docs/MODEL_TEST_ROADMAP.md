@@ -1,7 +1,18 @@
 # VirtualV LLM model test roadmap
 
-Status date: 2026-09-22. This document separates measured local evidence from
+Status date: 2026-09-24. This document separates measured local evidence from
 upstream reference numbers and from untested hypotheses.
+
+## 2026-09-24 decisions
+
+- MiMo-V2.6-Pro q4 (MXFP4) and q3 (BPW3.0/BPW3.5) are not planned. They do
+  not fit this disk or these V100s, and they are the wrong next step.
+- A usable rate under 3 tokens/second is not acceptable on this machine.
+  Mixture throughput is the sequential rate, `1 / sum(1/member_t/s)`, not
+  the slowest member's own rate.
+- The live MiMo-V2.6-Pro BPW2.5 suite stays. Its measured decode is above
+  that floor. The next planning work is the mixture table and the ordered
+  queue below, not another MiMo quant.
 
 ## Current local baselines
 

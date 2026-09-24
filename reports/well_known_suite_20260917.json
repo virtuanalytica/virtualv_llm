@@ -3368,8 +3368,9 @@
         "pass_at_1": 0.975,
         "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
       },
-      "bottleneck_tokens_per_second": 32.321984767599226,
-      "completion_tokens_per_second": 32.321984767599226
+      "bottleneck_tokens_per_second": 17.507821361725387,
+      "completion_tokens_per_second": 10.2155,
+      "usable_sequential_tokens_per_second": 10.2155
     },
     {
       "model": "mistral-small4-119b-q4-adaa4000",
@@ -4015,7 +4016,8 @@
         "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
       },
       "bottleneck_tokens_per_second": 5.852406574992886,
-      "completion_tokens_per_second": 5.852406574992886
+      "completion_tokens_per_second": 3.0749,
+      "usable_sequential_tokens_per_second": 3.0749
     },
     {
       "model": "mixture-of-models-4-gemma-direct",
@@ -4118,7 +4120,8 @@
         "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
       },
       "bottleneck_tokens_per_second": 5.852406574992886,
-      "completion_tokens_per_second": 5.852406574992886
+      "completion_tokens_per_second": 3.9875,
+      "usable_sequential_tokens_per_second": 3.9875
     },
     {
       "model": "mixture-of-models-4-gemma-routed",
@@ -4220,7 +4223,8 @@
         "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
       },
       "bottleneck_tokens_per_second": 5.852406574992886,
-      "completion_tokens_per_second": 5.852406574992886
+      "completion_tokens_per_second": 3.8724,
+      "usable_sequential_tokens_per_second": 3.8724
     },
     {
       "model": "llama3-70b-instruct-q4",
@@ -7608,7 +7612,8 @@
         "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
       },
       "bottleneck_tokens_per_second": 13.891050475556028,
-      "completion_tokens_per_second": 13.891050475556028
+      "completion_tokens_per_second": 5.1149,
+      "usable_sequential_tokens_per_second": 5.1149
     },
     {
       "model": "glm53-reap50-iq3m-v100",
@@ -9899,7 +9904,7 @@
       "engine": "mixture(2)",
       "policy": "sequential task-routed ensemble; majority vote on discrete final answers, best-of-N for HumanEval, optional specialist for free-text TruthfulQA",
       "bottleneck_tokens_per_second": 13.891050475556028,
-      "completion_tokens_per_second": 13.891050475556028,
+      "completion_tokens_per_second": 9.9109,
       "evaluation_caveat": "Post-hoc recombination of existing benchmark samples. When members are selected using these same scores, the result is a selection-set estimate and requires a fresh held-out run before production claims.",
       "benchmark_summary": {
         "core_composite_4task": 0.933425,
@@ -9971,7 +9976,8 @@
         "n_passed": 40,
         "pass_at_1": 1.0,
         "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
-      }
+      },
+      "usable_sequential_tokens_per_second": 9.9109
     },
     {
       "model": "mixture-optimized-3",
@@ -9999,7 +10005,7 @@
       "engine": "mixture(3)",
       "policy": "sequential task-routed ensemble; majority vote on discrete final answers, best-of-N for HumanEval, optional specialist for free-text TruthfulQA",
       "bottleneck_tokens_per_second": 13.891050475556028,
-      "completion_tokens_per_second": 13.891050475556028,
+      "completion_tokens_per_second": 8.2474,
       "evaluation_caveat": "Post-hoc recombination of existing benchmark samples. When members are selected using these same scores, the result is a selection-set estimate and requires a fresh held-out run before production claims.",
       "benchmark_summary": {
         "core_composite_4task": 0.944875,
@@ -10071,7 +10077,8 @@
         "n_passed": 40,
         "pass_at_1": 1.0,
         "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
-      }
+      },
+      "usable_sequential_tokens_per_second": 8.2474
     },
     {
       "model": "mixture-optimized-4",
@@ -10102,7 +10109,7 @@
       "engine": "mixture(4)",
       "policy": "sequential task-routed ensemble; majority vote on discrete final answers, best-of-N for HumanEval, optional specialist for free-text TruthfulQA",
       "bottleneck_tokens_per_second": 11.583552482032774,
-      "completion_tokens_per_second": 11.583552482032774,
+      "completion_tokens_per_second": 5.0472,
       "evaluation_caveat": "Post-hoc recombination of existing benchmark samples. When members are selected using these same scores, the result is a selection-set estimate and requires a fresh held-out run before production claims.",
       "benchmark_summary": {
         "core_composite_4task": 0.954575,
@@ -10174,7 +10181,8 @@
         "n_passed": 40,
         "pass_at_1": 1.0,
         "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
-      }
+      },
+      "usable_sequential_tokens_per_second": 5.0472
     },
     {
       "model": "mixture-optimized-5",
@@ -10208,7 +10216,7 @@
       "engine": "mixture(5)",
       "policy": "sequential task-routed ensemble; majority vote on discrete final answers, best-of-N for HumanEval, optional specialist for free-text TruthfulQA",
       "bottleneck_tokens_per_second": 5.852406574992886,
-      "completion_tokens_per_second": 5.852406574992886,
+      "completion_tokens_per_second": 3.6762,
       "evaluation_caveat": "Post-hoc recombination of existing benchmark samples. When members are selected using these same scores, the result is a selection-set estimate and requires a fresh held-out run before production claims.",
       "benchmark_summary": {
         "core_composite_4task": 0.9601,
@@ -10280,7 +10288,8 @@
         "n_passed": 39,
         "pass_at_1": 0.975,
         "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
-      }
+      },
+      "usable_sequential_tokens_per_second": 3.6762
     },
     {
       "model": "mixture-optimized-6",
@@ -10317,7 +10326,7 @@
       "engine": "mixture(6)",
       "policy": "sequential task-routed ensemble; majority vote on discrete final answers, best-of-N for HumanEval, optional specialist for free-text TruthfulQA",
       "bottleneck_tokens_per_second": 11.583552482032774,
-      "completion_tokens_per_second": 11.583552482032774,
+      "completion_tokens_per_second": 4.3389,
       "evaluation_caveat": "Post-hoc recombination of existing benchmark samples. When members are selected using these same scores, the result is a selection-set estimate and requires a fresh held-out run before production claims.",
       "benchmark_summary": {
         "core_composite_4task": 0.96635,
@@ -10389,7 +10398,8 @@
         "n_passed": 40,
         "pass_at_1": 1.0,
         "policy": "solved if >=1 ensemble model's completion passes (best-of-N-models)"
-      }
+      },
+      "usable_sequential_tokens_per_second": 4.3389
     },
     {
       "model": "cloud-antigravity-gemini-gemini-3.1-pro-preview",
@@ -11229,38 +11239,26 @@
       "model_release_date_status": "missing; add primary source before temporal contamination comparison"
     },
     {
-      "model": "mimo-v26-pro-mxfp4",
-      "status": "blocked",
-      "error": "geblokkeerd: q4-klasse MXFP4 van MiMo-V2.6-Pro (1.02T/42B) is niet uitvoerbaar op deze machine. AesSedai/MiMo-V2.6-Pro-RL-GGUF revisie a0af536b79b0b312eaddb7fea6a3f56e50e739c0 publiceert MXFP4 niet (alleen KLD-metadata, 577.7 GB, 4.52 bpw). kernelpool/MiMo-V2.6-Pro-RL-MXFP4-GGUF revisie c3d772ed7225b75c00c69c1da96429c9f630e3fe heeft part1 480000000000 bytes + part2 77146510560 bytes (~557 GB). Na verwijderen van niet-actieve gewichten blijft 382 GB vrij. Officiële Xiaomi-checkpoint is mxfp4-opslag met FP8-compute (~566 GB) en V100 SM70 heeft daar geen kernel voor. Geen score.",
+      "model": "mimo-v26-pro-bpw2.5",
+      "hardware_profile": "dual-layer",
       "access_profile": "sandbox",
-      "eval_protocol": "v4-mmlu-fewshot-20260918",
-      "source_repo": "kernelpool/MiMo-V2.6-Pro-RL-MXFP4-GGUF",
-      "source_revision": "c3d772ed7225b75c00c69c1da96429c9f630e3fe",
-      "model_source": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL",
-      "model_release_date": "2026-09-21",
-      "model_release_source": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL",
-      "quantization": "MXFP4",
-      "weight_bytes": 557146510560,
-      "engine": "niet geladen",
-      "topology": "niet geladen · 2× V100 64 GB, schijf 382 GB vrij",
-      "checked_at": "2026-09-24"
-    },
-    {
-      "model": "mimo-v26-pro-bpw3",
-      "status": "blocked",
-      "error": "geblokkeerd: q3-klasse BPW3.0/BPW3.5 van MiMo-V2.6-Pro staat niet als gewicht online. AesSedai/MiMo-V2.6-Pro-RL-GGUF revisie a0af536b79b0b312eaddb7fea6a3f56e50e739c0 heeft op 2026-09-24 alleen de mappen BPW2.0 en BPW2.5. De KLD-tabel noemt BPW3.0 (383.67 GB, mean KLD 0.184) en BPW3.5 (447.62 GB, mean KLD 0.141); beide directory's geven HTTP 404. 383 GB past ook niet in de 382 GB vrije ruimte met marge. Geen bartowski/unsloth/mradermacher Q3_K_M. Geen score.",
-      "access_profile": "sandbox",
-      "eval_protocol": "v4-mmlu-fewshot-20260918",
+      "model_source": "https://huggingface.co/AesSedai/MiMo-V2.6-Pro-RL-GGUF",
       "source_repo": "AesSedai/MiMo-V2.6-Pro-RL-GGUF",
       "source_revision": "a0af536b79b0b312eaddb7fea6a3f56e50e739c0",
-      "model_source": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL",
+      "quantization": "BPW2.5",
+      "weight_bytes": 319743531488,
+      "base_model": "XiaomiMiMo/MiMo-V2.6-Pro-RL",
+      "llama_cpp": "b11149",
+      "status": "running",
+      "progress_note": "bezig · gsm8k 18/50 · 3.8 t/s",
+      "engine": "llama.cpp b11149 · --cpu-moe",
+      "topology": "fysiek 1,2 · experts op CPU · 2× V100",
+      "cuda_device_order": "PCI_BUS_ID",
       "model_release_date": "2026-09-21",
       "model_release_source": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL",
-      "quantization": "BPW3.0",
-      "weight_bytes": 383669428552,
-      "engine": "niet geladen",
-      "topology": "niet geladen · directory 404 en groter dan vrije schijf",
-      "checked_at": "2026-09-24"
+      "requests_completed": 18,
+      "live_task": "gsm8k",
+      "completion_tokens_per_second": 3.8
     }
   ],
   "bbh_scoring_fix": {
