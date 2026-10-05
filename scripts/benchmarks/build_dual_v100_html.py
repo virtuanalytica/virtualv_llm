@@ -164,6 +164,38 @@ def onecat_rows() -> list[dict]:
     return rows
 
 
+GPU_NAMES = {"0": "RTX 4000 Ada", "1": "RTX 4000 Ada", "2": "RTX 4000 Ada", "5": "RTX 4000 Ada",
+             "3": "V100-SXM2-32GB", "4": "V100-SXM2-32GB"}   # PCI order since 2026-10-05
+LIVE_LABELS = {"qwen38-27b-q4": ("Qwen3.8-27B", "27B", "Q4_K_M"),
+               "qwen38-1cat-nvfp4-tp2": ("Qwen3.8 target", "27B", "NVFP4"),
+               "devstral-small2-24b-q4": ("Devstral Small 2", "24B", "Q4_K_M"),
+               "qwen35-27b-q4": ("Qwen3.5-27B", "27B", "Q4_K_M"),
+               "gemma4-26b-a4b-q4": ("Gemma4-26B-A4B", "26B / ~4B active", "Q4_K_M")}
+
+
+def live_mixture_rows() -> list[dict]:
+    """Per-server rows from the live mixture-of-models runs (reports/live_mixture_of_models_*.json):
+    generation/prompt t/s from the server's own timings (llama.cpp print_timing, vLLM /metrics) under
+    real mixture load, GPU utilisation from 1 s nvidia-smi samples. RIV and VRAM were not measured."""
+    rows = []
+    for name in LIVE_MIXTURE_REPORTS:
+        data = load(name)
+        for unit, u in data.get("units", {}).items():
+            label, params, quant = LIVE_LABELS.get(u.get("model"), (u.get("model", unit), "—", "—"))
+            idx = str(u.get("cuda_index", "")).split(",")
+            gpus = " + ".join(f"CUDA {i} {GPU_NAMES.get(i, '?')}" for i in idx)
+            tp = " TP2" if len(idx) > 1 else ""
+            rows.append({
+                "model": label, "params": params,
+                "engine": "1Cat-vLLM 1.5" if u.get("engine") == "vllm" else "llama.cpp", "quant": quant,
+                "profile": f"live MoM · {u.get('role')}{tp} · {gpus}", "tps": u.get("generation_tokens_per_second"),
+                "prompt_tps": u.get("prompt_tokens_per_second"), "speedup": None, "quality": "—", "memory": "—",
+                "util": fmt(u.get("gpu", {}).get("mean_utilisation_pct"), 1) + "%",
+                "scope": "dual" if tp else "single", "gpu_caption": "live mixture-run 2026-10-05" + (" · NVLink" if tp else ""),
+            })
+    return rows
+
+
 def table(rows: list[dict]) -> str:
     body = []
     for row in rows:
@@ -1070,7 +1102,7 @@ lokaal getest model onmogelijk maakt zonder scratchpad -- een reëel, verwacht m
 
 
 def main() -> int:
-    rows = gguf_rows() + onecat_rows()
+    rows = gguf_rows() + onecat_rows() + live_mixture_rows()
     throughput = throughput_rows(rows)
     bench_rows = benchmark_score_rows()
     wk_rows = well_known_rows()
@@ -1153,7 +1185,10 @@ onafhankelijke parallel-servinglaag. Iedere rij bewaart de werkelijk zichtbare f
 <div class="card"><small>1Cat DFlash2 B1</small><div class="metric">{fmt(next((r['tps'] for r in rows if r['model']=='Qwen3.8 + DFlash2' and 'B1' in r['profile']),None))} t/s</div><small>wall output throughput</small></div>
 <div class="card"><small>Vrije modelopslag</small><div class="metric">{fmt(free_gb, 1)} GB</div><small>live bij lokale generatie; niet beschikbaar op CI</small></div></section>
 <div class="callout"><strong>Hoofdconclusie.</strong> Layer split vergroot vooral capaciteit. Tensor split gebruikt beide V100’s echt parallel: Qwen3.8 wint {fmt(q_gain,1)}%, terwijl de 72,7B dense Qwen van 14,84 naar 24,29 t/s gaat (+63,7%). Voor Qwen3.8 single-stream latency blijft 1Cat + DFlash2 de snelste route; bij batch 4 wint target-only.</div>
-<h2>Alle lokale resultaten</h2><p>Decode-t/s van llama.cpp en wall-output-t/s van 1Cat zijn apart gemeten; batch-4 is aggregaat. RIV is een brongebonden zesveldentest, geen algemene modelaccuracy.</p>
+<h2>Alle lokale resultaten</h2><p>Decode-t/s van llama.cpp en wall-output-t/s van 1Cat zijn apart gemeten; batch-4 is aggregaat. RIV is een brongebonden zesveldentest, geen algemene modelaccuracy. Rijen met profiel
+<em>live MoM</em> (2026-10-05) zijn gemeten tijdens de live mixture-of-models-benchmark: generatie- en
+prompt-t/s uit de eigen timings van de server (llama.cpp <code>print_timing</code>, vLLM <code>/metrics</code>)
+onder echte mix-belasting, GPU-utilisatie als gemiddelde over de hele run; RIV en VRAM zijn daar niet gemeten.</p>
 <div class="tablewrap"><table class="sortable"><thead><tr><th>Model</th><th>Engine</th><th>Profiel</th><th data-sort-dir="desc">Output t/s</th><th>Prompt t/s</th><th>Qwen3.8 speedup</th><th>RIV</th><th>VRAM GiB</th><th>GPU util.</th></tr></thead><tbody>{table(rows)}</tbody></table></div>
 <section id="onecat-uitleg" class="benchmark-explanations" aria-labelledby="onecat-uitleg-title">
 <h3 id="onecat-uitleg-title">Uitleg van de 1Cat-vLLM-rijen</h3>
