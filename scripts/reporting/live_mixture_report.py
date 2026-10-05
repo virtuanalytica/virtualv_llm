@@ -221,7 +221,11 @@ def main() -> int:
                            "system_kwh_measured": round(pj / 3.6e6, 4),
                            "mean_system_watt_measured": round(pj / (p1 - p0), 1) if p1 > p0 else None,
                            "wh_per_answer": round(pj / 3600 / pans, 3) if pans else None,
-                           "answers_per_minute": round(pans / (p1 - p0) * 60, 2) if p1 > p0 else None}
+                           "answers_per_minute": round(pans / (p1 - p0) * 60, 2) if p1 > p0 else None,
+                           # GPU-only figures: comparable even when the CPU (RAPL) logger did not run
+                           "gpu_kwh": round(sum(g["joules"] for g in pg.values()) / 3.6e6, 4),
+                           "gpu_wh_per_answer": round(sum(g["joules"] for g in pg.values()) / 3600 / pans, 3) if pans else None,
+                           "cpu_measured": bool(pc)}
     a.out.write_text(json.dumps(report, indent=1) + "\n")
     print(json.dumps(report["totals"], indent=1))
     return 0

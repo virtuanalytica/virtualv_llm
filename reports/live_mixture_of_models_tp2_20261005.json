@@ -169,6 +169,9 @@
   "system_kwh_measured": 0.412,
   "mean_system_watt_measured": 611.3,
   "wh_per_answer": 2.901,
-  "answers_per_minute": 3.51
+  "answers_per_minute": 3.51,
+  "gpu_kwh": 0.32,
+  "gpu_wh_per_answer": 2.254,
+  "cpu_measured": true
  }
 }

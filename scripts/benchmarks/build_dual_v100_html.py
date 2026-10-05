@@ -1012,35 +1012,45 @@ def live_mixture_section() -> str:
 
 
 def _live_mixture_comparison(reports: list[dict]) -> str:
-    """Side by side: same proposers, aggregator as llama.cpp replicas vs 1Cat-vLLM TP2."""
+    """Side by side on the same workload: quality (full suite + contamination-free parts) and energy."""
     suite = {r.get("model"): r for r in load("well_known_suite_20260917.json").get("results", [])}
-    rows = ""
+    spec = {r.get("model"): r for r in load("specialist_suite_20260922.json").get("results", [])}
+    audit = {r.get("model"): r for r in load("contamination_audit_20260923.json").get("results", [])}
+    rows, facts = "", []
     for data in reports:
-        r, t = suite.get(data.get("suite_model"), {}), data.get("phase") or data.get("totals", {})
+        model = data.get("suite_model")
+        r, ph = suite.get(model, {}), data.get("phase") or {}
         parts = [rm.gsm8k_score(r) if r else None, (r.get("humaneval") or {}).get("pass_at_1"),
                  (r.get("mmlu_sample") or {}).get("mean_accuracy"), (r.get("bbh") or {}).get("mean_accuracy")]
         comp = sum(parts) / 4 if all(isinstance(v, (int, float)) for v in parts) else None
-        agg = [u for u in data.get("units", {}).values() if u.get("role") == "aggregator"]
-        rows += ("<tr><td>" + html.escape(LAYOUT_LABELS.get(data.get("layout"), data.get("layout", ""))) + "</td><td>" +
-                 fmt(comp, 3) + "</td><td>" + "</td><td>".join(fmt(v, 3) for v in parts) + "</td><td>" +
-                 fmt(t.get("wh_per_answer"), 2) + " Wh</td><td>" + fmt(t.get("mean_system_watt_measured")) + " W</td><td>" +
-                 fmt(t.get("answers_per_minute"), 2) + "</td><td>" + str(t.get("answers", "–")) + "</td><td>" +
-                 fmt(sum(u.get("gpu", {}).get("mean_utilisation_pct", 0) for u in agg) / len(agg) if agg else None, 1) +
-                 "%</td></tr>")
+        acc = [v.get("accuracy") for k, v in (spec.get(model, {}).get("results") or {}).items()
+               if v.get("status") == "complete" and k != "video"]
+        spec_mean = sum(acc) / len(acc) if acc else None
+        holdout = ((audit.get(model, {}).get("results") or {}).get("post_cutoff_holdout") or {}).get("accuracy")
+        label = LAYOUT_LABELS.get(data.get("layout"), data.get("layout", ""))
+        facts.append((label, comp, holdout, ph.get("gpu_wh_per_answer"), ph.get("answers_per_minute")))
+        rows += ("<tr><td>" + html.escape(label) + "</td><td>" + fmt(comp, 3) + "</td><td>" + fmt(spec_mean, 3) +
+                 "</td><td>" + fmt(holdout, 3) + "</td><td>" + fmt(ph.get("gpu_wh_per_answer"), 2) + " Wh</td><td>" +
+                 (fmt(ph.get("wh_per_answer"), 2) + " Wh" if ph.get("cpu_measured") else "niet gemeten") + "</td><td>" +
+                 fmt(ph.get("answers_per_minute"), 2) + "</td><td>" + str(ph.get("answers", "–")) + "</td></tr>")
+
+    def best(i, low=False):
+        vals = [f for f in facts if isinstance(f[i], (int, float))]
+        return (min if low else max)(vals, key=lambda f: f[i])[0] if vals else "–"
     return f"""
-<h3>Vergelijking: replica's versus TP2 als aggregator</h3>
-<div class="tablewrap"><table><thead><tr><th>Aggregator</th><th>Composite</th><th>gsm8k</th><th>humaneval</th>
-<th>mmlu</th><th>bbh</th><th>Energie per antwoord</th><th>Gem. systeemvermogen</th><th>Antwoorden/min</th><th>Antwoorden</th><th>Aggregator-GPU-utilisatie</th>
-</tr></thead><tbody>{rows}</tbody></table></div>
-<p class="note">Energie, vermogen en antwoorden per minuut zijn voor beide indelingen gemeten op hetzelfde deel
-van de suite ({html.escape(str((reports[0].get("phase") or {}).get("label", "hele meetvenster")))}), zodat het werk gelijk is;
-de scores komen uit de volledige suite.</p>
-<div class="callout"><strong>Interpretatie.</strong> TP2 benut beide V100's wel volledig tijdens een antwoord, maar
-de NVFP4-gewichten op het 1Cat-vLLM-pad leveren duidelijk minder kwaliteit dan de Q4_K_M-GGUF op llama.cpp: dezelfde
-proposers, een veel lagere score, wat strookt met de losse 1Cat-meting van Qwen3.8 NVFP4 elders op deze pagina. Op
-hetzelfde werk kost TP2 bovendien meer energie per antwoord en beantwoordt het minder vragen per minuut. Voor de mix
-blijft de llama.cpp-aggregator dus op alle drie de assen de betere keuze; energiewinst vraagt eerder om minder of
-zuiniger actieve kaarten dan om een andere parallellisatie.</div>
+<h3>Vergelijking van de aggregator-opstellingen</h3>
+<div class="tablewrap"><table><thead><tr><th>Aggregator</th><th>Composite</th><th>Specialist (privé)</th>
+<th>Holdout na cutoff</th><th>GPU-energie per antwoord</th><th>Systeem (GPU+CPU) per antwoord</th><th>Antwoorden/min</th>
+<th>Antwoorden</th></tr></thead><tbody>{rows}</tbody></table></div>
+<p class="note">Energie en tempo zijn voor alle opstellingen gemeten op hetzelfde deel van de suite
+({html.escape(str((reports[0].get("phase") or {}).get("label", "hele meetvenster")))}); GPU-energie is voor elke run
+gemeten, CPU-energie (RAPL) alleen waar de logger liep. Scores komen uit de volledige suite, de specialistsuite en de
+contaminatie-audit.</p>
+<div class="callout"><strong>Interpretatie.</strong> Hoogste composite: {html.escape(best(1))}. Hoogste score op
+de contaminatievrije holdout: {html.escape(best(2))}. Laagste GPU-energie per antwoord: {html.escape(best(3, low=True))};
+hoogste tempo: {html.escape(best(4))}. Een aggregator die op publieke benchmarks hoog scoort maar op nooit gepubliceerde
+vragen duidelijk lager, is geen betere keuze voor echte taken: kies op holdout en specialistsuite, en gebruik energie
+als tweede criterium.</div>
 """
 
 
