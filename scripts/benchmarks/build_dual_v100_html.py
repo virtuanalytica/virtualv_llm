@@ -169,6 +169,7 @@ GPU_NAMES = {"0": "RTX 4000 Ada", "1": "RTX 4000 Ada", "2": "RTX 4000 Ada", "5":
 LIVE_LABELS = {"qwen38-27b-q4": ("Qwen3.8-27B", "27B", "Q4_K_M"),
                "qwen38-1cat-nvfp4-tp2": ("Qwen3.8 target", "27B", "NVFP4"),
                "qwen36-35b-a3b-1cat-nvfp4-tp2": ("Qwen3.6-35B-A3B", "35B / ~3B active", "NVFP4"),
+               "glm53-reap50-iq4xs": ("GLM-5.3-Flash REAP50", "~157B / ~17B active", "IQ4_XS"),
                "devstral-small2-24b-q4": ("Devstral Small 2", "24B", "Q4_K_M"),
                "qwen35-27b-q4": ("Qwen3.5-27B", "27B", "Q4_K_M"),
                "gemma4-26b-a4b-q4": ("Gemma4-26B-A4B", "26B / ~4B active", "Q4_K_M")}
@@ -185,14 +186,15 @@ def live_mixture_rows() -> list[dict]:
             label, params, quant = LIVE_LABELS.get(u.get("model"), (u.get("model", unit), "—", "—"))
             idx = str(u.get("cuda_index", "")).split(",")
             gpus = " + ".join(f"CUDA {i} {GPU_NAMES.get(i, '?')}" for i in idx)
-            tp = " TP2" if len(idx) > 1 else ""
+            tp = ("" if len(idx) == 1 else " TP2" if u.get("engine") == "vllm" and len(idx) == 2
+                  else f" layer split ×{len(idx)}")
             rows.append({
                 "model": label, "params": params,
                 "engine": "1Cat-vLLM 1.5" if u.get("engine") == "vllm" else "llama.cpp", "quant": quant,
                 "profile": f"live MoM · {u.get('role')}{tp} · {gpus}", "tps": u.get("generation_tokens_per_second"),
                 "prompt_tps": u.get("prompt_tokens_per_second"), "speedup": None, "quality": "—", "memory": "—",
                 "util": fmt(u.get("gpu", {}).get("mean_utilisation_pct"), 1) + "%",
-                "scope": "dual" if tp else "single", "gpu_caption": "live mixture-run 2026-10-05" + (" · NVLink" if tp else ""),
+                "scope": "dual" if tp else "single", "gpu_caption": "live mixture-run 2026-10-05" + (" · NVLink" if "TP2" in tp else ""),
             })
     return rows
 
@@ -330,6 +332,8 @@ def throughput_rows(primary_rows: list[dict]) -> list[dict]:
 
 WELL_KNOWN_LABELS = {
     "mom-live-4": "Live mixture-of-models (Mixture-of-Agents: Qwen3.8 aggregator x2 replica's + Devstral, Qwen3.5, Gemma4)",
+    "glm53-reap50-iq4xs-v100ada": "GLM-5.3-Flash REAP50 IQ4_XS (V100 ×2 + Ada ×2, layer split)",
+    "mom-live-glm53": "Live mixture-of-models (Mixture-of-Agents: GLM-5.3-Flash REAP50 IQ4_XS aggregator + Devstral, Qwen3.5)",
     "mom-live-4-q36": "Live mixture-of-models (Mixture-of-Agents: Qwen3.6-35B-A3B NVFP4 1Cat-vLLM TP2 aggregator + Devstral, Qwen3.5, Gemma4)",
     "mom-live-4-tp2": "Live mixture-of-models (Mixture-of-Agents: Qwen3.8 1Cat-vLLM TP2 aggregator + Devstral, Qwen3.5, Gemma4)",
     "qwen38-27b-q4": "Qwen3.8-27B", "deepseek-r1-qwen32b-q4": "DeepSeek-R1-Qwen",
@@ -991,10 +995,11 @@ model per kaart. Gebruik A4000+Ada layer split alleen om een groter model passen
 
 
 LIVE_MIXTURE_REPORTS = ("live_mixture_of_models_20261005.json", "live_mixture_of_models_tp2_20261005.json",
-                        "live_mixture_of_models_q36tp2_20261005.json")
+                        "live_mixture_of_models_q36tp2_20261005.json", "live_mixture_of_models_glm_20261005.json")
 LAYOUT_LABELS = {"replicas": "aggregator als twee llama.cpp-replica's (data-parallel, één per V100)",
                  "tp2": "aggregator als één 1Cat-vLLM-instantie met tensor parallel (TP2) over het NVLink-paar",
-                 "q36tp2": "aggregator Qwen3.6-35B-A3B NVFP4 (1Cat-vLLM, TP2 over het NVLink-paar)"}
+                 "q36tp2": "aggregator Qwen3.6-35B-A3B NVFP4 (1Cat-vLLM, TP2 over het NVLink-paar)",
+                 "glm": "aggregator GLM-5.3-Flash REAP50 IQ4_XS (layer split over beide V100's + 2 Ada's), 2 proposers"}
 
 
 def live_mixture_section() -> str:

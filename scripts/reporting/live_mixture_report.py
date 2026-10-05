@@ -37,6 +37,9 @@ LAYOUTS = {  # unit: (role, model, CUDA indices in PCI order, port, engine)
     "tp2": {"mom-qwen38-tp2": ("aggregator", "qwen38-1cat-nvfp4-tp2", (3, 4), 8027, "vllm"), **PROPOSERS},
     # aggregator Qwen3.6-35B-A3B NVFP4 (the strongest NVFP4 model measured alone) as 1Cat-vLLM TP2
     "q36tp2": {"mom-qwen36-tp2": ("aggregator", "qwen36-35b-a3b-1cat-nvfp4-tp2", (3, 4), 8028, "vllm"), **PROPOSERS},
+    # aggregator GLM-5.3-Flash REAP50 IQ4_XS, layer split over the V100 pair + Ada 2,5; two proposers on Ada 0,1
+    "glm": {"glm53-iq4xs": ("aggregator", "glm53-reap50-iq4xs", (3, 4, 2, 5), 18017, "llama.cpp"),
+            "mom-devstral": PROPOSERS["mom-devstral"], "mom-qwen35": PROPOSERS["mom-qwen35"]},
 }
 _T = re.compile(r"(prompt eval|eval) time =\s*([\d.]+) ms /\s*(\d+) tokens")
 
