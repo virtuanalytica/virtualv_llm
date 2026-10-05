@@ -59,6 +59,8 @@ benchmarken (zelfde suite + specialist + audit + energie), daarna als aggregator
 - IQ4_XS-opstelling: llama.cpp layer split over V100 CUDA 3,4 + Ada CUDA 2,5. De split 29,29,12,12 gaf een OOM
   (32,7 GB op één V100); 26,26,14,14 laadt (V100's 27,0/30,1 GB, Ada's 15–19 GB).
 - Live gemeten tijdens de suite: prompt ~250 t/s, generatie ~23,6 t/s.
+- Resultaat los (2026-10-05, 46 min): GSM8K 0,92, HumanEval 1,00, MMLU 0,69, BBH 0,917 → composite 0,881
+  (mom-live-4: 0,885). Hoogste lokale HumanEval en BBH tot nu toe; MMLU is het zwakke punt. Generatie 23,6 t/s.
 
 ### Kimi K2.5 (MoE, DeepSeek-V3-architectuur; ~1T totaal)
 
