@@ -179,5 +179,16 @@
   "joules_per_answer_token": 145.85,
   "joules_per_generated_token_all_members": 17.98
  },
- "scope_note": "Gemeten: GPU-bordvermogen (nvidia-smi) en CPU-pakketenergie (RAPL). Niet gemeten: DRAM, schijven, ventilatoren en voedingsverlies. Het rustverbruik van alle zes GPU's telt mee, dus de cijfers zijn wat de mix op deze machine werkelijk kost, niet de marginale kost per verzoek."
+ "scope_note": "Gemeten: GPU-bordvermogen (nvidia-smi) en CPU-pakketenergie (RAPL). Niet gemeten: DRAM, schijven, ventilatoren en voedingsverlies. Het rustverbruik van alle zes GPU's telt mee, dus de cijfers zijn wat de mix op deze machine werkelijk kost, niet de marginale kost per verzoek.",
+ "phase": {
+  "label": "humaneval + specialistsuite + contaminatie-audit",
+  "since": "2026-10-05 11:51:52",
+  "until": "2026-10-05 12:25:46",
+  "seconds": 2034,
+  "answers": 142,
+  "system_kwh_measured": 0.3068,
+  "mean_system_watt_measured": 542.9,
+  "wh_per_answer": 2.16,
+  "answers_per_minute": 4.19
+ }
 }
