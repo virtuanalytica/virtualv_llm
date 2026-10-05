@@ -27,7 +27,9 @@ the chat uses.
 from __future__ import annotations
 
 import argparse
+import itertools
 import json
+import threading
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -45,18 +47,30 @@ DRAFT_HEADER = (
 
 @dataclass(frozen=True)
 class Member:
+    """One mixture member, served by one or more identical replicas (round-robin per request), so a
+    slow member can be spread over several GPUs without changing the mixture itself."""
     name: str
-    base_url: str          # ends in /v1
+    base_url: str          # first replica, ends in /v1
     model: str = ""        # model id sent upstream; "" = the server's default
+    replicas: tuple[str, ...] = ()
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "_rr", itertools.cycle(self.replicas or (self.base_url,)))
+        object.__setattr__(self, "_lock", threading.Lock())
+
+    def next_url(self) -> str:
+        with self._lock:
+            return next(self._rr)
 
 
 def parse_member(spec: str) -> Member:
-    """name=http://host:port/v1[#model-id]"""
+    """name=http://host:port/v1[|http://host2:port/v1...][#model-id]"""
     name, _, rest = spec.partition("=")
-    url, _, model = rest.partition("#")
-    if not name or not url.startswith("http"):
-        raise argparse.ArgumentTypeError(f"member must look like name=http://host:port/v1[#model], got {spec!r}")
-    return Member(name, url.rstrip("/"), model)
+    urls, _, model = rest.partition("#")
+    replicas = tuple(u.rstrip("/") for u in urls.split("|") if u)
+    if not name or not replicas or not all(u.startswith("http") for u in replicas):
+        raise argparse.ArgumentTypeError(f"member must look like name=http://host:port/v1[|...][#model], got {spec!r}")
+    return Member(name, replicas[0], model, replicas)
 
 
 def as_text_conversation(messages: list[dict]) -> list[dict]:
@@ -88,9 +102,20 @@ def with_drafts(payload: dict, drafts: dict[str, str]) -> dict:
     if not drafts:
         return payload
     body = "\n\n".join(f"### Draft from {name}\n{text}" for name, text in drafts.items())
+    note = f"{DRAFT_HEADER}\n\n{body}"
     msgs = list(payload.get("messages", []))
-    insert_at = len(msgs) - 1                     # just before the latest user message
-    msgs.insert(insert_at, {"role": "system", "content": f"{DRAFT_HEADER}\n\n{body}"})
+    # Chat templates (Qwen, Gemma) reject a system message that is not the first message, so the
+    # drafts are appended to the leading system message, or become the leading one.
+    if msgs and msgs[0].get("role") in ("system", "developer"):
+        first = dict(msgs[0])
+        c = first.get("content")
+        if isinstance(c, list):
+            first["content"] = [*c, {"type": "text", "text": note}]
+        else:
+            first["content"] = f"{c or ''}\n\n{note}".strip()
+        msgs[0] = first
+    else:
+        msgs.insert(0, {"role": "system", "content": note})
     return {**payload, "messages": msgs}
 
 
@@ -105,7 +130,7 @@ def propose(member: Member, messages: list[dict], max_tokens: int, timeout: floa
                "stream": False}
     if member.model:
         payload["model"] = member.model
-    data = json.loads(_post(f"{member.base_url}/chat/completions", payload, timeout))
+    data = json.loads(_post(f"{member.next_url()}/chat/completions", payload, timeout))
     return (data["choices"][0]["message"].get("content") or "").strip()
 
 
@@ -154,7 +179,7 @@ class Handler(BaseHTTPRequestHandler):
                     status.append(f"{name}:error:{type(exc).__name__}")
         upstream = with_drafts(payload, drafts)
         upstream["model"] = self.aggregator.model or upstream.get("model", "")
-        req = Request(f"{self.aggregator.base_url}/chat/completions", data=json.dumps(upstream).encode(),
+        req = Request(f"{self.aggregator.next_url()}/chat/completions", data=json.dumps(upstream).encode(),
                       headers={"Content-Type": "application/json"})
         try:
             resp = urlopen(req, timeout=900)
