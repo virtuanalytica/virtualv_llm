@@ -224,14 +224,29 @@ def table(rows: list[dict]) -> str:
 
 
 def bars(rows: list[dict]) -> str:
+    """Throughput chart: wide label, value, then a small bar at the end; every row carries data-*
+    attributes so the filter bar above it can search, filter by engine and sort."""
     selected = [row for row in rows if row["tps"] is not None]
     maximum = max((row["tps"] for row in selected), default=1)
-    return "".join(
-        f"<div class='barrow'><div class='barlabel'>{html.escape(row['model'])}"
+    engines = sorted({str(row.get("engine", "—")) for row in selected})
+    controls = ("<div class='chart-filters' role='search'>"
+                "<input type='search' id='tp-search' placeholder='Zoek model, profiel of GPU' aria-label='Zoek in throughputprofiel'>"
+                "<select id='tp-engine' aria-label='Filter op engine'><option value=''>Alle engines</option>"
+                + "".join(f"<option>{html.escape(e)}</option>" for e in engines) +
+                "</select><select id='tp-sort' aria-label='Sorteer throughputprofiel'>"
+                "<option value='desc'>Snelste eerst</option><option value='asc'>Traagste eerst</option>"
+                "<option value='name'>Op naam</option><option value='orig'>Oorspronkelijke volgorde</option></select>"
+                "<span id='tp-count' class='tp-count'></span></div>")
+    rows_html = "".join(
+        f"<div class='barrow' data-i='{i}' data-tps='{row['tps']:.4f}' data-engine='{html.escape(str(row.get('engine', '—')))}' "
+        f"data-text='{html.escape((row['model'] + ' ' + row['profile'] + ' ' + str(row.get('gpu_caption', '')) + ' ' + str(row.get('engine', ''))).lower())}'>"
+        f"<div class='barlabel'>{html.escape(row['model'])}"
         f"<small>{html.escape(row['profile'])} · {html.escape(row.get('gpu_caption', 'GPU-provenance ontbreekt'))}</small></div>"
-        f"<div class='track'><div class='bar' style='width:{100 * row['tps'] / maximum:.1f}%'></div></div>"
-        f"<div class='barvalue'>{row['tps']:.2f}</div></div>" for row in selected
+        f"<div class='barvalue'>{row['tps']:.2f}</div>"
+        f"<div class='track' aria-hidden='true'><div class='bar' style='width:{100 * row['tps'] / maximum:.1f}%'></div></div></div>"
+        for i, row in enumerate(selected)
     )
+    return controls + f"<div id='tp-rows'>{rows_html}</div>"
 
 
 def gpu_caption(topology: str | None, visible: str | None = None) -> str:
@@ -1165,7 +1180,7 @@ table{{border-collapse:collapse;width:100%;min-width:980px;table-layout:fixed}} 
 body.column-resizing{{cursor:col-resize;user-select:none}}
 .score-hi{{color:var(--green);font-weight:700}} .score-mid{{color:var(--orange);font-weight:700}} .score-lo{{color:#ff6b6b;font-weight:700}}
 .legend{{display:flex;flex-wrap:wrap;gap:10px;margin:10px 0 0;color:var(--muted);font-size:12px}}
-.chart{{background:#091722;border:1px solid var(--line);border-radius:16px;padding:20px}} .barrow{{display:grid;grid-template-columns:190px 1fr 65px;gap:12px;align-items:center;margin:11px 0}} .track{{height:14px;background:#122b3a;border-radius:20px;overflow:hidden}} .bar{{height:100%;background:linear-gradient(90deg,var(--cyan),var(--orange));border-radius:20px}} .barvalue{{font-variant-numeric:tabular-nums;text-align:right;font-weight:750}} .barlabel{{font-size:13px}}
+.chart{{background:#091722;border:1px solid var(--line);border-radius:16px;padding:20px}} .barrow{{display:grid;grid-template-columns:minmax(0,1fr) 70px 110px;gap:14px;align-items:center;margin:11px 0}} .barrow[hidden]{{display:none}} .track{{height:10px;background:#122b3a;border-radius:20px;overflow:hidden}} .chart-filters{{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:0 0 14px}} .chart-filters input,.chart-filters select{{background:#0d2231;color:inherit;border:1px solid var(--line);border-radius:10px;padding:8px 10px;font:inherit}} .chart-filters input{{flex:1 1 220px}} .tp-count{{color:var(--muted);font-size:12px}} .bar{{height:100%;background:linear-gradient(90deg,var(--cyan),var(--orange));border-radius:20px}} .barvalue{{font-variant-numeric:tabular-nums;text-align:right;font-weight:750}} .barlabel{{font-size:13px}}
 .twocol{{display:grid;grid-template-columns:1fr 1fr;gap:14px}} code{{color:#bfe9e5;background:#08141c;padding:2px 6px;border-radius:5px}} footer{{margin-top:54px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:12px}}
 table.sortable th{{user-select:none}} .th-content{{display:inline-flex;align-items:center;gap:7px}}
 .benchmark-link{{color:#9fc0cf;text-decoration:underline;text-decoration-style:dotted;text-underline-offset:3px}}
@@ -1177,7 +1192,7 @@ table.sortable th{{user-select:none}} .th-content{{display:inline-flex;align-ite
 .explanation-grid article{{scroll-margin-top:22px;background:#091722;border:1px solid var(--line);border-radius:12px;padding:16px}}
 .explanation-grid article:target{{border-color:var(--cyan);box-shadow:0 0 0 2px #33d1c633}}
 .explanation-grid h4{{margin:0 0 5px;color:var(--cyan)}} .explanation-grid p{{margin:0 0 8px}}
-@media(max-width:850px){{.grid,.twocol,.explanation-grid{{grid-template-columns:1fr 1fr}}.barrow{{grid-template-columns:130px 1fr 55px}}}} @media(max-width:560px){{main{{padding:32px 16px}}.grid,.twocol,.explanation-grid{{grid-template-columns:1fr}}}}
+@media(max-width:850px){{.grid,.twocol,.explanation-grid{{grid-template-columns:1fr 1fr}}.barrow{{grid-template-columns:minmax(0,1fr) 60px 70px}}}} @media(max-width:560px){{main{{padding:32px 16px}}.grid,.twocol,.explanation-grid{{grid-template-columns:1fr}}}}
 </style></head><body><main>
 <div class="eyebrow">node2 · gecontroleerde lokale meting</div><h1>LLM Hardware<br>Lab</h1>
 <p>Een reproduceerbare vergelijking van lokale modellen en hardwareconfiguraties: het
@@ -1237,6 +1252,30 @@ tabel erboven bevat de bijbehorende prompt-snelheid, VRAM en GPU-utilisatie.</p>
 <footer>Gegenereerd door <code>scripts/benchmarks/build_dual_v100_html.py</code>. Officiële modelbron: <a href="https://huggingface.co/Qwen/Qwen2.5-72B-Instruct-GGUF">Qwen/Qwen2.5-72B-Instruct-GGUF</a>. 1Cat-referentie: <a href="https://github.com/1CatAI/1Cat-vLLM/blob/main/RELEASE.md">1Cat-vLLM 1.5 release</a>.</footer>
 <script>
 (function(){{
+  // Throughput chart filter bar: search text, engine and sort order.
+  var tpRows = document.getElementById('tp-rows');
+  if (tpRows) {{
+    var items = Array.prototype.slice.call(tpRows.querySelectorAll('.barrow'));
+    var search = document.getElementById('tp-search'), engine = document.getElementById('tp-engine');
+    var sort = document.getElementById('tp-sort'), count = document.getElementById('tp-count');
+    function apply() {{
+      var q = (search.value || '').toLowerCase().trim(), e = engine.value, mode = sort.value, shown = 0;
+      items.forEach(function(el) {{
+        var ok = (!q || el.dataset.text.indexOf(q) !== -1) && (!e || el.dataset.engine === e);
+        el.hidden = !ok; if (ok) shown++;
+      }});
+      var ordered = items.slice().sort(function(a, b) {{
+        if (mode === 'asc') return a.dataset.tps - b.dataset.tps;
+        if (mode === 'name') return a.dataset.text.localeCompare(b.dataset.text);
+        if (mode === 'orig') return a.dataset.i - b.dataset.i;
+        return b.dataset.tps - a.dataset.tps;
+      }});
+      ordered.forEach(function(el) {{ tpRows.appendChild(el); }});
+      count.textContent = shown + ' van ' + items.length + ' configuraties';
+    }}
+    [search, engine, sort].forEach(function(c) {{ c.addEventListener('input', apply); c.addEventListener('change', apply); }});
+    apply();
+  }}
   function cellValue(td, forceText){{
     if (td.dataset.sort !== undefined && td.dataset.sort !== '') return parseFloat(td.dataset.sort);
     var t = td.textContent.trim();
