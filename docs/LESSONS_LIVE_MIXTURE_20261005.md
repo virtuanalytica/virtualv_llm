@@ -61,6 +61,13 @@ benchmarken (zelfde suite + specialist + audit + energie), daarna als aggregator
 - Live gemeten tijdens de suite: prompt ~250 t/s, generatie ~23,6 t/s.
 - Resultaat los (2026-10-05, 46 min): GSM8K 0,92, HumanEval 1,00, MMLU 0,69, BBH 0,917 → composite 0,881
   (mom-live-4: 0,885). Hoogste lokale HumanEval en BBH tot nu toe; MMLU is het zwakke punt. Generatie 23,6 t/s.
+- Als aggregator (`mom-live-glm53`, proposers devstral + qwen35, 2026-10-05 18:09–20:11): GSM8K 0,92, HumanEval 0,925,
+  MMLU 0,73, BBH 0,958 → composite 0,884; specialist 0,613, holdout na cutoff 0,667, canary-recall 0,1 (1 van 10).
+  Energie op hetzelfde suitedeel (humaneval + specialist + audit): 2,17 GPU-Wh per antwoord, 2,89 antwoorden/min.
+  Conclusie: gelijk aan mom-live-4 op composite (0,885), maar lager op specialist (0,72) en holdout (0,75), en ~35 %
+  meer energie per antwoord bij ~30 % minder tempo. mom-live-4 blijft de standaardmix; GLM is de beste losse kandidaat
+  voor redeneertaken (BBH). De eerste mixture-poging liep op een dode proxy (relatief pad onder `systemd-run`); de
+  suite faalt nu vooraf bij een onbereikbaar endpoint (PR #15).
 
 ### Kimi K2.5 (MoE, DeepSeek-V3-architectuur; ~1T totaal)
 
