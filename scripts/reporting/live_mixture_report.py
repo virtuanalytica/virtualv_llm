@@ -93,6 +93,16 @@ def vllm_timings(start: Path | None, end: Path | None) -> dict:
             "prompt_tokens_per_second": round(prompt / prefill_s, 2) if prefill_s else None}
 
 
+def aggregator_answers(unit: str, engine: str, since: str, until: str) -> int:
+    """Answered mixture turns of one aggregator unit in a window, from its own journal: one llama.cpp
+    generation timing line, or one vLLM access-log line for /v1/chat/completions, per answer."""
+    out = subprocess.run(["journalctl", "--user", "-u", unit, "--since", since, "--until", until, "--no-pager",
+                          "-o", "cat"], capture_output=True, text=True).stdout
+    if engine == "vllm":
+        return sum(1 for line in out.splitlines() if '"POST /v1/chat/completions' in line and " 200" in line)
+    return sum(1 for line in out.splitlines() if _T.search(line) and "prompt eval" not in line)
+
+
 def _ts(s: str) -> float:
     return datetime.strptime(s, "%Y-%m-%d %H:%M:%S").timestamp()
 
@@ -152,6 +162,9 @@ def main() -> int:
     ap.add_argument("--layout", choices=sorted(LAYOUTS), default="replicas")
     ap.add_argument("--vllm-metrics-start", type=Path)
     ap.add_argument("--vllm-metrics-end", type=Path)
+    ap.add_argument("--phase-since", help="start of a sub-window used for like-for-like comparisons")
+    ap.add_argument("--phase-until")
+    ap.add_argument("--phase-label", default="")
     ap.add_argument("--out", type=Path, required=True)
     a = ap.parse_args()
     t0, t1 = _ts(a.since), _ts(a.until)
@@ -192,6 +205,18 @@ def main() -> int:
                       "schijven, ventilatoren en voedingsverlies. Het rustverbruik van alle zes GPU's telt mee, dus de "
                       "cijfers zijn wat de mix op deze machine werkelijk kost, niet de marginale kost per verzoek.",
     }
+    if a.phase_since and a.phase_until:
+        p0, p1 = _ts(a.phase_since), _ts(a.phase_until)
+        pg, pc = gpu_energy(a.gpu_log, p0, p1), cpu_energy(a.cpu_log, p0, p1)
+        pj = sum(g["joules"] for g in pg.values()) + pc.get("joules", 0.0)
+        pans = sum(aggregator_answers(u, e, a.phase_since, a.phase_until)
+                   for u, (role, _m, _i, _p, e) in LAYOUTS[a.layout].items() if role == "aggregator")
+        report["phase"] = {"label": a.phase_label, "since": a.phase_since, "until": a.phase_until,
+                           "seconds": round(p1 - p0), "answers": pans,
+                           "system_kwh_measured": round(pj / 3.6e6, 4),
+                           "mean_system_watt_measured": round(pj / (p1 - p0), 1) if p1 > p0 else None,
+                           "wh_per_answer": round(pj / 3600 / pans, 3) if pans else None,
+                           "answers_per_minute": round(pans / (p1 - p0) * 60, 2) if p1 > p0 else None}
     a.out.write_text(json.dumps(report, indent=1) + "\n")
     print(json.dumps(report["totals"], indent=1))
     return 0
