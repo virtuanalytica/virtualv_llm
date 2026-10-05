@@ -75,6 +75,7 @@ def test_user_turn_gathers_drafts_and_reports_failing_proposers(mom):
     sent = seen["agg"][0]
     assert sent["tools"] == tools                                   # tools reach the aggregator only
     assert "draft one" in sent["messages"][0]["content"] and sent["messages"][-1]["content"] == "2+2?"
+    assert [m["role"] for m in sent["messages"]] == ["system", "user"]
     assert "tools" not in seen["p1"][0]
 
 
@@ -101,7 +102,20 @@ def test_proposers_see_tool_steps_as_text():
                     {"role": "user", "content": "[tool result]\n42"}]
 
 
-def test_member_spec_parsing():
-    assert mp.parse_member("q=http://h:1/v1/#m") == mp.Member("q", "http://h:1/v1", "m")
+def test_member_spec_parsing_and_round_robin_replicas():
+    m = mp.parse_member("q=http://h:1/v1/#m")
+    assert (m.name, m.base_url, m.model, m.replicas) == ("q", "http://h:1/v1", "m", ("http://h:1/v1",))
+    r = mp.parse_member("q=http://a:1/v1|http://b:2/v1")
+    assert [r.next_url() for _ in range(4)] == ["http://a:1/v1", "http://b:2/v1"] * 2
     with pytest.raises(Exception):
         mp.parse_member("nourl")
+
+
+def test_drafts_join_the_leading_system_message_never_a_second_one():
+    p = mp.with_drafts({"messages": [{"role": "system", "content": "be brief"}, {"role": "user", "content": "q"}]},
+                       {"a": "x"})
+    assert [m["role"] for m in p["messages"]] == ["system", "user"]
+    assert p["messages"][0]["content"].startswith("be brief") and "Draft from a" in p["messages"][0]["content"]
+    parts = mp.with_drafts({"messages": [{"role": "system", "content": [{"type": "text", "text": "s"}]},
+                                         {"role": "user", "content": "q"}]}, {"a": "x"})
+    assert len(parts["messages"]) == 2 and parts["messages"][0]["content"][-1]["type"] == "text"
