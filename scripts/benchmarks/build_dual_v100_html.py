@@ -115,6 +115,12 @@ def benchmark_score_rows() -> list[dict]:
             continue
         label, engine = BENCHMARK_LABELS[key]
         rows.append({"model": label, "engine": engine, "benchmarks": r["benchmarks"]})
+    # 2026-10-05: the same battery run against live endpoints (mixture proxies, expert-offload servers)
+    # by scripts/benchmarks/eight_task_external.py; labels shared with the well-known suite table.
+    for r in load("eight_task_external_20261005.json").get("results", []):
+        if "benchmarks" in r:
+            rows.append({"model": WELL_KNOWN_LABELS.get(r["model"], r["model"]),
+                         "engine": "live endpoint", "benchmarks": r["benchmarks"]})
     return rows
 
 
