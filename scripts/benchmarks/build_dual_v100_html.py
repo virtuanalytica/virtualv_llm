@@ -169,6 +169,7 @@ GPU_NAMES = {"0": "RTX 4000 Ada", "1": "RTX 4000 Ada", "2": "RTX 4000 Ada", "5":
 LIVE_LABELS = {"qwen38-27b-q4": ("Qwen3.8-27B", "27B", "Q4_K_M"),
                "qwen38-1cat-nvfp4-tp2": ("Qwen3.8 target", "27B", "NVFP4"),
                "qwen36-35b-a3b-1cat-nvfp4-tp2": ("Qwen3.6-35B-A3B", "35B / ~3B active", "NVFP4"),
+               "glm53-reap50-iq4xs": ("GLM-5.3-Flash REAP50", "~157B / ~17B active", "IQ4_XS"),
                "devstral-small2-24b-q4": ("Devstral Small 2", "24B", "Q4_K_M"),
                "qwen35-27b-q4": ("Qwen3.5-27B", "27B", "Q4_K_M"),
                "gemma4-26b-a4b-q4": ("Gemma4-26B-A4B", "26B / ~4B active", "Q4_K_M")}
@@ -185,14 +186,15 @@ def live_mixture_rows() -> list[dict]:
             label, params, quant = LIVE_LABELS.get(u.get("model"), (u.get("model", unit), "—", "—"))
             idx = str(u.get("cuda_index", "")).split(",")
             gpus = " + ".join(f"CUDA {i} {GPU_NAMES.get(i, '?')}" for i in idx)
-            tp = " TP2" if len(idx) > 1 else ""
+            tp = ("" if len(idx) == 1 else " TP2" if u.get("engine") == "vllm" and len(idx) == 2
+                  else f" layer split ×{len(idx)}")
             rows.append({
                 "model": label, "params": params,
                 "engine": "1Cat-vLLM 1.5" if u.get("engine") == "vllm" else "llama.cpp", "quant": quant,
                 "profile": f"live MoM · {u.get('role')}{tp} · {gpus}", "tps": u.get("generation_tokens_per_second"),
                 "prompt_tps": u.get("prompt_tokens_per_second"), "speedup": None, "quality": "—", "memory": "—",
                 "util": fmt(u.get("gpu", {}).get("mean_utilisation_pct"), 1) + "%",
-                "scope": "dual" if tp else "single", "gpu_caption": "live mixture-run 2026-10-05" + (" · NVLink" if tp else ""),
+                "scope": "dual" if tp else "single", "gpu_caption": "live mixture-run 2026-10-05" + (" · NVLink" if "TP2" in tp else ""),
             })
     return rows
 
@@ -330,6 +332,8 @@ def throughput_rows(primary_rows: list[dict]) -> list[dict]:
 
 WELL_KNOWN_LABELS = {
     "mom-live-4": "Live mixture-of-models (Mixture-of-Agents: Qwen3.8 aggregator x2 replica's + Devstral, Qwen3.5, Gemma4)",
+    "glm53-reap50-iq4xs-v100ada": "GLM-5.3-Flash REAP50 IQ4_XS (V100 ×2 + Ada ×2, layer split)",
+    "mom-live-glm53": "Live mixture-of-models (Mixture-of-Agents: GLM-5.3-Flash REAP50 IQ4_XS aggregator + Devstral, Qwen3.5)",
     "mom-live-4-q36": "Live mixture-of-models (Mixture-of-Agents: Qwen3.6-35B-A3B NVFP4 1Cat-vLLM TP2 aggregator + Devstral, Qwen3.5, Gemma4)",
     "mom-live-4-tp2": "Live mixture-of-models (Mixture-of-Agents: Qwen3.8 1Cat-vLLM TP2 aggregator + Devstral, Qwen3.5, Gemma4)",
     "qwen38-27b-q4": "Qwen3.8-27B", "deepseek-r1-qwen32b-q4": "DeepSeek-R1-Qwen",
@@ -991,10 +995,11 @@ model per kaart. Gebruik A4000+Ada layer split alleen om een groter model passen
 
 
 LIVE_MIXTURE_REPORTS = ("live_mixture_of_models_20261005.json", "live_mixture_of_models_tp2_20261005.json",
-                        "live_mixture_of_models_q36tp2_20261005.json")
+                        "live_mixture_of_models_q36tp2_20261005.json", "live_mixture_of_models_glm_20261005.json")
 LAYOUT_LABELS = {"replicas": "aggregator als twee llama.cpp-replica's (data-parallel, één per V100)",
                  "tp2": "aggregator als één 1Cat-vLLM-instantie met tensor parallel (TP2) over het NVLink-paar",
-                 "q36tp2": "aggregator Qwen3.6-35B-A3B NVFP4 (1Cat-vLLM, TP2 over het NVLink-paar)"}
+                 "q36tp2": "aggregator Qwen3.6-35B-A3B NVFP4 (1Cat-vLLM, TP2 over het NVLink-paar)",
+                 "glm": "aggregator GLM-5.3-Flash REAP50 IQ4_XS (layer split over beide V100's + 2 Ada's), 2 proposers"}
 
 
 def live_mixture_section() -> str:
@@ -1007,35 +1012,45 @@ def live_mixture_section() -> str:
 
 
 def _live_mixture_comparison(reports: list[dict]) -> str:
-    """Side by side: same proposers, aggregator as llama.cpp replicas vs 1Cat-vLLM TP2."""
+    """Side by side on the same workload: quality (full suite + contamination-free parts) and energy."""
     suite = {r.get("model"): r for r in load("well_known_suite_20260917.json").get("results", [])}
-    rows = ""
+    spec = {r.get("model"): r for r in load("specialist_suite_20260922.json").get("results", [])}
+    audit = {r.get("model"): r for r in load("contamination_audit_20260923.json").get("results", [])}
+    rows, facts = "", []
     for data in reports:
-        r, t = suite.get(data.get("suite_model"), {}), data.get("phase") or data.get("totals", {})
+        model = data.get("suite_model")
+        r, ph = suite.get(model, {}), data.get("phase") or {}
         parts = [rm.gsm8k_score(r) if r else None, (r.get("humaneval") or {}).get("pass_at_1"),
                  (r.get("mmlu_sample") or {}).get("mean_accuracy"), (r.get("bbh") or {}).get("mean_accuracy")]
         comp = sum(parts) / 4 if all(isinstance(v, (int, float)) for v in parts) else None
-        agg = [u for u in data.get("units", {}).values() if u.get("role") == "aggregator"]
-        rows += ("<tr><td>" + html.escape(LAYOUT_LABELS.get(data.get("layout"), data.get("layout", ""))) + "</td><td>" +
-                 fmt(comp, 3) + "</td><td>" + "</td><td>".join(fmt(v, 3) for v in parts) + "</td><td>" +
-                 fmt(t.get("wh_per_answer"), 2) + " Wh</td><td>" + fmt(t.get("mean_system_watt_measured")) + " W</td><td>" +
-                 fmt(t.get("answers_per_minute"), 2) + "</td><td>" + str(t.get("answers", "–")) + "</td><td>" +
-                 fmt(sum(u.get("gpu", {}).get("mean_utilisation_pct", 0) for u in agg) / len(agg) if agg else None, 1) +
-                 "%</td></tr>")
+        acc = [v.get("accuracy") for k, v in (spec.get(model, {}).get("results") or {}).items()
+               if v.get("status") == "complete" and k != "video"]
+        spec_mean = sum(acc) / len(acc) if acc else None
+        holdout = ((audit.get(model, {}).get("results") or {}).get("post_cutoff_holdout") or {}).get("accuracy")
+        label = LAYOUT_LABELS.get(data.get("layout"), data.get("layout", ""))
+        facts.append((label, comp, holdout, ph.get("gpu_wh_per_answer"), ph.get("answers_per_minute")))
+        rows += ("<tr><td>" + html.escape(label) + "</td><td>" + fmt(comp, 3) + "</td><td>" + fmt(spec_mean, 3) +
+                 "</td><td>" + fmt(holdout, 3) + "</td><td>" + fmt(ph.get("gpu_wh_per_answer"), 2) + " Wh</td><td>" +
+                 (fmt(ph.get("wh_per_answer"), 2) + " Wh" if ph.get("cpu_measured") else "niet gemeten") + "</td><td>" +
+                 fmt(ph.get("answers_per_minute"), 2) + "</td><td>" + str(ph.get("answers", "–")) + "</td></tr>")
+
+    def best(i, low=False):
+        vals = [f for f in facts if isinstance(f[i], (int, float))]
+        return (min if low else max)(vals, key=lambda f: f[i])[0] if vals else "–"
     return f"""
-<h3>Vergelijking: replica's versus TP2 als aggregator</h3>
-<div class="tablewrap"><table><thead><tr><th>Aggregator</th><th>Composite</th><th>gsm8k</th><th>humaneval</th>
-<th>mmlu</th><th>bbh</th><th>Energie per antwoord</th><th>Gem. systeemvermogen</th><th>Antwoorden/min</th><th>Antwoorden</th><th>Aggregator-GPU-utilisatie</th>
-</tr></thead><tbody>{rows}</tbody></table></div>
-<p class="note">Energie, vermogen en antwoorden per minuut zijn voor beide indelingen gemeten op hetzelfde deel
-van de suite ({html.escape(str((reports[0].get("phase") or {}).get("label", "hele meetvenster")))}), zodat het werk gelijk is;
-de scores komen uit de volledige suite.</p>
-<div class="callout"><strong>Interpretatie.</strong> TP2 benut beide V100's wel volledig tijdens een antwoord, maar
-de NVFP4-gewichten op het 1Cat-vLLM-pad leveren duidelijk minder kwaliteit dan de Q4_K_M-GGUF op llama.cpp: dezelfde
-proposers, een veel lagere score, wat strookt met de losse 1Cat-meting van Qwen3.8 NVFP4 elders op deze pagina. Op
-hetzelfde werk kost TP2 bovendien meer energie per antwoord en beantwoordt het minder vragen per minuut. Voor de mix
-blijft de llama.cpp-aggregator dus op alle drie de assen de betere keuze; energiewinst vraagt eerder om minder of
-zuiniger actieve kaarten dan om een andere parallellisatie.</div>
+<h3>Vergelijking van de aggregator-opstellingen</h3>
+<div class="tablewrap"><table><thead><tr><th>Aggregator</th><th>Composite</th><th>Specialist (privé)</th>
+<th>Holdout na cutoff</th><th>GPU-energie per antwoord</th><th>Systeem (GPU+CPU) per antwoord</th><th>Antwoorden/min</th>
+<th>Antwoorden</th></tr></thead><tbody>{rows}</tbody></table></div>
+<p class="note">Energie en tempo zijn voor alle opstellingen gemeten op hetzelfde deel van de suite
+({html.escape(str((reports[0].get("phase") or {}).get("label", "hele meetvenster")))}); GPU-energie is voor elke run
+gemeten, CPU-energie (RAPL) alleen waar de logger liep. Scores komen uit de volledige suite, de specialistsuite en de
+contaminatie-audit.</p>
+<div class="callout"><strong>Interpretatie.</strong> Hoogste composite: {html.escape(best(1))}. Hoogste score op
+de contaminatievrije holdout: {html.escape(best(2))}. Laagste GPU-energie per antwoord: {html.escape(best(3, low=True))};
+hoogste tempo: {html.escape(best(4))}. Een aggregator die op publieke benchmarks hoog scoort maar op nooit gepubliceerde
+vragen duidelijk lager, is geen betere keuze voor echte taken: kies op holdout en specialistsuite, en gebruik energie
+als tweede criterium.</div>
 """
 
 
