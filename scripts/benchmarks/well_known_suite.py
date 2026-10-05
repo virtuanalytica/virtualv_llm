@@ -730,6 +730,12 @@ def main() -> int:
                 raise SystemExit(f"--external-api-key-env {args.external_api_key_env} is unset or empty")
         if args.external_extra_body_json:
             EXTRA_CHAT_BODY = json.loads(args.external_extra_body_json)
+        # Preflight: a dead endpoint otherwise "completes" every lm-eval task in seconds with
+        # connection errors and publishes a broken row (2026-10-05, mixture proxy never started).
+        try:
+            complete_text("Reply with the single word OK.", 16)
+        except Exception as exc:  # noqa: BLE001 - any failure means the endpoint is unusable
+            raise SystemExit(f"endpoint preflight failed for {BASE_URL}{CHAT_COMPLETIONS_PATH}: {exc}")
     default_report: dict[str, Any] = {
         "suite": "gsm8k+bbh+truthfulqa_gen+mmlu_sample(8 subjects)+humaneval(40)",
         "results": [],
