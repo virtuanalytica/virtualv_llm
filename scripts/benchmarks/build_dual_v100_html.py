@@ -176,6 +176,7 @@ LIVE_LABELS = {"qwen38-27b-q4": ("Qwen3.8-27B", "27B", "Q4_K_M"),
                "qwen38-1cat-nvfp4-tp2": ("Qwen3.8 target", "27B", "NVFP4"),
                "qwen36-35b-a3b-1cat-nvfp4-tp2": ("Qwen3.6-35B-A3B", "35B / ~3B active", "NVFP4"),
                "glm53-reap50-iq4xs": ("GLM-5.3-Flash REAP50", "~157B / ~17B active", "IQ4_XS"),
+               "kimi25-iq3xxs": ("Kimi K2.5", "~1T / ~32B active", "UD-IQ3_XXS"),
                "devstral-small2-24b-q4": ("Devstral Small 2", "24B", "Q4_K_M"),
                "qwen35-27b-q4": ("Qwen3.5-27B", "27B", "Q4_K_M"),
                "gemma4-26b-a4b-q4": ("Gemma4-26B-A4B", "26B / ~4B active", "Q4_K_M")}
@@ -1059,11 +1060,19 @@ model per kaart. Gebruik A4000+Ada layer split alleen om een groter model passen
 
 
 LIVE_MIXTURE_REPORTS = ("live_mixture_of_models_20261005.json", "live_mixture_of_models_tp2_20261005.json",
-                        "live_mixture_of_models_q36tp2_20261005.json", "live_mixture_of_models_glm_20261005.json")
+                        "live_mixture_of_models_q36tp2_20261005.json", "live_mixture_of_models_glm_20261005.json",
+                        "live_mixture_of_models_2p_20261005.json", "live_mixture_of_models_1p_20261005.json",
+                        "live_mixture_of_models_gemma4agg_20261005.json", "live_mixture_of_models_qwen35agg_20261005.json",
+                        "live_mixture_of_models_kimi_20261005.json")
 LAYOUT_LABELS = {"replicas": "aggregator als twee llama.cpp-replica's (data-parallel, één per V100)",
                  "tp2": "aggregator als één 1Cat-vLLM-instantie met tensor parallel (TP2) over het NVLink-paar",
                  "q36tp2": "aggregator Qwen3.6-35B-A3B NVFP4 (1Cat-vLLM, TP2 over het NVLink-paar)",
-                 "glm": "aggregator GLM-5.3-Flash REAP50 IQ4_XS (layer split over beide V100's + 2 Ada's), 2 proposers"}
+                 "glm": "aggregator GLM-5.3-Flash REAP50 IQ4_XS (layer split over beide V100's + 2 Ada's), 2 proposers",
+                 "2p": "aggregator Qwen3.8 (2 replica's), 2 proposers: Devstral + Qwen3.5 (zonder Gemma4)",
+                 "1p": "aggregator Qwen3.8 (2 replica's), 1 proposer: Qwen3.5",
+                 "gemma4agg": "aggregator Gemma4-26B-A4B, proposers Qwen3.8 ×2, Devstral, Qwen3.5",
+                 "qwen35agg": "aggregator Qwen3.5-27B (2 replica's), proposers Qwen3.8 ×2, Devstral, Gemma4",
+                 "kimi": "aggregator Kimi K2.5 UD-IQ3_XXS (V100 ×2 + Ada ×2, experts in RAM), 2 proposers"}
 
 
 def live_mixture_section() -> str:
