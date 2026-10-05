@@ -933,6 +933,58 @@ vooraf gecontroleerd.</p>
 """
 
 
+GLM53_VARIANTS = [
+    ("glm53-flash-aj-iq2xxs", "AJ-IQ2_XXS (313B, CPU-offload)", "los"),
+    ("glm53-reap50-iq3m-v100", "REAP50 IQ3_M · 2×V100 (NVLink)", "los"),
+    ("glm53-reap50-iq3m-allfour", "REAP50 IQ3_M · 4 GPU's (2×V100 + A4000 + Ada)", "los"),
+    ("glm53-reap50-iq4xs-v100ada", "REAP50 IQ4_XS · 2×V100 + 2×Ada, alles in VRAM", "los"),
+    ("mom-live-glm53", "REAP50 IQ4_XS als aggregator + Devstral, Qwen3.5", "mixture"),
+]
+
+
+def glm53_variants_section() -> str:
+    """Every GLM-5.3-Flash quant/topology measured with the same suite, side by side, including the
+    live mixture with GLM as aggregator (2026-10-05)."""
+    suite = {r.get("model"): r for r in load("well_known_suite_20260917.json").get("results", [])}
+    spec = {r.get("model"): r for r in load("specialist_suite_20260922.json").get("results", [])}
+    audit = {r.get("model"): r for r in load("contamination_audit_20260923.json").get("results", [])}
+    rows = []
+    for model, label, kind in GLM53_VARIANTS:
+        r = suite.get(model)
+        if not r or r.get("error"):
+            continue
+        parts = [rm.gsm8k_score(r), (r.get("humaneval") or {}).get("pass_at_1"),
+                 (r.get("mmlu_sample") or {}).get("mean_accuracy"), (r.get("bbh") or {}).get("mean_accuracy")]
+        comp = sum(parts) / 4 if all(isinstance(v, (int, float)) for v in parts) else None
+        acc = [v.get("accuracy") for k, v in (spec.get(model, {}).get("results") or {}).items()
+               if isinstance(v, dict) and v.get("status") == "complete" and k != "video"]
+        holdout = ((audit.get(model, {}).get("results") or {}).get("post_cutoff_holdout") or {}).get("accuracy")
+        rows.append("<tr>" + "".join([
+            f"<td><strong>{html.escape(label)}</strong><small>{kind}</small></td>",
+            *[f"<td class='num'>{fmt(v, 3)}</td>" for v in parts],
+            f"<td class='num hot'>{fmt(comp, 3)}</td>",
+            f"<td class='num'>{fmt(sum(acc) / len(acc), 3) if acc else '—'}</td>",
+            f"<td class='num'>{fmt(holdout, 3)}</td>",
+            f"<td class='num'>{fmt(r.get('completion_tokens_per_second'))}</td>",
+        ]) + "</tr>")
+    if not rows:
+        return ""
+    return f"""
+<h2 id="glm53-varianten">GLM-5.3-Flash: alle quants en opstellingen</h2>
+<p>Elke GLM-5.3-Flash-variant die de volledige suite heeft doorlopen, naast elkaar: dezelfde taken, dezelfde
+scoring. De onderste rij is de live mixture met GLM als aggregator; daar is t/s niet als één getal gemeten
+(zie de energietabel in <em>Live mixture-of-models</em>). Specialist en holdout bestaan alleen voor de runs
+van 2026-10-05; oudere runs tonen “—”. Composite = gemiddelde van GSM8K, HumanEval, MMLU en BBH.</p>
+<div class="tablewrap"><table class="sortable"><thead><tr><th>Variant</th><th>GSM8K</th><th>HumanEval</th>
+<th>MMLU</th><th>BBH</th><th data-sort-dir="desc">Composite</th><th>Specialist</th><th>Holdout na cutoff</th>
+<th>Decode t/s</th></tr></thead><tbody>{''.join(rows)}</tbody></table></div>
+<p class="note">Conclusie 2026-10-05: REAP50 IQ4_XS volledig in VRAM is de beste losse GLM-variant (composite
+0,881, hoogste lokale HumanEval). Als aggregator haalt GLM de hoogste BBH van alle lokale runs, maar scoort lager
+op de privé-specialistsuite en de holdout dan de Qwen3.8-mix en kost meer energie per antwoord; die mix blijft de
+standaard.</p>
+"""
+
+
 def glm53_completion_summary() -> str:
     """Keep the completed GLM result visible above the long sortable tables."""
     suite = next((row for row in load("well_known_suite_20260917.json").get("results", [])
@@ -1262,6 +1314,7 @@ tabel erboven bevat de bijbehorende prompt-snelheid, VRAM en GPU-utilisatie.</p>
 {matrix_gate_section()}
 {hardware_scaling_section()}
 {glm53_hardware_section()}
+{glm53_variants_section()}
 {additional_gpu_serving_section()}
 {large_model_provenance_section()}
 {qwen38_flash_next_vllm_section()}
