@@ -40,6 +40,25 @@ LAYOUTS = {  # unit: (role, model, CUDA indices in PCI order, port, engine)
     # aggregator GLM-5.3-Flash REAP50 IQ4_XS, layer split over the V100 pair + Ada 2,5; two proposers on Ada 0,1
     "glm": {"glm53-iq4xs": ("aggregator", "glm53-reap50-iq4xs", (3, 4, 2, 5), 18017, "llama.cpp"),
             "mom-devstral": PROPOSERS["mom-devstral"], "mom-qwen35": PROPOSERS["mom-qwen35"]},
+    # 2026-10-05 evening queue: same running servers, different roles (one proxy per variant)
+    "2p": {"mom-qwen38": ("aggregator", "qwen38-27b-q4", (3,), 8021, "llama.cpp"),
+           "mom-qwen38b": ("aggregator", "qwen38-27b-q4", (4,), 8026, "llama.cpp"),
+           **{u: PROPOSERS[u] for u in ("mom-devstral", "mom-qwen35", "mom-qwen35b")}},
+    "1p": {"mom-qwen38": ("aggregator", "qwen38-27b-q4", (3,), 8021, "llama.cpp"),
+           "mom-qwen38b": ("aggregator", "qwen38-27b-q4", (4,), 8026, "llama.cpp"),
+           **{u: PROPOSERS[u] for u in ("mom-qwen35", "mom-qwen35b")}},
+    "gemma4agg": {"mom-gemma4": ("aggregator", "gemma4-26b-a4b-q4", (2,), 8024, "llama.cpp"),
+                  "mom-qwen38": ("proposer", "qwen38-27b-q4", (3,), 8021, "llama.cpp"),
+                  "mom-qwen38b": ("proposer", "qwen38-27b-q4", (4,), 8026, "llama.cpp"),
+                  **{u: PROPOSERS[u] for u in ("mom-devstral", "mom-qwen35", "mom-qwen35b")}},
+    "qwen35agg": {"mom-qwen35": ("aggregator", "qwen35-27b-q4", (1,), 8023, "llama.cpp"),
+                  "mom-qwen35b": ("aggregator", "qwen35-27b-q4", (5,), 8025, "llama.cpp"),
+                  "mom-qwen38": ("proposer", "qwen38-27b-q4", (3,), 8021, "llama.cpp"),
+                  "mom-qwen38b": ("proposer", "qwen38-27b-q4", (4,), 8026, "llama.cpp"),
+                  **{u: PROPOSERS[u] for u in ("mom-devstral", "mom-gemma4")}},
+    # Kimi K2.5 UD-IQ3_XXS aggregator, layer split over the V100 pair + Ada 2,5 with MoE experts in RAM
+    "kimi": {"kimi25-iq3xxs": ("aggregator", "kimi25-iq3xxs", (3, 4, 2, 5), 18019, "llama.cpp"),
+             "mom-devstral": PROPOSERS["mom-devstral"], "mom-qwen35": PROPOSERS["mom-qwen35"]},
 }
 _T = re.compile(r"(prompt eval|eval) time =\s*([\d.]+) ms /\s*(\d+) tokens")
 
