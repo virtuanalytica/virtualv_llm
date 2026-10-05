@@ -23,13 +23,15 @@ from datetime import date
 from pathlib import Path
 from typing import Any, Callable
 
+from result_store import upsert_result
+
 ROOT = Path(__file__).resolve().parents[2]
 REPORTS = ROOT / "reports"
 OUT = REPORTS / "specialist_suite_20260922.json"
 PRIVATE_PACK_DIR = ROOT / "data" / "eval_cache" / "specialist_packs"
 PACK_DIR = ROOT / "config" / "specialist_benchmarks"
-PROTOCOL = "v2-private-specialist-packs-vision-video-iq-eq-fq-qq-20260922"
-SPECIALISTS = ("chemistry", "physics", "vision", "video", "iq", "eq", "fq", "qq")
+PROTOCOL = "v3-private-specialist-packs-finance-20260924"
+SPECIALISTS = ("chemistry", "physics", "vision", "video", "iq", "eq", "fq", "qq", "finance")
 
 # Sources and publication dates live in the result as well as in this code, so
 # a detached JSON/HTML artifact always preserves its provenance.
@@ -44,6 +46,8 @@ SOURCES = {
     "eq": {"name": "EDS social-emotional reasoning holdout (not a clinical EQ test)", "publication_date": "2026-09-22", "url": "", "samples": "enabled CSV rows"},
     "fq": {"name": "EDS actuator/robot physics simulation holdout", "publication_date": "2026-09-22", "url": "", "samples": "enabled CSV rows"},
     "qq": {"name": "EDS quantum systems and quantum chemistry holdout", "publication_date": "2026-09-22", "url": "", "samples": "enabled CSV rows"},
+    "finance": {"name": "EDS finance holdout from identifier and crypto fact files, plus CFA/FRM/financial-engineering method items",
+                "publication_date": "2026-09-24", "url": "", "samples": "enabled CSV rows"},
 }
 
 
@@ -184,7 +188,7 @@ def run_specialists(model: str, complete: Callable[[str, int], str], selected: t
                               "access_profile": access_profile, "results": {}}
     for specialist in selected:
         try:
-            if specialist in ("chemistry", "physics", "iq", "eq", "qq"):
+            if specialist in ("chemistry", "physics", "iq", "eq", "qq", "finance"):
                 score = _run_custom(specialist, complete)
             elif specialist == "vision":
                 score = _run_vision(vision_complete)
@@ -195,9 +199,6 @@ def run_specialists(model: str, complete: Callable[[str, int], str], selected: t
         except Exception as exc:
             score = {"status": "unavailable", "reason": f"{type(exc).__name__}: {exc}", "n_samples": 0}
         result["results"][specialist] = score
-    payload = json.loads(out.read_text()) if out.exists() else {"suite": "specialist", "results": []}
-    payload["protocol"] = PROTOCOL
-    payload["results"] = [r for r in payload.get("results", []) if r.get("model") != model] + [result]
-    out.parent.mkdir(parents=True, exist_ok=True)
-    tmp = out.with_suffix(out.suffix + ".tmp"); tmp.write_text(json.dumps(payload, indent=2) + "\n"); tmp.replace(out)
+    upsert_result(out, result, {"suite": "specialist", "protocol": PROTOCOL, "results": []},
+                  key=lambda row: (row.get("model"), row.get("access_profile", "sandbox")))
     return result

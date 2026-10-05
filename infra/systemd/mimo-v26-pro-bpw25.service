@@ -1,0 +1,17 @@
+[Unit]
+Description=MiMo-V2.6-Pro BPW2.5 well-known suite on dual V100
+After=network-online.target
+
+[Service]
+Type=exec
+WorkingDirectory=/media/knight2/EDS2/projects/virtualv_llm
+ExecStart=/media/knight2/EDS2/projects/virtualv_llm/infra/systemd/run_mimo_v26_pro_bpw25.sh
+Restart=no
+TimeoutStartSec=infinity
+TimeoutStopSec=120s
+KillMode=control-group
+StandardOutput=append:/media/knight2/EDS2/projects/virtualv_llm/reports/benchmark_logs/mimo_v26_pro_bpw25.service.log
+StandardError=append:/media/knight2/EDS2/projects/virtualv_llm/reports/benchmark_logs/mimo_v26_pro_bpw25.service.log
+
+[Install]
+WantedBy=default.target

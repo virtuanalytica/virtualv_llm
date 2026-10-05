@@ -1,7 +1,19 @@
 # VirtualV LLM model test roadmap
 
-Status date: 2026-09-22. This document separates measured local evidence from
+Status date: 2026-09-24. This document separates measured local evidence from
 upstream reference numbers and from untested hypotheses.
+
+## 2026-09-24 decisions
+
+- MiMo-V2.6-Pro q4 (MXFP4) and q3 (BPW3.0/BPW3.5) are not planned. They do
+  not fit this disk or these V100s, and they are the wrong next step.
+- A usable rate under 3 tokens/second is not acceptable on this machine.
+  Mixture throughput is the sequential rate, `1 / sum(1/member_t/s)`, not
+  the slowest member's own rate.
+- The live MiMo-V2.6-Pro BPW2.5 suite stays. Its measured decode is above
+  that floor. Mixture rows already use the sequential rate, and the search
+  keeps combinations at or above 3 tok/s. The next work is the ordered queue
+  below, after the disk gate, not another MiMo quant.
 
 ## Current local baselines
 
@@ -15,23 +27,42 @@ upstream reference numbers and from untested hypotheses.
 These values are read from `reports/well_known_suite_20260917.json`. Different
 engines, contexts and topologies remain separate rows.
 
+## Disk gate before the queue
+
+Checked 2026-09-24 11:24 CEST. `/media/knight2/EDS2/models/llm` contains only
+`mimo-v26-pro-bpw2.5` (319,743,531,488 bytes, suite still running) and
+`qwen38-27b` (live chat on GPU 3, port 8011). `df` showed about 74 GB free.
+A download starts only when free space exceeds the artifact size plus the
+24 GB reserve, so nothing of about 50 GB or larger fits while the MiMo shards
+stay. Do not delete those shards until `mimo-v26-pro-bpw25.service` has exited
+and `/tmp/v100_exclusive.lock` is free. The Qwen chat weights stay.
+
 ## Ordered experiment queue
 
-1. **GLM correctness re-test, no download.** Re-run the existing AJ-IQ2_XXS
-   weights after the `reasoning_effort` fix. Preserve the old result as
-   superseded evidence and use a new run identifier. The current REAP50 IQ3_M
-   forced re-test is guarded by `glm53-reap50-retest.service`; the guardian
-   waits for the shared GPU lock and resumes only if the active attempt lacks
-   two post-download `benchmark_complete` events.
-2. **DeepSeek-V4-Flash-0731 placement matrix, existing weights first.** Use the
+1. **GLM AJ-IQ2_XXS re-test, after a re-download.** The weights are not on
+   disk. Recorded size is 87,346,006,560 bytes (two shards in
+   `scripts/benchmarks/run_glm53_hardware_matrix.py`, repo
+   `aj9o9/GLM-5.3-Flash-GGUF`, revision
+   `07c62fcdeaf1c05d22bd123c3da8058a1b1e63e2`). Re-run only after the disk gate
+   and the V100 lock both pass. Preserve the old result as superseded evidence
+   and use a new run identifier. `glm53-reap50-retest.service` is inactive, not
+   waiting on the lock. Its IQ3_M weights (72,132,392,352 bytes) are also gone,
+   so starting that unit would download before it can score. Leave it stopped
+   until the same gate passes.
+2. **DeepSeek-V4-Flash-0731 placement matrix, after a re-download.** The
+   UD-IQ3_XXS directory is gone. The benchmark registry describes four shards,
+   about 104 GiB. Same disk and lock gates. Once the weights are back, use the
    measured 13.89 tok/s row as baseline. Test V100 layer split and the supported
    all-four layer split with identical context and prompts. Treat “V100 experts,
    RTX attention/KV, CPU remainder” as a hypothesis until a runtime exposes and
    verifies tensor-class placement; never infer it from aggregate VRAM use.
-3. **Qwen quant improvement.** AP-Q4_K_XL is the next GGUF quality candidate,
-   but download only when free space exceeds download size plus the 24 GB reserve.
-   Promote either a speed champion (at least 42.79 tok/s and composite at least
-   0.91) or a balanced champion (composite above 0.9232 and at least 35 tok/s).
+3. **Qwen quant improvement.** AP-Q4_K_XL (101,142,769,536 bytes) was removed
+   on 2026-09-24; the restore command is in
+   `/media/knight2/EDS2/models/ARCHIVED_MODELS_MANIFEST.md` section 3. Download
+   only when free space exceeds that size plus the 24 GB reserve. The measured
+   rows stay valid. Promote either a speed champion (at least 42.79 tok/s and
+   composite at least 0.91) or a balanced champion (composite above 0.9232 and
+   at least 35 tok/s).
 4. **1Cat-vLLM baseline before branch work.** Pin release `v1.5.0`, run its
    SM70 preflight in an isolated environment and establish target-only quality
    before MTP. Upstream reports 80.732 tok/s target-only and 138.26 tok/s MTP4

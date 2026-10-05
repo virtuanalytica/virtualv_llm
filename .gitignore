@@ -30,6 +30,9 @@ reports/lm_eval_runs/
 reports/*_cascade_*.json
 reports/*.tmp
 
+# result_store.py's fcntl lock sidecar files, one per JSON report it guards
+*.json.lock
+
 # Generated local service units and build/test caches
 infra/systemd/generated/
 .pytest_cache/

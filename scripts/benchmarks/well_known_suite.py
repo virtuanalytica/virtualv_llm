@@ -39,14 +39,40 @@ from benchmark_local_gguf_tp2 import (  # noqa: E402
 )
 from humaneval_harness import run_humaneval  # noqa: E402
 from specialist_suite import SPECIALISTS, run_specialists  # noqa: E402
+from contamination_audit import METHODS as CONTAMINATION_METHODS, run_contamination_audit  # noqa: E402
+from result_store import locked_report, upsert_result  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 REPORTS = ROOT / "reports"
+NUMERAI_DASHBOARD = Path(
+    "/media/knight2/EDS2/projects/numerai-signals/reports/dual_v100_nvlink_benchmark.html")
 PORT = 18011
 BASE_URL = f"http://127.0.0.1:{PORT}"
 MODEL_ALIAS = "x"
 LM_EVAL_BIN = str(Path.home() / ".local/bin/lm-eval")
 EVAL_PROTOCOL = "v4-mmlu-fewshot-20260918"
+# Set only for --external-url endpoints that need a bearer token (cloud providers
+# behind an OpenAI-compatible surface, e.g. Gemini/Antigravity's /v1beta/openai). Local
+# llama-server/vLLM endpoints have no auth, so this stays None for every existing caller.
+API_KEY: str | None = None
+# Most OpenAI-compatible servers, local and cloud, serve chat completions at
+# /v1/chat/completions -- but Gemini's OpenAI-compat layer serves it at
+# /chat/completions directly under its own /v1beta/openai base (no extra /v1
+# segment), so this is overridable per --external-url invocation instead of hardcoded.
+CHAT_COMPLETIONS_PATH = "/v1/chat/completions"
+# 2026-09-23: confirmed via curl that Gemini 3's reasoning tokens are drawn
+# from the SAME max_tokens budget as the visible answer -- max_tokens=50
+# truncated a correct "56" down to a bare "5" before the model finished
+# thinking; max_tokens=500 fixed it, and a plain top-level "reasoning_effort":
+# "none" body field ALSO fixes it at max_tokens=50 with finish_reason=stop.
+# Same failure class as this repo's earlier GLM reasoning_effort and
+# DeepSeek-R1 empty-content bugs. Only wired into complete_text/complete_vision
+# below (HumanEval, specialists, contamination_audit -- the paths this module
+# itself builds the request body for); gsm8k/bbh/mmlu_sample/truthfulqa_gen go
+# through lm-eval's own local-chat-completions request builder instead, which
+# has no equivalent passthrough here yet -- left open rather than patching the
+# installed lm_eval package.
+EXTRA_CHAT_BODY: dict[str, Any] = {}
 
 MMLU_SUBJECT_SAMPLE = [
     "abstract_algebra", "anatomy", "astronomy", "college_computer_science",
@@ -71,19 +97,27 @@ PERF_PROMPT = ("Write a continuous technical explanation of point-in-time valida
                "machine learning. Use complete sentences and keep writing until the token budget ends.")
 
 
-def request_json(path: str, payload: dict[str, Any] | None = None, timeout: int = 240) -> dict[str, Any]:
+REQUEST_TIMEOUT = 240
+
+
+def request_json(path: str, payload: dict[str, Any] | None = None, timeout: int | None = None) -> dict[str, Any]:
+    if timeout is None:
+        timeout = REQUEST_TIMEOUT
     body = None if payload is None else json.dumps(payload).encode()
-    req = Request(f"{BASE_URL}{path}", data=body, headers={"Content-Type": "application/json"})
+    headers = {"Content-Type": "application/json"}
+    if API_KEY:
+        headers["Authorization"] = f"Bearer {API_KEY}"
+    req = Request(f"{BASE_URL}{path}", data=body, headers=headers)
     with urlopen(req, timeout=timeout) as response:
         return json.loads(response.read())
 
 
 def complete_text(prompt: str, max_tokens: int, stop: list[str] | None = None) -> str:
     payload = {"model": MODEL_ALIAS, "messages": [{"role": "user", "content": prompt}],
-               "max_tokens": max_tokens, "temperature": 0}
+               "max_tokens": max_tokens, "temperature": 0, **EXTRA_CHAT_BODY}
     if stop:
         payload["stop"] = stop
-    resp = request_json("/v1/chat/completions", payload)
+    resp = request_json(CHAT_COMPLETIONS_PATH, payload)
     return resp["choices"][0]["message"]["content"]
 
 
@@ -94,8 +128,8 @@ def complete_vision(prompt: str, image_path: Path, max_tokens: int) -> str:
     payload = {"model": MODEL_ALIAS, "messages": [{"role": "user", "content": [
         {"type": "text", "text": prompt},
         {"type": "image_url", "image_url": {"url": f"data:{mime};base64,{encoded}"}},
-    ]}], "max_tokens": max_tokens, "temperature": 0}
-    resp = request_json("/v1/chat/completions", payload)
+    ]}], "max_tokens": max_tokens, "temperature": 0, **EXTRA_CHAT_BODY}
+    resp = request_json(CHAT_COMPLETIONS_PATH, payload)
     return resp["choices"][0]["message"]["content"]
 
 
@@ -116,10 +150,15 @@ def run_lm_eval_task(
     num_fewshot: int | None = None,
 ) -> dict[str, Any]:
     out_dir = out_root / task
+    model_args = (f"model={MODEL_ALIAS},base_url={BASE_URL}{CHAT_COMPLETIONS_PATH},"
+                  f"num_concurrent=1,tokenized_requests=False,tokenizer_backend=None")
+    if API_KEY:
+        model_args += f",api_key={API_KEY}"
+    if REQUEST_TIMEOUT > 300:
+        model_args += f",timeout={REQUEST_TIMEOUT}"
     args = [
         LM_EVAL_BIN, "--model", "local-chat-completions", "--apply_chat_template",
-        "--model_args", f"model={MODEL_ALIAS},base_url={BASE_URL}/v1/chat/completions,"
-                        f"num_concurrent=1,tokenized_requests=False,tokenizer_backend=None",
+        "--model_args", model_args,
         "--tasks", task, "--limit", str(limit), "--output_path", str(out_dir),
     ]
     if log_samples:
@@ -254,7 +293,39 @@ def score_bbh_logged_samples(out_dir: Path, task: str) -> dict[str, Any] | None:
     return {"accuracy": round(correct / total, 4) if total else None, "n": total}
 
 
-def run_mmlu_sample(out_root: Path) -> dict[str, Any]:
+def publish_partial(report_path: Path, model: str, note: str, **fields: Any) -> None:
+    """Write the scores finished so far and rebuild the dashboard.
+
+    A later task may still be running. The row stays ``status=running`` until
+    the caller replaces it with the finished suite result.
+    """
+    try:
+        with locked_report(report_path) as payload:
+            rows = payload.setdefault("results", [])
+            row = next((item for item in rows if item.get("model") == model), None)
+            if row is None:
+                row = {"model": model}
+                rows.append(row)
+            row.pop("error", None)
+            row["status"] = "running"
+            row["progress_note"] = note
+            row.update(fields)
+        dest = Path(os.environ.get("VIRTUALV_DASHBOARD_OUT", str(NUMERAI_DASHBOARD)))
+        env = os.environ.copy()
+        env["VIRTUALV_DASHBOARD_OUT"] = str(dest)
+        subprocess.run(
+            [sys.executable, str(ROOT / "scripts/benchmarks/build_dual_v100_html.py")],
+            cwd=ROOT, env=env, check=False,
+        )
+        local = REPORTS / "dual_v100_nvlink_benchmark.html"
+        if dest.exists() and dest.resolve() != local.resolve():
+            local.write_bytes(dest.read_bytes())
+        print(f"dashboard {note}", flush=True)
+    except Exception as exc:
+        print(f"dashboard update failed: {type(exc).__name__}: {exc}", flush=True)
+
+
+def run_mmlu_sample(out_root: Path, on_subject: Any = None) -> dict[str, Any]:
     per_subject = {}
     correct_total = 0
     n_total = 0
@@ -277,6 +348,8 @@ def run_mmlu_sample(out_root: Path) -> dict[str, Any]:
         if acc_key and metrics.get(acc_key) is not None:
             correct_total += metrics[acc_key] * MMLU_LIMIT_PER_SUBJECT
             n_total += MMLU_LIMIT_PER_SUBJECT
+        if on_subject is not None:
+            on_subject(subject, per_subject, n_total)
     return {
         "per_subject": per_subject,
         "mean_accuracy": round(correct_total / n_total, 4) if n_total else None,
@@ -284,7 +357,7 @@ def run_mmlu_sample(out_root: Path) -> dict[str, Any]:
     }
 
 
-def run_bbh_sample(out_root: Path) -> dict[str, Any]:
+def run_bbh_sample(out_root: Path, on_subtask: Any = None) -> dict[str, Any]:
     per_subtask: dict[str, Any] = {}
     correct_total = 0.0
     n_total = 0
@@ -299,6 +372,8 @@ def run_bbh_sample(out_root: Path) -> dict[str, Any]:
             count = rescored["n"] if rescored is not None else BBH_LIMIT
             correct_total += acc * count
             n_total += count
+        if on_subtask is not None:
+            on_subtask(subtask, per_subtask, n_total)
     return {
         "per_subtask": per_subtask,
         "mean_accuracy": round(correct_total / n_total, 4) if n_total else None,
@@ -311,33 +386,73 @@ def run_suite_against_running_server(model_name: str,
                                      physical_gpus: tuple[int, ...] | list[int] = (1, 2),
                                      specialists: tuple[str, ...] = (),
                                      vision_capable: bool = False,
-                                     access_profile: str = "sandbox") -> dict[str, Any]:
+                                     access_profile: str = "sandbox",
+                                     contamination_audit: tuple[str, ...] = (),
+                                     report_path: Path | None = None) -> dict[str, Any]:
     out_root = REPORTS / "lm_eval_runs" / model_name
     started = time.time()
+    report = report_path or (REPORTS / "well_known_suite_20260917.json")
+
+    def publish(note: str, **fields: Any) -> None:
+        publish_partial(report, model_name, note, **fields)
 
     # log_samples on every task (not just MMLU): scripts/benchmarks/mixture_of_models.py
     # builds a post-hoc per-question ensemble across already-tested models by reading
     # these logged samples back, so no extra GPU time is needed for the mixture step.
     gsm8k = run_lm_eval_task("gsm8k", GSM8K_LIMIT, out_root, log_samples=True)
+    publish("bezig · GSM8K af", gsm8k=gsm8k.get("metrics", gsm8k))
     truthfulqa = run_lm_eval_task("truthfulqa_gen", TRUTHFULQA_LIMIT, out_root, log_samples=True)
-    bbh = run_bbh_sample(out_root)
-    mmlu = run_mmlu_sample(out_root)
+    publish("bezig · TruthfulQA af", truthfulqa_gen=truthfulqa.get("metrics", truthfulqa))
+
+    def publish_bbh(subtask: str, per_subtask: dict[str, Any], n_total: int) -> None:
+        done = [value for value in per_subtask.values() if isinstance(value, (int, float))]
+        mean = round(sum(done) / len(done), 4) if done else None
+        publish(
+            f"bezig · BBH {subtask} ({len(per_subtask)}/{len(BBH_SUBTASKS)})",
+            bbh={"per_subtask": dict(per_subtask), "mean_accuracy": mean, "n_samples": n_total},
+        )
+
+    bbh = run_bbh_sample(out_root, on_subtask=publish_bbh)
+
+    def publish_mmlu(subject: str, per_subject: dict[str, Any], n_total: int) -> None:
+        done = [value for value in per_subject.values() if isinstance(value, (int, float))]
+        mean = round(sum(done) / len(done), 4) if done else None
+        publish(
+            f"bezig · MMLU {subject} ({len(per_subject)}/{len(MMLU_SUBJECT_SAMPLE)})",
+            mmlu_sample={"per_subject": dict(per_subject), "mean_accuracy": mean, "n_samples": n_total},
+        )
+
+    mmlu = run_mmlu_sample(out_root, on_subject=publish_mmlu)
     humaneval = run_humaneval(complete_text, limit=HUMANEVAL_LIMIT)
+    publish("bezig · HumanEval af", humaneval=humaneval)
     # Specialist scores have their own artifact/table. They are intentionally
     # excluded from the general composite: all historical models stay blank
     # rather than acquiring an incomparable zero or a retroactive score.
     specialist = run_specialists(model_name, complete_text, specialists,
                                  complete_vision if vision_capable else None,
                                  access_profile=access_profile) if specialists else None
+    # Same rationale as specialist scores above: its own artifact, excluded
+    # from the general composite so historical rows stay blank rather than
+    # acquiring a retroactive, incomparable score.
+    contamination = run_contamination_audit(model_name, complete_text, contamination_audit,
+                                            access_profile=access_profile) if contamination_audit else None
 
     samples: list[dict[int, dict[str, float]]] = []
     stop = threading.Event()
     thread = threading.Thread(target=monitor_gpu, args=(stop, samples, physical_gpus), daemon=True)
     thread.start()
     try:
-        perf = request_json("/v1/completions", {
-            "model": MODEL_ALIAS, "prompt": PERF_PROMPT, "max_tokens": 256, "temperature": 0, "ignore_eos": True,
-        })
+        # Local llama-server/vLLM always serve raw /v1/completions with a
+        # llama.cpp-style "timings" block. Cloud chat-only providers (proxied
+        # or direct) often don't implement the legacy non-chat completions
+        # endpoint at all -- t/s is then simply unavailable rather than fatal,
+        # since the suite's actual scoring never depended on this call.
+        try:
+            perf = request_json("/v1/completions", {
+                "model": MODEL_ALIAS, "prompt": PERF_PROMPT, "max_tokens": 256, "temperature": 0, "ignore_eos": True,
+            })
+        except Exception as exc:
+            perf = {"error": f"{type(exc).__name__}: {exc}"}
     finally:
         stop.set()
         thread.join(timeout=2)
@@ -362,7 +477,15 @@ def run_suite_against_running_server(model_name: str,
 
 def benchmark_model(name: str, model_path: Path, profile_name: str,
                     specialists: tuple[str, ...] = (), vision_capable: bool = False,
-                    access_profile: str = "sandbox") -> dict[str, Any]:
+                    access_profile: str = "sandbox",
+                    contamination_audit: tuple[str, ...] = (),
+                    report_path: Path | None = None) -> dict[str, Any]:
+    global LM_EVAL_TIMEOUT, REQUEST_TIMEOUT
+    if name.startswith("mimo-v26-pro-"):
+        # 42B-active weights mostly on CPU: a 256-token decode and a 50-item
+        # GSM8K batch both exceed the fast-model ceilings.
+        LM_EVAL_TIMEOUT = 6 * 3600
+        REQUEST_TIMEOUT = 3600
     profile = PROFILES[profile_name]
     log_path = REPORTS / "lm_eval_runs" / f"{name}-wellknown-{profile_name}-server.log"
     log_path.parent.mkdir(parents=True, exist_ok=True)
@@ -424,9 +547,12 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
     # size-based rule would need actual measured-VRAM data per quant, not
     # file size, to be safe. Deferred; allowlist is the same trade the two
     # existing entries already made.
-    NEEDS_FIT_PREFIXES = ("glm53-", "deepseek-v4-flash-0731-", "qwen38-flash-next-ap-q4kxl")
+    NEEDS_FIT_PREFIXES = ("glm53-", "deepseek-v4-flash-0731-", "qwen38-flash-next-ap-q4kxl", "mimo-v26-pro-")
     if name.startswith(NEEDS_FIT_PREFIXES):
-        margins = ",".join("1024" for _ in profile["physical"])
+        # MiMo-V2.6-Pro BPW2.5 is 320 GB. A 1024 MiB fit margin asked CUDA0
+        # for 33463 MiB and cudaMalloc failed on the 32 GB V100 (2026-09-24).
+        # Keep every expert on CPU and leave 4 GB free on each V100.
+        margins = ",".join("4096" if name.startswith("mimo-v26-pro-") else "1024" for _ in profile["physical"])
         # 2026-09-22: a retry of glm53-reap50-iq3m-v100 (dual-layer) after the
         # tensor_split fix below still failed. First diagnosis wrongly blamed
         # a tensor_split regression -- that was reading a stale server log
@@ -442,6 +568,8 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
         # next attempt's server log has real diagnostics instead of guessing
         # further from a stale file.
         command.extend(["--fit", "on", "--fit-ctx", "4096", "--fit-target", margins, "--verbose"])
+        if name.startswith("mimo-v26-pro-"):
+            command.append("--cpu-moe")
         if name.startswith("glm53-"):
             command.extend([
                 "--override-kv", (
@@ -484,9 +612,15 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
     with log_path.open("w") as log:
         proc = subprocess.Popen(command, env=env, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
         try:
-            wait_ready(proc)
-            result = run_suite_against_running_server(name, profile["physical"], specialists, vision_capable, access_profile)
+            # 320GB MiMo shards take far longer than the 180s default to mmap.
+            wait_ready(proc, 3600 if name.startswith("mimo-v26-pro-") else 180)
+            result = run_suite_against_running_server(
+                name, profile["physical"], specialists, vision_capable,
+                access_profile, contamination_audit, report_path)
             result["visible_device_probe"] = visible
+            result["engine"] = "llama.cpp"
+            result["hardware_profile"] = profile_name
+            result["physical_gpus"] = list(profile["physical"])
             result["topology"] = f"physical GPU {profile['physical']}, split={profile['split_mode']}"
             result["cuda_device_order"] = "PCI_BUS_ID"
             result["cuda_visible_devices"] = str(profile["visible"])
@@ -504,15 +638,8 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
                     proc.wait()
 
 
-def write_result(path: Path, payload: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    tmp = path.with_suffix(path.suffix + ".tmp")
-    tmp.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n")
-    tmp.replace(path)
-
-
 def main() -> int:
-    global BASE_URL, MODEL_ALIAS
+    global BASE_URL, MODEL_ALIAS, API_KEY, CHAT_COMPLETIONS_PATH, EXTRA_CHAT_BODY
     parser = argparse.ArgumentParser()
     parser.add_argument("models", nargs="*")
     # Tensor split has twice reproduced a driver-level V100 hang during long
@@ -522,11 +649,24 @@ def main() -> int:
     parser.add_argument("--out", type=Path, default=REPORTS / "well_known_suite_20260917.json")
     parser.add_argument("--external-url", help="Base URL of an already-running OpenAI-compatible server")
     parser.add_argument("--external-model", default="x", help="Model alias accepted by --external-url")
+    parser.add_argument("--external-api-key-env", metavar="ENVVAR",
+                        help="Env var holding a bearer token to send as Authorization; unset for local servers")
+    parser.add_argument("--completions-path", default="/v1/chat/completions",
+                        help="Chat-completions path under --external-url (Gemini's OpenAI-compat layer "
+                             "uses /chat/completions with no extra /v1 segment)")
+    parser.add_argument("--external-extra-body-json", metavar="JSON",
+                        help='Extra top-level fields merged into every complete_text/complete_vision '
+                             'chat-completions body, e.g. \'{"reasoning_effort": "none"}\' to stop a '
+                             'reasoning model\'s thinking tokens from eating the visible-answer budget '
+                             '(confirmed needed for Gemini 3 models). Not applied to gsm8k/bbh/'
+                             'mmlu_sample/truthfulqa_gen, which go through lm-eval\'s own request builder.')
     parser.add_argument("--physical-gpus", help="Comma-separated physical GPU indexes for telemetry")
     parser.add_argument("--topology", help="Human-readable topology for an external server")
     parser.add_argument("--engine", default="vLLM", help="Runtime label for an external server")
     parser.add_argument("--specialists", default="all", metavar="LIST",
                         help="all (default), none, or comma-separated " + ",".join(SPECIALISTS))
+    parser.add_argument("--contamination-audit", default="all", metavar="LIST",
+                        help="all (default), none, or comma-separated " + ",".join(CONTAMINATION_METHODS))
     parser.add_argument("--vision-capable", action="store_true",
                         help="declare an image-capable endpoint (requires a configured VLM adapter)")
     parser.add_argument("--model-release-date", help="ISO publication/release date; stored with this result")
@@ -547,6 +687,16 @@ def main() -> int:
         unknown = set(selected_specialists) - set(SPECIALISTS)
         if unknown:
             raise SystemExit(f"unknown --specialists: {sorted(unknown)}; use all, none, or {','.join(SPECIALISTS)}")
+    if args.contamination_audit == "all":
+        selected_contamination = CONTAMINATION_METHODS
+    elif args.contamination_audit in ("none", "off", ""):
+        selected_contamination = ()
+    else:
+        selected_contamination = tuple(item.strip() for item in args.contamination_audit.split(",") if item.strip())
+        unknown = set(selected_contamination) - set(CONTAMINATION_METHODS)
+        if unknown:
+            raise SystemExit(f"unknown --contamination-audit: {sorted(unknown)}; use all, none, or "
+                             f"{','.join(CONTAMINATION_METHODS)}")
     if not args.external_url and not SERVER.exists():
         raise SystemExit(f"missing V100 llama-server: {SERVER}")
     if args.external_url and not args.models:
@@ -560,18 +710,17 @@ def main() -> int:
     if args.external_url:
         BASE_URL = args.external_url.rstrip("/")
         MODEL_ALIAS = args.external_model
-    # Merge into any existing report rather than overwrite: this script is invoked
-    # once per model across a long multi-model sweep, and each invocation must not
-    # discard results already recorded for other models.
-    if args.out.exists():
-        payload: dict[str, Any] = json.loads(args.out.read_text())
-        payload.setdefault("results", [])
-    else:
-        payload = {
-            "suite": "gsm8k+bbh+truthfulqa_gen+mmlu_sample(8 subjects)+humaneval(40)",
-            "physical_gpus": [1, 2], "results": [],
-        }
-    payload["profile"] = args.profile
+        CHAT_COMPLETIONS_PATH = args.completions_path
+        if args.external_api_key_env:
+            API_KEY = os.environ.get(args.external_api_key_env)
+            if not API_KEY:
+                raise SystemExit(f"--external-api-key-env {args.external_api_key_env} is unset or empty")
+        if args.external_extra_body_json:
+            EXTRA_CHAT_BODY = json.loads(args.external_extra_body_json)
+    default_report: dict[str, Any] = {
+        "suite": "gsm8k+bbh+truthfulqa_gen+mmlu_sample(8 subjects)+humaneval(40)",
+        "results": [],
+    }
     failures = 0
     for name in selected:
         print(f"START {name}", flush=True)
@@ -580,9 +729,13 @@ def main() -> int:
                 physical = tuple(int(value) for value in (args.physical_gpus or "").split(",") if value.strip())
                 if not physical:
                     raise ValueError("--physical-gpus is required with --external-url")
-                result = run_suite_against_running_server(name, physical, selected_specialists, args.vision_capable, args.access_profile)
+                result = run_suite_against_running_server(
+                    name, physical, selected_specialists, args.vision_capable,
+                    args.access_profile, selected_contamination, args.out)
                 result.update({
                     "engine": args.engine,
+                    "hardware_profile": args.profile,
+                    "physical_gpus": list(physical),
                     "topology": args.topology or f"physical GPU {list(physical)} · external server",
                     "cuda_device_order": "PCI_BUS_ID",
                     "external_base_url": BASE_URL,
@@ -590,22 +743,23 @@ def main() -> int:
                     "excluded_physical_gpus": [idx for idx in (0, 1, 2, 3) if idx not in physical],
                 })
             else:
-                result = benchmark_model(name, MODELS[name], args.profile, selected_specialists, args.vision_capable, args.access_profile)
+                result = benchmark_model(
+                    name, MODELS[name], args.profile, selected_specialists, args.vision_capable,
+                    args.access_profile, selected_contamination, args.out)
             if args.model_release_date:
                 result["model_release_date"] = args.model_release_date
                 result["model_release_source"] = args.model_release_source
             else:
                 result["model_release_date_status"] = "missing; add primary source before temporal contamination comparison"
-            payload["results"] = [r for r in payload["results"] if r.get("model") != name] + [result]
             print(f"DONE {name}: gsm8k={result['gsm8k']} humaneval={result['humaneval']['pass_at_1']} "
                   f"mmlu={result['mmlu_sample']['mean_accuracy']} t/s={result['completion_tokens_per_second']}",
                   flush=True)
         except Exception as exc:
             failures += 1
-            payload["results"] = [r for r in payload["results"] if r.get("model") != name] + [
-                {"model": name, "error": f"{type(exc).__name__}: {exc}"}]
+            result = {"model": name, "error": f"{type(exc).__name__}: {exc}",
+                      "hardware_profile": args.profile, "access_profile": args.access_profile}
             print(f"FAIL {name}: {type(exc).__name__}: {exc}", flush=True)
-        write_result(args.out, payload)
+        upsert_result(args.out, result, default_report)
     return 1 if failures else 0
 
 

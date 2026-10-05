@@ -328,6 +328,9 @@ WELL_KNOWN_LABELS = {
     "qwen38-flash-next-ap-q4km-allfour": "Qwen3.8 Flash-Next AP-Q4_K_M · 4 GPU's",
     "qwen38-flash-next-ap-iq2s-v100": "Qwen3.8 Flash-Next AP-IQ2_S · 2×V100",
     "qwen38-flash-next-ap-iq2s-allfour": "Qwen3.8 Flash-Next AP-IQ2_S · 4 GPU's",
+    "qwen38-flash-next-ap-q4kxl-v100": "Qwen3.8 Flash-Next AP-Q4_K_XL · 2×V100",
+    "qwen38-flash-next-ap-q4kxl-allfour": "Qwen3.8 Flash-Next AP-Q4_K_XL · 4 GPU's",
+    "mimo-v26-pro-bpw2.5": "MiMo-V2.6-Pro 1T BPW2.5 (q2.5)",
 }
 WELL_KNOWN_ORDER = list(WELL_KNOWN_LABELS)
 ACCESS_PROFILES = (
@@ -383,7 +386,9 @@ def well_known_rows() -> list[dict]:
         # completeness is judged on the composite's 4 metrics only.
         is_complete_current = current_protocol and composite is not None
         error = str(r.get("error", ""))
-        if (name.startswith("qwen38-flash-next-merlin-w4a16-") and name.endswith("-v100")) or (
+        if r.get("status") == "running":
+            status = str(r.get("progress_note") or "bezig · suite loopt")
+        elif (name.startswith("qwen38-flash-next-merlin-w4a16-") and name.endswith("-v100")) or (
                 "Min capability: 75" in error and "Current capability: 70" in error):
             status = "geteste backend onverenigbaar · SM75 vereist; 1Cat-herbeoordeling volgt"
         elif (name.startswith("qwen38-flash-next-merlin-w4a16-") and name.endswith("-allfour")) or (
@@ -391,6 +396,8 @@ def well_known_rows() -> list[dict]:
             status = "onverenigbaar · onvoldoende VRAM voor dit profiel"
         elif name.startswith("qwen38-flash-next-ap-") and r.get("error"):
             status = "mislukt · GGUF diagnose/herpoging gepland"
+        elif r.get("status") == "blocked" or "geblokkeerd" in error.lower():
+            status = "geblokkeerd · gewicht niet publiceerbaar op deze schijf"
         elif r.get("error"):
             status = "mislukt · diagnose/herpoging gepland"
         elif is_complete_current:
@@ -427,8 +434,12 @@ def well_known_rows() -> list[dict]:
             "model": label,
             "gsm8k": gsm8k, "bbh": bbh, "mmlu": mmlu, "truthfulqa": truthfulqa,
             "humaneval": humaneval, "composite": composite,
-            "tps": r.get("completion_tokens_per_second", throughput.get(name)), "status": status,
-            "hardware": r.get("topology") or rm.hardware_label(r) if r else "—",
+            "tps": (r.get("usable_sequential_tokens_per_second")
+                    if str(name).startswith("mixture") and r.get("usable_sequential_tokens_per_second") is not None
+                    else r.get("completion_tokens_per_second", throughput.get(name))),
+            "status": status,
+            "hardware": ("één machine · leden na elkaar" if str(name).startswith("mixture")
+                         else (r.get("topology") or rm.hardware_label(r) if r else "—")),
             # Old results predate access provenance and were raw chat-server
             # measurements, hence they are sandbox-only by construction.
             "access_profile": r.get("access_profile", "sandbox"),
@@ -533,6 +544,7 @@ SPECIALIST_LABELS = {
     "eq": "EQ · social reasoning",
     "fq": "FQ · robot simulatie",
     "qq": "QQ · quantum",
+    "finance": "Finance · feiten en modellering",
 }
 
 
@@ -564,7 +576,7 @@ def specialist_section() -> str:
     profile_tables = "".join(f"<h3>{title}</h3>{table(key)}" for key, title in ACCESS_PROFILES)
     return f"""
 <h2>Eigen specialistische suite</h2>
-<p>Optionele expert-suite. Bestaande modelrijen blijven bewust leeg: een em-dash betekent <em>niet gedraaid</em>, nooit 0%. Elke specialist heeft een eigen lokale, bewerkbare CSV waarvan antwoord- en rubricvelden nooit naar het model gaan. Vision bevat synthetische object- en ruimtelijke assets; Video meet een lokaal gerenderd MP4-artifact; FQ valideert actuatorcommando’s in een deterministische differential-drive-simulator. Vision en Video hebben elk een harde grens van vijf minuten. IQ/EQ zijn taaklabels voor abstract respectievelijk sociaal-emotioneel redeneren, geen klinische persoonsmetingen. Geen score telt mee in de algemene Composite.</p>
+<p>Optionele expert-suite. Bestaande modelrijen blijven bewust leeg: een em-dash betekent <em>niet gedraaid</em>, nooit 0%. Elke specialist heeft een eigen lokale, bewerkbare CSV waarvan antwoord- en rubricvelden nooit naar het model gaan. Vision bevat synthetische object- en ruimtelijke assets; Video meet een lokaal gerenderd MP4-artifact; FQ valideert actuatorcommando’s in een deterministische differential-drive-simulator. Vision en Video hebben elk een harde grens van vijf minuten. IQ/EQ zijn taaklabels voor abstract respectievelijk sociaal-emotioneel redeneren, geen klinische persoonsmetingen. Finance leest feiten uit de identifier- en cryptobestanden en toetst financiële modellering. Geen score telt mee in de algemene Composite.</p>
 {profile_tables}
 <section id="specialist-uitleg" class="benchmark-explanations"><h3>Specialistische meetdefinities</h3><div class="explanation-grid">
 <article id="specialist-chemistry"><h4>Chemistry · eigen holdout</h4><p>Lokale CSV met eigen vragen en antwoordletters; de GPQA-publicatie (2023-11-20) is alleen de moeilijkheidsreferentie.</p></article>
@@ -575,6 +587,7 @@ def specialist_section() -> str:
 <article id="specialist-eq"><h4>EQ · social reasoning</h4><p>Kalibratie, empathische triage en conflicthantering met expliciete rubrics; geen klinische EQ-diagnose.</p></article>
 <article id="specialist-fq"><h4>FQ · robot simulatie</h4><p>Het model produceert wielactuator-JSON; de scorer berekent positie en heading met differential-drive-kinematica.</p></article>
 <article id="specialist-qq"><h4>QQ · quantum</h4><p>Quantumtoestanden, meting, communicatie, metrologie en quantumchemie/VQE.</p></article>
+<article id="specialist-finance"><h4>Finance · feiten en modellering</h4><p>Feiten uit EDS_latest.csv, crypto_metadata.parquet en crypto_gics_extended.parquet (namen, ISIN, GICS, domicile, valuta, genesis, labels) plus methodevragen: OLS, integratie van tijdreeksen, correlatiematrices, CVaR, duration, lookahead en EUR-marktkapitalisatie.</p></article>
 </div></section>
 """
 
@@ -583,8 +596,10 @@ def contamination_section() -> str:
     """Separate mitigation/audit table; never infer training exposure from a score alone."""
     standard = {r.get("model"): r for r in load("well_known_suite_20260917.json").get("results", [])}
     specialist = {r.get("model"): r for r in load("specialist_suite_20260922.json").get("results", [])}
+    audit = {r.get("model"): r for r in load("contamination_audit_20260923.json").get("results", [])}
+    names = list(WELL_KNOWN_ORDER) + [name for name in audit if name not in WELL_KNOWN_ORDER]
     body = ""
-    for name in WELL_KNOWN_ORDER:
+    for name in names:
         base = standard.get(name, {})
         parts = [rm.gsm8k_score(base), (base.get("bbh") or {}).get("mean_accuracy"),
                  (base.get("mmlu_sample") or {}).get("mean_accuracy"), (base.get("humaneval") or {}).get("pass_at_1")]
@@ -598,23 +613,39 @@ def contamination_section() -> str:
         release_source = base.get("model_release_source")
         release_html = html.escape(release) + (" <small>bron opgeslagen</small>" if release_source else "")
         status = "vergelijkbaar" if gap is not None else "wacht op private/live score + releasebron"
+
+        methods = (audit.get(name, {}).get("results") or {})
+        canary = methods.get("canary_recall", {})
+        paraphrase = methods.get("paraphrase_invariance", {})
+        holdout = methods.get("post_cutoff_holdout", {})
+        canary_cell = pct_cell(canary.get("recall_rate") if canary.get("status") == "complete" else None)
+        paraphrase_cell = ("<td class='num'>—</td>" if paraphrase.get("status") != "complete"
+                           else f"<td class='num'>{paraphrase.get('accuracy_gap', 0):+.1%}</td>")
+        holdout_cell = pct_cell(holdout.get("accuracy") if holdout.get("status") == "complete" else None)
+
         body += ("<tr><td><strong>" + html.escape(WELL_KNOWN_LABELS.get(name, name)) + "</strong></td>" +
                  f"<td>{release_html}</td>{pct_cell(static_score)}{pct_cell(private_score)}" +
-                 f"<td class='num'>{'—' if gap is None else f'{gap:+.1%}'}</td><td>{status}</td></tr>")
+                 f"<td class='num'>{'—' if gap is None else f'{gap:+.1%}'}</td>" +
+                 f"{canary_cell}{paraphrase_cell}{holdout_cell}<td>{status}</td></tr>")
     return f"""
 <h2>Data-contaminatie: mitigaties en audit</h2>
 <p>Publieke benchmarks kunnen in pretraining, post-training of benchmark-optimalisatie terechtkomen. Een hoge publieke score is daarom geen zelfstandig bewijs van algemene vaardigheid. De audit vergelijkt dezelfde modelconfiguratie pas nadat zowel standaard- als private/live-resultaat bestaan; de gap is een <em>onderzoekssignaal</em>, geen bewijs van memorisatie of fraude.</p>
-<div class="tablewrap"><table class="sortable"><thead><tr>{sortable_header("Model")}{sortable_header("Modelpublicatie")}{sortable_header("Standaard composite", "contamination-static")}{sortable_header("Private/live score", "contamination-private")}{sortable_header("Verschil")}{sortable_header("Auditstatus")}</tr></thead><tbody>{body}</tbody></table></div>
+<div class="tablewrap"><table class="sortable"><thead><tr>{sortable_header("Model")}{sortable_header("Modelpublicatie")}{sortable_header("Standaard composite", "contamination-static")}{sortable_header("Private/live score", "contamination-private")}{sortable_header("Verschil")}{sortable_header("Canary-recall", "contamination-canary")}{sortable_header("Parafrase-gap", "contamination-paraphrase")}{sortable_header("Post-cutoff holdout", "contamination-holdout")}{sortable_header("Auditstatus")}</tr></thead><tbody>{body}</tbody></table></div>
 <div class="tablewrap"><table><thead><tr><th>Maatregel</th><th>Waarom</th><th>Bron / publicatiedatum</th><th>Lokale uitvoering</th></tr></thead><tbody>
 <tr><td>Private held-out set</td><td>Modelbouwers zien vragen/antwoorden niet vóór de eindmeting.</td><td>ARC-AGI-2 private eval · 2025</td><td>Private CSV-packs met SHA-256; publiceer een nieuwe pack niet vóór de run.</td></tr>
 <tr><td>Dynamische benchmark</td><td>Vragen ontstaan na de bekende modelcutoff.</td><td>LiveBench · 2024-06-27</td><td>Optionele live-lane; score, bron- en vraagdatum opslaan.</td></tr>
 <tr><td>Recente code-opgaven</td><td>Publicatiedatum van de opgave kan tegen modelrelease worden afgezet.</td><td>LiveCodeBench · 2024-03-12</td><td>Alleen opgaven ná release/cutoff; apart rapporteren.</td></tr>
-<tr><td>Canary-string probe</td><td>Onwaarschijnlijke string kan trainingsblootstelling detecteren.</td><td>BIG-bench GUID canary · 2022</td><td>Alleen logprob-geschikte engines; vergelijk met willekeurige GUID-controls.</td></tr>
+<tr><td>Canary-string probe <strong>(geïmplementeerd 2026-09-23)</strong></td><td>Woordelijke reproductie van een korte, bekende vraagfragment zonder de vraag zelf te geven, is een direct memorisatiesignaal.</td><td>BIG-bench GUID canary · 2022</td><td><code>contamination_audit.py::canary_recall</code> — 10 vaste GSM8K-testvragen, fragment-completion, tokenoverlap-drempel 0,6.</td></tr>
+<tr><td>Parafrase-invariantie <strong>(geïmplementeerd 2026-09-23)</strong></td><td>Grote accuraatheidsval bij een oppervlakkige herformulering (MC-opties omgekeerd) wijst op memorisatie van de exacte vorm, niet op redeneren.</td><td>Contaminatie-literatuur, algemeen erkende techniek</td><td><code>contamination_audit.py::paraphrase_invariance</code> — 15 vaste MMLU-vragen, deterministisch omgekeerde opties.</td></tr>
+<tr><td>Post-cutoff holdout <strong>(geïmplementeerd 2026-09-23)</strong></td><td>Nooit eerder gepubliceerde vragen kunnen per definitie niet in trainingsdata zitten.</td><td>Eigen EDS-pack, aangemaakt 2026-09-23</td><td><code>contamination_audit.py::post_cutoff_holdout</code> — 12 originele reken-/logica-opgaven, nooit online gepubliceerd.</td></tr>
 <tr><td>Modelprovenance</td><td>Release- en trainingscutoff maken tijdsvergelijking controleerbaar.</td><td>Modelcard/release note</td><td>Elke nieuwe run bewaart datum plus primaire bron-URL.</td></tr>
 </tbody></table></div>
 <section id="contamination-uitleg" class="benchmark-explanations"><h3>Interpretatie</h3><div class="explanation-grid">
 <article id="contamination-static"><h4>Standaard composite</h4><p>De bestaande publieke GSM8K/BBH/MMLU/HumanEval-composite.</p></article>
 <article id="contamination-private"><h4>Private/live score</h4><p>Gemiddelde van vergelijkbare, voltooide private of tijdgebonden lanes; video blijft apart wegens andere metriek.</p></article>
+<article id="contamination-canary"><h4>Canary-recall</h4><p>Fractie van 10 bekende GSM8K-testvragen die het model woord-voor-woord kon aanvullen vanaf alleen een kort fragment. Hoog = sterk memorisatiesignaal, niet per se een probleem voor de kernvaardigheid maar wel voor de betrouwbaarheid van de GSM8K-score zelf.</p></article>
+<article id="contamination-paraphrase"><h4>Parafrase-gap</h4><p>Accuraatheid op 15 originele MMLU-vragen minus accuraatheid op dezelfde vragen met omgekeerde antwoordopties. Positief en groot = afhankelijk van de exacte, oorspronkelijke vorm.</p></article>
+<article id="contamination-holdout"><h4>Post-cutoff holdout</h4><p>Accuraatheid op 12 nooit-gepubliceerde eigen opgaven. Vergelijk met de standaard composite: een grote kloof (publiek hoog, holdout laag) op vergelijkbare moeilijkheid is het onderzoekssignaal.</p></article>
 </div></section>
 """
 
@@ -666,10 +697,16 @@ def large_model_provenance_section() -> str:
     for row in results:
         name = row.get("model", "—")
         source = row.get("model_source") or f"https://huggingface.co/{row['source_repo']}"
-        if name == winner:
+        if row.get("status") == "running":
+            status = str(row.get("progress_note") or "bezig · suite loopt")
+        elif row.get("status") == "blocked" or "geblokkeerd" in str(row.get("error", "")).lower():
+            status = "geblokkeerd · niet gedownload"
+        elif name == winner:
             status = "winnaar · weights behouden"
         elif name in pruned:
             status = "volledig getest · veilig verwijderd"
+        elif row.get("error"):
+            status = "mislukt · geen volledige suite"
         else:
             status = "volledig getest · cascade actief"
         rows.append("<tr>" + "".join([

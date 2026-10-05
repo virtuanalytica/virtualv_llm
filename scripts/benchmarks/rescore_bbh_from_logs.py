@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 import well_known_suite as wks
+from result_store import locked_report
 
 ROOT = Path(__file__).resolve().parents[2]
 REPORT = ROOT / "reports/well_known_suite_20260917.json"
@@ -35,30 +36,37 @@ def rescore_model(model: str) -> dict[str, Any] | None:
 
 
 def main() -> int:
-    payload = json.loads(REPORT.read_text())
-    changed = []
-    for row in payload.get("results", []):
-        model = row.get("model")
-        if not model or row.get("error"):
-            continue
-        replacement = rescore_model(model)
-        if replacement is None:
-            continue
-        old_bbh = row.get("bbh") or {}
-        previous = old_bbh.get(
-            "legacy_mean_accuracy_before_normalization", old_bbh.get("mean_accuracy")
-        )
-        replacement["legacy_mean_accuracy_before_normalization"] = previous
-        row["bbh"] = replacement
-        changed.append({"model": model, "before": previous, "after": replacement["mean_accuracy"]})
-    payload["bbh_scoring_fix"] = {
-        "method": "normalized_logged_answer_v1",
-        "reason": "strip punctuation/model end tokens before comparing typed BBH answers",
-        "changed_rows": changed,
-    }
-    temporary = REPORT.with_suffix(REPORT.suffix + ".tmp")
-    temporary.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n")
-    temporary.replace(REPORT)
+    # 2026-09-23: this used to be a raw json.loads(REPORT.read_text()) / write-back
+    # with no lock -- every other writer of this file (well_known_suite.py,
+    # mixture_of_models.py, contamination_audit.py) goes through
+    # result_store.locked_report's fcntl exclusive lock instead. A run of this
+    # script that read a stale snapshot before a concurrent locked writer added
+    # new rows, then wrote its own (older) full snapshot back, silently
+    # discarded every row added in between -- confirmed as the root cause of
+    # the mixture-optimized-2..6 rows vanishing from this exact file despite
+    # mixture_of_models.py's own writes being individually lock-safe. Wrapping
+    # the whole read-modify-write in the shared lock closes that window.
+    with locked_report(REPORT) as payload:
+        changed = []
+        for row in payload.get("results", []):
+            model = row.get("model")
+            if not model or row.get("error"):
+                continue
+            replacement = rescore_model(model)
+            if replacement is None:
+                continue
+            old_bbh = row.get("bbh") or {}
+            previous = old_bbh.get(
+                "legacy_mean_accuracy_before_normalization", old_bbh.get("mean_accuracy")
+            )
+            replacement["legacy_mean_accuracy_before_normalization"] = previous
+            row["bbh"] = replacement
+            changed.append({"model": model, "before": previous, "after": replacement["mean_accuracy"]})
+        payload["bbh_scoring_fix"] = {
+            "method": "normalized_logged_answer_v1",
+            "reason": "strip punctuation/model end tokens before comparing typed BBH answers",
+            "changed_rows": changed,
+        }
     if CASCADE_STATE.exists():
         state = json.loads(CASCADE_STATE.read_text())
         candidates = {candidate.get("name") for candidate in state.get("candidates", [])}
