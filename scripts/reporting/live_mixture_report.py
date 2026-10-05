@@ -23,13 +23,18 @@ import subprocess
 from datetime import datetime
 from pathlib import Path
 
-UNITS = {  # unit: (role, model, CUDA index in PCI order, port)
-    "mom-qwen38": ("aggregator", "qwen38-27b-q4", 3, 8021),
-    "mom-qwen38b": ("aggregator", "qwen38-27b-q4", 4, 8026),
-    "mom-devstral": ("proposer", "devstral-small2-24b-q4", 0, 8022),
-    "mom-qwen35": ("proposer", "qwen35-27b-q4", 1, 8023),
-    "mom-qwen35b": ("proposer", "qwen35-27b-q4", 5, 8025),
-    "mom-gemma4": ("proposer", "gemma4-26b-a4b-q4", 2, 8024),
+PROPOSERS = {
+    "mom-devstral": ("proposer", "devstral-small2-24b-q4", (0,), 8022, "llama.cpp"),
+    "mom-qwen35": ("proposer", "qwen35-27b-q4", (1,), 8023, "llama.cpp"),
+    "mom-qwen35b": ("proposer", "qwen35-27b-q4", (5,), 8025, "llama.cpp"),
+    "mom-gemma4": ("proposer", "gemma4-26b-a4b-q4", (2,), 8024, "llama.cpp"),
+}
+LAYOUTS = {  # unit: (role, model, CUDA indices in PCI order, port, engine)
+    # aggregator as two data-parallel llama.cpp replicas, one per V100
+    "replicas": {"mom-qwen38": ("aggregator", "qwen38-27b-q4", (3,), 8021, "llama.cpp"),
+                 "mom-qwen38b": ("aggregator", "qwen38-27b-q4", (4,), 8026, "llama.cpp"), **PROPOSERS},
+    # aggregator as one 1Cat-vLLM tensor-parallel (TP2) instance over the NVLinked V100 pair
+    "tp2": {"mom-qwen38-tp2": ("aggregator", "qwen38-1cat-nvfp4-tp2", (3, 4), 8027, "vllm"), **PROPOSERS},
 }
 _T = re.compile(r"(prompt eval|eval) time =\s*([\d.]+) ms /\s*(\d+) tokens")
 
@@ -54,6 +59,38 @@ def unit_timings(unit: str, since: str, until: str) -> dict:
             "generation_tokens_per_second": round(gen_tok / gen_ms * 1000, 2) if gen_ms else None,
             "generation_tokens_per_second_median_request": round(statistics.median(gen_rates), 2) if gen_rates else None,
             "prompt_tokens_per_second": round(prompt_tok / prompt_ms * 1000, 2) if prompt_ms else None}
+
+
+def _metrics(path: Path | None) -> dict[str, float]:
+    """Prometheus text snapshot of a vLLM /metrics endpoint -> {metric_name: summed value}."""
+    out: dict[str, float] = {}
+    if not path or not path.exists():
+        return out
+    for line in path.read_text().splitlines():
+        if line.startswith("#") or " " not in line:
+            continue
+        name, _, value = line.rpartition(" ")
+        base = name.split("{", 1)[0]
+        try:
+            out[base] = out.get(base, 0.0) + float(value)
+        except ValueError:
+            pass
+    return out
+
+
+def vllm_timings(start: Path | None, end: Path | None) -> dict:
+    a, b = _metrics(start), _metrics(end)
+    if not a or not b:
+        return {"requests": 0, "generated_tokens": 0, "prompt_tokens": 0, "generation_tokens_per_second": None,
+                "prompt_tokens_per_second": None, "note": "no vLLM /metrics snapshots for this window"}
+    d = {k: b.get(k, 0.0) - a.get(k, 0.0) for k in b}
+    gen, prompt = d.get("vllm:generation_tokens_total", 0.0), d.get("vllm:prompt_tokens_total", 0.0)
+    decode_s = d.get("vllm:request_decode_time_seconds_sum", 0.0)
+    prefill_s = d.get("vllm:request_prefill_time_seconds_sum", 0.0)
+    return {"requests": int(d.get("vllm:request_success_total", 0.0)), "generated_tokens": int(gen),
+            "prompt_tokens": int(prompt),
+            "generation_tokens_per_second": round(gen / decode_s, 2) if decode_s else None,
+            "prompt_tokens_per_second": round(prompt / prefill_s, 2) if prefill_s else None}
 
 
 def _ts(s: str) -> float:
@@ -112,14 +149,23 @@ def main() -> int:
     ap.add_argument("--since", required=True)
     ap.add_argument("--until", required=True)
     ap.add_argument("--suite-model", default="mom-live-4")
+    ap.add_argument("--layout", choices=sorted(LAYOUTS), default="replicas")
+    ap.add_argument("--vllm-metrics-start", type=Path)
+    ap.add_argument("--vllm-metrics-end", type=Path)
     ap.add_argument("--out", type=Path, required=True)
     a = ap.parse_args()
     t0, t1 = _ts(a.since), _ts(a.until)
     gpus, cpu = gpu_energy(a.gpu_log, t0, t1), cpu_energy(a.cpu_log, t0, t1)
     units = {}
-    for unit, (role, model, gpu, port) in UNITS.items():
-        u = {"role": role, "model": model, "cuda_index": gpu, "port": port, **unit_timings(unit, a.since, a.until)}
-        g = gpus.get(gpu, {})
+    for unit, (role, model, idxs, port, engine) in LAYOUTS[a.layout].items():
+        timing = (vllm_timings(a.vllm_metrics_start, a.vllm_metrics_end) if engine == "vllm"
+                  else unit_timings(unit, a.since, a.until))
+        u = {"role": role, "model": model, "cuda_index": ",".join(map(str, idxs)), "port": port, "engine": engine,
+             **timing}
+        parts = [gpus[i] for i in idxs if i in gpus]
+        g = {"mean_watt": round(sum(p["mean_watt"] for p in parts), 1),
+             "mean_utilisation_pct": round(statistics.fmean(p["mean_utilisation_pct"] for p in parts), 1),
+             "joules": round(sum(p["joules"] for p in parts), 1)} if parts else {}
         u["gpu"] = g
         if g.get("joules") and u["generated_tokens"]:
             u["gpu_joules_per_generated_token"] = round(g["joules"] / u["generated_tokens"], 3)
@@ -130,7 +176,7 @@ def main() -> int:
     gen_tokens = sum(u["generated_tokens"] for u in units.values())
     agg_tokens = sum(u["generated_tokens"] for u in units.values() if u["role"] == "aggregator")
     report = {
-        "name": "mom-live", "suite_model": a.suite_model, "method": "Mixture-of-Agents (proposers draft, aggregator answers)",
+        "name": "mom-live", "suite_model": a.suite_model, "layout": a.layout, "method": "Mixture-of-Agents (proposers draft, aggregator answers)",
         "window": {"since": a.since, "until": a.until, "seconds": round(t1 - t0)},
         "units": units, "gpus": {str(k): v for k, v in sorted(gpus.items())}, "cpu": cpu,
         "totals": {

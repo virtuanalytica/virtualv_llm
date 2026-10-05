@@ -281,7 +281,8 @@ def throughput_rows(primary_rows: list[dict]) -> list[dict]:
 
 
 WELL_KNOWN_LABELS = {
-    "mom-live-4": "Live mixture-of-models (Mixture-of-Agents: Qwen3.8 aggregator + Devstral, Qwen3.5, Gemma4)",
+    "mom-live-4": "Live mixture-of-models (Mixture-of-Agents: Qwen3.8 aggregator x2 replica's + Devstral, Qwen3.5, Gemma4)",
+    "mom-live-4-tp2": "Live mixture-of-models (Mixture-of-Agents: Qwen3.8 1Cat-vLLM TP2 aggregator + Devstral, Qwen3.5, Gemma4)",
     "qwen38-27b-q4": "Qwen3.8-27B", "deepseek-r1-qwen32b-q4": "DeepSeek-R1-Qwen",
     "qwen36-27b-iq3": "Qwen3.6-27B", "qwen35-27b-q4": "Qwen3.5-27B",
     "gemma4-26b-a4b-q4": "Gemma4-26B-A4B", "devstral-small2-24b-q4": "Devstral Small 2",
@@ -940,11 +941,19 @@ model per kaart. Gebruik A4000+Ada layer split alleen om een groter model passen
 """
 
 
+LIVE_MIXTURE_REPORTS = ("live_mixture_of_models_20261005.json", "live_mixture_of_models_tp2_20261005.json")
+LAYOUT_LABELS = {"replicas": "aggregator als twee llama.cpp-replica's (data-parallel, één per V100)",
+                 "tp2": "aggregator als één 1Cat-vLLM-instantie met tensor parallel (TP2) over het NVLink-paar"}
+
+
 def live_mixture_section() -> str:
-    """Live mixture-of-models: layout, measured throughput and measured energy per answer."""
-    data = load("live_mixture_of_models_20261005.json")
-    if not data:
-        return ""
+    """Live mixture-of-models, one block per measured layout (same method and metrics)."""
+    blocks = [_live_mixture_block(data) for data in (load(name) for name in LIVE_MIXTURE_REPORTS) if data]
+    return "".join(blocks)
+
+
+def _live_mixture_block(data: dict) -> str:
+    """Layout, measured throughput and measured energy per answer for one live mixture run."""
     t, units = data.get("totals", {}), data.get("units", {})
     w = data.get("window", {})
     suite = next((r for r in load("well_known_suite_20260917.json").get("results", [])
@@ -965,6 +974,7 @@ def live_mixture_section() -> str:
         composite = sum(parts) / 4
     return f"""
 <h2>Live mixture-of-models (Mixture-of-Agents) · energie per antwoord</h2>
+<h3>{html.escape(LAYOUT_LABELS.get(data.get('layout', 'replicas'), data.get('layout', '')))} · <code>{html.escape(str(data.get('suite_model')))}</code></h3>
 <p>Eén OpenAI-compatibel endpoint (<code>scripts/benchmarks/mixture_proxy.py</code>, opstelling
 <code>infra/model_serve_configs/mom-live.sh</code>) over alle zes GPU's: drie proposers schrijven parallel een
 concept, de aggregator schrijft het antwoord met de concepten in context. Dezelfde endpoint dient de chat
