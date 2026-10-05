@@ -1,0 +1,163 @@
+{
+ "name": "mom-live",
+ "suite_model": "mom-live-4-tp2",
+ "layout": "tp2",
+ "method": "Mixture-of-Agents (proposers draft, aggregator answers)",
+ "window": {
+  "since": "2026-10-05 13:29:14",
+  "until": "2026-10-05 14:56:12",
+  "seconds": 5218
+ },
+ "units": {
+  "mom-qwen38-tp2": {
+   "role": "aggregator",
+   "model": "qwen38-1cat-nvfp4-tp2",
+   "cuda_index": "3,4",
+   "port": 8027,
+   "engine": "vllm",
+   "requests": 431,
+   "generated_tokens": 52639,
+   "prompt_tokens": 425460,
+   "generation_tokens_per_second": 49.32,
+   "prompt_tokens_per_second": 1693.4,
+   "gpu": {
+    "mean_watt": 219.0,
+    "mean_utilisation_pct": 25.4,
+    "joules": 1142367.9
+   },
+   "gpu_joules_per_generated_token": 21.702
+  },
+  "mom-devstral": {
+   "role": "proposer",
+   "model": "devstral-small2-24b-q4",
+   "cuda_index": "0",
+   "port": 8022,
+   "engine": "llama.cpp",
+   "requests": 431,
+   "generated_tokens": 48544,
+   "prompt_tokens": 54098,
+   "generation_tokens_per_second": 22.01,
+   "generation_tokens_per_second_median_request": 41.96,
+   "prompt_tokens_per_second": 945.19,
+   "gpu": {
+    "mean_watt": 74.4,
+    "mean_utilisation_pct": 42.1,
+    "joules": 388466.4
+   },
+   "gpu_joules_per_generated_token": 8.002
+  },
+  "mom-qwen35": {
+   "role": "proposer",
+   "model": "qwen35-27b-q4",
+   "cuda_index": "1",
+   "port": 8023,
+   "engine": "llama.cpp",
+   "requests": 215,
+   "generated_tokens": 21607,
+   "prompt_tokens": 58306,
+   "generation_tokens_per_second": 18.85,
+   "generation_tokens_per_second_median_request": 34.09,
+   "prompt_tokens_per_second": 457.56,
+   "gpu": {
+    "mean_watt": 49.7,
+    "mean_utilisation_pct": 23.5,
+    "joules": 259231.3
+   },
+   "gpu_joules_per_generated_token": 11.998
+  },
+  "mom-qwen35b": {
+   "role": "proposer",
+   "model": "qwen35-27b-q4",
+   "cuda_index": "5",
+   "port": 8025,
+   "engine": "llama.cpp",
+   "requests": 216,
+   "generated_tokens": 23042,
+   "prompt_tokens": 58035,
+   "generation_tokens_per_second": 17.07,
+   "generation_tokens_per_second_median_request": 25.86,
+   "prompt_tokens_per_second": 419.3,
+   "gpu": {
+    "mean_watt": 58.9,
+    "mean_utilisation_pct": 30.7,
+    "joules": 307500.2
+   },
+   "gpu_joules_per_generated_token": 13.345
+  },
+  "mom-gemma4": {
+   "role": "proposer",
+   "model": "gemma4-26b-a4b-q4",
+   "cuda_index": "2",
+   "port": 8024,
+   "engine": "llama.cpp",
+   "requests": 431,
+   "generated_tokens": 49287,
+   "prompt_tokens": 107180,
+   "generation_tokens_per_second": 69.24,
+   "generation_tokens_per_second_median_request": 96.62,
+   "prompt_tokens_per_second": 1045.35,
+   "gpu": {
+    "mean_watt": 47.8,
+    "mean_utilisation_pct": 22.3,
+    "joules": 249468.3
+   },
+   "gpu_joules_per_generated_token": 5.062
+  }
+ },
+ "gpus": {
+  "0": {
+   "mean_watt": 74.4,
+   "mean_utilisation_pct": 42.1,
+   "joules": 388466.4,
+   "samples": 5200
+  },
+  "1": {
+   "mean_watt": 49.7,
+   "mean_utilisation_pct": 23.5,
+   "joules": 259231.3,
+   "samples": 5200
+  },
+  "2": {
+   "mean_watt": 47.8,
+   "mean_utilisation_pct": 22.3,
+   "joules": 249468.3,
+   "samples": 5200
+  },
+  "3": {
+   "mean_watt": 106.8,
+   "mean_utilisation_pct": 25.4,
+   "joules": 557257.6,
+   "samples": 5200
+  },
+  "4": {
+   "mean_watt": 112.2,
+   "mean_utilisation_pct": 25.4,
+   "joules": 585110.3,
+   "samples": 5200
+  },
+  "5": {
+   "mean_watt": 58.9,
+   "mean_utilisation_pct": 30.7,
+   "joules": 307500.2,
+   "samples": 5200
+  }
+ },
+ "cpu": {
+  "joules": 715074.7,
+  "mean_watt": 137.1,
+  "scope": "RAPL package energy, sockets 0+1 (no DRAM)"
+ },
+ "totals": {
+  "answers": 431,
+  "generated_tokens_all_members": 195119,
+  "answer_tokens": 52639,
+  "gpu_kwh": 0.652,
+  "cpu_kwh": 0.1986,
+  "system_kwh_measured": 0.8506,
+  "mean_system_watt_measured": 586.8,
+  "wh_per_answer": 1.974,
+  "joules_per_answer_token": 58.17,
+  "joules_per_generated_token_all_members": 15.69
+ },
+ "scope_note": "Gemeten: GPU-bordvermogen (nvidia-smi) en CPU-pakketenergie (RAPL). Niet gemeten: DRAM, schijven, ventilatoren en voedingsverlies. Het rustverbruik van alle zes GPU's telt mee, dus de cijfers zijn wat de mix op deze machine werkelijk kost, niet de marginale kost per verzoek."
+}

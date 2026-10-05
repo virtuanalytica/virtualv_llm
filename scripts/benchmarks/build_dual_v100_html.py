@@ -948,8 +948,40 @@ LAYOUT_LABELS = {"replicas": "aggregator als twee llama.cpp-replica's (data-para
 
 def live_mixture_section() -> str:
     """Live mixture-of-models, one block per measured layout (same method and metrics)."""
-    blocks = [_live_mixture_block(data) for data in (load(name) for name in LIVE_MIXTURE_REPORTS) if data]
+    reports = [data for data in (load(name) for name in LIVE_MIXTURE_REPORTS) if data]
+    blocks = [_live_mixture_block(data) for data in reports]
+    if len(reports) == 2:
+        blocks.append(_live_mixture_comparison(reports))
     return "".join(blocks)
+
+
+def _live_mixture_comparison(reports: list[dict]) -> str:
+    """Side by side: same proposers, aggregator as llama.cpp replicas vs 1Cat-vLLM TP2."""
+    suite = {r.get("model"): r for r in load("well_known_suite_20260917.json").get("results", [])}
+    rows = ""
+    for data in reports:
+        r, t = suite.get(data.get("suite_model"), {}), data.get("totals", {})
+        parts = [rm.gsm8k_score(r) if r else None, (r.get("humaneval") or {}).get("pass_at_1"),
+                 (r.get("mmlu_sample") or {}).get("mean_accuracy"), (r.get("bbh") or {}).get("mean_accuracy")]
+        comp = sum(parts) / 4 if all(isinstance(v, (int, float)) for v in parts) else None
+        agg = [u for u in data.get("units", {}).values() if u.get("role") == "aggregator"]
+        rows += ("<tr><td>" + html.escape(LAYOUT_LABELS.get(data.get("layout"), data.get("layout", ""))) + "</td><td>" +
+                 fmt(comp, 3) + "</td><td>" + "</td><td>".join(fmt(v, 3) for v in parts) + "</td><td>" +
+                 fmt(t.get("wh_per_answer"), 2) + " Wh</td><td>" + fmt(t.get("mean_system_watt_measured")) + " W</td><td>" +
+                 fmt(sum(u.get("gpu", {}).get("mean_utilisation_pct", 0) for u in agg) / len(agg) if agg else None, 1) +
+                 "%</td></tr>")
+    return f"""
+<h3>Vergelijking: replica's versus TP2 als aggregator</h3>
+<div class="tablewrap"><table><thead><tr><th>Aggregator</th><th>Composite</th><th>gsm8k</th><th>humaneval</th>
+<th>mmlu</th><th>bbh</th><th>Energie per antwoord</th><th>Gem. systeemvermogen</th><th>Aggregator-GPU-utilisatie</th>
+</tr></thead><tbody>{rows}</tbody></table></div>
+<div class="callout"><strong>Interpretatie.</strong> TP2 benut beide V100's wel volledig tijdens een antwoord, maar
+de NVFP4-gewichten op het 1Cat-vLLM-pad leveren duidelijk minder kwaliteit dan de Q4_K_M-GGUF op llama.cpp: dezelfde
+proposers, een veel lagere score. Dat strookt met de losse 1Cat-meting van Qwen3.8 NVFP4 elders op deze pagina. De
+energie per antwoord is nagenoeg gelijk, omdat het rustverbruik van alle zes GPU's in beide opstellingen meetelt. Voor
+de mix blijft de llama.cpp-aggregator dus de betere keuze; een energiewinst vraagt eerder om minder of zuiniger
+actieve kaarten dan om een andere parallellisatie.</div>
+"""
 
 
 def _live_mixture_block(data: dict) -> str:
@@ -976,7 +1008,7 @@ def _live_mixture_block(data: dict) -> str:
 <h2>Live mixture-of-models (Mixture-of-Agents) · energie per antwoord</h2>
 <h3>{html.escape(LAYOUT_LABELS.get(data.get('layout', 'replicas'), data.get('layout', '')))} · <code>{html.escape(str(data.get('suite_model')))}</code></h3>
 <p>Eén OpenAI-compatibel endpoint (<code>scripts/benchmarks/mixture_proxy.py</code>, opstelling
-<code>infra/model_serve_configs/mom-live.sh</code>) over alle zes GPU's: drie proposers schrijven parallel een
+{'<code>infra/vllm_v100/serve_1cat_qwen38_tp2.sh</code> voor de aggregator, proposers uit <code>infra/model_serve_configs/mom-live.sh</code>' if data.get('layout') == 'tp2' else '<code>infra/model_serve_configs/mom-live.sh</code>'}) over alle zes GPU's: drie proposers schrijven parallel een
 concept, de aggregator schrijft het antwoord met de concepten in context. Dezelfde endpoint dient de chat
 (OMP-profiel <code>toddler</code>, met Toddler als MCP-tool) en deze benchmark, dus de score hieronder is
 de mix die werkelijk gebruikt wordt. Meetvenster {html.escape(str(w.get('since')))} tot

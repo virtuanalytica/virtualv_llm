@@ -3522,6 +3522,2670 @@
           ]
         }
       }
+    },
+    {
+      "model": "mom-live-4",
+      "protocol": "v3-private-specialist-packs-finance-20260924",
+      "sources": {
+        "chemistry": {
+          "name": "EDS editable private chemistry holdout v1; difficulty target GPQA Diamond",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2311.12022",
+          "samples": "enabled CSV rows"
+        },
+        "physics": {
+          "name": "EDS editable private physics holdout v1; difficulty target GPQA Diamond",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2311.12022",
+          "samples": "enabled CSV rows"
+        },
+        "vision": {
+          "name": "EDS synthetic object recognition + spatial reasoning holdout; MMMU-Pro difficulty reference",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2409.02813",
+          "samples": "enabled CSV rows",
+          "max_wall_sec": 300
+        },
+        "video": {
+          "name": "EDS programmatic MP4 artifact holdout; VBench metric reference",
+          "publication_date": "2026-10-05",
+          "url": "https://arxiv.org/abs/2408.06072",
+          "samples": "enabled CSV rows",
+          "max_wall_sec": 300
+        },
+        "iq": {
+          "name": "EDS abstract/rule reasoning holdout (not a clinical IQ test)",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "eq": {
+          "name": "EDS social-emotional reasoning holdout (not a clinical EQ test)",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "fq": {
+          "name": "EDS actuator/robot physics simulation holdout",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "qq": {
+          "name": "EDS quantum systems and quantum chemistry holdout",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "finance": {
+          "name": "EDS finance holdout from identifier and crypto fact files, plus CFA/FRM/financial-engineering method items",
+          "publication_date": "2026-09-24",
+          "url": "",
+          "samples": "enabled CSV rows"
+        }
+      },
+      "access_profile": "sandbox",
+      "results": {
+        "chemistry": {
+          "status": "complete",
+          "accuracy": 0.8333,
+          "n_samples": 6,
+          "question_pack": "config/benchmark_specialist_holdout_v1.csv",
+          "pack_version": "benchmark_specialist_holdout_v1",
+          "pack_sha256": "9e57532f9f293779d352e96413219fd6100af8b01230d0c6440db822146a362c",
+          "samples": [
+            {
+              "id": "chem-001",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "chem-002",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "chem-003",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "chem-004",
+              "correct": false,
+              "target": "D",
+              "prediction": "B"
+            },
+            {
+              "id": "chem-005",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "chem-006",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "physics": {
+          "status": "complete",
+          "accuracy": 1.0,
+          "n_samples": 6,
+          "question_pack": "config/benchmark_specialist_holdout_v1.csv",
+          "pack_version": "benchmark_specialist_holdout_v1",
+          "pack_sha256": "9e57532f9f293779d352e96413219fd6100af8b01230d0c6440db822146a362c",
+          "samples": [
+            {
+              "id": "physics-001",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "physics-003",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-004",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-005",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-006",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "vision": {
+          "status": "unsupported",
+          "reason": "text-only endpoint; requires --vision-capable and a VLM adapter",
+          "n_samples": 0
+        },
+        "video": {
+          "status": "complete",
+          "accuracy": 0.0,
+          "n_samples": 3,
+          "elapsed_sec": 109.1,
+          "samples": [
+            {
+              "passed": false,
+              "duration_sec": 0.0
+            },
+            {
+              "passed": false,
+              "reason": "unsafe/oversized filtergraph"
+            },
+            {
+              "passed": false,
+              "reason": "unsafe/oversized filtergraph"
+            }
+          ]
+        },
+        "iq": {
+          "status": "complete",
+          "accuracy": 0.6667,
+          "n_samples": 3,
+          "question_pack": "config/specialist_benchmarks/iq.csv",
+          "pack_version": "iq",
+          "pack_sha256": "fb7a38220cac82529911671e647f4d764c8958092763aec582156d4751679b41",
+          "samples": [
+            {
+              "id": "iq-001",
+              "correct": true,
+              "target": "D",
+              "prediction": "D"
+            },
+            {
+              "id": "iq-002",
+              "correct": false,
+              "target": "A",
+              "prediction": "C"
+            },
+            {
+              "id": "iq-003",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            }
+          ]
+        },
+        "eq": {
+          "status": "complete",
+          "accuracy": 1.0,
+          "n_samples": 3,
+          "question_pack": "config/specialist_benchmarks/eq.csv",
+          "pack_version": "eq",
+          "pack_sha256": "eecae15256f18e3e2d67489c677f9276ce02e712eaf7d474e7df28bc2a1858c5",
+          "samples": [
+            {
+              "id": "eq-001",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "eq-002",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "eq-003",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "fq": {
+          "status": "complete",
+          "accuracy": 0.0,
+          "n_samples": 2,
+          "samples": [
+            {
+              "id": "fq-001",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq-002",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            }
+          ],
+          "simulator": "differential_drive_v1"
+        },
+        "qq": {
+          "status": "complete",
+          "accuracy": 0.75,
+          "n_samples": 4,
+          "question_pack": "config/specialist_benchmarks/qq.csv",
+          "pack_version": "qq",
+          "pack_sha256": "2820da6fa7b05d0bef6adcd2fcb8a1aa9fa86970185605bcaea60b8fac81f769",
+          "samples": [
+            {
+              "id": "qq-001",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "qq-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "qq-003",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "qq-004",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "finance": {
+          "status": "complete",
+          "accuracy": 0.7917,
+          "n_samples": 24,
+          "question_pack": "config/specialist_benchmarks/finance.csv",
+          "pack_version": "finance",
+          "pack_sha256": "e3a0f395876ee65b4949217ef7dd50abb58ef67b5edcffc0f813d83c4118b37d",
+          "samples": [
+            {
+              "id": "fin-001",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-003",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-004",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-005",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "fin-006",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "fin-007",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-008",
+              "correct": false,
+              "target": "A",
+              "prediction": "C"
+            },
+            {
+              "id": "fin-009",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "fin-010",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-011",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-012",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-013",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-014",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-015",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-016",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-017",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-018",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "fin-019",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-020",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-021",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-022",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-023",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-024",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "model": "qwen38-27b-q4",
+      "protocol": "v3-private-specialist-packs-finance-20260924",
+      "sources": {
+        "chemistry": {
+          "name": "EDS editable private chemistry holdout v1; difficulty target GPQA Diamond",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2311.12022",
+          "samples": "enabled CSV rows"
+        },
+        "physics": {
+          "name": "EDS editable private physics holdout v1; difficulty target GPQA Diamond",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2311.12022",
+          "samples": "enabled CSV rows"
+        },
+        "vision": {
+          "name": "EDS synthetic object recognition + spatial reasoning holdout; MMMU-Pro difficulty reference",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2409.02813",
+          "samples": "enabled CSV rows",
+          "max_wall_sec": 300
+        },
+        "video": {
+          "name": "EDS programmatic MP4 artifact holdout; VBench metric reference",
+          "publication_date": "2026-10-05",
+          "url": "https://arxiv.org/abs/2408.06072",
+          "samples": "enabled CSV rows",
+          "max_wall_sec": 300
+        },
+        "iq": {
+          "name": "EDS abstract/rule reasoning holdout (not a clinical IQ test)",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "eq": {
+          "name": "EDS social-emotional reasoning holdout (not a clinical EQ test)",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "fq": {
+          "name": "EDS actuator/robot physics simulation holdout",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "qq": {
+          "name": "EDS quantum systems and quantum chemistry holdout",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "finance": {
+          "name": "EDS finance holdout from identifier and crypto fact files, plus CFA/FRM/financial-engineering method items",
+          "publication_date": "2026-09-24",
+          "url": "",
+          "samples": "enabled CSV rows"
+        }
+      },
+      "access_profile": "sandbox",
+      "results": {
+        "chemistry": {
+          "status": "complete",
+          "accuracy": 0.3333,
+          "n_samples": 6,
+          "question_pack": "config/benchmark_specialist_holdout_v1.csv",
+          "pack_version": "benchmark_specialist_holdout_v1",
+          "pack_sha256": "9e57532f9f293779d352e96413219fd6100af8b01230d0c6440db822146a362c",
+          "samples": [
+            {
+              "id": "chem-001",
+              "correct": false,
+              "target": "C",
+              "prediction": "B"
+            },
+            {
+              "id": "chem-002",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "chem-003",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            },
+            {
+              "id": "chem-004",
+              "correct": false,
+              "target": "D",
+              "prediction": "C"
+            },
+            {
+              "id": "chem-005",
+              "correct": false,
+              "target": "B",
+              "prediction": "C"
+            },
+            {
+              "id": "chem-006",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "physics": {
+          "status": "complete",
+          "accuracy": 0.8333,
+          "n_samples": 6,
+          "question_pack": "config/benchmark_specialist_holdout_v1.csv",
+          "pack_version": "benchmark_specialist_holdout_v1",
+          "pack_sha256": "9e57532f9f293779d352e96413219fd6100af8b01230d0c6440db822146a362c",
+          "samples": [
+            {
+              "id": "physics-001",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-002",
+              "correct": false,
+              "target": "A",
+              "prediction": "C"
+            },
+            {
+              "id": "physics-003",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-004",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-005",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-006",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "vision": {
+          "status": "unsupported",
+          "reason": "text-only endpoint; requires --vision-capable and a VLM adapter",
+          "n_samples": 0
+        },
+        "video": {
+          "status": "complete",
+          "accuracy": 0.0,
+          "n_samples": 3,
+          "elapsed_sec": 19.3,
+          "samples": [
+            {
+              "passed": false,
+              "duration_sec": 0.0
+            },
+            {
+              "passed": false,
+              "duration_sec": 0.0
+            },
+            {
+              "passed": false,
+              "reason": "unsafe/oversized filtergraph"
+            }
+          ]
+        },
+        "iq": {
+          "status": "complete",
+          "accuracy": 0.3333,
+          "n_samples": 3,
+          "question_pack": "config/specialist_benchmarks/iq.csv",
+          "pack_version": "iq",
+          "pack_sha256": "fb7a38220cac82529911671e647f4d764c8958092763aec582156d4751679b41",
+          "samples": [
+            {
+              "id": "iq-001",
+              "correct": false,
+              "target": "D",
+              "prediction": "B"
+            },
+            {
+              "id": "iq-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "iq-003",
+              "correct": false,
+              "target": "C",
+              "prediction": "B"
+            }
+          ]
+        },
+        "eq": {
+          "status": "complete",
+          "accuracy": 1.0,
+          "n_samples": 3,
+          "question_pack": "config/specialist_benchmarks/eq.csv",
+          "pack_version": "eq",
+          "pack_sha256": "eecae15256f18e3e2d67489c677f9276ce02e712eaf7d474e7df28bc2a1858c5",
+          "samples": [
+            {
+              "id": "eq-001",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "eq-002",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "eq-003",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "fq": {
+          "status": "complete",
+          "accuracy": 0.0,
+          "n_samples": 2,
+          "samples": [
+            {
+              "id": "fq-001",
+              "correct": false,
+              "max_normalized_error": 0.5
+            },
+            {
+              "id": "fq-002",
+              "correct": false,
+              "max_normalized_error": 0.5
+            }
+          ],
+          "simulator": "differential_drive_v1"
+        },
+        "qq": {
+          "status": "complete",
+          "accuracy": 0.75,
+          "n_samples": 4,
+          "question_pack": "config/specialist_benchmarks/qq.csv",
+          "pack_version": "qq",
+          "pack_sha256": "2820da6fa7b05d0bef6adcd2fcb8a1aa9fa86970185605bcaea60b8fac81f769",
+          "samples": [
+            {
+              "id": "qq-001",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "qq-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "qq-003",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "qq-004",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "finance": {
+          "status": "complete",
+          "accuracy": 0.8333,
+          "n_samples": 24,
+          "question_pack": "config/specialist_benchmarks/finance.csv",
+          "pack_version": "finance",
+          "pack_sha256": "e3a0f395876ee65b4949217ef7dd50abb58ef67b5edcffc0f813d83c4118b37d",
+          "samples": [
+            {
+              "id": "fin-001",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-003",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-004",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-005",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-006",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-007",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-008",
+              "correct": false,
+              "target": "A",
+              "prediction": "C"
+            },
+            {
+              "id": "fin-009",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "fin-010",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-011",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-012",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "fin-013",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-014",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-015",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-016",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-017",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-018",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "fin-019",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-020",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-021",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-022",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-023",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-024",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "model": "devstral-small2-24b-q4",
+      "protocol": "v3-private-specialist-packs-finance-20260924",
+      "sources": {
+        "chemistry": {
+          "name": "EDS editable private chemistry holdout v1; difficulty target GPQA Diamond",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2311.12022",
+          "samples": "enabled CSV rows"
+        },
+        "physics": {
+          "name": "EDS editable private physics holdout v1; difficulty target GPQA Diamond",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2311.12022",
+          "samples": "enabled CSV rows"
+        },
+        "vision": {
+          "name": "EDS synthetic object recognition + spatial reasoning holdout; MMMU-Pro difficulty reference",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2409.02813",
+          "samples": "enabled CSV rows",
+          "max_wall_sec": 300
+        },
+        "video": {
+          "name": "EDS programmatic MP4 artifact holdout; VBench metric reference",
+          "publication_date": "2026-10-05",
+          "url": "https://arxiv.org/abs/2408.06072",
+          "samples": "enabled CSV rows",
+          "max_wall_sec": 300
+        },
+        "iq": {
+          "name": "EDS abstract/rule reasoning holdout (not a clinical IQ test)",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "eq": {
+          "name": "EDS social-emotional reasoning holdout (not a clinical EQ test)",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "fq": {
+          "name": "EDS actuator/robot physics simulation holdout",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "qq": {
+          "name": "EDS quantum systems and quantum chemistry holdout",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "finance": {
+          "name": "EDS finance holdout from identifier and crypto fact files, plus CFA/FRM/financial-engineering method items",
+          "publication_date": "2026-09-24",
+          "url": "",
+          "samples": "enabled CSV rows"
+        }
+      },
+      "access_profile": "sandbox",
+      "results": {
+        "chemistry": {
+          "status": "complete",
+          "accuracy": 0.1667,
+          "n_samples": 6,
+          "question_pack": "config/benchmark_specialist_holdout_v1.csv",
+          "pack_version": "benchmark_specialist_holdout_v1",
+          "pack_sha256": "9e57532f9f293779d352e96413219fd6100af8b01230d0c6440db822146a362c",
+          "samples": [
+            {
+              "id": "chem-001",
+              "correct": false,
+              "target": "C",
+              "prediction": "A"
+            },
+            {
+              "id": "chem-002",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            },
+            {
+              "id": "chem-003",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            },
+            {
+              "id": "chem-004",
+              "correct": false,
+              "target": "D",
+              "prediction": "B"
+            },
+            {
+              "id": "chem-005",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            },
+            {
+              "id": "chem-006",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "physics": {
+          "status": "complete",
+          "accuracy": 0.5,
+          "n_samples": 6,
+          "question_pack": "config/benchmark_specialist_holdout_v1.csv",
+          "pack_version": "benchmark_specialist_holdout_v1",
+          "pack_sha256": "9e57532f9f293779d352e96413219fd6100af8b01230d0c6440db822146a362c",
+          "samples": [
+            {
+              "id": "physics-001",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-002",
+              "correct": false,
+              "target": "A",
+              "prediction": "D"
+            },
+            {
+              "id": "physics-003",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-004",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            },
+            {
+              "id": "physics-005",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-006",
+              "correct": false,
+              "target": "B",
+              "prediction": "C"
+            }
+          ]
+        },
+        "vision": {
+          "status": "unsupported",
+          "reason": "text-only endpoint; requires --vision-capable and a VLM adapter",
+          "n_samples": 0
+        },
+        "video": {
+          "status": "complete",
+          "accuracy": 0.0,
+          "n_samples": 3,
+          "elapsed_sec": 73.3,
+          "samples": [
+            {
+              "passed": false,
+              "reason": "unsafe/oversized filtergraph"
+            },
+            {
+              "passed": false,
+              "reason": "unsafe/oversized filtergraph"
+            },
+            {
+              "passed": false,
+              "reason": "unsafe/oversized filtergraph"
+            }
+          ]
+        },
+        "iq": {
+          "status": "complete",
+          "accuracy": 0.3333,
+          "n_samples": 3,
+          "question_pack": "config/specialist_benchmarks/iq.csv",
+          "pack_version": "iq",
+          "pack_sha256": "fb7a38220cac82529911671e647f4d764c8958092763aec582156d4751679b41",
+          "samples": [
+            {
+              "id": "iq-001",
+              "correct": false,
+              "target": "D",
+              "prediction": "A"
+            },
+            {
+              "id": "iq-002",
+              "correct": false,
+              "target": "A",
+              "prediction": "C"
+            },
+            {
+              "id": "iq-003",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            }
+          ]
+        },
+        "eq": {
+          "status": "complete",
+          "accuracy": 1.0,
+          "n_samples": 3,
+          "question_pack": "config/specialist_benchmarks/eq.csv",
+          "pack_version": "eq",
+          "pack_sha256": "eecae15256f18e3e2d67489c677f9276ce02e712eaf7d474e7df28bc2a1858c5",
+          "samples": [
+            {
+              "id": "eq-001",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "eq-002",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "eq-003",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "fq": {
+          "status": "complete",
+          "accuracy": 0.0,
+          "n_samples": 2,
+          "samples": [
+            {
+              "id": "fq-001",
+              "correct": false,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq-002",
+              "correct": false,
+              "max_normalized_error": 0.5796
+            }
+          ],
+          "simulator": "differential_drive_v1"
+        },
+        "qq": {
+          "status": "complete",
+          "accuracy": 0.75,
+          "n_samples": 4,
+          "question_pack": "config/specialist_benchmarks/qq.csv",
+          "pack_version": "qq",
+          "pack_sha256": "2820da6fa7b05d0bef6adcd2fcb8a1aa9fa86970185605bcaea60b8fac81f769",
+          "samples": [
+            {
+              "id": "qq-001",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "qq-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "qq-003",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "qq-004",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "finance": {
+          "status": "complete",
+          "accuracy": 0.6667,
+          "n_samples": 24,
+          "question_pack": "config/specialist_benchmarks/finance.csv",
+          "pack_version": "finance",
+          "pack_sha256": "e3a0f395876ee65b4949217ef7dd50abb58ef67b5edcffc0f813d83c4118b37d",
+          "samples": [
+            {
+              "id": "fin-001",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "fin-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-003",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "fin-004",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-005",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "fin-006",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "fin-007",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-008",
+              "correct": false,
+              "target": "A",
+              "prediction": "C"
+            },
+            {
+              "id": "fin-009",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "fin-010",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-011",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-012",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-013",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-014",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-015",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "fin-016",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "fin-017",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-018",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-019",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-020",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-021",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-022",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-023",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-024",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "model": "qwen35-27b-q4",
+      "protocol": "v3-private-specialist-packs-finance-20260924",
+      "sources": {
+        "chemistry": {
+          "name": "EDS editable private chemistry holdout v1; difficulty target GPQA Diamond",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2311.12022",
+          "samples": "enabled CSV rows"
+        },
+        "physics": {
+          "name": "EDS editable private physics holdout v1; difficulty target GPQA Diamond",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2311.12022",
+          "samples": "enabled CSV rows"
+        },
+        "vision": {
+          "name": "EDS synthetic object recognition + spatial reasoning holdout; MMMU-Pro difficulty reference",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2409.02813",
+          "samples": "enabled CSV rows",
+          "max_wall_sec": 300
+        },
+        "video": {
+          "name": "EDS programmatic MP4 artifact holdout; VBench metric reference",
+          "publication_date": "2026-10-05",
+          "url": "https://arxiv.org/abs/2408.06072",
+          "samples": "enabled CSV rows",
+          "max_wall_sec": 300
+        },
+        "iq": {
+          "name": "EDS abstract/rule reasoning holdout (not a clinical IQ test)",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "eq": {
+          "name": "EDS social-emotional reasoning holdout (not a clinical EQ test)",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "fq": {
+          "name": "EDS actuator/robot physics simulation holdout",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "qq": {
+          "name": "EDS quantum systems and quantum chemistry holdout",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "finance": {
+          "name": "EDS finance holdout from identifier and crypto fact files, plus CFA/FRM/financial-engineering method items",
+          "publication_date": "2026-09-24",
+          "url": "",
+          "samples": "enabled CSV rows"
+        }
+      },
+      "access_profile": "sandbox",
+      "results": {
+        "chemistry": {
+          "status": "complete",
+          "accuracy": 0.6667,
+          "n_samples": 6,
+          "question_pack": "config/benchmark_specialist_holdout_v1.csv",
+          "pack_version": "benchmark_specialist_holdout_v1",
+          "pack_sha256": "9e57532f9f293779d352e96413219fd6100af8b01230d0c6440db822146a362c",
+          "samples": [
+            {
+              "id": "chem-001",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "chem-002",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "chem-003",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            },
+            {
+              "id": "chem-004",
+              "correct": true,
+              "target": "D",
+              "prediction": "D"
+            },
+            {
+              "id": "chem-005",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            },
+            {
+              "id": "chem-006",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "physics": {
+          "status": "complete",
+          "accuracy": 0.6667,
+          "n_samples": 6,
+          "question_pack": "config/benchmark_specialist_holdout_v1.csv",
+          "pack_version": "benchmark_specialist_holdout_v1",
+          "pack_sha256": "9e57532f9f293779d352e96413219fd6100af8b01230d0c6440db822146a362c",
+          "samples": [
+            {
+              "id": "physics-001",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            },
+            {
+              "id": "physics-002",
+              "correct": false,
+              "target": "A",
+              "prediction": "D"
+            },
+            {
+              "id": "physics-003",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-004",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-005",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-006",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "vision": {
+          "status": "unsupported",
+          "reason": "text-only endpoint; requires --vision-capable and a VLM adapter",
+          "n_samples": 0
+        },
+        "video": {
+          "status": "complete",
+          "accuracy": 0.0,
+          "n_samples": 3,
+          "elapsed_sec": 55.1,
+          "samples": [
+            {
+              "passed": false,
+              "duration_sec": 0.0
+            },
+            {
+              "passed": false,
+              "duration_sec": 0.0
+            },
+            {
+              "passed": false,
+              "duration_sec": 0.0
+            }
+          ]
+        },
+        "iq": {
+          "status": "complete",
+          "accuracy": 0.6667,
+          "n_samples": 3,
+          "question_pack": "config/specialist_benchmarks/iq.csv",
+          "pack_version": "iq",
+          "pack_sha256": "fb7a38220cac82529911671e647f4d764c8958092763aec582156d4751679b41",
+          "samples": [
+            {
+              "id": "iq-001",
+              "correct": true,
+              "target": "D",
+              "prediction": "D"
+            },
+            {
+              "id": "iq-002",
+              "correct": false,
+              "target": "A",
+              "prediction": "C"
+            },
+            {
+              "id": "iq-003",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            }
+          ]
+        },
+        "eq": {
+          "status": "complete",
+          "accuracy": 1.0,
+          "n_samples": 3,
+          "question_pack": "config/specialist_benchmarks/eq.csv",
+          "pack_version": "eq",
+          "pack_sha256": "eecae15256f18e3e2d67489c677f9276ce02e712eaf7d474e7df28bc2a1858c5",
+          "samples": [
+            {
+              "id": "eq-001",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "eq-002",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "eq-003",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "fq": {
+          "status": "complete",
+          "accuracy": 0.5,
+          "n_samples": 2,
+          "samples": [
+            {
+              "id": "fq-001",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq-002",
+              "correct": false,
+              "max_normalized_error": 1.2958
+            }
+          ],
+          "simulator": "differential_drive_v1"
+        },
+        "qq": {
+          "status": "complete",
+          "accuracy": 0.75,
+          "n_samples": 4,
+          "question_pack": "config/specialist_benchmarks/qq.csv",
+          "pack_version": "qq",
+          "pack_sha256": "2820da6fa7b05d0bef6adcd2fcb8a1aa9fa86970185605bcaea60b8fac81f769",
+          "samples": [
+            {
+              "id": "qq-001",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "qq-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "qq-003",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "qq-004",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "finance": {
+          "status": "complete",
+          "accuracy": 0.875,
+          "n_samples": 24,
+          "question_pack": "config/specialist_benchmarks/finance.csv",
+          "pack_version": "finance",
+          "pack_sha256": "e3a0f395876ee65b4949217ef7dd50abb58ef67b5edcffc0f813d83c4118b37d",
+          "samples": [
+            {
+              "id": "fin-001",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-003",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-004",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-005",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-006",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-007",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-008",
+              "correct": false,
+              "target": "A",
+              "prediction": "C"
+            },
+            {
+              "id": "fin-009",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "fin-010",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-011",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-012",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "fin-013",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-014",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-015",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-016",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-017",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-018",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-019",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-020",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-021",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-022",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-023",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-024",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "model": "gemma4-26b-a4b-q4",
+      "protocol": "v3-private-specialist-packs-finance-20260924",
+      "sources": {
+        "chemistry": {
+          "name": "EDS editable private chemistry holdout v1; difficulty target GPQA Diamond",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2311.12022",
+          "samples": "enabled CSV rows"
+        },
+        "physics": {
+          "name": "EDS editable private physics holdout v1; difficulty target GPQA Diamond",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2311.12022",
+          "samples": "enabled CSV rows"
+        },
+        "vision": {
+          "name": "EDS synthetic object recognition + spatial reasoning holdout; MMMU-Pro difficulty reference",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2409.02813",
+          "samples": "enabled CSV rows",
+          "max_wall_sec": 300
+        },
+        "video": {
+          "name": "EDS programmatic MP4 artifact holdout; VBench metric reference",
+          "publication_date": "2026-10-05",
+          "url": "https://arxiv.org/abs/2408.06072",
+          "samples": "enabled CSV rows",
+          "max_wall_sec": 300
+        },
+        "iq": {
+          "name": "EDS abstract/rule reasoning holdout (not a clinical IQ test)",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "eq": {
+          "name": "EDS social-emotional reasoning holdout (not a clinical EQ test)",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "fq": {
+          "name": "EDS actuator/robot physics simulation holdout",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "qq": {
+          "name": "EDS quantum systems and quantum chemistry holdout",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "finance": {
+          "name": "EDS finance holdout from identifier and crypto fact files, plus CFA/FRM/financial-engineering method items",
+          "publication_date": "2026-09-24",
+          "url": "",
+          "samples": "enabled CSV rows"
+        }
+      },
+      "access_profile": "sandbox",
+      "results": {
+        "chemistry": {
+          "status": "complete",
+          "accuracy": 0.3333,
+          "n_samples": 6,
+          "question_pack": "config/benchmark_specialist_holdout_v1.csv",
+          "pack_version": "benchmark_specialist_holdout_v1",
+          "pack_sha256": "9e57532f9f293779d352e96413219fd6100af8b01230d0c6440db822146a362c",
+          "samples": [
+            {
+              "id": "chem-001",
+              "correct": false,
+              "target": "C",
+              "prediction": "A"
+            },
+            {
+              "id": "chem-002",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            },
+            {
+              "id": "chem-003",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "chem-004",
+              "correct": false,
+              "target": "D",
+              "prediction": "C"
+            },
+            {
+              "id": "chem-005",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            },
+            {
+              "id": "chem-006",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "physics": {
+          "status": "complete",
+          "accuracy": 0.8333,
+          "n_samples": 6,
+          "question_pack": "config/benchmark_specialist_holdout_v1.csv",
+          "pack_version": "benchmark_specialist_holdout_v1",
+          "pack_sha256": "9e57532f9f293779d352e96413219fd6100af8b01230d0c6440db822146a362c",
+          "samples": [
+            {
+              "id": "physics-001",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-002",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-003",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-004",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-005",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-006",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "vision": {
+          "status": "unsupported",
+          "reason": "text-only endpoint; requires --vision-capable and a VLM adapter",
+          "n_samples": 0
+        },
+        "video": {
+          "status": "complete",
+          "accuracy": 0.0,
+          "n_samples": 3,
+          "elapsed_sec": 10.4,
+          "samples": [
+            {
+              "passed": false,
+              "duration_sec": 0.0
+            },
+            {
+              "passed": false,
+              "reason": "unsafe/oversized filtergraph"
+            },
+            {
+              "passed": false,
+              "reason": "unsafe/oversized filtergraph"
+            }
+          ]
+        },
+        "iq": {
+          "status": "complete",
+          "accuracy": 1.0,
+          "n_samples": 3,
+          "question_pack": "config/specialist_benchmarks/iq.csv",
+          "pack_version": "iq",
+          "pack_sha256": "fb7a38220cac82529911671e647f4d764c8958092763aec582156d4751679b41",
+          "samples": [
+            {
+              "id": "iq-001",
+              "correct": true,
+              "target": "D",
+              "prediction": "D"
+            },
+            {
+              "id": "iq-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "iq-003",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            }
+          ]
+        },
+        "eq": {
+          "status": "complete",
+          "accuracy": 1.0,
+          "n_samples": 3,
+          "question_pack": "config/specialist_benchmarks/eq.csv",
+          "pack_version": "eq",
+          "pack_sha256": "eecae15256f18e3e2d67489c677f9276ce02e712eaf7d474e7df28bc2a1858c5",
+          "samples": [
+            {
+              "id": "eq-001",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "eq-002",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "eq-003",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "fq": {
+          "status": "complete",
+          "accuracy": 0.0,
+          "n_samples": 2,
+          "samples": [
+            {
+              "id": "fq-001",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq-002",
+              "correct": false,
+              "max_normalized_error": 0.4407
+            }
+          ],
+          "simulator": "differential_drive_v1"
+        },
+        "qq": {
+          "status": "complete",
+          "accuracy": 1.0,
+          "n_samples": 4,
+          "question_pack": "config/specialist_benchmarks/qq.csv",
+          "pack_version": "qq",
+          "pack_sha256": "2820da6fa7b05d0bef6adcd2fcb8a1aa9fa86970185605bcaea60b8fac81f769",
+          "samples": [
+            {
+              "id": "qq-001",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "qq-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "qq-003",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "qq-004",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "finance": {
+          "status": "complete",
+          "accuracy": 0.9583,
+          "n_samples": 24,
+          "question_pack": "config/specialist_benchmarks/finance.csv",
+          "pack_version": "finance",
+          "pack_sha256": "e3a0f395876ee65b4949217ef7dd50abb58ef67b5edcffc0f813d83c4118b37d",
+          "samples": [
+            {
+              "id": "fin-001",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-003",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-004",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-005",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-006",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-007",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-008",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-009",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-010",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-011",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-012",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-013",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-014",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-015",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-016",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-017",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-018",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "fin-019",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-020",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-021",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-022",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-023",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-024",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "model": "mom-live-4-tp2",
+      "protocol": "v3-private-specialist-packs-finance-20260924",
+      "sources": {
+        "chemistry": {
+          "name": "EDS editable private chemistry holdout v1; difficulty target GPQA Diamond",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2311.12022",
+          "samples": "enabled CSV rows"
+        },
+        "physics": {
+          "name": "EDS editable private physics holdout v1; difficulty target GPQA Diamond",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2311.12022",
+          "samples": "enabled CSV rows"
+        },
+        "vision": {
+          "name": "EDS synthetic object recognition + spatial reasoning holdout; MMMU-Pro difficulty reference",
+          "publication_date": "2026-09-22",
+          "url": "https://arxiv.org/abs/2409.02813",
+          "samples": "enabled CSV rows",
+          "max_wall_sec": 300
+        },
+        "video": {
+          "name": "EDS programmatic MP4 artifact holdout; VBench metric reference",
+          "publication_date": "2026-10-05",
+          "url": "https://arxiv.org/abs/2408.06072",
+          "samples": "enabled CSV rows",
+          "max_wall_sec": 300
+        },
+        "iq": {
+          "name": "EDS abstract/rule reasoning holdout (not a clinical IQ test)",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "eq": {
+          "name": "EDS social-emotional reasoning holdout (not a clinical EQ test)",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "fq": {
+          "name": "EDS actuator/robot physics simulation holdout",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "qq": {
+          "name": "EDS quantum systems and quantum chemistry holdout",
+          "publication_date": "2026-09-22",
+          "url": "",
+          "samples": "enabled CSV rows"
+        },
+        "finance": {
+          "name": "EDS finance holdout from identifier and crypto fact files, plus CFA/FRM/financial-engineering method items",
+          "publication_date": "2026-09-24",
+          "url": "",
+          "samples": "enabled CSV rows"
+        }
+      },
+      "access_profile": "sandbox",
+      "results": {
+        "chemistry": {
+          "status": "complete",
+          "accuracy": 0.0,
+          "n_samples": 6,
+          "question_pack": "config/benchmark_specialist_holdout_v1.csv",
+          "pack_version": "benchmark_specialist_holdout_v1",
+          "pack_sha256": "9e57532f9f293779d352e96413219fd6100af8b01230d0c6440db822146a362c",
+          "samples": [
+            {
+              "id": "chem-001",
+              "correct": false,
+              "target": "C",
+              "prediction": "A"
+            },
+            {
+              "id": "chem-002",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            },
+            {
+              "id": "chem-003",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            },
+            {
+              "id": "chem-004",
+              "correct": false,
+              "target": "D",
+              "prediction": "A"
+            },
+            {
+              "id": "chem-005",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            },
+            {
+              "id": "chem-006",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            }
+          ]
+        },
+        "physics": {
+          "status": "complete",
+          "accuracy": 0.3333,
+          "n_samples": 6,
+          "question_pack": "config/benchmark_specialist_holdout_v1.csv",
+          "pack_version": "benchmark_specialist_holdout_v1",
+          "pack_sha256": "9e57532f9f293779d352e96413219fd6100af8b01230d0c6440db822146a362c",
+          "samples": [
+            {
+              "id": "physics-001",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            },
+            {
+              "id": "physics-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "physics-003",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            },
+            {
+              "id": "physics-004",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            },
+            {
+              "id": "physics-005",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "physics-006",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            }
+          ]
+        },
+        "vision": {
+          "status": "unsupported",
+          "reason": "text-only endpoint; requires --vision-capable and a VLM adapter",
+          "n_samples": 0
+        },
+        "video": {
+          "status": "complete",
+          "accuracy": 0.0,
+          "n_samples": 3,
+          "elapsed_sec": 118.7,
+          "samples": [
+            {
+              "passed": false,
+              "duration_sec": 0.0
+            },
+            {
+              "passed": false,
+              "reason": "unsafe/oversized filtergraph"
+            },
+            {
+              "passed": false,
+              "duration_sec": 0.0
+            }
+          ]
+        },
+        "iq": {
+          "status": "complete",
+          "accuracy": 0.3333,
+          "n_samples": 3,
+          "question_pack": "config/specialist_benchmarks/iq.csv",
+          "pack_version": "iq",
+          "pack_sha256": "fb7a38220cac82529911671e647f4d764c8958092763aec582156d4751679b41",
+          "samples": [
+            {
+              "id": "iq-001",
+              "correct": false,
+              "target": "D",
+              "prediction": "A"
+            },
+            {
+              "id": "iq-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "iq-003",
+              "correct": false,
+              "target": "C",
+              "prediction": "A"
+            }
+          ]
+        },
+        "eq": {
+          "status": "complete",
+          "accuracy": 1.0,
+          "n_samples": 3,
+          "question_pack": "config/specialist_benchmarks/eq.csv",
+          "pack_version": "eq",
+          "pack_sha256": "eecae15256f18e3e2d67489c677f9276ce02e712eaf7d474e7df28bc2a1858c5",
+          "samples": [
+            {
+              "id": "eq-001",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "eq-002",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "eq-003",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            }
+          ]
+        },
+        "fq": {
+          "status": "complete",
+          "accuracy": 0.0,
+          "n_samples": 2,
+          "samples": [
+            {
+              "id": "fq-001",
+              "correct": false,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq-002",
+              "correct": false,
+              "max_normalized_error": 0.5
+            }
+          ],
+          "simulator": "differential_drive_v1"
+        },
+        "qq": {
+          "status": "complete",
+          "accuracy": 0.5,
+          "n_samples": 4,
+          "question_pack": "config/specialist_benchmarks/qq.csv",
+          "pack_version": "qq",
+          "pack_sha256": "2820da6fa7b05d0bef6adcd2fcb8a1aa9fa86970185605bcaea60b8fac81f769",
+          "samples": [
+            {
+              "id": "qq-001",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            },
+            {
+              "id": "qq-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "qq-003",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "qq-004",
+              "correct": false,
+              "target": "B",
+              "prediction": "A"
+            }
+          ]
+        },
+        "finance": {
+          "status": "complete",
+          "accuracy": 0.9583,
+          "n_samples": 24,
+          "question_pack": "config/specialist_benchmarks/finance.csv",
+          "pack_version": "finance",
+          "pack_sha256": "e3a0f395876ee65b4949217ef7dd50abb58ef67b5edcffc0f813d83c4118b37d",
+          "samples": [
+            {
+              "id": "fin-001",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-003",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-004",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-005",
+              "correct": false,
+              "target": "A",
+              "prediction": null
+            },
+            {
+              "id": "fin-006",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-007",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-008",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-009",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-010",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-011",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-012",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-013",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-014",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-015",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-016",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-017",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-018",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-019",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-020",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-021",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-022",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-023",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "fin-024",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            }
+          ]
+        }
+      }
     }
   ],
   "protocol": "v2-private-specialist-packs-vision-video-iq-eq-fq-qq-20260922"

@@ -1,0 +1,183 @@
+{
+ "name": "mom-live",
+ "suite_model": "mom-live-4",
+ "layout": "replicas",
+ "method": "Mixture-of-Agents (proposers draft, aggregator answers)",
+ "window": {
+  "since": "2026-10-05 11:46:00",
+  "until": "2026-10-05 12:25:46",
+  "seconds": 2386
+ },
+ "units": {
+  "mom-qwen38": {
+   "role": "aggregator",
+   "model": "qwen38-27b-q4",
+   "cuda_index": "3",
+   "port": 8021,
+   "engine": "llama.cpp",
+   "requests": 91,
+   "generated_tokens": 4386,
+   "prompt_tokens": 61725,
+   "generation_tokens_per_second": 33.65,
+   "generation_tokens_per_second_median_request": 59.93,
+   "prompt_tokens_per_second": 439.86,
+   "gpu": {
+    "mean_watt": 79.5,
+    "mean_utilisation_pct": 10.6,
+    "joules": 189729.0
+   },
+   "gpu_joules_per_generated_token": 43.258
+  },
+  "mom-qwen38b": {
+   "role": "aggregator",
+   "model": "qwen38-27b-q4",
+   "cuda_index": "4",
+   "port": 8026,
+   "engine": "llama.cpp",
+   "requests": 91,
+   "generated_tokens": 4186,
+   "prompt_tokens": 61771,
+   "generation_tokens_per_second": 33.62,
+   "generation_tokens_per_second_median_request": 59.83,
+   "prompt_tokens_per_second": 456.24,
+   "gpu": {
+    "mean_watt": 81.9,
+    "mean_utilisation_pct": 10.5,
+    "joules": 195485.9
+   },
+   "gpu_joules_per_generated_token": 46.7
+  },
+  "mom-devstral": {
+   "role": "proposer",
+   "model": "devstral-small2-24b-q4",
+   "cuda_index": "0",
+   "port": 8022,
+   "engine": "llama.cpp",
+   "requests": 183,
+   "generated_tokens": 29820,
+   "prompt_tokens": 17915,
+   "generation_tokens_per_second": 21.92,
+   "generation_tokens_per_second_median_request": 42.17,
+   "prompt_tokens_per_second": 907.82,
+   "gpu": {
+    "mean_watt": 88.2,
+    "mean_utilisation_pct": 55.2,
+    "joules": 210342.0
+   },
+   "gpu_joules_per_generated_token": 7.054
+  },
+  "mom-qwen35": {
+   "role": "proposer",
+   "model": "qwen35-27b-q4",
+   "cuda_index": "1",
+   "port": 8023,
+   "engine": "llama.cpp",
+   "requests": 91,
+   "generated_tokens": 6354,
+   "prompt_tokens": 11581,
+   "generation_tokens_per_second": 18.9,
+   "generation_tokens_per_second_median_request": 34.09,
+   "prompt_tokens_per_second": 360.58,
+   "gpu": {
+    "mean_watt": 38.2,
+    "mean_utilisation_pct": 14.8,
+    "joules": 91176.6
+   },
+   "gpu_joules_per_generated_token": 14.349
+  },
+  "mom-qwen35b": {
+   "role": "proposer",
+   "model": "qwen35-27b-q4",
+   "cuda_index": "5",
+   "port": 8025,
+   "engine": "llama.cpp",
+   "requests": 92,
+   "generated_tokens": 7689,
+   "prompt_tokens": 12033,
+   "generation_tokens_per_second": 16.73,
+   "generation_tokens_per_second_median_request": 29.55,
+   "prompt_tokens_per_second": 344.83,
+   "gpu": {
+    "mean_watt": 53.5,
+    "mean_utilisation_pct": 26.5,
+    "joules": 127623.0
+   },
+   "gpu_joules_per_generated_token": 16.598
+  },
+  "mom-gemma4": {
+   "role": "proposer",
+   "model": "gemma4-26b-a4b-q4",
+   "cuda_index": "2",
+   "port": 8024,
+   "engine": "llama.cpp",
+   "requests": 183,
+   "generated_tokens": 17118,
+   "prompt_tokens": 21937,
+   "generation_tokens_per_second": 72.88,
+   "generation_tokens_per_second_median_request": 101.99,
+   "prompt_tokens_per_second": 821.31,
+   "gpu": {
+    "mean_watt": 44.4,
+    "mean_utilisation_pct": 14.4,
+    "joules": 105966.5
+   },
+   "gpu_joules_per_generated_token": 6.19
+  }
+ },
+ "gpus": {
+  "0": {
+   "mean_watt": 88.2,
+   "mean_utilisation_pct": 55.2,
+   "joules": 210342.0,
+   "samples": 2378
+  },
+  "1": {
+   "mean_watt": 38.2,
+   "mean_utilisation_pct": 14.8,
+   "joules": 91176.6,
+   "samples": 2378
+  },
+  "2": {
+   "mean_watt": 44.4,
+   "mean_utilisation_pct": 14.4,
+   "joules": 105966.5,
+   "samples": 2378
+  },
+  "3": {
+   "mean_watt": 79.5,
+   "mean_utilisation_pct": 10.6,
+   "joules": 189729.0,
+   "samples": 2378
+  },
+  "4": {
+   "mean_watt": 81.9,
+   "mean_utilisation_pct": 10.5,
+   "joules": 195485.9,
+   "samples": 2378
+  },
+  "5": {
+   "mean_watt": 53.5,
+   "mean_utilisation_pct": 26.5,
+   "joules": 127623.0,
+   "samples": 2378
+  }
+ },
+ "cpu": {
+  "joules": 329919.2,
+  "mean_watt": 138.4,
+  "scope": "RAPL package energy, sockets 0+1 (no DRAM)"
+ },
+ "totals": {
+  "answers": 182,
+  "generated_tokens_all_members": 69553,
+  "answer_tokens": 8572,
+  "gpu_kwh": 0.2556,
+  "cpu_kwh": 0.0916,
+  "system_kwh_measured": 0.3473,
+  "mean_system_watt_measured": 524.0,
+  "wh_per_answer": 1.908,
+  "joules_per_answer_token": 145.85,
+  "joules_per_generated_token_all_members": 17.98
+ },
+ "scope_note": "Gemeten: GPU-bordvermogen (nvidia-smi) en CPU-pakketenergie (RAPL). Niet gemeten: DRAM, schijven, ventilatoren en voedingsverlies. Het rustverbruik van alle zes GPU's telt mee, dus de cijfers zijn wat de mix op deze machine werkelijk kost, niet de marginale kost per verzoek."
+}
