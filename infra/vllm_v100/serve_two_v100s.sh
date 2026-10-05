@@ -7,7 +7,7 @@ ROOT=/media/knight2/EDS2
 VENV="$ROOT/envs/vllm-v100-cu124"
 
 export CUDA_DEVICE_ORDER=PCI_BUS_ID
-export CUDA_VISIBLE_DEVICES=1,2
+source "$(dirname "${BASH_SOURCE[0]}")/../lib/v100_pair.sh"   # V100 pair by name (indices changed 2026-10-05)
 export HF_HOME="$ROOT/models/huggingface"
 export HUGGINGFACE_HUB_CACHE="$HF_HOME/hub"
 export XDG_CACHE_HOME="$ROOT/cache/xdg"

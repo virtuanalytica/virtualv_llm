@@ -48,7 +48,7 @@ if ! flock -n 9; then
 fi
 
 export CUDA_DEVICE_ORDER=PCI_BUS_ID
-export CUDA_VISIBLE_DEVICES=1,2
+source "$(dirname "${BASH_SOURCE[0]}")/../lib/v100_pair.sh"   # V100 pair by name (indices changed 2026-10-05)
 export CUDA_HOME=/usr/local/cuda-12.9
 export PATH="$CUDA_HOME/bin:$ENV_DIR/bin:$PATH"
 export HF_HOME="$ROOT/cache/huggingface-1cat"

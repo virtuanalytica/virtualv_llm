@@ -30,7 +30,7 @@ fi
 test -f "$MODEL_FILE" || { echo "model not found at $MODEL_FILE -- run: $0 download" >&2; exit 1; }
 
 export CUDA_DEVICE_ORDER=PCI_BUS_ID
-export CUDA_VISIBLE_DEVICES=1,2
+source "$(dirname "${BASH_SOURCE[0]}")/../lib/v100_pair.sh"   # V100 pair by name (indices changed 2026-10-05)
 export GGML_CUDA_P2P=1
 
 exec "$SERVER" \
