@@ -145,6 +145,9 @@ def complete_vision(prompt: str, image_path: Path, max_tokens: int) -> str:
 LM_EVAL_TIMEOUT = 1800
 
 
+RESUME = False
+
+
 def run_lm_eval_task(
     task: str, limit: int, out_root: Path, log_samples: bool = False, gen_kwargs: str | None = None,
     num_fewshot: int | None = None,
@@ -167,6 +170,12 @@ def run_lm_eval_task(
         args += ["--gen_kwargs", gen_kwargs]
     if num_fewshot is not None:
         args += ["--num_fewshot", str(num_fewshot)]
+    existing = sorted(out_dir.glob("*/results_*.json"))
+    if RESUME and existing:
+        # --resume: an interrupted run of the SAME model/endpoint already finished this task;
+        # reuse its lm-eval output instead of spending the GPU hours again (marked in the row).
+        data = json.loads(existing[-1].read_text())
+        return {"task": task, "metrics": data.get("results", {}).get(task, {}), "out_dir": out_dir, "resumed": True}
     proc = subprocess.run(args, capture_output=True, text=True, timeout=LM_EVAL_TIMEOUT)
     result_files = sorted(out_dir.glob("*/results_*.json"))
     if not result_files:
@@ -673,7 +682,11 @@ def main() -> int:
     parser.add_argument("--model-release-source", help="Primary release-note or model-card URL for that date")
     parser.add_argument("--access-profile", default="sandbox", choices=("sandbox", "disk", "internet_disk"),
                         help="tool-access condition; non-sandbox needs the dedicated agent runner")
+    parser.add_argument("--resume", action="store_true",
+                        help="reuse lm-eval task outputs already present for this model (interrupted run)")
     args = parser.parse_args()
+    global RESUME
+    RESUME = args.resume
     if bool(args.model_release_date) != bool(args.model_release_source):
         raise SystemExit("supply --model-release-date and --model-release-source together")
     if args.access_profile != "sandbox":

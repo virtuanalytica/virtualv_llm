@@ -281,6 +281,8 @@ def throughput_rows(primary_rows: list[dict]) -> list[dict]:
 
 
 WELL_KNOWN_LABELS = {
+    "mom-live-4": "Live mixture-of-models (Mixture-of-Agents: Qwen3.8 aggregator x2 replica's + Devstral, Qwen3.5, Gemma4)",
+    "mom-live-4-tp2": "Live mixture-of-models (Mixture-of-Agents: Qwen3.8 1Cat-vLLM TP2 aggregator + Devstral, Qwen3.5, Gemma4)",
     "qwen38-27b-q4": "Qwen3.8-27B", "deepseek-r1-qwen32b-q4": "DeepSeek-R1-Qwen",
     "qwen36-27b-iq3": "Qwen3.6-27B", "qwen35-27b-q4": "Qwen3.5-27B",
     "gemma4-26b-a4b-q4": "Gemma4-26B-A4B", "devstral-small2-24b-q4": "Devstral Small 2",
@@ -939,6 +941,100 @@ model per kaart. Gebruik A4000+Ada layer split alleen om een groter model passen
 """
 
 
+LIVE_MIXTURE_REPORTS = ("live_mixture_of_models_20261005.json", "live_mixture_of_models_tp2_20261005.json")
+LAYOUT_LABELS = {"replicas": "aggregator als twee llama.cpp-replica's (data-parallel, één per V100)",
+                 "tp2": "aggregator als één 1Cat-vLLM-instantie met tensor parallel (TP2) over het NVLink-paar"}
+
+
+def live_mixture_section() -> str:
+    """Live mixture-of-models, one block per measured layout (same method and metrics)."""
+    reports = [data for data in (load(name) for name in LIVE_MIXTURE_REPORTS) if data]
+    blocks = [_live_mixture_block(data) for data in reports]
+    if len(reports) == 2:
+        blocks.append(_live_mixture_comparison(reports))
+    return "".join(blocks)
+
+
+def _live_mixture_comparison(reports: list[dict]) -> str:
+    """Side by side: same proposers, aggregator as llama.cpp replicas vs 1Cat-vLLM TP2."""
+    suite = {r.get("model"): r for r in load("well_known_suite_20260917.json").get("results", [])}
+    rows = ""
+    for data in reports:
+        r, t = suite.get(data.get("suite_model"), {}), data.get("totals", {})
+        parts = [rm.gsm8k_score(r) if r else None, (r.get("humaneval") or {}).get("pass_at_1"),
+                 (r.get("mmlu_sample") or {}).get("mean_accuracy"), (r.get("bbh") or {}).get("mean_accuracy")]
+        comp = sum(parts) / 4 if all(isinstance(v, (int, float)) for v in parts) else None
+        agg = [u for u in data.get("units", {}).values() if u.get("role") == "aggregator"]
+        rows += ("<tr><td>" + html.escape(LAYOUT_LABELS.get(data.get("layout"), data.get("layout", ""))) + "</td><td>" +
+                 fmt(comp, 3) + "</td><td>" + "</td><td>".join(fmt(v, 3) for v in parts) + "</td><td>" +
+                 fmt(t.get("wh_per_answer"), 2) + " Wh</td><td>" + fmt(t.get("mean_system_watt_measured")) + " W</td><td>" +
+                 fmt(sum(u.get("gpu", {}).get("mean_utilisation_pct", 0) for u in agg) / len(agg) if agg else None, 1) +
+                 "%</td></tr>")
+    return f"""
+<h3>Vergelijking: replica's versus TP2 als aggregator</h3>
+<div class="tablewrap"><table><thead><tr><th>Aggregator</th><th>Composite</th><th>gsm8k</th><th>humaneval</th>
+<th>mmlu</th><th>bbh</th><th>Energie per antwoord</th><th>Gem. systeemvermogen</th><th>Aggregator-GPU-utilisatie</th>
+</tr></thead><tbody>{rows}</tbody></table></div>
+<div class="callout"><strong>Interpretatie.</strong> TP2 benut beide V100's wel volledig tijdens een antwoord, maar
+de NVFP4-gewichten op het 1Cat-vLLM-pad leveren duidelijk minder kwaliteit dan de Q4_K_M-GGUF op llama.cpp: dezelfde
+proposers, een veel lagere score. Dat strookt met de losse 1Cat-meting van Qwen3.8 NVFP4 elders op deze pagina. De
+energie per antwoord is nagenoeg gelijk, omdat het rustverbruik van alle zes GPU's in beide opstellingen meetelt. Voor
+de mix blijft de llama.cpp-aggregator dus de betere keuze; een energiewinst vraagt eerder om minder of zuiniger
+actieve kaarten dan om een andere parallellisatie.</div>
+"""
+
+
+def _live_mixture_block(data: dict) -> str:
+    """Layout, measured throughput and measured energy per answer for one live mixture run."""
+    t, units = data.get("totals", {}), data.get("units", {})
+    w = data.get("window", {})
+    suite = next((r for r in load("well_known_suite_20260917.json").get("results", [])
+                  if r.get("model") == data.get("suite_model")), {})
+    rows = ""
+    for name, u in units.items():
+        g = u.get("gpu", {})
+        rows += ("<tr><td>" + html.escape(name) + "</td><td>" + html.escape(u.get("role", "")) + "</td><td>" +
+                 html.escape(WELL_KNOWN_LABELS.get(u.get("model"), u.get("model", ""))) + "</td><td>CUDA " +
+                 str(u.get("cuda_index")) + "</td><td>" + str(u.get("requests", "–")) + "</td><td>" +
+                 fmt(u.get("generation_tokens_per_second")) + "</td><td>" + fmt(u.get("prompt_tokens_per_second")) +
+                 "</td><td>" + fmt(g.get("mean_watt")) + " W</td><td>" + fmt(g.get("mean_utilisation_pct")) +
+                 "%</td><td>" + fmt(u.get("gpu_joules_per_generated_token")) + "</td></tr>")
+    composite = None
+    parts = [rm.gsm8k_score(suite) if suite else None, (suite.get("humaneval") or {}).get("pass_at_1"),
+             (suite.get("mmlu_sample") or {}).get("mean_accuracy"), (suite.get("bbh") or {}).get("mean_accuracy")]
+    if all(isinstance(v, (int, float)) for v in parts):
+        composite = sum(parts) / 4
+    return f"""
+<h2>Live mixture-of-models (Mixture-of-Agents) · energie per antwoord</h2>
+<h3>{html.escape(LAYOUT_LABELS.get(data.get('layout', 'replicas'), data.get('layout', '')))} · <code>{html.escape(str(data.get('suite_model')))}</code></h3>
+<p>Eén OpenAI-compatibel endpoint (<code>scripts/benchmarks/mixture_proxy.py</code>, opstelling
+{'<code>infra/vllm_v100/serve_1cat_qwen38_tp2.sh</code> voor de aggregator, proposers uit <code>infra/model_serve_configs/mom-live.sh</code>' if data.get('layout') == 'tp2' else '<code>infra/model_serve_configs/mom-live.sh</code>'}) over alle zes GPU's: drie proposers schrijven parallel een
+concept, de aggregator schrijft het antwoord met de concepten in context. Dezelfde endpoint dient de chat
+(OMP-profiel <code>toddler</code>, met Toddler als MCP-tool) en deze benchmark, dus de score hieronder is
+de mix die werkelijk gebruikt wordt. Meetvenster {html.escape(str(w.get('since')))} tot
+{html.escape(str(w.get('until')))}.</p>
+<div class="grid">
+<div class="card"><small>Energie per beantwoorde vraag</small><div class="metric">{fmt(t.get('wh_per_answer'), 3)} Wh</div>
+<small>hele gemeten systeem (6 GPU's + CPU-pakketten), {t.get('answers', '–')} antwoorden</small></div>
+<div class="card"><small>Gemiddeld vermogen tijdens de run</small><div class="metric">{fmt(t.get('mean_system_watt_measured'))} W</div>
+<small>GPU-bordvermogen + CPU-pakketten (RAPL)</small></div>
+<div class="card"><small>Gemeten energie in het venster</small><div class="metric">{fmt(t.get('system_kwh_measured'), 3)} kWh</div>
+<small>GPU {fmt(t.get('gpu_kwh'), 3)} · CPU {fmt(t.get('cpu_kwh'), 3)}</small></div>
+<div class="card"><small>Composite (gsm8k, humaneval, mmlu, bbh)</small><div class="metric">{fmt(composite, 3) if composite is not None else '–'}</div>
+<small>{html.escape(str(suite.get('eval_protocol', 'run loopt nog')))}</small></div></div>
+<div class="tablewrap"><table><thead><tr><th>Unit</th><th>Rol</th><th>Model</th><th>GPU</th><th>Requests</th>
+<th>Generatie t/s</th><th>Prompt t/s</th><th>Gem. GPU-vermogen</th><th>GPU-utilisatie</th><th>GPU J / gegenereerd token</th>
+</tr></thead><tbody>{rows}</tbody></table></div>
+<div class="callout"><strong>Meetscope.</strong> {html.escape(data.get('scope_note', ''))} Ter context, met andere
+scope en niet direct vergelijkbaar: Google rapporteerde 0,24 Wh voor de mediane Gemini-Apps-tekstprompt
+(<a href="https://cloud.google.com/blog/products/infrastructure/measuring-the-environmental-impact-of-ai-inference">augustus 2025</a>,
+inclusief datacenteroverhead) en Epoch AI schatte circa 0,3 Wh voor een typische GPT-4o-vraag
+(<a href="https://epoch.ai/gradient-updates/how-much-energy-does-chatgpt-use">februari 2025</a>). Benchmarkvragen
+(mmlu: één letter, humaneval: een functie) verschillen van chatprompts; vergelijk daarom vooral de rijen
+onderling en de mix met het losse aggregatormodel.</div>
+"""
+
+
 def benchmark_section(rows: list[dict]) -> str:
     if not rows:
         return ""
@@ -1088,6 +1184,7 @@ tabel erboven bevat de bijbehorende prompt-snelheid, VRAM en GPU-utilisatie.</p>
 {glm53_completion_summary()}
 {well_known_section(wk_rows)}
 {specialist_section()}
+{live_mixture_section()}
 {contamination_section()}
 {matrix_gate_section()}
 {hardware_scaling_section()}
@@ -1097,7 +1194,7 @@ tabel erboven bevat de bijbehorende prompt-snelheid, VRAM en GPU-utilisatie.</p>
 {qwen38_flash_next_vllm_section()}
 {candidate_research_section()}
 <h2>Wat gebruikt NVLink het best?</h2><div class="twocol"><div class="card"><h3>Tensor split</h3><p>Beste llama.cpp-topologie. Qwen3.8 bereikt circa 85–86% gemiddelde utiliteit per V100; Qwen-72B circa 95–97%. De zes NVLinks maken de benodigde tensorcollectives praktisch.</p></div><div class="card"><h3>Layer split</h3><p>Goed om modellen te laten passen, maar geen decodeversnelling voor 27B: 33,33 versus 33,53 t/s single. De lagen worden grotendeels na elkaar uitgevoerd.</p></div><div class="card"><h3>1Cat TP2</h3><p>Qwen3.8 NVFP4 gebruikt beide V100’s op 100%. DFlash2 is sterk bij B1; target-only schaalt beter bij vier gelijktijdige requests.</p></div><div class="card"><h3>72B–100B envelope</h3><p>72,7B dense Q4_K_M gebruikt circa 22,27 GiB per kaart en is stabiel op 8K. Een dense 100B Q4 zou te weinig allocator- en KV-marge laten; de betrouwbare grens ligt op deze machine daarom rond 70–80B.</p></div></div>
-<h2>Meetintegriteit</h2><div class="tablewrap"><table><tbody><tr><th>V100-modelranglijst</th><td>Fysieke GPU 1 + 2: Tesla V100-SXM2-32GB; A4000/Ada zijn onzichtbaar en uitgesloten</td></tr><tr><th>RTX-profielen</th><td>GPU0 = RTX A4000 15GB; GPU3 = RTX 4000 Ada 20GB. Single-card, PCIe layer split en parallel serving worden als verschillende configuraties gerapporteerd.</td></tr><tr><th>Device contract</th><td><code>CUDA_DEVICE_ORDER=PCI_BUS_ID</code> plus een expliciete <code>CUDA_VISIBLE_DEVICES</code>-set; de llama.cpp device probe en telemetry moeten exact met het profiel overeenkomen</td></tr><tr><th>Interconnect</th><td>NV6; 6 actieve links per V100, elk 25,781 GB/s gerapporteerd. Tussen A4000 en Ada bestaat geen NVLink.</td></tr><tr><th>Temperatuur</th><td>Maximaal 65°C in de 72B tensor-run</td></tr><tr><th>Brondata</th><td>JSON-artefacten in <code>reports/</code>; pagina wordt daar rechtstreeks uit gegenereerd</td></tr></tbody></table></div>
+<h2>Meetintegriteit</h2><div class="tablewrap"><table><tbody><tr><th>V100-modelranglijst</th><td>Fysieke GPU 1 + 2: Tesla V100-SXM2-32GB; A4000/Ada zijn onzichtbaar en uitgesloten</td></tr><tr><th>RTX-profielen</th><td>Sinds 2026-10-05: vier RTX 4000 Ada 20GB (CUDA 0, 1, 2, 5) en twee V100-SXM2-32GB met NVLink (CUDA 3, 4); de RTX A4000 zit niet meer in de machine. Oudere rijen met GPU0 = RTX A4000 15GB blijven historische metingen. Single-card, PCIe layer split en parallel serving worden als verschillende configuraties gerapporteerd.</td></tr><tr><th>Device contract</th><td><code>CUDA_DEVICE_ORDER=PCI_BUS_ID</code> plus een expliciete <code>CUDA_VISIBLE_DEVICES</code>-set; de llama.cpp device probe en telemetry moeten exact met het profiel overeenkomen</td></tr><tr><th>Interconnect</th><td>NV6; 6 actieve links per V100, elk 25,781 GB/s gerapporteerd. Tussen A4000 en Ada bestaat geen NVLink.</td></tr><tr><th>Temperatuur</th><td>Maximaal 65°C in de 72B tensor-run</td></tr><tr><th>Brondata</th><td>JSON-artefacten in <code>reports/</code>; pagina wordt daar rechtstreeks uit gegenereerd</td></tr></tbody></table></div>
 <footer>Gegenereerd door <code>scripts/benchmarks/build_dual_v100_html.py</code>. Officiële modelbron: <a href="https://huggingface.co/Qwen/Qwen2.5-72B-Instruct-GGUF">Qwen/Qwen2.5-72B-Instruct-GGUF</a>. 1Cat-referentie: <a href="https://github.com/1CatAI/1Cat-vLLM/blob/main/RELEASE.md">1Cat-vLLM 1.5 release</a>.</footer>
 <script>
 (function(){{

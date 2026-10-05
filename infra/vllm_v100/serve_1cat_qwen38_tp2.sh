@@ -48,7 +48,15 @@ if ! flock -n 9; then
 fi
 
 export CUDA_DEVICE_ORDER=PCI_BUS_ID
-export CUDA_VISIBLE_DEVICES=1,2
+# Find the V100 pair by name instead of hard-coding indices: the GPU inventory changed on
+# 2026-10-05 (V100s are now PCI indices 3,4). 1Cat-vLLM 1.5 parses CUDA_VISIBLE_DEVICES as
+# integers (a GPU UUID fails ModelConfig: "invalid literal for int()"), so pass indices.
+mapfile -t V100_IDX < <(nvidia-smi --query-gpu=index,name --format=csv,noheader | awk -F, '/Tesla V100-SXM2-32GB/ {gsub(/[[:space:]]/, "", $1); print $1}')
+if [[ ${#V100_IDX[@]} -ne 2 ]]; then
+  echo "Expected two healthy Tesla V100-SXM2-32GB GPUs, found ${#V100_IDX[@]}" >&2
+  exit 75
+fi
+export CUDA_VISIBLE_DEVICES="${V100_IDX[0]},${V100_IDX[1]}"
 # The distro /usr/bin/nvcc is CUDA 12.0 and cannot compile TileLang's modern
 # BF16 helpers. The installed CUDA 12.9 toolkit matches the wheel's CUDA-12.8
 # ABI lane and the nvidia-cuda-nvcc-cu12 dependency installed with 1Cat.
