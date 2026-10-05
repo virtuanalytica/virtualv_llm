@@ -2,7 +2,7 @@
 
 Everything is placed on EDS2: the isolated CUDA-12.4 environment, Hugging Face
 cache, vLLM cache, temporary files, logs and model weights.  The launcher fixes
-`CUDA_VISIBLE_DEVICES=1,2`, uses tensor parallelism two, and interleaves CPU RAM
+the V100 pair via `infra/lib/v100_pair.sh` (PCI indices 3,4 since 2026-10-05; 1,2 before), uses tensor parallelism two, and interleaves CPU RAM
 over both NUMA nodes because the V100s are local to NUMA node 1.
 
 Run the hardware/model check first:

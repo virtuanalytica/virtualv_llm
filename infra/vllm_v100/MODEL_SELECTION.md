@@ -69,7 +69,7 @@ The V100s are NVLinked, so benchmark both `layer` and `tensor` modes, but use
 the stable layer mode initially for Qwen3 MoE.  Tensor mode is not implemented
 for several MoE architectures, so it must not be assumed to work.^10
 
-Use `CUDA_VISIBLE_DEVICES=1,2`, `GGML_CUDA_P2P=1`, `-ngl all`, and a fixed
+Use `source infra/lib/v100_pair.sh` (finds the V100 pair by name; it was `CUDA_VISIBLE_DEVICES=1,2` before the 2026-10-05 GPU change), `GGML_CUDA_P2P=1`, `-ngl all`, and a fixed
 4–8K context for the first fit test.  Prefer **one model per V100** for the
 router/verifier design; this avoids per-token inter-GPU synchronization and
 keeps both cards useful.  Use a split model only for an FP16 24B fallback or a
