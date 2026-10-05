@@ -168,6 +168,7 @@ GPU_NAMES = {"0": "RTX 4000 Ada", "1": "RTX 4000 Ada", "2": "RTX 4000 Ada", "5":
              "3": "V100-SXM2-32GB", "4": "V100-SXM2-32GB"}   # PCI order since 2026-10-05
 LIVE_LABELS = {"qwen38-27b-q4": ("Qwen3.8-27B", "27B", "Q4_K_M"),
                "qwen38-1cat-nvfp4-tp2": ("Qwen3.8 target", "27B", "NVFP4"),
+               "qwen36-35b-a3b-1cat-nvfp4-tp2": ("Qwen3.6-35B-A3B", "35B / ~3B active", "NVFP4"),
                "devstral-small2-24b-q4": ("Devstral Small 2", "24B", "Q4_K_M"),
                "qwen35-27b-q4": ("Qwen3.5-27B", "27B", "Q4_K_M"),
                "gemma4-26b-a4b-q4": ("Gemma4-26B-A4B", "26B / ~4B active", "Q4_K_M")}
@@ -329,6 +330,7 @@ def throughput_rows(primary_rows: list[dict]) -> list[dict]:
 
 WELL_KNOWN_LABELS = {
     "mom-live-4": "Live mixture-of-models (Mixture-of-Agents: Qwen3.8 aggregator x2 replica's + Devstral, Qwen3.5, Gemma4)",
+    "mom-live-4-q36": "Live mixture-of-models (Mixture-of-Agents: Qwen3.6-35B-A3B NVFP4 1Cat-vLLM TP2 aggregator + Devstral, Qwen3.5, Gemma4)",
     "mom-live-4-tp2": "Live mixture-of-models (Mixture-of-Agents: Qwen3.8 1Cat-vLLM TP2 aggregator + Devstral, Qwen3.5, Gemma4)",
     "qwen38-27b-q4": "Qwen3.8-27B", "deepseek-r1-qwen32b-q4": "DeepSeek-R1-Qwen",
     "qwen36-27b-iq3": "Qwen3.6-27B", "qwen35-27b-q4": "Qwen3.5-27B",
@@ -988,16 +990,18 @@ model per kaart. Gebruik A4000+Ada layer split alleen om een groter model passen
 """
 
 
-LIVE_MIXTURE_REPORTS = ("live_mixture_of_models_20261005.json", "live_mixture_of_models_tp2_20261005.json")
+LIVE_MIXTURE_REPORTS = ("live_mixture_of_models_20261005.json", "live_mixture_of_models_tp2_20261005.json",
+                        "live_mixture_of_models_q36tp2_20261005.json")
 LAYOUT_LABELS = {"replicas": "aggregator als twee llama.cpp-replica's (data-parallel, één per V100)",
-                 "tp2": "aggregator als één 1Cat-vLLM-instantie met tensor parallel (TP2) over het NVLink-paar"}
+                 "tp2": "aggregator als één 1Cat-vLLM-instantie met tensor parallel (TP2) over het NVLink-paar",
+                 "q36tp2": "aggregator Qwen3.6-35B-A3B NVFP4 (1Cat-vLLM, TP2 over het NVLink-paar)"}
 
 
 def live_mixture_section() -> str:
     """Live mixture-of-models, one block per measured layout (same method and metrics)."""
     reports = [data for data in (load(name) for name in LIVE_MIXTURE_REPORTS) if data]
     blocks = [_live_mixture_block(data) for data in reports]
-    if len(reports) == 2:
+    if len(reports) >= 2:
         blocks.append(_live_mixture_comparison(reports))
     return "".join(blocks)
 
