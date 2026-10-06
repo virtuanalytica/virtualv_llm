@@ -14,6 +14,9 @@ import knowledge_layer as kl  # noqa: E402
 import mixture_proxy as mp  # noqa: E402
 import prepare_public_knowledge as public_stage  # noqa: E402
 import summarize_mom_events as mom_events  # noqa: E402
+import import_knowledge_sources as knowledge_import  # noqa: E402
+import lens_bridge  # noqa: E402
+import eight_task_external as eight_task  # noqa: E402
 
 
 def _server(handler):
@@ -111,10 +114,12 @@ def test_coding_graph_context_and_specialist_are_labelled(stack):
 
 
 def test_unlabelled_request_does_not_invoke_kimi(stack):
-    url, agg, kimi, _, _ = stack
+    url, agg, kimi, jev, _ = stack
     result = json.loads(_post(url, "Please explain parse_member"))
     assert result["mom"]["task"] == ""
     assert len(agg) == 1 and not kimi
+    assert result["mom"]["jev"]["mode"] == "fact_rule_classifier"
+    assert "deterministic fact or rule" in jev[0]["questions"]["supported"]["instructions"]
 
 
 def test_public_export_filters_private_code_and_verifies_digest(tmp_path, stack):
@@ -180,3 +185,36 @@ def test_mom_system_metrics_keep_model_rate_unset():
     assert report["knowledge_direct_share"] == .5
     assert report["model_tokens_per_second"] is None
     assert report["request_latency_seconds_p95"] == 2.1
+
+
+def test_gitnexus_symbol_without_doc_imports_privately(tmp_path):
+    source = tmp_path / "symbols.jsonl"
+    source.write_text(json.dumps({"source_path": "scripts/benchmarks/example.py", "name": "fn",
+                                  "kind": "function", "line": 4, "doc": ""}) + "\n")
+    rows = knowledge_import.import_gitnexus_symbols(source, "https://example.org/repo", "abc")
+    assert len(rows) == 1 and rows[0]["publish_allowed"] is False
+    assert rows[0]["line"] == 4
+
+
+def test_lens_bridge_ranks_frozen_rows_and_preserves_task_boundary(tmp_path, stack):
+    _, _, _, _, bundle = stack
+    rows = tmp_path / "lens-rows.json"
+    rows.write_bytes(kl.canonical(lens_bridge.rows_for_bundle(bundle)))
+    root = Path("/media/knight2/EDS2/projects/radicle-knitweb/lens")
+    if not (root / "src/knitweb_lens").exists():
+        pytest.skip("local Lens checkout absent")
+    bridge = lens_bridge.LensBridge(bundle, rows, root)
+    assert [hit.record["id"] for hit in bridge.retrieve("parse_member replica URLs", "coding")] == ["c1"]
+    assert bridge.retrieve("parse_member replica URLs", "math") == []
+    assert [hit.record["id"] for hit in bridge.retrieve("parse_member replica URLs", "humaneval")] == ["c1"]
+    tampered = lens_bridge.rows_for_bundle(bundle)
+    tampered["rows"][0]["text"] = "changed"
+    rows.write_bytes(kl.canonical(tampered))
+    with pytest.raises(ValueError, match="differ"):
+        lens_bridge.LensBridge(bundle, rows, root)
+
+
+def test_eight_task_labels_select_only_relevant_kimi_requests():
+    assert eight_task.mom_task_label("code_exec_drawdown") == "coding"
+    assert eight_task.mom_task_label("needle_in_haystack") == "long_context"
+    assert eight_task.mom_task_label("gics_format_following") == "benchmark"

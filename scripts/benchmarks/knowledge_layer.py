@@ -37,6 +37,12 @@ def terms(text: str) -> set[str]:
     return set(WORDS.findall(normalise(text)))
 
 
+def allowed_for_task(record: dict, task: str) -> bool:
+    effective_task = "coding" if task in {"coding", "humaneval"} else task
+    tasks = record.get("tasks", [])
+    return (not tasks or effective_task in tasks) and (record["kind"] != "code" or effective_task == "coding")
+
+
 def validate_record(record: dict) -> None:
     if record.get("kind") not in {"fact", "rule", "code"}:
         raise ValueError("record kind must be fact, rule or code")
@@ -110,10 +116,7 @@ def retrieve(bundle: dict | None, question: str, task: str = "", limit: int = 3)
     query_terms = terms(question)
     hits = []
     for record in bundle["records"]:
-        tasks = record.get("tasks", [])
-        if tasks and task not in tasks:
-            continue
-        if record["kind"] == "code" and task != "coding":
+        if not allowed_for_task(record, task):
             continue
         exact = normalise(question) == normalise(record.get("query", ""))
         overlap = len(query_terms & terms(record["text"] + " " + record.get("query", "")))

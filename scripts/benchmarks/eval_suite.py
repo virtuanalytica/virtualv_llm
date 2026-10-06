@@ -323,11 +323,12 @@ def message_text(response: dict[str, Any]) -> str:
     return (message.get("content") or "") + "\n" + (message.get("reasoning_content") or "")
 
 
-def run_tasks(complete_fn: Callable[[str, int], dict[str, Any]]) -> dict[str, Any]:
-    """Run every task through complete_fn(prompt, max_tokens) -> raw OpenAI-style response dict."""
+def run_tasks(complete_fn: Callable[[str, int], dict[str, Any]], *,
+              complete_task_fn: Callable[[Task], dict[str, Any]] | None = None) -> dict[str, Any]:
+    """Run tasks; optional task-aware callback lets an external MoM label requests."""
     results: dict[str, Any] = {}
     for task in TASKS:
-        response = complete_fn(task.prompt, task.max_tokens)
+        response = complete_task_fn(task) if complete_task_fn else complete_fn(task.prompt, task.max_tokens)
         raw = message_text(response)
         score, detail = task.score(raw)
         results[task.id] = {"score": round(score, 4), "detail": detail, "raw": raw.strip()[:800]}

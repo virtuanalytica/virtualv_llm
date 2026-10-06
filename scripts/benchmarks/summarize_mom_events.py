@@ -24,12 +24,19 @@ def summarize(events: list[dict]) -> dict:
     tasks = Counter(row.get("task") or "unlabelled" for row in events)
     output_tokens = sum(int(row["model_output_tokens"]) for row in events
                         if isinstance(row.get("model_output_tokens"), int))
+    jev_tokens = sum(int(row["jev_model_output_tokens"]) for row in events
+                     if isinstance(row.get("jev_model_output_tokens"), int))
     return {"schema": "mom-system-metrics/v1", "requests": len(events), "paths": dict(paths),
             "tasks": dict(tasks), "knowledge_direct_share":
             round(paths.get("knowledge_direct", 0) / len(events), 4) if events else None,
+            "jev_attempted_requests": sum(bool(row.get("jev_attempted")) for row in events),
+            "jev_successful_requests": sum(bool(row.get("jev_success")) for row in events),
+            "specialist_selected_requests": sum(bool(row.get("specialist_selected")) for row in events),
+            "lens_hit_requests": sum(bool(row.get("lens_ids")) for row in events),
             "request_latency_seconds_p50": percentile(durations, .5),
             "request_latency_seconds_p95": percentile(durations, .95),
             "upstream_reported_model_output_tokens_total": output_tokens,
+            "jev_reported_model_output_tokens_total": jev_tokens,
             "model_tokens_per_second": None,
             "model_tokens_per_second_reason":
             "These events include retrieval, rules, JEV and multiple models; raw decode speed requires a separate engine run."}

@@ -22,6 +22,7 @@ def exports(private_bundle: dict) -> dict[str, dict]:
     rows = public["records"]
     lens = {"rows": [{"id": row["id"], "title": row.get("query") or row["id"],
                       "content": row["text"], "source": row["source"],
+                      "source_uri": row["source"],
                       "relationships": [], "weight": 1} for row in rows]}
     field = {"records": [{"id": row["id"], "title": row.get("query") or row["id"],
                           "body": row["text"], "tags": [row["kind"]],

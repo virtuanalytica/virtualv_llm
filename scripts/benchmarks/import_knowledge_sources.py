@@ -54,7 +54,7 @@ def import_gitnexus_symbols(path: Path, repo: str, commit: str,
         symbol = str(row.get("qualname") or row.get("name") or "").strip()
         if not symbol:
             continue
-        description = str(row.get("doc") or "").strip().splitlines()[0][:500]
+        description = (str(row.get("doc") or "").strip().splitlines() or [""])[0][:500]
         text = f"{row.get('kind', 'symbol')} {symbol} in {source_path}:{line_no}. {description}".strip()
         source = (f"{repo.rstrip('/')}/blob/{commit}/{source_path}#L{line_no}"
                   if repo.startswith("https://") else f"{repo}@{commit}:{source_path}:{line_no}")

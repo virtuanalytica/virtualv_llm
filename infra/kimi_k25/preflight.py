@@ -62,8 +62,20 @@ def onecat_report(env: Path) -> dict:
     registry = library / "model_executor" / "models" / "registry.py"
     registered = (model.is_file() and registry.is_file() and
                   "KimiK25ForConditionalGeneration" in registry.read_text())
+    quant_root = library / "model_executor" / "layers" / "quantization"
+    fused_root = library / "model_executor" / "layers" / "fused_moe"
+    turbomind = quant_root / "sm70_turbomind.py"
+    triton = fused_root / "experts" / "triton_moe.py"
+    fused_layer = fused_root / "layer.py"
     return {"installed": library.is_dir(), "model_registered": registered,
+            "sm70_turbomind_compressed_int4_present":
+            turbomind.is_file() and "prepare_compressed_uint4_linear" in turbomind.read_text(),
+            "triton_wna16_moe_present":
+            triton.is_file() and "class TritonWNA16Experts" in triton.read_text(),
+            "fused_moe_weight_loader_present":
+            fused_layer.is_file() and "def weight_loader" in fused_layer.read_text(),
             "native_int4_cpu_offload_verified": False, "sm70_serve_verified": False,
+            "fused_moe_tier_loader_verified": False,
             "serve_ready": False}
 
 
