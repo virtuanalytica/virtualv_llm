@@ -1,0 +1,155 @@
+{
+ "name": "mom-live",
+ "suite_model": "mom-live-1p",
+ "layout": "1p",
+ "method": "Mixture-of-Agents (proposers draft, aggregator answers)",
+ "window": {
+  "since": "2026-10-06 05:29:29",
+  "until": "2026-10-06 06:54:12",
+  "seconds": 5083
+ },
+ "units": {
+  "mom-qwen38": {
+   "role": "aggregator",
+   "model": "qwen38-27b-q4",
+   "cuda_index": "3",
+   "port": 8021,
+   "engine": "llama.cpp",
+   "requests": 210,
+   "generated_tokens": 15037,
+   "prompt_tokens": 117505,
+   "generation_tokens_per_second": 33.01,
+   "generation_tokens_per_second_median_request": 54.21,
+   "prompt_tokens_per_second": 365.96,
+   "gpu": {
+    "mean_watt": 90.0,
+    "mean_utilisation_pct": 14.1,
+    "joules": 457531.9
+   },
+   "gpu_joules_per_generated_token": 30.427
+  },
+  "mom-qwen38b": {
+   "role": "aggregator",
+   "model": "qwen38-27b-q4",
+   "cuda_index": "4",
+   "port": 8026,
+   "engine": "llama.cpp",
+   "requests": 210,
+   "generated_tokens": 13423,
+   "prompt_tokens": 123466,
+   "generation_tokens_per_second": 33.43,
+   "generation_tokens_per_second_median_request": 51.81,
+   "prompt_tokens_per_second": 395.9,
+   "gpu": {
+    "mean_watt": 89.6,
+    "mean_utilisation_pct": 13.1,
+    "joules": 454982.1
+   },
+   "gpu_joules_per_generated_token": 33.896
+  },
+  "mom-qwen35": {
+   "role": "proposer",
+   "model": "qwen35-27b-q4",
+   "cuda_index": "1",
+   "port": 8023,
+   "engine": "llama.cpp",
+   "requests": 210,
+   "generated_tokens": 23075,
+   "prompt_tokens": 57569,
+   "generation_tokens_per_second": 18.24,
+   "generation_tokens_per_second_median_request": 27.3,
+   "prompt_tokens_per_second": 396.96,
+   "gpu": {
+    "mean_watt": 52.5,
+    "mean_utilisation_pct": 25.7,
+    "joules": 266651.9
+   },
+   "gpu_joules_per_generated_token": 11.556
+  },
+  "mom-qwen35b": {
+   "role": "proposer",
+   "model": "qwen35-27b-q4",
+   "cuda_index": "5",
+   "port": 8025,
+   "engine": "llama.cpp",
+   "requests": 210,
+   "generated_tokens": 23822,
+   "prompt_tokens": 57275,
+   "generation_tokens_per_second": 17.46,
+   "generation_tokens_per_second_median_request": 26.94,
+   "prompt_tokens_per_second": 422.33,
+   "gpu": {
+    "mean_watt": 58.8,
+    "mean_utilisation_pct": 29.8,
+    "joules": 299016.8
+   },
+   "gpu_joules_per_generated_token": 12.552
+  }
+ },
+ "gpus": {
+  "0": {
+   "mean_watt": 18.0,
+   "mean_utilisation_pct": 1.8,
+   "joules": 91503.2,
+   "samples": 5061
+  },
+  "1": {
+   "mean_watt": 52.5,
+   "mean_utilisation_pct": 25.7,
+   "joules": 266651.9,
+   "samples": 5061
+  },
+  "2": {
+   "mean_watt": 23.7,
+   "mean_utilisation_pct": 3.2,
+   "joules": 120432.4,
+   "samples": 5061
+  },
+  "3": {
+   "mean_watt": 90.0,
+   "mean_utilisation_pct": 14.1,
+   "joules": 457531.9,
+   "samples": 5061
+  },
+  "4": {
+   "mean_watt": 89.6,
+   "mean_utilisation_pct": 13.1,
+   "joules": 454982.1,
+   "samples": 5061
+  },
+  "5": {
+   "mean_watt": 58.8,
+   "mean_utilisation_pct": 29.8,
+   "joules": 299016.8,
+   "samples": 5061
+  }
+ },
+ "cpu": {},
+ "totals": {
+  "answers": 420,
+  "generated_tokens_all_members": 75357,
+  "answer_tokens": 28460,
+  "gpu_kwh": 0.4695,
+  "cpu_kwh": 0.0,
+  "system_kwh_measured": 0.4695,
+  "mean_system_watt_measured": 332.5,
+  "wh_per_answer": 1.118,
+  "joules_per_answer_token": 59.39,
+  "joules_per_generated_token_all_members": 22.43
+ },
+ "scope_note": "Gemeten: GPU-bordvermogen (nvidia-smi) en CPU-pakketenergie (RAPL). Niet gemeten: DRAM, schijven, ventilatoren en voedingsverlies. Het rustverbruik van alle zes GPU's telt mee, dus de cijfers zijn wat de mix op deze machine werkelijk kost, niet de marginale kost per verzoek.",
+ "phase": {
+  "label": "humaneval + specialistsuite + contaminatie-audit",
+  "since": "2026-10-06 06:30:20",
+  "until": "2026-10-06 06:54:12",
+  "seconds": 1432,
+  "answers": 131,
+  "system_kwh_measured": 0.1359,
+  "mean_system_watt_measured": 341.7,
+  "wh_per_answer": 1.038,
+  "answers_per_minute": 5.49,
+  "gpu_kwh": 0.1359,
+  "gpu_wh_per_answer": 1.038,
+  "cpu_measured": false
+ }
+}

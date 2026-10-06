@@ -420,6 +420,111 @@
       "benchmark_mean_score": 0.875,
       "runtime_sec": 46.6,
       "at": "2026-10-06T03:29:28.375378+00:00"
+    },
+    {
+      "model": "mom-live-1p",
+      "external_base_url": "http://127.0.0.1:8044",
+      "external_model_alias": "mom-live-1p",
+      "topology": "Mixture-of-Agents: Qwen3.8 aggregator x2 replicas (V100 3,4) + one proposer Qwen3.5 x2",
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 0.8333,
+          "detail": {
+            "extracted": {
+              "event_type": "acquisition",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-08-01",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-01",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": false,
+              "delisted_date": true,
+              "completion_date": true,
+              "successor": true
+            }
+          },
+          "raw": "{\n  \"event_type\": \"acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-08-01\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}"
+        },
+        "arithmetic_payout": {
+          "score": 0.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 5786.4
+          },
+          "raw": "5786.40"
+        },
+        "code_exec_drawdown": {
+          "score": 1.0,
+          "detail": {
+            "model_result": -0.2584,
+            "reference": -0.2584
+          },
+          "raw": "```python\ndef max_drawdown(returns):\n    wealth = 1.0\n    peak = 1.0\n    max_dd = 0.0\n    for r in returns:\n        wealth *= (1 + r)\n        if wealth > peak:\n            peak = wealth\n        dd = (wealth - peak) / peak\n        if dd < max_dd:\n            max_dd = dd\n    return max_dd\n```"
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "{\"ticker\": \"AAPL\", \"country_iso2\": \"US\", \"is_delisted\": false}"
+        },
+        "gics_format_following": {
+          "score": 1.0,
+          "detail": {
+            "lines": [
+              "Energy",
+              "Financials",
+              "Health Care",
+              "Information Technology",
+              "Materials"
+            ],
+            "line_count_ok": true,
+            "distinct_valid_sectors": 5
+          },
+          "raw": "Energy\nFinancials\nHealth Care\nInformation Technology\nMaterials"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "2011-04-08"
+        },
+        "summary_faithfulness": {
+          "score": 1.0,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": true
+          },
+          "raw": "A historical-price recovery audit revealed that 13,350 of 21,535 train and validation tickers, representing 62%, have left the current investable universe. To address this, Tiingo retains historical observations for delisted securities by querying dated identifiers and preserving provider response timestamps. Consequently, missing records remain explicit and are never replaced by present-day ticker matches without point-in-time evidence."
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "INSUFFICIENT_INFORMATION"
+        },
+        "_mean_score": 0.8542
+      },
+      "benchmark_mean_score": 0.8542,
+      "runtime_sec": 48.4,
+      "at": "2026-10-06T04:55:03.122867+00:00"
     }
   ]
 }
