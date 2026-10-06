@@ -98,3 +98,25 @@ Wat de lessen hierboven betekenen voor K2.5 (te verifiëren, nog niet getest):
   V100-paar + PMem-laag; `febuz/1Cat-vLLM@feat/volta-edSQ-k25`, issue #987). Het native INT4-checkpoint (595 GB)
   staat daarvoor op `/media/knight2/eds1/Kimi-K2.5-Tower`; de Q3-meting van vannacht is de basislijn waartegen een
   vLLM-TP2-versie gepromoot kan worden (zelfde suite, 8 taken, specialist, audit en energie per antwoord).
+
+
+## 5. Avondwachtrij 2026-10-05/06: welke rol en hoeveel proposers?
+
+Zelfde servers (geen herlaadacties), per variant een eigen proxy; volledige suite + specialist + audit + 8 taken;
+energie op hetzelfde suitedeel (humaneval + specialist + audit).
+
+| Variant | Composite | Specialist | Holdout | 8 taken | GPU-Wh/antw. | Antw./min |
+|---|---|---|---|---|---|---|
+| mom-live-4 (Qwen3.8 ×2 + Devstral, Qwen3.5 ×2, Gemma4) | 0,885 | 0,720 | **0,750** | 0,833 | 1,60 | 4,19 |
+| mom-live-2p (zonder Gemma4) | 0,893 | 0,608 | 0,667 | 0,854 | 1,58 | 4,00 |
+| **mom-live-1p** (alleen Qwen3.5 als proposer) | **0,898** | **0,750** | 0,583 | 0,854 | **1,04** | **5,49** |
+| mom-gemma4-agg (Gemma4 aggregator) | 0,694 | 0,700 | 0,667 | 0,854 | 1,45 | 4,51 |
+| mom-qwen35-agg (Qwen3.5 aggregator) | 0,868 | 0,642 | **0,750** | **0,875** | 1,70 | 3,35 |
+
+Lessen:
+- **Meer proposers is niet beter.** De goedkoopste mix (1 proposer) heeft de hoogste composite en specialistscore
+  bij ~35 % minder energie per antwoord. Alleen de holdout (n=12, dus grof) is lager.
+- **De aggregator bepaalt redeneren.** Gemma4 als aggregator is zuinig maar zakt op BBH (0,417); Qwen3.8 blijft
+  de beste aggregator, Qwen3.5 geeft de hoogste GSM8K (0,96) en 8-takenscore.
+- **Volgende stap:** mom-live-1p herhalen met andere seeds/vragen (holdout uitbreiden) voordat hij mom-live-4
+  vervangt als standaardmix; één run is geen promotie.
