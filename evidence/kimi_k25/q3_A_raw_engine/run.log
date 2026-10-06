@@ -1,0 +1,4 @@
+2026-10-06 11:07:41 healthy
+{"B1": {"aggregate_tg_tps": 0.796, "per_request_tg_tps_median": 1.2370671809982896, "per_request_pp_tps_median": 10.217350875759795, "latency_p50_s": 166.32, "gpu_wh_per_answer": 7.4486}, "B4": {"aggregate_tg_tps": 1.007, "per_request_tg_tps_median": 0.4164249953499142, "per_request_pp_tps_median": 3.229317189758711, "latency_p50_s": 508.16650000000004, "gpu_wh_per_answer": 5.8946}}
+2026-10-06 11:33:48 bench exit=0
+2026-10-06 11:34:23 mom-live restored; DONE

@@ -1,0 +1,13 @@
+engine: version: 0.4.0-dev (build 1, commit 8ea2902) built with GNU 13.3.0 for Linux x86_64 
+binary: /media/knight2/EDS2/tools/llama.cpp/build-v100/bin/llama-server
+args: --model /media/knight2/eds1/models/kimi-k2.5-gguf/UD-IQ3_XXS/Kimi-K2.5-UD-IQ3_XXS-00001-of-00009.gguf --alias k --host 127.0.0.1 --port 18019 --ctx-size 32768 --parallel 4 --n-gpu-layers 99 --cpu-moe --no-op-offload --threads 32 --flash-attn on --cache-type-k q8_0 --cache-type-v q8_0 --jinja
+CUDA_VISIBLE_DEVICES=3,4 (PCI order; V100-SXM2 pair, llama.cpp layer split = NOT TP2)
+GPU 0: NVIDIA RTX 4000 Ada Generation (UUID: GPU-718fab28-97e8-3d87-78ef-3548e07d1365)
+GPU 1: NVIDIA RTX 4000 Ada Generation (UUID: GPU-dbcb008d-9b3a-9e2b-9cb5-26ba212d0c87)
+GPU 2: NVIDIA RTX 4000 Ada Generation (UUID: GPU-2ee19bd4-47b3-f0e7-4cad-6ca6cf6595c3)
+GPU 3: Tesla V100-SXM2-32GB (UUID: GPU-37ee0799-66e2-442d-663b-75e2852e2f0a)
+GPU 4: Tesla V100-SXM2-32GB (UUID: GPU-db0a9984-44c9-0980-1139-9525653f9240)
+GPU 5: NVIDIA RTX 4000 Ada Generation (UUID: GPU-b516559a-b2b1-578b-639e-20560c0f3bba)
+available: 2 nodes (0-1)
+node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71
+node 0 size: 257556 MB

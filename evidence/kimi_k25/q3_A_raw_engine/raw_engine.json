@@ -1,0 +1,153 @@
+{
+  "label": "q3_A_raw",
+  "url": "http://127.0.0.1:18019",
+  "max_tokens": 128,
+  "instant_mode": true,
+  "phases": [
+    {
+      "phase": "B1",
+      "concurrency": 1,
+      "requests": [
+        {
+          "i": 1,
+          "wall_s": 137.933,
+          "pp_tokens": 650,
+          "pp_tps": 11.381049568445484,
+          "tg_tokens": 128,
+          "tg_tps": 1.5720828196006,
+          "completion_tokens": 128
+        },
+        {
+          "i": 2,
+          "wall_s": 166.32,
+          "pp_tokens": 650,
+          "pp_tps": 10.217350875759795,
+          "tg_tokens": 128,
+          "tg_tps": 1.2370671809982896,
+          "completion_tokens": 128
+        },
+        {
+          "i": 3,
+          "wall_s": 178.111,
+          "pp_tokens": 650,
+          "pp_tps": 9.150371790163955,
+          "tg_tokens": 128,
+          "tg_tps": 1.1867353820715587,
+          "completion_tokens": 128
+        }
+      ],
+      "wall_s": 482.37,
+      "aggregate_tg_tps": 0.796,
+      "per_request_tg_tps_median": 1.2370671809982896,
+      "per_request_pp_tps_median": 10.217350875759795,
+      "latency_p50_s": 166.32,
+      "latency_p95_s": 178.111,
+      "gpu_energy_wh": 22.346,
+      "gpu_wh_per_answer": 7.4486,
+      "gpu_peak_memory_mib": {
+        "0": 16473.0,
+        "1": 16913.0,
+        "2": 17079.0,
+        "3": 5139.0,
+        "4": 5051.0,
+        "5": 17440.0
+      },
+      "cpu_energy": "not measured (RAPL unavailable without root)"
+    },
+    {
+      "phase": "B4",
+      "concurrency": 4,
+      "requests": [
+        {
+          "i": 4,
+          "wall_s": 515.93,
+          "pp_tokens": 627,
+          "pp_tps": 3.521860333129792,
+          "tg_tokens": 128,
+          "tg_tps": 0.3759026532653681,
+          "completion_tokens": 128
+        },
+        {
+          "i": 5,
+          "wall_s": 515.928,
+          "pp_tokens": 627,
+          "pp_tps": 3.5218849820443405,
+          "tg_tokens": 128,
+          "tg_tps": 0.3759022460467027,
+          "completion_tokens": 128
+        },
+        {
+          "i": 6,
+          "wall_s": 516.732,
+          "pp_tokens": 627,
+          "pp_tps": 2.8085880081354984,
+          "tg_tokens": 128,
+          "tg_tps": 0.4328053476147375,
+          "completion_tokens": 128
+        },
+        {
+          "i": 7,
+          "wall_s": 515.926,
+          "pp_tokens": 627,
+          "pp_tps": 3.521901836877954,
+          "tg_tokens": 128,
+          "tg_tps": 0.37590237733568427,
+          "completion_tokens": 128
+        },
+        {
+          "i": 8,
+          "wall_s": 499.301,
+          "pp_tokens": 627,
+          "pp_tps": 3.229311410013726,
+          "tg_tokens": 128,
+          "tg_tps": 0.41642532851515457,
+          "completion_tokens": 128
+        },
+        {
+          "i": 9,
+          "wall_s": 499.301,
+          "pp_tokens": 627,
+          "pp_tps": 3.2292982705500837,
+          "tg_tokens": 128,
+          "tg_tps": 0.4164246621846738,
+          "completion_tokens": 128
+        },
+        {
+          "i": 10,
+          "wall_s": 500.407,
+          "pp_tokens": 627,
+          "pp_tps": 2.6021257582893265,
+          "tg_tokens": 128,
+          "tg_tps": 0.4898082908476386,
+          "completion_tokens": 128
+        },
+        {
+          "i": 11,
+          "wall_s": 499.3,
+          "pp_tokens": 627,
+          "pp_tps": 3.2293229695036954,
+          "tg_tokens": 128,
+          "tg_tps": 0.4164263539582366,
+          "completion_tokens": 128
+        }
+      ],
+      "wall_s": 1017.15,
+      "aggregate_tg_tps": 1.007,
+      "per_request_tg_tps_median": 0.4164249953499142,
+      "per_request_pp_tps_median": 3.229317189758711,
+      "latency_p50_s": 508.16650000000004,
+      "latency_p95_s": 516.732,
+      "gpu_energy_wh": 47.157,
+      "gpu_wh_per_answer": 5.8946,
+      "gpu_peak_memory_mib": {
+        "0": 16473.0,
+        "1": 16913.0,
+        "2": 17079.0,
+        "3": 5139.0,
+        "4": 5053.0,
+        "5": 17487.0
+      },
+      "cpu_energy": "not measured (RAPL unavailable without root)"
+    }
+  ]
+}
