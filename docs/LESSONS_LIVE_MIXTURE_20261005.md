@@ -89,3 +89,12 @@ Wat de lessen hierboven betekenen voor K2.5 (te verifiëren, nog niet getest):
 - **Meetplan:** (1) Q3-GGUF met expert-offload, los: suite + specialist + audit + energie; (2) Q4 als het past;
   (3) NVFP4A16 op de vier Ada-kaarten als vLLM die route ondersteunt; (4) de beste variant als aggregator in de mix
   en vergelijken met `mom-live-4` op hetzelfde suitedeel (`--phase-since/--phase-until`).
+- **Gemeten 2026-10-06 (Q3, stap 1):** unsloth UD-IQ3_XXS (415 GB, sha256 OK) op de nieuwe modelschijf `eds1`.
+  `--n-cpu-moe 44` gaf een OOM (50 GB gevraagd op één Ada van 20 GB); met `--cpu-moe` (alle experts in RAM,
+  attention/gedeeld op 6 GPU's, 48 threads) laadt het, maar warm haalt het maar ~1,2 t/s generatie en ~4 t/s prompt:
+  per token gaat ~13 GB experts door de CPU. Volledige suite zou >15 u duren (boven de 3-uursgrens) en is gestopt;
+  de 8-takenbatterij draait apart met 1 u time-out per verzoek. Kimi als aggregator is met deze snelheid niet zinvol.
+- **Gevolg:** de snelle route voor K2.5 is niet GGUF-met-CPU-experts maar het EDSQ/vLLM-TP2-pad (experts op het
+  V100-paar + PMem-laag; `febuz/1Cat-vLLM@feat/volta-edSQ-k25`, issue #987). Het native INT4-checkpoint (595 GB)
+  staat daarvoor op `/media/knight2/eds1/Kimi-K2.5-Tower`; de Q3-meting van vannacht is de basislijn waartegen een
+  vLLM-TP2-versie gepromoot kan worden (zelfde suite, 8 taken, specialist, audit en energie per antwoord).
