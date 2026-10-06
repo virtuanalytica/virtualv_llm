@@ -120,3 +120,19 @@ Lessen:
   de beste aggregator, Qwen3.5 geeft de hoogste GSM8K (0,96) en 8-takenscore.
 - **Volgende stap:** mom-live-1p herhalen met andere seeds/vragen (holdout uitbreiden) voordat hij mom-live-4
   vervangt als standaardmix; één run is geen promotie.
+
+## 6. Snelheidsrecord 2026-10-06 (zelfde harness als de DFlash2-kaart: 256 tokens, wall output t/s)
+
+| Meting | B1 | B4 (aggregaat) | 8 taken |
+|---|---|---|---|
+| Qwen3.8 + DFlash2, 1Cat TP2 (vorig record, 2026-09-17) | 81,59 | — | — |
+| **Qwen3.6-35B-A3B NVFP4, 1Cat TP2 (V100 3,4)** | **111,02** | **288,49** | 0,854 |
+| Gemma4-26B-A4B Q4_K_M, llama.cpp (1 Ada) | 61,99 | 127,09 | 0,833 |
+
+Les: een MoE met ~3B actieve parameters in NVFP4 over het NVLink-paar is de snelste lokale route (+36 % B1 boven het
+oude record) zonder kwaliteitsverlies op de 8 taken. De live mixture had dit al laten zien (117,7 t/s onder
+mixture-belasting) maar het werd gisteravond niet als zuivere meting uitgewerkt; voortaan na elke live run de
+snelste unit apart op de recordharness meten.
+
+Kimi K2.5 Q3 in instant-modus (`chat_template_kwargs: {"thinking": false}`) haalt 0,833 op de 8 taken (gelijk aan
+mom-live-4); met denken aan (ook met `--reasoning off`) 0,396 omdat het denken het vaste tokenbudget opmaakt.

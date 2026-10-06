@@ -1,0 +1,132 @@
+{
+  "mode": "gemma4-a4b-llamacpp",
+  "model": "gemma4",
+  "engine": "1Cat-vLLM 1.5.0",
+  "tensor_parallel_size": 2,
+  "concurrency": 4,
+  "output_tokens": 1024,
+  "output_tokens_per_request": [
+    256,
+    256,
+    256,
+    256
+  ],
+  "wall_seconds": 8.057,
+  "wall_output_tokens_per_second": 127.0943,
+  "benchmarks": {
+    "riv_au_lifecycle": {
+      "score": 1.0,
+      "detail": {
+        "extracted": {
+          "event_type": "takeover",
+          "acquirer": "Rio Tinto",
+          "control_date": "2011-04-08",
+          "delisted_date": "2011-07-07",
+          "completion_date": "2011-08-01",
+          "successor": "Rio Tinto Coal Mozambique"
+        },
+        "checks": {
+          "event_type": true,
+          "acquirer": true,
+          "control_date": true,
+          "delisted_date": true,
+          "completion_date": true,
+          "successor": true
+        }
+      },
+      "raw": "```json\n{\n  \"event_type\": \"takeover\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-04-08\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}\n```"
+    },
+    "arithmetic_payout": {
+      "score": 0.0,
+      "detail": {
+        "expected": 5332.32,
+        "candidate": 4651.2
+      },
+      "raw": "4651.20"
+    },
+    "code_exec_drawdown": {
+      "score": 1.0,
+      "detail": {
+        "model_result": -0.2584,
+        "reference": -0.2584
+      },
+      "raw": "```python\ndef max_drawdown(returns):\n    wealth_index = [1.0]\n    current_wealth = 1.0\n    for r in returns:\n        current_wealth *= (1 + r)\n        wealth_index.append(current_wealth)\n    \n    max_dd = 0.0\n    peak = wealth_index[0]\n    \n    for value in wealth_index:\n        if value > peak:\n            peak = value\n        drawdown = (value - peak) / peak\n        if drawdown < max_dd:\n            max_dd = drawdown\n            \n    return max_dd\n```"
+    },
+    "json_schema_facts": {
+      "score": 1.0,
+      "detail": {
+        "extracted": {
+          "ticker": "AAPL",
+          "country_iso2": "US",
+          "is_delisted": false
+        },
+        "checks": {
+          "ticker": true,
+          "country_iso2": true,
+          "is_delisted": true
+        }
+      },
+      "raw": "{\"ticker\": \"AAPL\", \"country_iso2\": \"US\", \"is_delisted\": false}"
+    },
+    "gics_format_following": {
+      "score": 1.0,
+      "detail": {
+        "lines": [
+          "Energy",
+          "Financials",
+          "Health Care",
+          "Information Technology",
+          "Consumer Discretionary"
+        ],
+        "line_count_ok": true,
+        "distinct_valid_sectors": 5
+      },
+      "raw": "Energy\nFinancials\nHealth Care\nInformation Technology\nConsumer Discretionary"
+    },
+    "needle_in_haystack": {
+      "score": 1.0,
+      "detail": {
+        "found": true
+      },
+      "raw": "2011-04-08"
+    },
+    "summary_faithfulness": {
+      "score": 0.6667,
+      "detail": {
+        "retains_key_figure": true,
+        "mentions_tiingo": false,
+        "reasonable_length": true
+      },
+      "raw": "A historical-price recovery audit revealed that 13,350 of 21,535 train and validation tickers, representing 62%, had left the current investable universe. To address this, the recovery process queries dated identifiers and preserves provider response timestamps, ensuring missing records are never replaced by present-day matches without point-in-time evidence."
+    },
+    "refusal_calibration": {
+      "score": 1.0,
+      "detail": {
+        "abstained": true,
+        "fabricated_date_found": false
+      },
+      "raw": "INSUFFICIENT_INFORMATION"
+    },
+    "_mean_score": 0.8333
+  },
+  "benchmark_mean_score": 0.8333,
+  "benchmark_task_count": 8,
+  "gpu_telemetry": {
+    "2": {
+      "samples": 23,
+      "max_util_pct": 90.0,
+      "max_memory_mib": 18024.0,
+      "max_power_w": 107.86,
+      "max_temperature_c": 66.0
+    }
+  },
+  "both_v100_active": true,
+  "speculative_summary": {
+    "rounds": null,
+    "draft_tokens": null,
+    "accepted_tokens": null,
+    "acceptance_pct": null,
+    "accepted_tokens_per_round": null
+  },
+  "speculative_metrics": []
+}

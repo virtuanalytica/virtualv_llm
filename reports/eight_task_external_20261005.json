@@ -525,6 +525,116 @@
       "benchmark_mean_score": 0.8542,
       "runtime_sec": 48.4,
       "at": "2026-10-06T04:55:03.122867+00:00"
+    },
+    {
+      "model": "kimi25-iq3xxs-6gpu-cpumoe",
+      "external_base_url": "http://127.0.0.1:18019",
+      "external_model_alias": "kimi25-iq3xxs",
+      "topology": "6 GPUs (2×V100 + 4×Ada) attention/shared, all MoE experts in RAM (--cpu-moe), 48 threads, Kimi instant mode (chat_template_kwargs thinking=false; --reasoning off alone did not stop thinking)",
+      "extra_body": {
+        "chat_template_kwargs": {
+          "thinking": false
+        }
+      },
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "event_type": "acquisition",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-04-08",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-01",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": true,
+              "delisted_date": true,
+              "completion_date": true,
+              "successor": true
+            }
+          },
+          "raw": "```json\n{\n  \"event_type\": \"acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-04-08\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}\n```"
+        },
+        "arithmetic_payout": {
+          "score": 0.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 5342.4
+          },
+          "raw": "5342.40"
+        },
+        "code_exec_drawdown": {
+          "score": 1.0,
+          "detail": {
+            "model_result": -0.2584,
+            "reference": -0.2584
+          },
+          "raw": "```python\ndef max_drawdown(returns):\n    wealth = 1.0\n    peak = 1.0\n    max_dd = 0.0\n    \n    for r in returns:\n        wealth *= (1 + r)\n        if wealth > peak:\n            peak = wealth\n        drawdown = (wealth - peak) / peak\n        if drawdown < max_dd:\n            max_dd = drawdown\n    \n    return max_dd\n```"
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "{\"ticker\": \"AAPL\", \"country_iso2\": \"US\", \"is_delisted\": false}"
+        },
+        "gics_format_following": {
+          "score": 1.0,
+          "detail": {
+            "lines": [
+              "Energy",
+              "Financials",
+              "Health Care",
+              "Information Technology",
+              "Utilities"
+            ],
+            "line_count_ok": true,
+            "distinct_valid_sectors": 5
+          },
+          "raw": "Energy\nFinancials\nHealth Care\nInformation Technology\nUtilities"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "2011-04-08"
+        },
+        "summary_faithfulness": {
+          "score": 0.6667,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": false,
+            "reasonable_length": true
+          },
+          "raw": "A historical-price recovery audit found that 13,350 of 21,535 train and validation tickers, or 62%, had left the current investable universe. The recovery job queries dated identifiers and preserves the provider response timestamp, while missing records remain explicit and are never replaced by present-day ticker matches without point-in-time evidence."
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "INSUFFICIENT_INFORMATION"
+        },
+        "_mean_score": 0.8333
+      },
+      "benchmark_mean_score": 0.8333,
+      "runtime_sec": 946.1,
+      "at": "2026-10-06T06:53:54.136476+00:00"
     }
   ]
 }
