@@ -1,0 +1,149 @@
+{
+  "benchmark": "pmem_dax_parallel_read",
+  "date": "2026-10-06",
+  "host": "node2",
+  "method": "N parallel `dd if=<2 GiB file> of=/dev/null bs=2M` per mount, each pinned with numactl --cpunodebind/--membind; files written once with oflag=direct; ext4 dax=always so reads bypass the page cache; files removed after the run. Script: pmem_dax_parallel_read_20261006.sh",
+  "devices": {
+    "pmem0": "namespace0.0 fsdax align 2M, socket0",
+    "pmem1": "namespace1.0 fsdax align 2M, socket1"
+  },
+  "caveats": [
+    "dd, not fio: no io_uring/queue depth; aggregate comes from process parallelism",
+    "the both-sockets-concurrent rows ran while a sha256 verification read the eds1 NVMe (CPU+memory traffic); repeat with fio before using the 6.3 GB/s aggregate as a planning number"
+  ],
+  "results": [
+    {
+      "mount": "/mnt/pmem0",
+      "cpu_mem_node": 0,
+      "parallel_readers": 1,
+      "GiB_read": 2.0,
+      "seconds": 0.65,
+      "GB_per_s": 3.31,
+      "case": "local"
+    },
+    {
+      "mount": "/mnt/pmem1",
+      "cpu_mem_node": 1,
+      "parallel_readers": 1,
+      "GiB_read": 2.0,
+      "seconds": 0.65,
+      "GB_per_s": 3.32,
+      "case": "local"
+    },
+    {
+      "mount": "/mnt/pmem0",
+      "cpu_mem_node": 0,
+      "parallel_readers": 4,
+      "GiB_read": 8.0,
+      "seconds": 0.85,
+      "GB_per_s": 10.1,
+      "case": "local"
+    },
+    {
+      "mount": "/mnt/pmem1",
+      "cpu_mem_node": 1,
+      "parallel_readers": 4,
+      "GiB_read": 8.0,
+      "seconds": 0.85,
+      "GB_per_s": 10.13,
+      "case": "local"
+    },
+    {
+      "mount": "/mnt/pmem0",
+      "cpu_mem_node": 0,
+      "parallel_readers": 8,
+      "GiB_read": 16.0,
+      "seconds": 1.64,
+      "GB_per_s": 10.5,
+      "case": "local"
+    },
+    {
+      "mount": "/mnt/pmem1",
+      "cpu_mem_node": 1,
+      "parallel_readers": 8,
+      "GiB_read": 16.0,
+      "seconds": 1.64,
+      "GB_per_s": 10.51,
+      "case": "local"
+    },
+    {
+      "mount": "/mnt/pmem0",
+      "cpu_mem_node": 0,
+      "parallel_readers": 16,
+      "GiB_read": 32.0,
+      "seconds": 3.3,
+      "GB_per_s": 10.43,
+      "case": "local"
+    },
+    {
+      "mount": "/mnt/pmem1",
+      "cpu_mem_node": 1,
+      "parallel_readers": 16,
+      "GiB_read": 32.0,
+      "seconds": 3.28,
+      "GB_per_s": 10.48,
+      "case": "local"
+    },
+    {
+      "mount": "/mnt/pmem0",
+      "cpu_mem_node": 1,
+      "parallel_readers": 8,
+      "GiB_read": 16.0,
+      "seconds": 18.3,
+      "GB_per_s": 0.94,
+      "case": "remote"
+    },
+    {
+      "mount": "/mnt/pmem1",
+      "cpu_mem_node": 0,
+      "parallel_readers": 8,
+      "GiB_read": 16.0,
+      "seconds": 17.6,
+      "GB_per_s": 0.98,
+      "case": "remote"
+    },
+    {
+      "mount": "/mnt/pmem0",
+      "cpu_mem_node": 1,
+      "parallel_readers": 16,
+      "GiB_read": 32.0,
+      "seconds": 86.82,
+      "GB_per_s": 0.4,
+      "case": "remote"
+    },
+    {
+      "mount": "/mnt/pmem1",
+      "cpu_mem_node": 0,
+      "parallel_readers": 16,
+      "GiB_read": 32.0,
+      "seconds": 87.68,
+      "GB_per_s": 0.39,
+      "case": "remote"
+    },
+    {
+      "mount": "/mnt/pmem1",
+      "cpu_mem_node": 1,
+      "parallel_readers": 16,
+      "GiB_read": 32.0,
+      "seconds": 10.71,
+      "GB_per_s": 3.21,
+      "case": "both_sockets_concurrent_local"
+    },
+    {
+      "mount": "/mnt/pmem0",
+      "cpu_mem_node": 0,
+      "parallel_readers": 16,
+      "GiB_read": 32.0,
+      "seconds": 11.21,
+      "GB_per_s": 3.07,
+      "case": "both_sockets_concurrent_local"
+    }
+  ],
+  "summary": {
+    "local_single_reader_GBps": 3.3,
+    "local_saturated_GBps_per_mount": 10.5,
+    "saturation_at_readers": 4,
+    "remote_socket_GBps": "0.4-1.0 (10x+ penalty)",
+    "both_sockets_concurrent_aggregate_GBps": 6.28
+  }
+}

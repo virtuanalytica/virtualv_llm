@@ -32,6 +32,7 @@ import time
 from pathlib import Path
 from typing import Any
 from urllib.request import Request, urlopen
+from urllib.parse import quote
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from benchmark_local_gguf_tp2 import (  # noqa: E402
@@ -60,6 +61,8 @@ API_KEY: str | None = None
 # /chat/completions directly under its own /v1beta/openai base (no extra /v1
 # segment), so this is overridable per --external-url invocation instead of hardcoded.
 CHAT_COMPLETIONS_PATH = "/v1/chat/completions"
+MOM_TASK_LABELS = False
+CURRENT_TASK_LABEL = ""
 # 2026-09-23: confirmed via curl that Gemini 3's reasoning tokens are drawn
 # from the SAME max_tokens budget as the visible answer -- max_tokens=50
 # truncated a correct "56" down to a bare "5" before the model finished
@@ -105,6 +108,8 @@ def request_json(path: str, payload: dict[str, Any] | None = None, timeout: int 
         timeout = REQUEST_TIMEOUT
     body = None if payload is None else json.dumps(payload).encode()
     headers = {"Content-Type": "application/json"}
+    if MOM_TASK_LABELS and CURRENT_TASK_LABEL:
+        headers["X-MoM-Task"] = CURRENT_TASK_LABEL
     if API_KEY:
         headers["Authorization"] = f"Bearer {API_KEY}"
     req = Request(f"{BASE_URL}{path}", data=body, headers=headers)
@@ -153,7 +158,10 @@ def run_lm_eval_task(
     num_fewshot: int | None = None,
 ) -> dict[str, Any]:
     out_dir = out_root / task
-    model_args = (f"model={MODEL_ALIAS},base_url={BASE_URL}{CHAT_COMPLETIONS_PATH},"
+    endpoint = f"{BASE_URL}{CHAT_COMPLETIONS_PATH}"
+    if MOM_TASK_LABELS:
+        endpoint += "?mom_task=" + quote(task, safe="_")
+    model_args = (f"model={MODEL_ALIAS},base_url={endpoint},"
                   f"num_concurrent=1,tokenized_requests=False,tokenizer_backend=None")
     if API_KEY:
         model_args += f",api_key={API_KEY}"
@@ -398,6 +406,7 @@ def run_suite_against_running_server(model_name: str,
                                      access_profile: str = "sandbox",
                                      contamination_audit: tuple[str, ...] = (),
                                      report_path: Path | None = None) -> dict[str, Any]:
+    global CURRENT_TASK_LABEL
     out_root = REPORTS / "lm_eval_runs" / model_name
     started = time.time()
     report = report_path or (REPORTS / "well_known_suite_20260917.json")
@@ -432,19 +441,23 @@ def run_suite_against_running_server(model_name: str,
         )
 
     mmlu = run_mmlu_sample(out_root, on_subject=publish_mmlu)
+    CURRENT_TASK_LABEL = "humaneval"
     humaneval = run_humaneval(complete_text, limit=HUMANEVAL_LIMIT)
     publish("bezig · HumanEval af", humaneval=humaneval)
     # Specialist scores have their own artifact/table. They are intentionally
     # excluded from the general composite: all historical models stay blank
     # rather than acquiring an incomparable zero or a retroactive score.
+    CURRENT_TASK_LABEL = "specialist"
     specialist = run_specialists(model_name, complete_text, specialists,
                                  complete_vision if vision_capable else None,
                                  access_profile=access_profile) if specialists else None
     # Same rationale as specialist scores above: its own artifact, excluded
     # from the general composite so historical rows stay blank rather than
     # acquiring a retroactive, incomparable score.
+    CURRENT_TASK_LABEL = "contamination"
     contamination = run_contamination_audit(model_name, complete_text, contamination_audit,
                                             access_profile=access_profile) if contamination_audit else None
+    CURRENT_TASK_LABEL = ""
 
     samples: list[dict[int, dict[str, float]]] = []
     stop = threading.Event()
@@ -471,6 +484,7 @@ def run_suite_against_running_server(model_name: str,
         "model": model_name,
         "access_profile": access_profile,
         "eval_protocol": EVAL_PROTOCOL,
+        "mom_task_labels": MOM_TASK_LABELS,
         "gsm8k": gsm8k.get("metrics", gsm8k),
         "truthfulqa_gen": truthfulqa.get("metrics", truthfulqa),
         "bbh": bbh,
@@ -648,7 +662,7 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
 
 
 def main() -> int:
-    global BASE_URL, MODEL_ALIAS, API_KEY, CHAT_COMPLETIONS_PATH, EXTRA_CHAT_BODY
+    global BASE_URL, MODEL_ALIAS, API_KEY, CHAT_COMPLETIONS_PATH, EXTRA_CHAT_BODY, MOM_TASK_LABELS
     parser = argparse.ArgumentParser()
     parser.add_argument("models", nargs="*")
     # Tensor split has twice reproduced a driver-level V100 hang during long
@@ -657,6 +671,8 @@ def main() -> int:
     parser.add_argument("--profile", default="dual-layer", choices=PROFILES)
     parser.add_argument("--out", type=Path, default=REPORTS / "well_known_suite_20260917.json")
     parser.add_argument("--external-url", help="Base URL of an already-running OpenAI-compatible server")
+    parser.add_argument("--mom-task-labels", action="store_true",
+                        help="send explicit task labels to the virtualv_llm MoM proxy")
     parser.add_argument("--external-model", default="x", help="Model alias accepted by --external-url")
     parser.add_argument("--external-api-key-env", metavar="ENVVAR",
                         help="Env var holding a bearer token to send as Authorization; unset for local servers")
@@ -685,6 +701,9 @@ def main() -> int:
     parser.add_argument("--resume", action="store_true",
                         help="reuse lm-eval task outputs already present for this model (interrupted run)")
     args = parser.parse_args()
+    if args.mom_task_labels and not args.external_url:
+        parser.error("--mom-task-labels requires --external-url")
+    MOM_TASK_LABELS = args.mom_task_labels
     global RESUME
     RESUME = args.resume
     if bool(args.model_release_date) != bool(args.model_release_source):
