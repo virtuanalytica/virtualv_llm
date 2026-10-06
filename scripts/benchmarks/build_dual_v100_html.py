@@ -156,6 +156,8 @@ def onecat_rows() -> list[dict]:
         # 2026-10-06 record attempt, same harness (256 forced tokens, wall output t/s)
         ("1cat_q36_tp2_8k_b1_20261006.json", "Qwen3.6-35B-A3B", "B1", "35B / ~3B active", "NVFP4", "1Cat-vLLM 1.5", *v100_new),
         ("1cat_q36_tp2_8k_b4_20261006.json", "Qwen3.6-35B-A3B", "B4", "35B / ~3B active", "NVFP4", "1Cat-vLLM 1.5", *v100_new),
+        ("1cat_q36_tp2_8k_b8_20261006.json", "Qwen3.6-35B-A3B", "B8", "35B / ~3B active", "NVFP4", "1Cat-vLLM 1.5", *v100_new),
+        ("1cat_q36_tp2_8k_b16_20261006.json", "Qwen3.6-35B-A3B", "B16", "35B / ~3B active", "NVFP4", "1Cat-vLLM 1.5", *v100_new),
         ("gemma4_26b_a4b_ada_b1_20261006.json", "Gemma4-26B-A4B", "B1", "26B / ~4B active", "Q4_K_M", "llama.cpp",
          ("2",), "GPU 2 · RTX 4000 Ada 20GB"),
         ("gemma4_26b_a4b_ada_b4_20261006.json", "Gemma4-26B-A4B", "B4", "26B / ~4B active", "Q4_K_M", "llama.cpp",
