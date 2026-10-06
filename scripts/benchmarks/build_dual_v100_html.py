@@ -145,27 +145,38 @@ def benchmark_table(rows: list[dict]) -> str:
 
 
 def onecat_rows() -> list[dict]:
+    # (file, label, batch, params, quant, engine, sampled GPU keys, GPU caption)
+    v100_old = (("1", "2"), "GPU 1 + 2 · 2× Tesla V100-SXM2-32GB · NVLink")
+    v100_new = (("3", "4"), "GPU 3 + 4 · 2× Tesla V100-SXM2-32GB · NVLink")
     specs = [
-        ("1cat_target_tp2_8k_verified_20260917.json", "Qwen3.8 target", "B1"),
-        ("1cat_dflash2_tp2_8k_verified_20260917.json", "Qwen3.8 + DFlash2", "B1"),
-        ("1cat_target_tp2_8k_b4_20260917.json", "Qwen3.8 target", "B4"),
-        ("1cat_dflash2_tp2_8k_b4_20260917.json", "Qwen3.8 + DFlash2", "B4"),
+        ("1cat_target_tp2_8k_verified_20260917.json", "Qwen3.8 target", "B1", "27B", "NVFP4", "1Cat-vLLM 1.5", *v100_old),
+        ("1cat_dflash2_tp2_8k_verified_20260917.json", "Qwen3.8 + DFlash2", "B1", "27B", "NVFP4", "1Cat-vLLM 1.5", *v100_old),
+        ("1cat_target_tp2_8k_b4_20260917.json", "Qwen3.8 target", "B4", "27B", "NVFP4", "1Cat-vLLM 1.5", *v100_old),
+        ("1cat_dflash2_tp2_8k_b4_20260917.json", "Qwen3.8 + DFlash2", "B4", "27B", "NVFP4", "1Cat-vLLM 1.5", *v100_old),
+        # 2026-10-06 record attempt, same harness (256 forced tokens, wall output t/s)
+        ("1cat_q36_tp2_8k_b1_20261006.json", "Qwen3.6-35B-A3B", "B1", "35B / ~3B active", "NVFP4", "1Cat-vLLM 1.5", *v100_new),
+        ("1cat_q36_tp2_8k_b4_20261006.json", "Qwen3.6-35B-A3B", "B4", "35B / ~3B active", "NVFP4", "1Cat-vLLM 1.5", *v100_new),
+        ("gemma4_26b_a4b_ada_b1_20261006.json", "Gemma4-26B-A4B", "B1", "26B / ~4B active", "Q4_K_M", "llama.cpp",
+         ("2",), "GPU 2 · RTX 4000 Ada 20GB"),
+        ("gemma4_26b_a4b_ada_b4_20261006.json", "Gemma4-26B-A4B", "B4", "26B / ~4B active", "Q4_K_M", "llama.cpp",
+         ("2",), "GPU 2 · RTX 4000 Ada 20GB"),
     ]
     rows = []
-    for filename, label, batch in specs:
+    for filename, label, batch, params, quant, engine, keys, caption in specs:
         row = load(filename)
         if not row:
             continue
         gpu = row.get("gpu_telemetry", {})
         rows.append({
-            "model": label, "params": "27B", "engine": "1Cat-vLLM 1.5", "quant": "NVFP4",
-            "profile": f"TP2 / 8K / {batch}", "tps": row.get("wall_output_tokens_per_second"),
+            "model": label, "params": params, "engine": engine, "quant": quant,
+            "profile": f"{'TP2 / 8K' if len(keys) == 2 else 'single Ada'} / {batch}",
+            "tps": row.get("wall_output_tokens_per_second"),
             "prompt_tps": None, "speedup": None,
             "quality": f"{row.get('riv_au_score', '—')}/{row.get('riv_au_max', 6)}",
-            "memory": " / ".join(fmt(gpu.get(i, {}).get("max_memory_mib", 0) / 1024) for i in ("1", "2")),
-            "util": " / ".join(fmt(gpu.get(i, {}).get("max_util_pct"), 0) + "%" for i in ("1", "2")),
-            "scope": "dual",
-            "gpu_caption": "GPU 1 + 2 · 2× Tesla V100-SXM2-32GB · NVLink",
+            "memory": " / ".join(fmt((gpu.get(i, {}).get("max_memory_mib") or 0) / 1024) for i in keys),
+            "util": " / ".join(fmt(gpu.get(i, {}).get("max_util_pct"), 0) + "%" for i in keys),
+            "scope": "dual" if len(keys) == 2 else "single",
+            "gpu_caption": caption,
         })
     return rows
 
@@ -1294,6 +1305,7 @@ onafhankelijke parallel-servinglaag. Iedere rij bewaart de werkelijk zichtbare f
 <section class="grid"><div class="card"><small>Qwen3.8 tensor split</small><div class="metric">{fmt(q_tensor)} t/s</div><small>{fmt(q_gain,1)}% boven single V100</small></div>
 <div class="card"><small>Dense schaaltest</small><div class="metric">{fmt(dense72.get('tps'))} t/s</div><small>Qwen2.5 72,7B · RIV {dense72.get('quality','—')}</small></div>
 <div class="card"><small>1Cat DFlash2 B1</small><div class="metric">{fmt(next((r['tps'] for r in rows if r['model']=='Qwen3.8 + DFlash2' and 'B1' in r['profile']),None))} t/s</div><small>wall output throughput</small></div>
+<div class="card"><small>Snelste lokale B1</small><div class="metric">{fmt(max((r['tps'] for r in rows if r.get('tps') and r['profile'].endswith('/ B1')), default=None))} t/s</div><small>{html.escape(max((r for r in rows if r.get('tps') and r['profile'].endswith('/ B1')), key=lambda r: r['tps'], default={}).get('model', '—'))} · wall output, 256 tokens</small></div>
 <div class="card"><small>Vrije modelopslag</small><div class="metric">{fmt(free_gb, 1)} GB</div><small>live bij lokale generatie; niet beschikbaar op CI</small></div></section>
 <div class="callout"><strong>Hoofdconclusie.</strong> Layer split vergroot vooral capaciteit. Tensor split gebruikt beide V100’s echt parallel: Qwen3.8 wint {fmt(q_gain,1)}%, terwijl de 72,7B dense Qwen van 14,84 naar 24,29 t/s gaat (+63,7%). Voor Qwen3.8 single-stream latency blijft 1Cat + DFlash2 de snelste route; bij batch 4 wint target-only.</div>
 <h2>Alle lokale resultaten</h2><p>Decode-t/s van llama.cpp en wall-output-t/s van 1Cat zijn apart gemeten; batch-4 is aggregaat. RIV is een brongebonden zesveldentest, geen algemene modelaccuracy. Rijen met profiel

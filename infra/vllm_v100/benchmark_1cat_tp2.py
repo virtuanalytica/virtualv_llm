@@ -28,6 +28,9 @@ def post(url: str, payload: dict[str, Any], timeout: int = 300) -> dict[str, Any
         return json.loads(response.read())
 
 
+GPUS = (3, 4)  # V100 pair in PCI order since 2026-10-05 (was 1, 2 before the A4000 left)
+
+
 def sample_gpus() -> dict[int, dict[str, float]]:
     raw = subprocess.check_output([
         "nvidia-smi", "--query-gpu=index,utilization.gpu,memory.used,power.draw,temperature.gpu",
@@ -36,7 +39,7 @@ def sample_gpus() -> dict[int, dict[str, float]]:
     for line in raw.splitlines():
         values = [v.strip() for v in line.split(",")]
         idx = int(values[0])
-        if idx in (1, 2):
+        if idx in GPUS:
             out[idx] = dict(zip(("util_pct", "memory_mib", "power_w", "temperature_c"),
                                 map(float, values[1:]), strict=True))
     return out
@@ -53,7 +56,7 @@ def monitor(stop: threading.Event, rows: list[dict[int, dict[str, float]]]) -> N
 
 def summarize(rows: list[dict[int, dict[str, float]]]) -> dict[str, Any]:
     result = {}
-    for idx in (1, 2):
+    for idx in GPUS:
         found = [row[idx] for row in rows if idx in row]
         result[str(idx)] = {"samples": len(found), **{
             f"max_{key}": max((item[key] for item in found), default=None)
@@ -70,11 +73,14 @@ def completion(base: str, model: str, prompt: str, tokens: int, ignore_eos: bool
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--mode", choices=("target", "dflash2"), required=True)
+    parser.add_argument("--mode", required=True, help="label, e.g. target, dflash2, q36-target")
+    parser.add_argument("--gpus", default="3,4", help="physical GPU indices (PCI order) to sample")
     parser.add_argument("--port", type=int, default=18012)
     parser.add_argument("--concurrency", type=int, default=1)
     parser.add_argument("--out", type=Path, required=True)
     args = parser.parse_args()
+    global GPUS
+    GPUS = tuple(int(i) for i in args.gpus.split(","))
     base = f"http://127.0.0.1:{args.port}"
     with urlopen(base + "/v1/models", timeout=10) as response:
         model = json.loads(response.read())["data"][0]["id"]
@@ -118,7 +124,7 @@ def main() -> int:
         "wall_output_tokens_per_second": round(output_tokens / elapsed, 4) if output_tokens else None,
         "benchmarks": benchmarks, "benchmark_mean_score": benchmarks["_mean_score"],
         "benchmark_task_count": len(eval_suite.TASKS), "gpu_telemetry": telemetry,
-        "both_v100_active": all((telemetry[str(i)].get("max_util_pct") or 0) >= 10 for i in (1, 2)),
+        "both_v100_active": all((telemetry[str(i)].get("max_util_pct") or 0) >= 10 for i in GPUS),
         "speculative_summary": {
             "rounds": drafts, "draft_tokens": drafted_tokens, "accepted_tokens": accepted_tokens,
             "acceptance_pct": round(100 * accepted_tokens / drafted_tokens, 4)
