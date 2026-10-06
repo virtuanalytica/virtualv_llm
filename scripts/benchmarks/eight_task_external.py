@@ -31,13 +31,16 @@ def main() -> int:
     ap.add_argument("--external-model", required=True, help="model alias the endpoint expects")
     ap.add_argument("--topology", default="")
     ap.add_argument("--timeout", type=int, default=600)
+    ap.add_argument("--extra-body-json", default="",
+                    help='extra request fields, e.g. \'{"chat_template_kwargs": {"thinking": false}}\' for Kimi instant mode')
     ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
     args = ap.parse_args()
     base = args.external_url.rstrip("/")
+    extra = json.loads(args.extra_body_json) if args.extra_body_json else {}
 
     def complete(prompt: str, max_tokens: int) -> dict:
         body = json.dumps({"model": args.external_model, "messages": [{"role": "user", "content": prompt}],
-                           "max_tokens": max_tokens, "temperature": 0}).encode()
+                           "max_tokens": max_tokens, "temperature": 0, **extra}).encode()
         req = Request(f"{base}/v1/chat/completions", data=body, headers={"Content-Type": "application/json"})
         with urlopen(req, timeout=args.timeout) as response:
             return json.loads(response.read())
@@ -49,7 +52,7 @@ def main() -> int:
     started = time.time()
     results = eval_suite.run_tasks(complete)
     row = {"model": args.model, "external_base_url": base, "external_model_alias": args.external_model,
-           "topology": args.topology, "benchmarks": results, "benchmark_mean_score": results["_mean_score"],
+           "topology": args.topology, "extra_body": extra, "benchmarks": results, "benchmark_mean_score": results["_mean_score"],
            "runtime_sec": round(time.time() - started, 1), "at": datetime.now(timezone.utc).isoformat()}
     upsert_result(args.out, row, default={"suite": "eval_suite 8-task battery (external endpoints)", "results": []})
     print(f"DONE {args.model}: mean={results['_mean_score']} "
