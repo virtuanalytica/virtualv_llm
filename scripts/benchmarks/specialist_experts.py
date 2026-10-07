@@ -127,6 +127,20 @@ FQ_COLUMNS = ("id", "discipline", "enabled", "prompt", "wheel_radius_m", "wheelb
               "target_y_m", "target_heading_deg", "max_duration_s", "tolerance", "author", "created_date", "notes")
 
 
+FQ_PACK_V3 = suite.PACK_DIR / "fq_v3_parametric.csv"
+FQ_LIMIT_SENTENCE = " The whole manoeuvre must take at most 10 seconds."
+
+
+def fq_parametric_rows_v3() -> list[dict[str, str]]:
+    """The v2 targets with the duration limit stated in the task text.
+
+    v2 scored a command as wrong when it ran longer than 10 s although the
+    prompt never said so; 6 of the expert's 8 misses on v2 were that.
+    """
+    return [{**row, "id": row["id"].replace("fq2-", "fq3-"), "prompt": row["prompt"] + FQ_LIMIT_SENTENCE}
+            for row in fq_parametric_rows()]
+
+
 def fq_parametric_rows(count: int = 73, seed: int = 20261007) -> list[dict[str, str]]:
     """Reachable differential-drive targets with exact ground truth.
 
@@ -160,12 +174,12 @@ def fq_parametric_rows(count: int = 73, seed: int = 20261007) -> list[dict[str, 
     return rows
 
 
-def write_fq_pack(path: Path = FQ_PACK_V2) -> None:
+def write_fq_pack(path: Path = FQ_PACK_V2, rows: list[dict[str, str]] | None = None) -> None:
     import csv
     with path.open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=FQ_COLUMNS)
         writer.writeheader()
-        writer.writerows(fq_parametric_rows())
+        writer.writerows(rows or fq_parametric_rows())
 
 
 def read_pack(path: Path) -> list[dict[str, str]]:
