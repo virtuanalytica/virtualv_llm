@@ -180,9 +180,9 @@ def _run_video(complete: Callable[[str, int], str]) -> dict[str, Any]:
             "elapsed_sec": round(time.monotonic() - started, 1), "samples": details}
 
 
-def _run_fq(complete: Callable[[str, int], str]) -> dict[str, Any]:
+def _run_fq(complete: Callable[[str, int], str], rows: list[dict[str, str]] | None = None) -> dict[str, Any]:
     """Score robot actuator commands through a deterministic differential-drive model."""
-    rows, correct, details = _custom_rows("fq", require_mcq=False), 0, []
+    rows, correct, details = rows or _custom_rows("fq", require_mcq=False), 0, []
     for row in rows:
         raw = complete(row["prompt"] + "\nOutput only JSON with left_rad_s, right_rad_s and duration_s.", 256)
         try:

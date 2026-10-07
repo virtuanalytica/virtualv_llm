@@ -37,7 +37,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from benchmark_local_gguf_tp2 import (  # noqa: E402
     MODELS, PROFILES, SERVER, gpu_sample, monitor_gpu, telemetry_summary, wait_ready,
 )
-from humaneval_harness import run_humaneval  # noqa: E402
+from humaneval_harness import DATA_PATH as HUMANEVAL_DATA, run_humaneval  # noqa: E402
 from specialist_suite import SPECIALISTS, run_specialists  # noqa: E402
 from contamination_audit import METHODS as CONTAMINATION_METHODS, run_contamination_audit  # noqa: E402
 from result_store import locked_report, upsert_result  # noqa: E402
@@ -700,6 +700,10 @@ def main() -> int:
     parser.add_argument("--resume", action="store_true",
                         help="reuse lm-eval task outputs already present for this model (interrupted run)")
     args = parser.parse_args()
+    # HumanEval runs last. On 2026-10-07 six runs each spent up to two hours on
+    # the earlier tasks and then died on this missing file, so check it first.
+    if not HUMANEVAL_DATA.is_file():
+        raise SystemExit(f"missing {HUMANEVAL_DATA}; run scripts/benchmarks/bootstrap_public_data.py first")
     global RESUME
     RESUME = args.resume
     if bool(args.model_release_date) != bool(args.model_release_source):
