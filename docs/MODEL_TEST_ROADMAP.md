@@ -179,12 +179,17 @@ context). Throughput comes from `omp bench` as a distribution
 
 | Provider key | Models | Smoke test | Full suite |
 |---|---|---|---|
-| `omp-zai` | glm-5.3-flash, glm-5.3 | pass | re-queued (first runs lost to a missing HumanEval file) |
+| `omp-zai` | glm-5.3-flash, glm-5.3 | pass | glm-5.3-flash done (`cloud-omp-zai-glm-5.3-flash`); glm-5.3 running |
 | `omp-openai-codex` | gpt-6-luna, gpt-6-astra, gpt-6-sol | pass | gpt-6-sol: composite 0.9505 (`cloud-omp-openai-codex-gpt-6-sol`); luna and astra re-queued |
 | `omp-google` | gemini-3.8-flash | pass | done (`cloud-omp-google-gemini-3.8-flash`) |
 | github-copilot | all tried | 400 "model not supported" | not registered |
 | google-antigravity | gemini-3.8-flash | omp: unhandled API mapping | not registered |
 | grok-build | grok-4.5 | no answer (not signed in) | not registered |
+
+GLM-5.3-Flash as served by Z.ai scores composite 0.9466, against 0.8861 for
+the local REAP50 IQ4_XS quant and 0.6024 for AJ-IQ2_XXS: the first measured
+size of what pruning and quantisation cost this model on our suite. The gap
+to the IQ4_XS row is about 2.3 standard errors.
 
 Decode rate over 10 chat requests each (`reports/cloud_cli_throughput.json`),
 median with the observed range: Gemini 3.8 Flash 94 tok/s (83 to 702; the top

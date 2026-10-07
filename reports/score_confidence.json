@@ -2,8 +2,8 @@
   "method": "Wilson 95% per component; composite SE from Agresti-Coull binomial variances; unpaired z-test against the profile leader (conservative, see module docstring)",
   "protocol": "v4-mmlu-fewshot-20260918",
   "source_sha256": {
-    "well_known_suite_20260917.json": "60e5be446f0e2c34dd78b4806f81f1bb68aaf23e8d69797cbf765ab3f4ae5dc1",
-    "specialist_suite_20260922.json": "f37638905cb8cdf5c7b3a566f0354708e75cae8979c7033cb51cb7414d3603c5"
+    "well_known_suite_20260917.json": "118457930492fbd435a2ae054cd17b0fd68d87e9dd1cee9b2082302cd9d3fc6a",
+    "specialist_suite_20260922.json": "2c428ec8ae5a352361fc9f99a36143aebbb8475521c219218f0a796973a92d26"
   },
   "min_items_for_perfect_score_claim": {
     "lower_bound_0.90": 35,
@@ -196,6 +196,52 @@
         "tied_with_leader": true
       },
       {
+        "model": "cloud-omp-zai-glm-5.3-flash",
+        "composite": 0.9466,
+        "standard_error": 0.0172,
+        "ci95": [
+          0.9129,
+          0.9802
+        ],
+        "components": {
+          "gsm8k": {
+            "accuracy": 0.98,
+            "n": 50,
+            "ci95": [
+              0.895,
+              0.9965
+            ]
+          },
+          "bbh": {
+            "accuracy": 0.9375,
+            "n": 48,
+            "ci95": [
+              0.8316,
+              0.9785
+            ]
+          },
+          "mmlu": {
+            "accuracy": 0.8938,
+            "n": 160,
+            "ci95": [
+              0.8365,
+              0.9326
+            ]
+          },
+          "humaneval": {
+            "accuracy": 0.975,
+            "n": 40,
+            "ci95": [
+              0.8712,
+              0.9956
+            ]
+          }
+        },
+        "rank": 5,
+        "z_vs_leader": 0.81,
+        "tied_with_leader": true
+      },
+      {
         "model": "cloud-antigravity-gemini-gemini-3.5-flash",
         "composite": 0.9463,
         "standard_error": 0.0175,
@@ -237,7 +283,7 @@
             ]
           }
         },
-        "rank": 5,
+        "rank": 6,
         "z_vs_leader": 0.82,
         "tied_with_leader": true
       },
@@ -283,7 +329,7 @@
             ]
           }
         },
-        "rank": 6,
+        "rank": 7,
         "z_vs_leader": 1.57,
         "tied_with_leader": true
       },
@@ -329,7 +375,7 @@
             ]
           }
         },
-        "rank": 7,
+        "rank": 8,
         "z_vs_leader": 1.7,
         "tied_with_leader": true
       },
@@ -375,7 +421,7 @@
             ]
           }
         },
-        "rank": 8,
+        "rank": 9,
         "z_vs_leader": 1.82,
         "tied_with_leader": true
       },
@@ -421,7 +467,7 @@
             ]
           }
         },
-        "rank": 9,
+        "rank": 10,
         "z_vs_leader": 1.88,
         "tied_with_leader": true
       },
@@ -467,7 +513,7 @@
             ]
           }
         },
-        "rank": 10,
+        "rank": 11,
         "z_vs_leader": 1.88,
         "tied_with_leader": true
       },
@@ -513,7 +559,7 @@
             ]
           }
         },
-        "rank": 11,
+        "rank": 12,
         "z_vs_leader": 1.93,
         "tied_with_leader": true
       },
@@ -559,7 +605,7 @@
             ]
           }
         },
-        "rank": 12,
+        "rank": 13,
         "z_vs_leader": 1.93,
         "tied_with_leader": true
       },
@@ -605,7 +651,7 @@
             ]
           }
         },
-        "rank": 13,
+        "rank": 14,
         "z_vs_leader": 2.12,
         "tied_with_leader": false
       },
@@ -651,7 +697,7 @@
             ]
           }
         },
-        "rank": 14,
+        "rank": 15,
         "z_vs_leader": 2.19,
         "tied_with_leader": false
       },
@@ -697,7 +743,7 @@
             ]
           }
         },
-        "rank": 15,
+        "rank": 16,
         "z_vs_leader": 2.29,
         "tied_with_leader": false
       },
@@ -743,7 +789,7 @@
             ]
           }
         },
-        "rank": 16,
+        "rank": 17,
         "z_vs_leader": 2.55,
         "tied_with_leader": false
       },
@@ -789,7 +835,7 @@
             ]
           }
         },
-        "rank": 17,
+        "rank": 18,
         "z_vs_leader": 2.59,
         "tied_with_leader": false
       },
@@ -835,7 +881,7 @@
             ]
           }
         },
-        "rank": 18,
+        "rank": 19,
         "z_vs_leader": 2.72,
         "tied_with_leader": false
       },
@@ -881,7 +927,7 @@
             ]
           }
         },
-        "rank": 19,
+        "rank": 20,
         "z_vs_leader": 3.19,
         "tied_with_leader": false
       },
@@ -927,7 +973,7 @@
             ]
           }
         },
-        "rank": 20,
+        "rank": 21,
         "z_vs_leader": 2.97,
         "tied_with_leader": false
       },
@@ -973,7 +1019,7 @@
             ]
           }
         },
-        "rank": 21,
+        "rank": 22,
         "z_vs_leader": 3.15,
         "tied_with_leader": false
       },
@@ -1019,7 +1065,7 @@
             ]
           }
         },
-        "rank": 22,
+        "rank": 23,
         "z_vs_leader": 3.48,
         "tied_with_leader": false
       },
@@ -1065,7 +1111,7 @@
             ]
           }
         },
-        "rank": 23,
+        "rank": 24,
         "z_vs_leader": 3.58,
         "tied_with_leader": false
       },
@@ -1111,7 +1157,7 @@
             ]
           }
         },
-        "rank": 24,
+        "rank": 25,
         "z_vs_leader": 3.85,
         "tied_with_leader": false
       },
@@ -1157,7 +1203,7 @@
             ]
           }
         },
-        "rank": 25,
+        "rank": 26,
         "z_vs_leader": 4.11,
         "tied_with_leader": false
       },
@@ -1203,7 +1249,7 @@
             ]
           }
         },
-        "rank": 26,
+        "rank": 27,
         "z_vs_leader": 4.27,
         "tied_with_leader": false
       },
@@ -1249,7 +1295,7 @@
             ]
           }
         },
-        "rank": 27,
+        "rank": 28,
         "z_vs_leader": 4.4,
         "tied_with_leader": false
       },
@@ -1295,7 +1341,7 @@
             ]
           }
         },
-        "rank": 28,
+        "rank": 29,
         "z_vs_leader": 4.44,
         "tied_with_leader": false
       },
@@ -1341,7 +1387,7 @@
             ]
           }
         },
-        "rank": 29,
+        "rank": 30,
         "z_vs_leader": 4.96,
         "tied_with_leader": false
       },
@@ -1387,7 +1433,7 @@
             ]
           }
         },
-        "rank": 30,
+        "rank": 31,
         "z_vs_leader": 5.24,
         "tied_with_leader": false
       },
@@ -1433,7 +1479,7 @@
             ]
           }
         },
-        "rank": 31,
+        "rank": 32,
         "z_vs_leader": 5.16,
         "tied_with_leader": false
       },
@@ -1479,7 +1525,7 @@
             ]
           }
         },
-        "rank": 32,
+        "rank": 33,
         "z_vs_leader": 5.41,
         "tied_with_leader": false
       },
@@ -1525,7 +1571,7 @@
             ]
           }
         },
-        "rank": 33,
+        "rank": 34,
         "z_vs_leader": 5.79,
         "tied_with_leader": false
       },
@@ -1571,7 +1617,7 @@
             ]
           }
         },
-        "rank": 34,
+        "rank": 35,
         "z_vs_leader": 6.39,
         "tied_with_leader": false
       },
@@ -1617,7 +1663,7 @@
             ]
           }
         },
-        "rank": 35,
+        "rank": 36,
         "z_vs_leader": 6.75,
         "tied_with_leader": false
       },
@@ -1663,7 +1709,7 @@
             ]
           }
         },
-        "rank": 36,
+        "rank": 37,
         "z_vs_leader": 6.51,
         "tied_with_leader": false
       },
@@ -1709,7 +1755,7 @@
             ]
           }
         },
-        "rank": 37,
+        "rank": 38,
         "z_vs_leader": 7.58,
         "tied_with_leader": false
       },
@@ -1755,7 +1801,7 @@
             ]
           }
         },
-        "rank": 38,
+        "rank": 39,
         "z_vs_leader": 8.64,
         "tied_with_leader": false
       },
@@ -1801,7 +1847,7 @@
             ]
           }
         },
-        "rank": 39,
+        "rank": 40,
         "z_vs_leader": 12.04,
         "tied_with_leader": false
       },
@@ -1847,7 +1893,7 @@
             ]
           }
         },
-        "rank": 40,
+        "rank": 41,
         "z_vs_leader": 11.39,
         "tied_with_leader": false
       },
@@ -1893,7 +1939,7 @@
             ]
           }
         },
-        "rank": 41,
+        "rank": 42,
         "z_vs_leader": 12.88,
         "tied_with_leader": false
       },
@@ -1939,7 +1985,7 @@
             ]
           }
         },
-        "rank": 42,
+        "rank": 43,
         "z_vs_leader": 12.61,
         "tied_with_leader": false
       },
@@ -1985,7 +2031,7 @@
             ]
           }
         },
-        "rank": 43,
+        "rank": 44,
         "z_vs_leader": 10.84,
         "tied_with_leader": false
       },
@@ -2031,7 +2077,7 @@
             ]
           }
         },
-        "rank": 44,
+        "rank": 45,
         "z_vs_leader": 10.91,
         "tied_with_leader": false
       },
@@ -2077,7 +2123,7 @@
             ]
           }
         },
-        "rank": 45,
+        "rank": 46,
         "z_vs_leader": 11.8,
         "tied_with_leader": false
       },
@@ -2123,7 +2169,7 @@
             ]
           }
         },
-        "rank": 46,
+        "rank": 47,
         "z_vs_leader": 14.17,
         "tied_with_leader": false
       },
@@ -2169,7 +2215,7 @@
             ]
           }
         },
-        "rank": 47,
+        "rank": 48,
         "z_vs_leader": 14.33,
         "tied_with_leader": false
       },
@@ -2215,7 +2261,7 @@
             ]
           }
         },
-        "rank": 48,
+        "rank": 49,
         "z_vs_leader": 16.86,
         "tied_with_leader": false
       },
@@ -2261,7 +2307,7 @@
             ]
           }
         },
-        "rank": 49,
+        "rank": 50,
         "z_vs_leader": 18.39,
         "tied_with_leader": false
       }
@@ -2292,6 +2338,15 @@
         "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
+        "model_only_pass": 1,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "cloud-omp-zai-glm-5.3-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 1,
         "model_only_pass": 1,
         "p_value": 1.0,
         "differs_from_leader": false
@@ -4592,6 +4647,66 @@
       "ci95": [
         0.7416,
         0.9769
+      ]
+    },
+    {
+      "model": "cloud-omp-zai-glm-5.3-flash",
+      "lane": "video",
+      "accuracy": 0.0,
+      "n": 3,
+      "ci95": [
+        0.0,
+        0.5615
+      ]
+    },
+    {
+      "model": "cloud-omp-zai-glm-5.3-flash",
+      "lane": "iq",
+      "accuracy": 1.0,
+      "n": 3,
+      "ci95": [
+        0.4385,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-omp-zai-glm-5.3-flash",
+      "lane": "eq",
+      "accuracy": 1.0,
+      "n": 3,
+      "ci95": [
+        0.4385,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-omp-zai-glm-5.3-flash",
+      "lane": "fq",
+      "accuracy": 0.5,
+      "n": 2,
+      "ci95": [
+        0.0945,
+        0.9055
+      ]
+    },
+    {
+      "model": "cloud-omp-zai-glm-5.3-flash",
+      "lane": "qq",
+      "accuracy": 0.75,
+      "n": 4,
+      "ci95": [
+        0.3006,
+        0.9544
+      ]
+    },
+    {
+      "model": "cloud-omp-zai-glm-5.3-flash",
+      "lane": "finance",
+      "accuracy": 0.75,
+      "n": 24,
+      "ci95": [
+        0.551,
+        0.88
       ]
     }
   ]

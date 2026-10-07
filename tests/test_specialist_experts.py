@@ -122,3 +122,13 @@ def test_http_complete_retries_a_transient_error_and_raises_a_persistent_one(mon
     monkeypatch.setattr(experts, "urlopen", down)
     with pytest.raises(HTTPError):
         experts.http_complete("http://x", "m", attempts=2, backoff_sec=0)("q", 8)
+
+
+def test_v3_pack_states_the_duration_limit_and_keeps_the_v2_targets():
+    v2, v3 = experts.fq_parametric_rows(), experts.fq_parametric_rows_v3()
+    assert experts.read_pack(experts.FQ_PACK_V3) == v3
+    for old, new in zip(v2, v3):
+        assert new["prompt"] == old["prompt"] + experts.FQ_LIMIT_SENTENCE
+        assert "at most 10 seconds" in new["prompt"] and new["max_duration_s"] == "10"
+        assert {k: v for k, v in new.items() if k not in ("id", "prompt")} == \
+               {k: v for k, v in old.items() if k not in ("id", "prompt")}
