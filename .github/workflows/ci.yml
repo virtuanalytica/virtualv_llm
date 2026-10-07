@@ -23,6 +23,10 @@ jobs:
           python -m pytest -q
       - name: Validate curated evidence and public paths
         run: python scripts/reporting/validate_publication.py
+      - name: Validate community submissions
+        run: python scripts/reporting/submission.py validate
+      - name: Recompute score confidence from curated evidence
+        run: python scripts/benchmarks/score_confidence.py --out /tmp/score_confidence.json
       - name: Render dashboard in a clean environment
         env:
           VIRTUALV_DASHBOARD_OUT: /tmp/virtualv-dashboard.html
