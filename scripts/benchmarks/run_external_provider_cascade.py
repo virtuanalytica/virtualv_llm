@@ -70,6 +70,26 @@ PROVIDERS = {
         "kind": "cli", "backend": "zcode", "engine": "Z.ai ZCode CLI (zcode --prompt, plan mode, no tools)",
         "models": ["glm-5.3-flash"],
     },
+    # omp fronts many providers with one CLI and one accounting format. The
+    # key names the omp provider; a model is sent as "<omp_provider>/<slug>".
+    # Only slugs that answered a smoke prompt are listed (2026-10-07).
+    "omp-zai": {
+        "kind": "cli", "backend": "omp", "omp_provider": "zai",
+        "engine": "omp CLI (omp -p, no tools) via Z.ai",
+        "models": ["glm-5.3-flash", "glm-5.3"],
+    },
+    "omp-openai-codex": {
+        "kind": "cli", "backend": "omp", "omp_provider": "openai-codex",
+        "engine": "omp CLI (omp -p, no tools) via OpenAI Codex subscription",
+        "models": ["gpt-6-luna", "gpt-6-astra", "gpt-6-sol"],
+    },
+    "omp-google": {
+        "kind": "cli", "backend": "omp", "omp_provider": "google",
+        "engine": "omp CLI (omp -p, no tools) via Google Gemini API",
+        "models": ["gemini-3.8-flash"],
+    },
+    # Not listed: github-copilot (every model answered 400 "not supported" on
+    # this subscription) and google-antigravity (omp: unhandled API mapping).
     "antigravity-gemini": {
         "kind": "sanitizing_http",
         "target_base_url": "https://generativelanguage.googleapis.com/v1beta/openai",
@@ -108,6 +128,8 @@ def wait_for_proxy(port: int, timeout: float = 15.0) -> None:
 
 def proxy_command(provider: dict, model: str, port: int, usage_log: Path | None = None) -> list[str]:
     if provider["kind"] == "cli":
+        if provider.get("omp_provider"):
+            model = f"{provider['omp_provider']}/{model}"
         cmd = ["python3", str(CLI_PROXY), "--backend", provider["backend"], "--model", model,
                "--port", str(port)]
         return cmd + (["--usage-log", str(usage_log)] if usage_log else [])
@@ -132,7 +154,7 @@ def record_cli_usage(name: str) -> None:
     """Sum the proxy's per-request accounting into the finished row.
 
     Also states that the row ran without the per-request output budget local
-    models get (the Claude CLI cannot truncate; see external_cli_agent_proxy.py).
+    models get (agent CLIs cannot truncate; see external_cli_agent_proxy.py).
     """
     log = usage_log_path(name)
     if not log.exists():
@@ -151,7 +173,7 @@ def record_cli_usage(name: str) -> None:
             "cost_usd_list_price": round(sum(e.get("cost_usd") or 0 for e in entries), 4),
             "source": str(log.relative_to(ROOT)),
         }
-        row["output_budget"] = "uncapped: claude -p cannot truncate at max_tokens (local rows are capped)"
+        row["output_budget"] = "uncapped: the agent CLI cannot truncate at max_tokens (local rows are capped)"
 
 
 def run_one(row_name: str, provider_key: str, model: str, specialists: str) -> int:
@@ -163,13 +185,14 @@ def run_one(row_name: str, provider_key: str, model: str, specialists: str) -> i
               "--specialists", specialists]
 
     port = free_port()
-    usage_log = usage_log_path(name) if provider.get("backend") == "claude-cli" else None
+    accounted = provider.get("backend") in ("claude-cli", "omp")
+    usage_log = usage_log_path(name) if accounted else None
     proxy_proc = subprocess.Popen(proxy_command(provider, model, port, usage_log), cwd=ROOT)
     try:
         wait_for_proxy(port)
         cmd = common + ["--external-url", f"http://127.0.0.1:{port}", "--external-model", model]
         rc = subprocess.run(cmd, cwd=ROOT).returncode
-        if provider.get("backend") == "claude-cli":
+        if accounted:
             record_cli_usage(name)
         return rc
     finally:

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local OpenAI-compatible proxy in front of an agent CLI (codex exec, claude -p, zcode).
+"""Local OpenAI-compatible proxy in front of an agent CLI (codex exec, claude -p, zcode, omp).
 
 Neither Codex nor Claude Code exposes a raw chat-completions HTTP endpoint --
 both are interactive-first CLIs with a non-interactive "print one answer and
@@ -139,7 +139,7 @@ def _timings(usage: dict[str, Any] | None) -> dict[str, Any] | None:
         "predicted_per_second": round(usage["completion_tokens"] / decode_sec, 2) if decode_sec > 0 else None,
         "prompt_n": usage["prompt_tokens"],
         "prompt_per_second": round(usage["prompt_tokens"] / prefill_sec, 2) if prefill_sec > 0 else None,
-        "source": "claude -p --output-format json (API decode after first token; network included)",
+        "source": "agent CLI JSON accounting (API decode after first token; network included)",
     }
 
 
@@ -173,7 +173,62 @@ def complete_via_zcode(prompt: str, model: str) -> str:
     raise RuntimeError(f"zcode --prompt failed (rc={proc.returncode}): {(proc.stderr or proc.stdout)[-500:]}")
 
 
-BACKENDS = {"codex": complete_via_codex, "claude-cli": complete_via_claude_cli, "zcode": complete_via_zcode}
+def omp_command(prompt: str, model: str) -> list[str]:
+    # No tools, extensions, skills, rules or saved session: the request that
+    # reaches the provider is the benchmark prompt plus one neutral system line.
+    return ["omp", "-p", "--model", model, "--no-tools", "--no-session", "--no-extensions", "--no-skills",
+            "--no-rules", "--no-title", "--thinking", "off", "--system-prompt", CLAUDE_BENCH_SYSTEM_PROMPT,
+            "--mode", "json", prompt]
+
+
+def parse_omp_events(stdout: str) -> tuple[str, dict[str, Any]]:
+    """Answer text and accounting from omp's JSON-lines event stream."""
+    final: dict[str, Any] | None = None
+    for line in stdout.splitlines():
+        try:
+            event = json.loads(line)
+        except json.JSONDecodeError:
+            continue
+        message = event.get("message") if isinstance(event, dict) else None
+        if event.get("type") == "message_end" and isinstance(message, dict) and message.get("role") == "assistant":
+            final = message
+    if final is None:
+        raise RuntimeError("omp printed no assistant message")
+    if final.get("stopReason") == "error":
+        raise RuntimeError(f"omp provider error: {str(final.get('errorMessage'))[:300]}")
+    # Thinking blocks are reasoning, not the answer; only text blocks are scored.
+    text = "".join(block.get("text", "") for block in final.get("content") or []
+                   if isinstance(block, dict) and block.get("type") == "text")
+    if not text.strip():
+        raise RuntimeError("omp assistant message has no text")
+    usage = final.get("usage") or {}
+    return text, {
+        "prompt_tokens": int(usage.get("input") or 0),
+        "completion_tokens": int(usage.get("output") or 0),
+        "duration_api_ms": final.get("duration"),
+        "ttft_ms": final.get("ttft"),
+        "cost_usd": (usage.get("cost") or {}).get("total"),
+    }
+
+
+def complete_via_omp(prompt: str, model: str) -> str:
+    # max_tokens is not forwarded (omp -p has no output cap), so these rows run
+    # uncapped like the Claude rows. stdin is closed: omp otherwise waits on it.
+    with tempfile.TemporaryDirectory() as cwd:
+        proc = subprocess.run(omp_command(prompt, model), text=True, capture_output=True,
+                              stdin=subprocess.DEVNULL, timeout=CLI_TIMEOUT_SEC, cwd=cwd)
+    try:
+        text, usage = parse_omp_events(proc.stdout)
+    except RuntimeError as exc:
+        raise RuntimeError(f"{exc} (rc={proc.returncode}): {proc.stderr[-300:]}") from exc
+    _claude_usage.value = usage
+    return text
+
+
+# Backends that return real per-request token and timing accounting.
+ACCOUNTED_BACKENDS = {"claude-cli", "omp"}
+BACKENDS = {"codex": complete_via_codex, "claude-cli": complete_via_claude_cli, "zcode": complete_via_zcode,
+            "omp": complete_via_omp}
 
 
 _usage_log_lock = threading.Lock()
@@ -199,9 +254,9 @@ class Handler(BaseHTTPRequestHandler):
         chat = self.path in ("/v1/chat/completions", "/chat/completions")
         # Legacy /v1/completions exists only so well_known_suite.py's throughput
         # probe gets llama.cpp-style "timings"; the prompt is still answered as one chat turn.
-        if not chat and not (self.path == "/v1/completions" and self.backend_name == "claude-cli"):
+        if not chat and not (self.path == "/v1/completions" and self.backend_name in ACCOUNTED_BACKENDS):
             self._send_json(404, {"error": f"unsupported path {self.path}; this proxy only implements "
-                                            "chat completions (legacy /v1/completions: claude-cli only)"})
+                                            "chat completions (legacy /v1/completions: accounted backends only)"})
             return
         length = int(self.headers.get("Content-Length", 0))
         try:
@@ -254,7 +309,7 @@ def main() -> int:
     parser.add_argument("--port", type=int, required=True)
     parser.add_argument("--usage-log", help="append one JSON line of real token/cost accounting per request")
     args = parser.parse_args()
-    for name in ("codex", "claude"):
+    for name in ("codex", "claude", "omp"):
         if name in args.backend and shutil.which(name) is None:
             raise SystemExit(f"{name} CLI not found on PATH")
 
