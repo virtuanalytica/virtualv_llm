@@ -932,6 +932,842 @@
         "file": "fq_v2_parametric.csv",
         "sha256": "42513231693c4548fc7109893030b7c148800c703e6c7f4d8bd5ccbeb659f711"
       }
+    },
+    {
+      "model": "cloud-omp-zai-glm-5.3-flash@fq_v3_parametric",
+      "protocol": "v3-private-specialist-packs-finance-20260924",
+      "max_rounds": 3,
+      "bare": {
+        "fq": {
+          "status": "complete",
+          "accuracy": 0.4247,
+          "n_samples": 73,
+          "samples": [
+            {
+              "id": "fq3-001",
+              "correct": false,
+              "max_normalized_error": 0.67
+            },
+            {
+              "id": "fq3-002",
+              "correct": true,
+              "max_normalized_error": 0.0027
+            },
+            {
+              "id": "fq3-003",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-004",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-005",
+              "correct": false,
+              "max_normalized_error": 4.101
+            },
+            {
+              "id": "fq3-006",
+              "correct": true,
+              "max_normalized_error": 0.0079
+            },
+            {
+              "id": "fq3-007",
+              "correct": true,
+              "max_normalized_error": 0.001
+            },
+            {
+              "id": "fq3-008",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-009",
+              "correct": false,
+              "max_normalized_error": 0.5
+            },
+            {
+              "id": "fq3-010",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-011",
+              "correct": true,
+              "max_normalized_error": 0.0031
+            },
+            {
+              "id": "fq3-012",
+              "correct": false,
+              "max_normalized_error": 3.2412
+            },
+            {
+              "id": "fq3-013",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-014",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-015",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-016",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-017",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-018",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-019",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-020",
+              "correct": false,
+              "max_normalized_error": 2.0
+            },
+            {
+              "id": "fq3-021",
+              "correct": false,
+              "max_normalized_error": 0.1599
+            },
+            {
+              "id": "fq3-022",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-023",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-024",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-025",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-026",
+              "correct": true,
+              "max_normalized_error": 0.0031
+            },
+            {
+              "id": "fq3-027",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-028",
+              "correct": true,
+              "max_normalized_error": 0.0028
+            },
+            {
+              "id": "fq3-029",
+              "correct": true,
+              "max_normalized_error": 0.0002
+            },
+            {
+              "id": "fq3-030",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-031",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-032",
+              "correct": false,
+              "max_normalized_error": 0.1357
+            },
+            {
+              "id": "fq3-033",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-034",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-035",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-036",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-037",
+              "correct": true,
+              "max_normalized_error": 0.0071
+            },
+            {
+              "id": "fq3-038",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-039",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-040",
+              "correct": true,
+              "max_normalized_error": 0.0003
+            },
+            {
+              "id": "fq3-041",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-042",
+              "correct": true,
+              "max_normalized_error": 0.0076
+            },
+            {
+              "id": "fq3-043",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-044",
+              "correct": true,
+              "max_normalized_error": 0.0045
+            },
+            {
+              "id": "fq3-045",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-046",
+              "correct": true,
+              "max_normalized_error": 0.0001
+            },
+            {
+              "id": "fq3-047",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-048",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-049",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-050",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-051",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-052",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-053",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-054",
+              "correct": false,
+              "max_normalized_error": 1.6713
+            },
+            {
+              "id": "fq3-055",
+              "correct": true,
+              "max_normalized_error": 0.0056
+            },
+            {
+              "id": "fq3-056",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-057",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-058",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-059",
+              "correct": true,
+              "max_normalized_error": 0.0052
+            },
+            {
+              "id": "fq3-060",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-061",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-062",
+              "correct": true,
+              "max_normalized_error": 0.0015
+            },
+            {
+              "id": "fq3-063",
+              "correct": false,
+              "max_normalized_error": 0.6667
+            },
+            {
+              "id": "fq3-064",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-065",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-066",
+              "correct": true,
+              "max_normalized_error": 0.003
+            },
+            {
+              "id": "fq3-067",
+              "correct": false,
+              "max_normalized_error": 1.6677
+            },
+            {
+              "id": "fq3-068",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-069",
+              "correct": true,
+              "max_normalized_error": 0.0005
+            },
+            {
+              "id": "fq3-070",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-071",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-072",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq3-073",
+              "correct": true,
+              "max_normalized_error": 0.0053
+            }
+          ],
+          "simulator": "differential_drive_v1"
+        }
+      },
+      "expert": {
+        "fq": {
+          "status": "complete",
+          "accuracy": 0.9589,
+          "n_samples": 73,
+          "samples": [
+            {
+              "id": "fq3-001",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-002",
+              "correct": true,
+              "max_normalized_error": 0.0065
+            },
+            {
+              "id": "fq3-003",
+              "correct": true,
+              "max_normalized_error": 0.0032
+            },
+            {
+              "id": "fq3-004",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-005",
+              "correct": true,
+              "max_normalized_error": 0.0031
+            },
+            {
+              "id": "fq3-006",
+              "correct": true,
+              "max_normalized_error": 0.0045
+            },
+            {
+              "id": "fq3-007",
+              "correct": true,
+              "max_normalized_error": 0.0008
+            },
+            {
+              "id": "fq3-008",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-009",
+              "correct": true,
+              "max_normalized_error": 0.0002
+            },
+            {
+              "id": "fq3-010",
+              "correct": true,
+              "max_normalized_error": 0.0036
+            },
+            {
+              "id": "fq3-011",
+              "correct": true,
+              "max_normalized_error": 0.0023
+            },
+            {
+              "id": "fq3-012",
+              "correct": true,
+              "max_normalized_error": 0.0083
+            },
+            {
+              "id": "fq3-013",
+              "correct": true,
+              "max_normalized_error": 0.0046
+            },
+            {
+              "id": "fq3-014",
+              "correct": true,
+              "max_normalized_error": 0.0042
+            },
+            {
+              "id": "fq3-015",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-016",
+              "correct": true,
+              "max_normalized_error": 0.0169
+            },
+            {
+              "id": "fq3-017",
+              "correct": true,
+              "max_normalized_error": 0.0008
+            },
+            {
+              "id": "fq3-018",
+              "correct": true,
+              "max_normalized_error": 0.0016
+            },
+            {
+              "id": "fq3-019",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-020",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-021",
+              "correct": true,
+              "max_normalized_error": 0.0023
+            },
+            {
+              "id": "fq3-022",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-023",
+              "correct": true,
+              "max_normalized_error": 0.0015
+            },
+            {
+              "id": "fq3-024",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-025",
+              "correct": true,
+              "max_normalized_error": 0.0012
+            },
+            {
+              "id": "fq3-026",
+              "correct": true,
+              "max_normalized_error": 0.0028
+            },
+            {
+              "id": "fq3-027",
+              "correct": true,
+              "max_normalized_error": 0.0016
+            },
+            {
+              "id": "fq3-028",
+              "correct": true,
+              "max_normalized_error": 0.0023
+            },
+            {
+              "id": "fq3-029",
+              "correct": true,
+              "max_normalized_error": 0.0013
+            },
+            {
+              "id": "fq3-030",
+              "correct": true,
+              "max_normalized_error": 0.0053
+            },
+            {
+              "id": "fq3-031",
+              "correct": true,
+              "max_normalized_error": 0.0005
+            },
+            {
+              "id": "fq3-032",
+              "correct": true,
+              "max_normalized_error": 0.0035
+            },
+            {
+              "id": "fq3-033",
+              "correct": true,
+              "max_normalized_error": 0.0035
+            },
+            {
+              "id": "fq3-034",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-035",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-036",
+              "correct": true,
+              "max_normalized_error": 0.0002
+            },
+            {
+              "id": "fq3-037",
+              "correct": true,
+              "max_normalized_error": 0.004
+            },
+            {
+              "id": "fq3-038",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-039",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-040",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-041",
+              "correct": true,
+              "max_normalized_error": 0.0003
+            },
+            {
+              "id": "fq3-042",
+              "correct": false,
+              "max_normalized_error": 0.3333
+            },
+            {
+              "id": "fq3-043",
+              "correct": true,
+              "max_normalized_error": 0.0026
+            },
+            {
+              "id": "fq3-044",
+              "correct": true,
+              "max_normalized_error": 0.004
+            },
+            {
+              "id": "fq3-045",
+              "correct": true,
+              "max_normalized_error": 0.003
+            },
+            {
+              "id": "fq3-046",
+              "correct": true,
+              "max_normalized_error": 0.0004
+            },
+            {
+              "id": "fq3-047",
+              "correct": false,
+              "max_normalized_error": 0.096
+            },
+            {
+              "id": "fq3-048",
+              "correct": true,
+              "max_normalized_error": 0.0007
+            },
+            {
+              "id": "fq3-049",
+              "correct": true,
+              "max_normalized_error": 0.0018
+            },
+            {
+              "id": "fq3-050",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-051",
+              "correct": true,
+              "max_normalized_error": 0.0001
+            },
+            {
+              "id": "fq3-052",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-053",
+              "correct": true,
+              "max_normalized_error": 0.0014
+            },
+            {
+              "id": "fq3-054",
+              "correct": true,
+              "max_normalized_error": 0.0045
+            },
+            {
+              "id": "fq3-055",
+              "correct": true,
+              "max_normalized_error": 0.0056
+            },
+            {
+              "id": "fq3-056",
+              "correct": true,
+              "max_normalized_error": 0.0024
+            },
+            {
+              "id": "fq3-057",
+              "correct": true,
+              "max_normalized_error": 0.0011
+            },
+            {
+              "id": "fq3-058",
+              "correct": true,
+              "max_normalized_error": 0.0071
+            },
+            {
+              "id": "fq3-059",
+              "correct": false,
+              "max_normalized_error": 3.2256
+            },
+            {
+              "id": "fq3-060",
+              "correct": true,
+              "max_normalized_error": 0.0055
+            },
+            {
+              "id": "fq3-061",
+              "correct": true,
+              "max_normalized_error": 0.0052
+            },
+            {
+              "id": "fq3-062",
+              "correct": true,
+              "max_normalized_error": 0.0058
+            },
+            {
+              "id": "fq3-063",
+              "correct": true,
+              "max_normalized_error": 0.0008
+            },
+            {
+              "id": "fq3-064",
+              "correct": true,
+              "max_normalized_error": 0.0155
+            },
+            {
+              "id": "fq3-065",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-066",
+              "correct": true,
+              "max_normalized_error": 0.001
+            },
+            {
+              "id": "fq3-067",
+              "correct": true,
+              "max_normalized_error": 0.0146
+            },
+            {
+              "id": "fq3-068",
+              "correct": true,
+              "max_normalized_error": 0.0041
+            },
+            {
+              "id": "fq3-069",
+              "correct": true,
+              "max_normalized_error": 0.0011
+            },
+            {
+              "id": "fq3-070",
+              "correct": true,
+              "max_normalized_error": 0.0023
+            },
+            {
+              "id": "fq3-071",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq3-072",
+              "correct": true,
+              "max_normalized_error": 0.002
+            },
+            {
+              "id": "fq3-073",
+              "correct": true,
+              "max_normalized_error": 0.0151
+            }
+          ],
+          "simulator": "differential_drive_v1"
+        }
+      },
+      "expert_rounds": {
+        "fq": [
+          2,
+          2,
+          2,
+          2,
+          3,
+          2,
+          2,
+          3,
+          3,
+          2,
+          3,
+          3,
+          3,
+          2,
+          3,
+          3,
+          2,
+          3,
+          2,
+          2,
+          3,
+          2,
+          3,
+          2,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          2,
+          3,
+          2,
+          3,
+          3,
+          3,
+          3,
+          3,
+          2,
+          3,
+          2,
+          3,
+          3,
+          2,
+          3,
+          3,
+          3,
+          2,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          2,
+          3,
+          2,
+          2,
+          3,
+          2,
+          3,
+          3
+        ]
+      },
+      "fq_pack": {
+        "file": "fq_v3_parametric.csv",
+        "sha256": "cc314728c1e36aa938208d3ccf5d818e1c8b0f54f0e943faf5ab747d79d2459d"
+      }
     }
   ]
 }

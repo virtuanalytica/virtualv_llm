@@ -666,6 +666,54 @@ foutloze 3 uit 3 bewijst met 95% zekerheid alleen dat de werkelijke score boven 
 goed” te mogen claimen zijn {need} foutloze opgaven per lane nodig.</div>"""
 
 
+def resistant_section() -> str:
+    """Rankings that do not rest on public, possibly memorised benchmark items."""
+    rows = score_confidence.resistant_ranking(
+        load("well_known_suite_20260917.json"), load("specialist_suite_20260922.json"),
+        load("contamination_audit_20260923.json"), wks.EVAL_PROTOCOL)
+    if not rows:
+        return ""
+    flag_text = {"canary-recall": "zet publieke GSM8K-vragen woordelijk voort", "form-sensitive": "zakt bij herordende opties"}
+
+    def interval(cell: dict | None) -> str:
+        if not cell:
+            return "<td class='num' data-sort=''>–</td><td class='num'>–</td>"
+        return (score_cell(cell["value"])
+                + f"<td class='num'>{cell['ci95'][0] * 100:.0f}% – {cell['ci95'][1] * 100:.0f}%</td>")
+
+    body = ""
+    for e in rows:
+        resistant, specialist = e["resistant"], e["specialist"]
+        gap = e.get("public_minus_resistant")
+        lanes = (f"{specialist['lanes']}/{len(score_confidence.SPECIALIST_LANES)}" if specialist else "–")
+        body += (f"<tr><td><strong>{html.escape(e['model'])}</strong></td>" + interval(resistant)
+                 + pct_cell(resistant["holdout"] if resistant else None)
+                 + pct_cell(resistant["paraphrased_mmlu"] if resistant else None)
+                 + pct_cell(resistant["canary_recall"] if resistant else None)
+                 + interval(specialist) + f"<td class='num'>{lanes}</td>" + pct_cell(e["public_composite"])
+                 + f"<td class='num' data-sort='{'' if gap is None else gap}'>{'–' if gap is None else f'{gap * 100:+.0f} pp'}</td>"
+                 + "<td>" + html.escape("; ".join(flag_text[f] for f in (resistant or {}).get("flags", []))) + "</td></tr>")
+    return f"""
+<h2 id="contaminatiebestendig">Contaminatiebestendige composites</h2>
+<p>De publieke composite bestaat uit opgaven die in trainingsdata kunnen zitten. Deze tabel zet er twee scores
+naast die daar niet op rusten. <strong>Contaminatiebestendig</strong> is het gemiddelde van de post-cutoff
+holdout (11 eigen opgaven van 2026-09-23; antwoordsleutel gecorrigeerd op 2026-10-07) en MMLU met herordende antwoordopties (15 opgaven).
+<strong>Specialisten</strong> is het ongewogen gemiddelde over de acht tekstlanes van de eigen suite (chemie,
+fysica, IQ, EQ, FQ, QQ, finance, video; vision telt niet mee); alleen een rij met 8/8 lanes is volledig
+vergelijkbaar. Canary-recall en vormgevoeligheid zijn signalen en tellen niet mee in het getal. Gesorteerd op
+de contaminatiebestendige score. Met 26 respectievelijk hooguit 51 opgaven zijn de marges breed: lees de
+intervallen, niet de decimalen. Aan de top is de contaminatiebestendige score verzadigd; een groter en
+moeilijker pakket is nodig om de beste modellen te scheiden.</p>
+<div class="tablewrap"><table class="sortable"><thead><tr>{sortable_header("Model")}
+{sortable_header("Contaminatiebestendig")}{sortable_header("95%-interval")}{sortable_header("Holdout")}
+{sortable_header("Geparafraseerde MMLU")}{sortable_header("Canary-recall")}{sortable_header("Specialisten")}
+{sortable_header("95%-interval")}{sortable_header("Lanes")}{sortable_header("Publieke composite")}
+{sortable_header("Publiek − bestendig")}{sortable_header("Signaal")}</tr></thead><tbody>{body}</tbody></table></div>
+<div class="callout"><strong>Beperkingen.</strong> De post-cutoff holdout staat in deze openbare repository en
+is dus alleen onbesmet voor modellen van vóór de publicatie; een echte live-lane met wisselende vragen bestaat
+nog niet. Een model zonder audit heeft hier geen contaminatiebestendige score.</div>"""
+
+
 def community_section() -> str:
     """Outside submissions, always apart from the reference ranking."""
     rows = sorted(submission.load_valid(), key=submission.composite, reverse=True)
@@ -1440,6 +1488,7 @@ tabel erboven bevat de bijbehorende prompt-snelheid, VRAM en GPU-utilisatie.</p>
 {glm53_completion_summary()}
 {well_known_section(wk_rows)}
 {confidence_section()}
+{resistant_section()}
 {community_section()}
 {specialist_section()}
 {live_mixture_section()}

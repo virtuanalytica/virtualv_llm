@@ -57,7 +57,8 @@ PROVIDERS = {
     # Ordered newest/current-session model first; run one with --model.
     "claude": {
         "kind": "cli", "backend": "claude-cli", "engine": "Anthropic Claude Code CLI (claude -p)",
-        "models": ["claude-opus-5-5", "claude-fable-5-1", "claude-sonnet-5", "claude-haiku-4-5-20251001"],
+        "models": ["claude-opus-5-5", "claude-fable-5-1", "claude-sonnet-5-5", "claude-sonnet-5",
+                   "claude-haiku-4-5-20251001"],
     },
     "codex": {
         "kind": "cli", "backend": "codex", "engine": "OpenAI Codex CLI",

@@ -1,5 +1,74 @@
 # Changelog
 
+## v1.0.2 — 2026-10-07
+
+Measurement integrity: error bars, contamination-resistant composites, a
+strict contribution protocol, and cloud models measured through one CLI.
+
+### Added
+
+- **Contamination-resistant composites** next to the public one: the mean of
+  the post-cutoff holdout and option-reordered MMLU, and a specialist
+  composite over the eight text lanes, each with a 95% interval. Canary
+  recall and form sensitivity are shown as signals. On current evidence
+  MiMo-V2.6-Pro drops from 0.79 public to 0.08 and the local GLM-5.3 REAP50
+  quant from 0.89 to 0.72, while seven of 30 audited rows carry a
+  canary-recall signal (Claude Sonnet 5.5 continues 9 of 10 held-out GSM8K
+  questions verbatim, Claude Opus 5.5 8, GPT-6 Astra 7). At the
+  top the resistant composite is saturated: twelve rows score 0.95 or more
+  on 26 items.
+- **Error bars on every ranked score** (`score_confidence.py`): the public
+  composite rests on 298 items and has a margin of about ±3 to ±5 points.
+  A paired test shows HumanEval-40 is saturated at the top of the table.
+- **Strict contribution protocol**: append-only result submissions under
+  `submissions/`, a validator, and a guard that runs from the base branch.
+- **Cloud models through the omp CLI**, same suite as local models: GPT-6
+  Astra 0.9802, Gemini 3.8 Flash 0.9658, GPT-6 Sol 0.9505, GLM-5.3-Flash
+  0.9466, GLM-5.3 0.9436, GPT-6 Luna 0.9257, with decode-rate distributions
+  from `omp bench` (`reports/cloud_cli_throughput.json`).
+- **Re-baseline on the six-GPU machine**: Qwen3.8 Flash-Next AP-IQ2_S on four
+  RTX 4000 Ada cards, 40.61 tok/s, composite 0.9180. Cascade profiles
+  `ada4`, `v100pair` and `six`; the Q4_K_M and Q4_K_XL quants are candidates
+  again.
+- **Six-GPU and V100-pair rows**: AP-IQ2_S 0.9148 at 40.80 tok/s on six
+  cards and 0.9113 at 40.77 on the V100 pair; AP-Q4_K_M 0.9342 at 38.52 and
+  AP-Q4_K_XL 0.9193 at 38.31 on six cards. More cards do not speed this model
+  up under layer split, and neither Q4 variant beats the baseline on both
+  axes.
+- **Claude through the `claude -p` CLI**: Opus 5.5 0.9818, the new leader
+  and tied with GPT-6 Astra (canary recall 0.8); Sonnet 5.5 0.9542 (canary
+  recall 0.9). Haiku 4.5 is listed with a caveat (MMLU artifact); Fable 5.1 is
+  blocked on usage credits.
+- **Tool experts for the FQ and video lanes** and a 73-item parametric FQ
+  pack: with the duration limit stated in the task (v3), GLM-5.3-Flash goes
+  from 31 of 73 bare to 70 of 73 with the simulator loop (v2, limit unstated:
+  35 to 65).
+
+### Fixed
+
+- **Post-cutoff holdout answer key.** Three keys were wrong and one item had
+  no correct option; nearly every model gave the same "wrong" answer and the
+  arithmetic confirmed the models. Keys corrected, the unsolvable item
+  disabled, all 24 audit rows re-scored from their stored predictions, and a
+  test now recomputes every arithmetic key.
+
+- **The "gsm8k 404" of v1.0.1** was an `--external-url` ending in `/v1`
+  while the suite appends `/v1/...` itself. The suite now refuses that URL.
+- The suite checks for the HumanEval data before starting; six runs were
+  lost on the last task in worktrees without it.
+- The contribution guard decides maintainership from repository permission;
+  the event label reports the owner as an outside contributor.
+
+### Known issues
+
+- The contamination-resistant composite rests on 26 items and the holdout
+  pack is public in this repository; there is no rotating live lane yet.
+- Video scores 0 for every bare model; no lane has the 73 items needed to
+  support a "95% correct" claim except FQ.
+- Few-shot prompts reach agent CLIs as one message; Claude Haiku 4.5 then
+  reviews all questions instead of answering the last (MMLU artifact).
+- Roadmap variants 1, 2 and 4 (1Cat-vLLM, tensor split) are not measured yet.
+
 ## v1.0.1 — 2026-10-07
 
 Hardware-tier expansion and the first EDSQ-Volta contribution cycle. This

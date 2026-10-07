@@ -138,9 +138,9 @@ first, under the unchanged protocol `v4-mmlu-fewshot-20260918`:
 
 | Row to measure | Topology | Old reference | Result |
 |---|---|---|---|
-| Qwen3.8 Flash-Next AP-IQ2_S, six GPUs | 4x Ada 20 GB + 2x V100 32 GB, layer split | 40.79 tok/s, composite 0.9232 (old all-four) | pending |
+| Qwen3.8 Flash-Next AP-IQ2_S, six GPUs | 4x Ada 20 GB + 2x V100 32 GB, layer split | 40.79 tok/s, composite 0.9232 (old all-four) | **40.80 tok/s, composite 0.9148** (`qwen38-flash-next-ap-iq2s-six`) |
 | Qwen3.8 Flash-Next AP-IQ2_S, four Ada | 4x RTX 4000 Ada 20 GB, layer split | none | **40.61 tok/s, composite 0.9180** (`qwen38-flash-next-ap-iq2s-ada4`, 4K context, about 53 GB in VRAM); inside the margin of the old 0.9232 |
-| Qwen3.8 Flash-Next AP-IQ2_S, V100 pair | 2x V100 32 GB NVLink, layer split | 42.79 tok/s, composite 0.9113 | pending |
+| Qwen3.8 Flash-Next AP-IQ2_S, V100 pair | 2x V100 32 GB NVLink, layer split | 42.79 tok/s, composite 0.9113 | **40.77 tok/s, composite 0.9113** (`qwen38-flash-next-ap-iq2s-v100pair`) |
 
 This table is updated in place when a row is measured: the value, the result
 row's model identifier and the pull request that published it.
@@ -154,9 +154,9 @@ hypothesis with the measurement it rests on; none is a result yet.
 |---|---|---|---|---|
 | 1 | Qwen3.8 Flash-Next NVFP4, 1Cat-vLLM TP2 target-only, V100 pair | Upstream reports 80.7 tok/s; locally the same engine gives 111 tok/s on Qwen3.6-35B-A3B NVFP4 | 4-bit weights versus IQ2_S. The existing `qwen38-1cat-vllm-target` row scores 0.34, which points at a template or scoring fault to fix first | pending |
 | 2 | Variant 1 with DFlash2/MTP speculative decoding | 81.59 tok/s measured at B1 on this pair | Speculation is verified against the target, so quality equals variant 1; reported as its own row | pending |
-| 3 | Qwen3.8 Flash-Next AP-Q4_K_XL, six GPUs, fully in VRAM | 34.59 tok/s on the V100 pair with the remainder outside VRAM; 144 GB now holds all 101 GB | Highest measured local composite, 0.9272 | pending |
+| 3 | Qwen3.8 Flash-Next AP-Q4_K_XL, six GPUs, fully in VRAM | 34.59 tok/s on the V100 pair with the remainder outside VRAM; 144 GB now holds all 101 GB | Highest measured local composite, 0.9272 | **Not faster: 38.31 tok/s, composite 0.9193** (`qwen38-flash-next-ap-q4kxl-six`); about 73 GB was in VRAM, so the model was not fully offloaded |
 | 4 | Qwen3.8 Flash-Next AP-IQ2_S, V100 pair, tensor split | Tensor split is the fastest llama.cpp topology on this NVLink pair (44.87 tok/s for the 27B model versus 33 with layer split) | Same weights as the baseline | pending |
-| 5 | Qwen3.8 Flash-Next AP-Q4_K_M, six GPUs | 40.00 tok/s on the old set, where the A4000 was the slowest card | 0.9175 measured, inside the baseline's margin, at 4-bit | pending |
+| 5 | Qwen3.8 Flash-Next AP-Q4_K_M, six GPUs | 40.00 tok/s on the old set, where the A4000 was the slowest card | 0.9175 measured, inside the baseline's margin, at 4-bit | **Not faster: 38.52 tok/s, composite 0.9342** (`qwen38-flash-next-ap-q4km-six`); highest local composite so far, inside the margin of the baseline |
 
 Reading the result: the composite has a 95% margin of about ±3.8 points on
 these rows (`reports/score_confidence.json`), and all measured Flash-Next rows
@@ -166,8 +166,17 @@ it; until then "not lower" is the honest claim. Variants that are faster but
 clearly lower (Qwen3.6-35B-A3B NVFP4 at 111 tok/s and 0.841, Kat-Coder v2.5 at
 91.7 tok/s and 0.907) stay in the speed lane and are not listed here.
 
-Execution starts after the runs that are in flight on 2026-10-07 have ended
-and the V100 lock is free.
+Measured 2026-10-07: AP-IQ2_S runs at about 40.7 tok/s on four Ada cards, on
+the V100 pair and on all six cards alike, so adding cards does not speed this
+model up under layer split. Variants 3 and 5 are slower than the baseline and
+statistically level on composite; neither beats it on both axes. Variants 1,
+2 and 4 (1Cat-vLLM and tensor split) are the remaining candidates for speed.
+
+Claude through the `claude -p` CLI: Opus 5.5 leads the table at 0.9818
+(tied with GPT-6 Astra at 0.9802) at 86 tok/s, canary recall 0.8; Sonnet 5.5
+scores 0.9542 at 117.7 tok/s, canary recall 0.9. Haiku 4.5
+reads 0.8046, but its MMLU cell is a prompt-format artifact and the row is
+flagged. Fable 5.1 is blocked on usage credits and has no score.
 
 ## 2026-10-07: cloud providers through the omp CLI
 
@@ -231,8 +240,12 @@ p < 0.0001), at 2 or 3 model calls per item instead of 1. Of the bare
 model's 38 misses, 31 were unparseable output and 7 a wrong pose. Of the
 expert's 8 misses, 6 reached the pose within tolerance but took longer than
 the 10 s limit, which the task text does not state; 2 were a wrong pose. The
-next pack version states the limit in the prompt. The lane is not at 100%,
-and 89% on one model is not yet a claim about the mixture.
+next pack version states the limit in the prompt.
+
+Pack v3 (`fq_v3_parametric.csv`, same 73 targets, limit stated): bare 31 of
+73 (42%, 31% to 54%), with the expert 70 of 73 (96%, 89% to 99%); paired, 41
+fixed and 2 broken. The three remaining misses are wrong poses. The lane is
+not at 100%, and one model is not yet a claim about the mixture.
 
 ## 2026-10-07: disk freed for the Flash-Next runs
 
