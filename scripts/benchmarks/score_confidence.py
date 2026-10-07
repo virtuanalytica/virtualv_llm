@@ -27,6 +27,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 WELL_KNOWN = ROOT / "reports/well_known_suite_20260917.json"
 SPECIALIST = ROOT / "reports/specialist_suite_20260922.json"
+AUDIT = ROOT / "reports/contamination_audit_20260923.json"
 OUT = ROOT / "reports/score_confidence.json"
 Z95 = 1.959963984540054
 COMPONENTS = ("gsm8k", "bbh", "mmlu", "humaneval")
@@ -169,6 +170,81 @@ def specialist_confidence(payload: dict) -> list[dict]:
     return rows
 
 
+# Vision needs a multimodal model, so the text-model composite leaves it out.
+SPECIALIST_LANES = ("chemistry", "physics", "iq", "eq", "fq", "qq", "finance", "video")
+CANARY_FLAG = 0.2      # share of held-out GSM8K items continued verbatim
+FORM_GAP_FLAG = 0.2    # accuracy lost when MMLU options are reordered
+
+
+def _mean_with_interval(parts: list[tuple[float, int]]) -> dict:
+    value = sum(score for score, _ in parts) / len(parts)
+    se = math.sqrt(sum(variance(score, n) for score, n in parts)) / len(parts)
+    return {"value": round(value, 4), "standard_error": round(se, 4), "items": sum(n for _, n in parts),
+            "ci95": [round(max(0.0, value - Z95 * se), 4), round(min(1.0, value + Z95 * se), 4)]}
+
+
+def specialist_composite(row: dict) -> dict | None:
+    """Unweighted mean over the text specialist lanes that completed.
+
+    ``complete`` is true only with all lanes present; a partial mean is kept
+    for inspection but must not be ranked against complete ones.
+    """
+    cells = row.get("results") or {}
+    parts = [(cells[lane]["accuracy"], cells[lane]["n_samples"]) for lane in SPECIALIST_LANES
+             if cells.get(lane, {}).get("status") == "complete"
+             and isinstance(cells[lane].get("accuracy"), (int, float)) and cells[lane].get("n_samples")]
+    if not parts:
+        return None
+    return {**_mean_with_interval(parts), "lanes": len(parts), "complete": len(parts) == len(SPECIALIST_LANES)}
+
+
+def resistant_composite(row: dict) -> dict | None:
+    """Mean of the two scores a model cannot have memorised in this form:
+    the post-cutoff holdout and MMLU with reordered options. The canary probe
+    and the form gap are reported as flags, not folded into the number."""
+    methods = row.get("results") or {}
+    holdout, paraphrase, canary = (methods.get(k) or {} for k in
+                                   ("post_cutoff_holdout", "paraphrase_invariance", "canary_recall"))
+    if holdout.get("status") != "complete" or paraphrase.get("status") != "complete":
+        return None
+    result = _mean_with_interval([(holdout["accuracy"], holdout["n_samples"]),
+                                  (paraphrase["paraphrase_accuracy"], paraphrase["n_samples"])])
+    flags = []
+    if canary.get("status") == "complete" and canary.get("recall_rate", 0) >= CANARY_FLAG:
+        flags.append("canary-recall")
+    if paraphrase.get("accuracy_gap", 0) >= FORM_GAP_FLAG:
+        flags.append("form-sensitive")
+    return {**result, "holdout": holdout["accuracy"], "paraphrased_mmlu": paraphrase["paraphrase_accuracy"],
+            "canary_recall": canary.get("recall_rate"), "flags": flags}
+
+
+def resistant_ranking(well_known: dict, specialist: dict, audit: dict, protocol: str) -> list[dict]:
+    """Per model: public composite next to the two contamination-resistant ones.
+
+    Sorted by the resistant composite; models without an audit follow, sorted
+    by specialist composite. Sandbox rows only.
+    """
+    public = {e["model"]: e for e in well_known_confidence(well_known, protocol).get("sandbox", [])}
+
+    def sandbox(rows: list[dict]) -> dict[str, dict]:
+        return {r["model"]: r for r in rows if r.get("access_profile", "sandbox") == "sandbox"}
+
+    spec, aud = sandbox(specialist.get("results", [])), sandbox(audit.get("results", []))
+    rows = []
+    for model in sorted(set(spec) | set(aud)):
+        entry = {"model": model,
+                 "public_composite": public.get(model, {}).get("composite"),
+                 "specialist": specialist_composite(spec[model]) if model in spec else None,
+                 "resistant": resistant_composite(aud[model]) if model in aud else None}
+        if entry["specialist"] or entry["resistant"]:
+            if entry["public_composite"] is not None and entry["resistant"]:
+                entry["public_minus_resistant"] = round(entry["public_composite"] - entry["resistant"]["value"], 4)
+            rows.append(entry)
+    rows.sort(key=lambda e: ((e["resistant"] or {}).get("value", -1), (e["specialist"] or {}).get("value", -1)),
+              reverse=True)
+    return rows
+
+
 def build(protocol: str) -> dict:
     well_known = json.loads(WELL_KNOWN.read_text())
     report = {
@@ -186,6 +262,8 @@ def build(protocol: str) -> dict:
     if SPECIALIST.exists():
         report["source_sha256"][SPECIALIST.name] = hashlib.sha256(SPECIALIST.read_bytes()).hexdigest()
         report["specialist"] = specialist_confidence(json.loads(SPECIALIST.read_text()))
+        audit = json.loads(AUDIT.read_text()) if AUDIT.exists() else {"results": []}
+        report["resistant_ranking"] = resistant_ranking(well_known, json.loads(SPECIALIST.read_text()), audit, protocol)
     return report
 
 

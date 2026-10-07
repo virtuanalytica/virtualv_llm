@@ -1,7 +1,7 @@
 # VirtualV LLM-testsuite — standaard en proces
 
 Documenteigenaar: VirtualV AI Assurance  
-Versie: 1.1  
+Versie: 1.2  
 Peildatum: 7 oktober 2026  
 Status: operationele standaard van de huidige implementatie  
 Classificatie: publiek (onderdeel van de virtualv_llm-repository)
@@ -250,6 +250,27 @@ model” of “beter dan” vereisen een verschil buiten de marge, of een
 bevestigingsrun op een grotere steekproef onder een eigen protocol-ID. Voor de
 specialistische lanes geldt hetzelfde: een foutloze score op minder dan 73
 opgaven mag niet als “minstens 95% goed” worden gepresenteerd.
+
+### 12.1 Contaminatiebestendige composites
+
+De publieke composite rust op opgaven die in trainingsdata kunnen zitten en is
+daarom geen zelfstandig bewijs van vaardigheid. Naast die score publiceert de
+suite twee composites die daar niet op rusten
+(`scripts/benchmarks/score_confidence.py`, dashboardsectie
+“Contaminatiebestendige composites”):
+
+| Composite | Definitie | Volledig wanneer |
+|---|---|---|
+| Contaminatiebestendig | ongewogen gemiddelde van de post-cutoff holdout en MMLU met herordende antwoordopties | beide auditmethoden voltooid |
+| Specialisten | ongewogen gemiddelde over de tekstlanes chemie, fysica, IQ, EQ, FQ, QQ, finance en video; vision telt niet mee | alle acht lanes voltooid |
+
+Canary-recall (vanaf 20%) en vormgevoeligheid (accuraatheidsval vanaf 20
+procentpunt bij herordende opties) worden als signaal naast de score getoond
+en tellen niet mee in het getal. Een onvolledige specialistenscore wordt met
+het aantal lanes getoond en niet tegen volledige scores gerangschikt. Beide
+composites krijgen een 95%-interval; een rangorde binnen de marge is geen
+rangorde. Een wijziging in lanes, auditmethoden of drempels vereist een nieuwe
+protocol-ID.
 
 ## 13. Bijdragen van buiten
 

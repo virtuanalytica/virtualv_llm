@@ -16,7 +16,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 DEFAULT_SOURCE = ROOT / "reports/lm_eval_runs"
-DEFAULT_OUTPUT = ROOT / "output/releases/virtualv-llm-evidence-v1.0.1.tar.gz"
+DEFAULT_OUTPUT = ROOT / "output/releases/virtualv-llm-evidence-v1.0.2.tar.gz"
 SECRET_PATTERNS = (
     re.compile(rb"hf_[A-Za-z0-9]{24,}"),
     re.compile(rb"sk-[A-Za-z0-9_-]{24,}"),

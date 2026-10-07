@@ -1,5 +1,53 @@
 # Changelog
 
+## v1.0.2 — 2026-10-07
+
+Measurement integrity: error bars, contamination-resistant composites, a
+strict contribution protocol, and cloud models measured through one CLI.
+
+### Added
+
+- **Contamination-resistant composites** next to the public one: the mean of
+  the post-cutoff holdout and option-reordered MMLU, and a specialist
+  composite over the eight text lanes, each with a 95% interval. Canary
+  recall and form sensitivity are shown as signals. On current evidence the
+  order changes: MiMo-V2.6-Pro drops from 0.79 public to 0.03, and the three
+  hosted Gemini rows carry a canary-recall signal.
+- **Error bars on every ranked score** (`score_confidence.py`): the public
+  composite rests on 298 items and has a margin of about ±3 to ±5 points.
+  A paired test shows HumanEval-40 is saturated at the top of the table.
+- **Strict contribution protocol**: append-only result submissions under
+  `submissions/`, a validator, and a guard that runs from the base branch.
+- **Cloud models through the omp CLI**, same suite as local models: GPT-6
+  Astra 0.9802, Gemini 3.8 Flash 0.9658, GPT-6 Sol 0.9505, GLM-5.3-Flash
+  0.9466, GLM-5.3 0.9436, GPT-6 Luna 0.9257, with decode-rate distributions
+  from `omp bench` (`reports/cloud_cli_throughput.json`).
+- **Re-baseline on the six-GPU machine**: Qwen3.8 Flash-Next AP-IQ2_S on four
+  RTX 4000 Ada cards, 40.61 tok/s, composite 0.9180. Cascade profiles
+  `ada4`, `v100pair` and `six`; the Q4_K_M and Q4_K_XL quants are candidates
+  again.
+- **Tool experts for the FQ and video lanes** and a 73-item parametric FQ
+  pack: GLM-5.3-Flash goes from 35 of 73 bare to 65 of 73 with the simulator
+  loop (v2 pack; v3 states the duration limit in the task text).
+
+### Fixed
+
+- **The "gsm8k 404" of v1.0.1** was an `--external-url` ending in `/v1`
+  while the suite appends `/v1/...` itself. The suite now refuses that URL.
+- The suite checks for the HumanEval data before starting; six runs were
+  lost on the last task in worktrees without it.
+- The contribution guard decides maintainership from repository permission;
+  the event label reports the owner as an outside contributor.
+
+### Known issues
+
+- The contamination-resistant composite rests on 27 items and the holdout
+  pack is public in this repository; there is no rotating live lane yet.
+- Video scores 0 for every bare model; no lane has the 73 items needed to
+  support a "95% correct" claim except FQ.
+- The V100-pair and six-GPU Flash-Next rows and variants 3 and 5 are still
+  being measured.
+
 ## v1.0.1 — 2026-10-07
 
 Hardware-tier expansion and the first EDSQ-Volta contribution cycle. This
