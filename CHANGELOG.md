@@ -29,6 +29,14 @@ strict contribution protocol, and cloud models measured through one CLI.
   RTX 4000 Ada cards, 40.61 tok/s, composite 0.9180. Cascade profiles
   `ada4`, `v100pair` and `six`; the Q4_K_M and Q4_K_XL quants are candidates
   again.
+- **Six-GPU and V100-pair rows**: AP-IQ2_S 0.9148 at 40.80 tok/s on six
+  cards and 0.9113 at 40.77 on the V100 pair; AP-Q4_K_M 0.9342 at 38.52 and
+  AP-Q4_K_XL 0.9193 at 38.31 on six cards. More cards do not speed this model
+  up under layer split, and neither Q4 variant beats the baseline on both
+  axes.
+- **Claude through the `claude -p` CLI**: Sonnet 5.5 0.9542 (canary recall
+  0.9). Haiku 4.5 is listed with a caveat (MMLU artifact); Fable 5.1 is
+  blocked on usage credits.
 - **Tool experts for the FQ and video lanes** and a 73-item parametric FQ
   pack: with the duration limit stated in the task (v3), GLM-5.3-Flash goes
   from 31 of 73 bare to 70 of 73 with the simulator loop (v2, limit unstated:
@@ -55,8 +63,9 @@ strict contribution protocol, and cloud models measured through one CLI.
   pack is public in this repository; there is no rotating live lane yet.
 - Video scores 0 for every bare model; no lane has the 73 items needed to
   support a "95% correct" claim except FQ.
-- The V100-pair and six-GPU Flash-Next rows and variants 3 and 5 are still
-  being measured.
+- Few-shot prompts reach agent CLIs as one message; Claude Haiku 4.5 then
+  reviews all questions instead of answering the last (MMLU artifact).
+- Roadmap variants 1, 2 and 4 (1Cat-vLLM, tensor split) are not measured yet.
 
 ## v1.0.1 — 2026-10-07
 

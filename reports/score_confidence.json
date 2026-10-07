@@ -2,8 +2,8 @@
   "method": "Wilson 95% per component; composite SE from Agresti-Coull binomial variances; unpaired z-test against the profile leader (conservative, see module docstring)",
   "protocol": "v4-mmlu-fewshot-20260918",
   "source_sha256": {
-    "well_known_suite_20260917.json": "aa5b3daef0090f073569160afd379ae37a26799c6e0e83cec2d613c1c490dd01",
-    "specialist_suite_20260922.json": "c6737ce14466ad2fa5a437e58d49efe5907c1d650f614b7211922b040bf692e6"
+    "well_known_suite_20260917.json": "b9e0486e2e55785801e9a806b8ecc8d0d0ab9df42b3717b62b104e1d8f559fdd",
+    "specialist_suite_20260922.json": "9afd97c2c533eae62db58020e121aebf582889234d573f92f27c7ffe31435af8"
   },
   "min_items_for_perfect_score_claim": {
     "lower_bound_0.90": 35,
@@ -196,6 +196,52 @@
         "tied_with_leader": true
       },
       {
+        "model": "cloud-claude-claude-sonnet-5-5",
+        "composite": 0.9542,
+        "standard_error": 0.0169,
+        "ci95": [
+          0.9211,
+          0.9872
+        ],
+        "components": {
+          "gsm8k": {
+            "accuracy": 1.0,
+            "n": 50,
+            "ci95": [
+              0.9287,
+              1.0
+            ]
+          },
+          "bbh": {
+            "accuracy": 0.9167,
+            "n": 48,
+            "ci95": [
+              0.8045,
+              0.9671
+            ]
+          },
+          "mmlu": {
+            "accuracy": 0.925,
+            "n": 160,
+            "ci95": [
+              0.8735,
+              0.9566
+            ]
+          },
+          "humaneval": {
+            "accuracy": 0.975,
+            "n": 40,
+            "ci95": [
+              0.8712,
+              0.9956
+            ]
+          }
+        },
+        "rank": 5,
+        "z_vs_leader": 1.17,
+        "tied_with_leader": true
+      },
+      {
         "model": "cloud-omp-openai-codex-gpt-6-sol",
         "composite": 0.9505,
         "standard_error": 0.0175,
@@ -237,7 +283,7 @@
             ]
           }
         },
-        "rank": 5,
+        "rank": 6,
         "z_vs_leader": 1.31,
         "tied_with_leader": true
       },
@@ -283,7 +329,7 @@
             ]
           }
         },
-        "rank": 6,
+        "rank": 7,
         "z_vs_leader": 1.5,
         "tied_with_leader": true
       },
@@ -329,7 +375,7 @@
             ]
           }
         },
-        "rank": 7,
+        "rank": 8,
         "z_vs_leader": 1.5,
         "tied_with_leader": true
       },
@@ -375,9 +421,55 @@
             ]
           }
         },
-        "rank": 8,
+        "rank": 9,
         "z_vs_leader": 1.6,
         "tied_with_leader": true
+      },
+      {
+        "model": "qwen38-flash-next-ap-q4km-six",
+        "composite": 0.9342,
+        "standard_error": 0.0178,
+        "ci95": [
+          0.8993,
+          0.9691
+        ],
+        "components": {
+          "gsm8k": {
+            "accuracy": 0.92,
+            "n": 50,
+            "ci95": [
+              0.8116,
+              0.9685
+            ]
+          },
+          "bbh": {
+            "accuracy": 0.9792,
+            "n": 48,
+            "ci95": [
+              0.8911,
+              0.9963
+            ]
+          },
+          "mmlu": {
+            "accuracy": 0.8625,
+            "n": 160,
+            "ci95": [
+              0.8006,
+              0.9074
+            ]
+          },
+          "humaneval": {
+            "accuracy": 0.975,
+            "n": 40,
+            "ci95": [
+              0.8712,
+              0.9956
+            ]
+          }
+        },
+        "rank": 10,
+        "z_vs_leader": 2.01,
+        "tied_with_leader": false
       },
       {
         "model": "qwen38-flash-next-ap-q4kxl-v100",
@@ -421,7 +513,7 @@
             ]
           }
         },
-        "rank": 9,
+        "rank": 11,
         "z_vs_leader": 2.26,
         "tied_with_leader": false
       },
@@ -467,7 +559,7 @@
             ]
           }
         },
-        "rank": 10,
+        "rank": 12,
         "z_vs_leader": 2.28,
         "tied_with_leader": false
       },
@@ -513,7 +605,7 @@
             ]
           }
         },
-        "rank": 11,
+        "rank": 13,
         "z_vs_leader": 2.37,
         "tied_with_leader": false
       },
@@ -559,8 +651,54 @@
             ]
           }
         },
-        "rank": 12,
+        "rank": 14,
         "z_vs_leader": 2.5,
+        "tied_with_leader": false
+      },
+      {
+        "model": "qwen38-flash-next-ap-q4kxl-six",
+        "composite": 0.9193,
+        "standard_error": 0.0189,
+        "ci95": [
+          0.8822,
+          0.9564
+        ],
+        "components": {
+          "gsm8k": {
+            "accuracy": 0.9,
+            "n": 50,
+            "ci95": [
+              0.7864,
+              0.9565
+            ]
+          },
+          "bbh": {
+            "accuracy": 0.9583,
+            "n": 48,
+            "ci95": [
+              0.8602,
+              0.9885
+            ]
+          },
+          "mmlu": {
+            "accuracy": 0.8438,
+            "n": 160,
+            "ci95": [
+              0.7796,
+              0.8919
+            ]
+          },
+          "humaneval": {
+            "accuracy": 0.975,
+            "n": 40,
+            "ci95": [
+              0.8712,
+              0.9956
+            ]
+          }
+        },
+        "rank": 15,
+        "z_vs_leader": 2.56,
         "tied_with_leader": false
       },
       {
@@ -605,7 +743,7 @@
             ]
           }
         },
-        "rank": 13,
+        "rank": 16,
         "z_vs_leader": 2.56,
         "tied_with_leader": false
       },
@@ -651,7 +789,7 @@
             ]
           }
         },
-        "rank": 14,
+        "rank": 17,
         "z_vs_leader": 2.55,
         "tied_with_leader": false
       },
@@ -697,7 +835,7 @@
             ]
           }
         },
-        "rank": 15,
+        "rank": 18,
         "z_vs_leader": 2.62,
         "tied_with_leader": false
       },
@@ -743,8 +881,54 @@
             ]
           }
         },
-        "rank": 16,
+        "rank": 19,
         "z_vs_leader": 2.62,
+        "tied_with_leader": false
+      },
+      {
+        "model": "qwen38-flash-next-ap-iq2s-six",
+        "composite": 0.9148,
+        "standard_error": 0.02,
+        "ci95": [
+          0.8756,
+          0.954
+        ],
+        "components": {
+          "gsm8k": {
+            "accuracy": 0.88,
+            "n": 50,
+            "ci95": [
+              0.762,
+              0.9438
+            ]
+          },
+          "bbh": {
+            "accuracy": 0.9167,
+            "n": 48,
+            "ci95": [
+              0.8045,
+              0.9671
+            ]
+          },
+          "mmlu": {
+            "accuracy": 0.8875,
+            "n": 160,
+            "ci95": [
+              0.8292,
+              0.9276
+            ]
+          },
+          "humaneval": {
+            "accuracy": 0.975,
+            "n": 40,
+            "ci95": [
+              0.8712,
+              0.9956
+            ]
+          }
+        },
+        "rank": 20,
+        "z_vs_leader": 2.65,
         "tied_with_leader": false
       },
       {
@@ -789,7 +973,53 @@
             ]
           }
         },
-        "rank": 17,
+        "rank": 21,
+        "z_vs_leader": 2.79,
+        "tied_with_leader": false
+      },
+      {
+        "model": "qwen38-flash-next-ap-iq2s-v100pair",
+        "composite": 0.9113,
+        "standard_error": 0.0201,
+        "ci95": [
+          0.8718,
+          0.9507
+        ],
+        "components": {
+          "gsm8k": {
+            "accuracy": 0.92,
+            "n": 50,
+            "ci95": [
+              0.8116,
+              0.9685
+            ]
+          },
+          "bbh": {
+            "accuracy": 0.875,
+            "n": 48,
+            "ci95": [
+              0.753,
+              0.9414
+            ]
+          },
+          "mmlu": {
+            "accuracy": 0.875,
+            "n": 160,
+            "ci95": [
+              0.8148,
+              0.9176
+            ]
+          },
+          "humaneval": {
+            "accuracy": 0.975,
+            "n": 40,
+            "ci95": [
+              0.8712,
+              0.9956
+            ]
+          }
+        },
+        "rank": 22,
         "z_vs_leader": 2.79,
         "tied_with_leader": false
       },
@@ -835,7 +1065,7 @@
             ]
           }
         },
-        "rank": 18,
+        "rank": 23,
         "z_vs_leader": 2.88,
         "tied_with_leader": false
       },
@@ -881,7 +1111,7 @@
             ]
           }
         },
-        "rank": 19,
+        "rank": 24,
         "z_vs_leader": 2.96,
         "tied_with_leader": false
       },
@@ -927,7 +1157,7 @@
             ]
           }
         },
-        "rank": 20,
+        "rank": 25,
         "z_vs_leader": 3.22,
         "tied_with_leader": false
       },
@@ -973,7 +1203,7 @@
             ]
           }
         },
-        "rank": 21,
+        "rank": 26,
         "z_vs_leader": 3.25,
         "tied_with_leader": false
       },
@@ -1019,7 +1249,7 @@
             ]
           }
         },
-        "rank": 22,
+        "rank": 27,
         "z_vs_leader": 3.38,
         "tied_with_leader": false
       },
@@ -1065,7 +1295,7 @@
             ]
           }
         },
-        "rank": 23,
+        "rank": 28,
         "z_vs_leader": 3.93,
         "tied_with_leader": false
       },
@@ -1111,7 +1341,7 @@
             ]
           }
         },
-        "rank": 24,
+        "rank": 29,
         "z_vs_leader": 3.64,
         "tied_with_leader": false
       },
@@ -1157,7 +1387,7 @@
             ]
           }
         },
-        "rank": 25,
+        "rank": 30,
         "z_vs_leader": 3.86,
         "tied_with_leader": false
       },
@@ -1203,7 +1433,7 @@
             ]
           }
         },
-        "rank": 26,
+        "rank": 31,
         "z_vs_leader": 4.12,
         "tied_with_leader": false
       },
@@ -1249,7 +1479,7 @@
             ]
           }
         },
-        "rank": 27,
+        "rank": 32,
         "z_vs_leader": 4.22,
         "tied_with_leader": false
       },
@@ -1295,7 +1525,7 @@
             ]
           }
         },
-        "rank": 28,
+        "rank": 33,
         "z_vs_leader": 4.53,
         "tied_with_leader": false
       },
@@ -1341,7 +1571,7 @@
             ]
           }
         },
-        "rank": 29,
+        "rank": 34,
         "z_vs_leader": 4.79,
         "tied_with_leader": false
       },
@@ -1387,7 +1617,7 @@
             ]
           }
         },
-        "rank": 30,
+        "rank": 35,
         "z_vs_leader": 4.95,
         "tied_with_leader": false
       },
@@ -1433,7 +1663,7 @@
             ]
           }
         },
-        "rank": 31,
+        "rank": 36,
         "z_vs_leader": 5.09,
         "tied_with_leader": false
       },
@@ -1479,7 +1709,7 @@
             ]
           }
         },
-        "rank": 32,
+        "rank": 37,
         "z_vs_leader": 5.12,
         "tied_with_leader": false
       },
@@ -1525,7 +1755,7 @@
             ]
           }
         },
-        "rank": 33,
+        "rank": 38,
         "z_vs_leader": 5.63,
         "tied_with_leader": false
       },
@@ -1571,7 +1801,7 @@
             ]
           }
         },
-        "rank": 34,
+        "rank": 39,
         "z_vs_leader": 5.93,
         "tied_with_leader": false
       },
@@ -1617,7 +1847,7 @@
             ]
           }
         },
-        "rank": 35,
+        "rank": 40,
         "z_vs_leader": 5.82,
         "tied_with_leader": false
       },
@@ -1663,8 +1893,54 @@
             ]
           }
         },
-        "rank": 36,
+        "rank": 41,
         "z_vs_leader": 6.09,
+        "tied_with_leader": false
+      },
+      {
+        "model": "cloud-claude-claude-haiku-4-5-20251001",
+        "composite": 0.8046,
+        "standard_error": 0.02,
+        "ci95": [
+          0.7654,
+          0.8438
+        ],
+        "components": {
+          "gsm8k": {
+            "accuracy": 0.96,
+            "n": 50,
+            "ci95": [
+              0.8654,
+              0.989
+            ]
+          },
+          "bbh": {
+            "accuracy": 0.8958,
+            "n": 48,
+            "ci95": [
+              0.7783,
+              0.9547
+            ]
+          },
+          "mmlu": {
+            "accuracy": 0.3875,
+            "n": 160,
+            "ci95": [
+              0.3155,
+              0.4648
+            ]
+          },
+          "humaneval": {
+            "accuracy": 0.975,
+            "n": 40,
+            "ci95": [
+              0.8712,
+              0.9956
+            ]
+          }
+        },
+        "rank": 42,
+        "z_vs_leader": 7.13,
         "tied_with_leader": false
       },
       {
@@ -1709,7 +1985,7 @@
             ]
           }
         },
-        "rank": 37,
+        "rank": 43,
         "z_vs_leader": 6.46,
         "tied_with_leader": false
       },
@@ -1755,7 +2031,7 @@
             ]
           }
         },
-        "rank": 38,
+        "rank": 44,
         "z_vs_leader": 7.15,
         "tied_with_leader": false
       },
@@ -1801,7 +2077,7 @@
             ]
           }
         },
-        "rank": 39,
+        "rank": 45,
         "z_vs_leader": 7.46,
         "tied_with_leader": false
       },
@@ -1847,7 +2123,7 @@
             ]
           }
         },
-        "rank": 40,
+        "rank": 46,
         "z_vs_leader": 7.17,
         "tied_with_leader": false
       },
@@ -1893,7 +2169,7 @@
             ]
           }
         },
-        "rank": 41,
+        "rank": 47,
         "z_vs_leader": 8.2,
         "tied_with_leader": false
       },
@@ -1939,7 +2215,7 @@
             ]
           }
         },
-        "rank": 42,
+        "rank": 48,
         "z_vs_leader": 9.34,
         "tied_with_leader": false
       },
@@ -1985,7 +2261,7 @@
             ]
           }
         },
-        "rank": 43,
+        "rank": 49,
         "z_vs_leader": 13.08,
         "tied_with_leader": false
       },
@@ -2031,7 +2307,7 @@
             ]
           }
         },
-        "rank": 44,
+        "rank": 50,
         "z_vs_leader": 12.23,
         "tied_with_leader": false
       },
@@ -2077,7 +2353,7 @@
             ]
           }
         },
-        "rank": 45,
+        "rank": 51,
         "z_vs_leader": 13.88,
         "tied_with_leader": false
       },
@@ -2123,7 +2399,7 @@
             ]
           }
         },
-        "rank": 46,
+        "rank": 52,
         "z_vs_leader": 13.54,
         "tied_with_leader": false
       },
@@ -2169,7 +2445,7 @@
             ]
           }
         },
-        "rank": 47,
+        "rank": 53,
         "z_vs_leader": 11.48,
         "tied_with_leader": false
       },
@@ -2215,7 +2491,7 @@
             ]
           }
         },
-        "rank": 48,
+        "rank": 54,
         "z_vs_leader": 11.55,
         "tied_with_leader": false
       },
@@ -2261,7 +2537,7 @@
             ]
           }
         },
-        "rank": 49,
+        "rank": 55,
         "z_vs_leader": 12.45,
         "tied_with_leader": false
       },
@@ -2307,7 +2583,7 @@
             ]
           }
         },
-        "rank": 50,
+        "rank": 56,
         "z_vs_leader": 15.06,
         "tied_with_leader": false
       },
@@ -2353,7 +2629,7 @@
             ]
           }
         },
-        "rank": 51,
+        "rank": 57,
         "z_vs_leader": 15.17,
         "tied_with_leader": false
       },
@@ -2399,7 +2675,7 @@
             ]
           }
         },
-        "rank": 52,
+        "rank": 58,
         "z_vs_leader": 17.73,
         "tied_with_leader": false
       },
@@ -2445,7 +2721,7 @@
             ]
           }
         },
-        "rank": 53,
+        "rank": 59,
         "z_vs_leader": 19.25,
         "tied_with_leader": false
       }
@@ -2473,6 +2749,15 @@
       },
       {
         "model": "cloud-antigravity-gemini-gemini-3.6-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 1,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "cloud-claude-claude-sonnet-5-5",
         "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
         "leader_only_pass": 1,
@@ -2517,6 +2802,15 @@
         "differs_from_leader": false
       },
       {
+        "model": "qwen38-flash-next-ap-q4km-six",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 1,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
         "model": "qwen38-flash-next-ap-q4kxl-v100",
         "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
@@ -2545,6 +2839,15 @@
       },
       {
         "model": "qwen38-flash-next-ap-q4kxl-allfour",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 1,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "qwen38-flash-next-ap-q4kxl-six",
         "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
         "leader_only_pass": 1,
@@ -2589,7 +2892,25 @@
         "differs_from_leader": false
       },
       {
+        "model": "qwen38-flash-next-ap-iq2s-six",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 1,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
         "model": "qwen38-flash-next-ap-iq2s-v100",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 1,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "qwen38-flash-next-ap-iq2s-v100pair",
         "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
         "leader_only_pass": 1,
@@ -2767,6 +3088,15 @@
         "model_only_pass": 0,
         "p_value": 0.0312,
         "differs_from_leader": true
+      },
+      {
+        "model": "cloud-claude-claude-haiku-4-5-20251001",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 1,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
       },
       {
         "model": "mimo-v26-pro-bpw2.5",
@@ -5203,6 +5533,406 @@
         0.862,
         1.0
       ]
+    },
+    {
+      "model": "cloud-claude-claude-sonnet-5-5",
+      "lane": "chemistry",
+      "accuracy": 0.6667,
+      "n": 6,
+      "ci95": [
+        0.3,
+        0.9032
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-sonnet-5-5",
+      "lane": "physics",
+      "accuracy": 1.0,
+      "n": 6,
+      "ci95": [
+        0.6097,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-sonnet-5-5",
+      "lane": "video",
+      "accuracy": 0.0,
+      "n": 3,
+      "ci95": [
+        0.0,
+        0.5615
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-sonnet-5-5",
+      "lane": "iq",
+      "accuracy": 0.6667,
+      "n": 3,
+      "ci95": [
+        0.2077,
+        0.9385
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-sonnet-5-5",
+      "lane": "eq",
+      "accuracy": 1.0,
+      "n": 3,
+      "ci95": [
+        0.4385,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-sonnet-5-5",
+      "lane": "fq",
+      "accuracy": 0.5,
+      "n": 2,
+      "ci95": [
+        0.0945,
+        0.9055
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-sonnet-5-5",
+      "lane": "qq",
+      "accuracy": 0.75,
+      "n": 4,
+      "ci95": [
+        0.3006,
+        0.9544
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-sonnet-5-5",
+      "lane": "finance",
+      "accuracy": 1.0,
+      "n": 24,
+      "ci95": [
+        0.862,
+        1.0
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-v100pair",
+      "lane": "chemistry",
+      "accuracy": 0.1667,
+      "n": 6,
+      "ci95": [
+        0.0301,
+        0.5635
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-v100pair",
+      "lane": "physics",
+      "accuracy": 0.8333,
+      "n": 6,
+      "ci95": [
+        0.4365,
+        0.9699
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-v100pair",
+      "lane": "video",
+      "accuracy": 0.3333,
+      "n": 3,
+      "ci95": [
+        0.0615,
+        0.7923
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-v100pair",
+      "lane": "iq",
+      "accuracy": 0.3333,
+      "n": 3,
+      "ci95": [
+        0.0615,
+        0.7923
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-v100pair",
+      "lane": "eq",
+      "accuracy": 1.0,
+      "n": 3,
+      "ci95": [
+        0.4385,
+        1.0
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-v100pair",
+      "lane": "fq",
+      "accuracy": 0.0,
+      "n": 2,
+      "ci95": [
+        0.0,
+        0.6576
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-v100pair",
+      "lane": "qq",
+      "accuracy": 0.75,
+      "n": 4,
+      "ci95": [
+        0.3006,
+        0.9544
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-v100pair",
+      "lane": "finance",
+      "accuracy": 0.875,
+      "n": 24,
+      "ci95": [
+        0.69,
+        0.9566
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-six",
+      "lane": "chemistry",
+      "accuracy": 0.1667,
+      "n": 6,
+      "ci95": [
+        0.0301,
+        0.5635
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-six",
+      "lane": "physics",
+      "accuracy": 0.8333,
+      "n": 6,
+      "ci95": [
+        0.4365,
+        0.9699
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-six",
+      "lane": "video",
+      "accuracy": 0.6667,
+      "n": 3,
+      "ci95": [
+        0.2077,
+        0.9385
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-six",
+      "lane": "iq",
+      "accuracy": 0.6667,
+      "n": 3,
+      "ci95": [
+        0.2077,
+        0.9385
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-six",
+      "lane": "eq",
+      "accuracy": 1.0,
+      "n": 3,
+      "ci95": [
+        0.4385,
+        1.0
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-six",
+      "lane": "fq",
+      "accuracy": 0.0,
+      "n": 2,
+      "ci95": [
+        0.0,
+        0.6576
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-six",
+      "lane": "qq",
+      "accuracy": 0.75,
+      "n": 4,
+      "ci95": [
+        0.3006,
+        0.9544
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-six",
+      "lane": "finance",
+      "accuracy": 0.9583,
+      "n": 24,
+      "ci95": [
+        0.7975,
+        0.9926
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4km-six",
+      "lane": "chemistry",
+      "accuracy": 0.3333,
+      "n": 6,
+      "ci95": [
+        0.0968,
+        0.7
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4km-six",
+      "lane": "physics",
+      "accuracy": 0.8333,
+      "n": 6,
+      "ci95": [
+        0.4365,
+        0.9699
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4km-six",
+      "lane": "video",
+      "accuracy": 0.0,
+      "n": 3,
+      "ci95": [
+        0.0,
+        0.5615
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4km-six",
+      "lane": "iq",
+      "accuracy": 0.3333,
+      "n": 3,
+      "ci95": [
+        0.0615,
+        0.7923
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4km-six",
+      "lane": "eq",
+      "accuracy": 1.0,
+      "n": 3,
+      "ci95": [
+        0.4385,
+        1.0
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4km-six",
+      "lane": "fq",
+      "accuracy": 0.0,
+      "n": 2,
+      "ci95": [
+        0.0,
+        0.6576
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4km-six",
+      "lane": "qq",
+      "accuracy": 0.75,
+      "n": 4,
+      "ci95": [
+        0.3006,
+        0.9544
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4km-six",
+      "lane": "finance",
+      "accuracy": 0.9167,
+      "n": 24,
+      "ci95": [
+        0.7416,
+        0.9769
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4kxl-six",
+      "lane": "chemistry",
+      "accuracy": 0.0,
+      "n": 6,
+      "ci95": [
+        0.0,
+        0.3903
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4kxl-six",
+      "lane": "physics",
+      "accuracy": 0.5,
+      "n": 6,
+      "ci95": [
+        0.1876,
+        0.8124
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4kxl-six",
+      "lane": "video",
+      "accuracy": 0.0,
+      "n": 3,
+      "ci95": [
+        0.0,
+        0.5615
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4kxl-six",
+      "lane": "iq",
+      "accuracy": 0.3333,
+      "n": 3,
+      "ci95": [
+        0.0615,
+        0.7923
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4kxl-six",
+      "lane": "eq",
+      "accuracy": 1.0,
+      "n": 3,
+      "ci95": [
+        0.4385,
+        1.0
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4kxl-six",
+      "lane": "fq",
+      "accuracy": 0.0,
+      "n": 2,
+      "ci95": [
+        0.0,
+        0.6576
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4kxl-six",
+      "lane": "qq",
+      "accuracy": 0.75,
+      "n": 4,
+      "ci95": [
+        0.3006,
+        0.9544
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4kxl-six",
+      "lane": "finance",
+      "accuracy": 1.0,
+      "n": 24,
+      "ci95": [
+        0.862,
+        1.0
+      ]
     }
   ],
   "resistant_ranking": [
@@ -5561,6 +6291,37 @@
       "public_minus_resistant": -0.1399
     },
     {
+      "model": "cloud-claude-claude-sonnet-5-5",
+      "public_composite": 0.9542,
+      "specialist": {
+        "value": 0.6979,
+        "standard_error": 0.0568,
+        "items": 51,
+        "ci95": [
+          0.5866,
+          0.8093
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 0.9212,
+        "standard_error": 0.0665,
+        "items": 26,
+        "ci95": [
+          0.7909,
+          1.0
+        ],
+        "holdout": 0.9091,
+        "paraphrased_mmlu": 0.9333,
+        "canary_recall": 0.9,
+        "flags": [
+          "canary-recall"
+        ]
+      },
+      "public_minus_resistant": 0.033
+    },
+    {
       "model": "cloud-antigravity-gemini-gemini-3.6-flash",
       "public_composite": 0.9594,
       "specialist": {
@@ -5768,6 +6529,35 @@
       "public_minus_resistant": -0.0531
     },
     {
+      "model": "qwen38-flash-next-ap-iq2s-six",
+      "public_composite": 0.9148,
+      "specialist": {
+        "value": 0.6302,
+        "standard_error": 0.0574,
+        "items": 51,
+        "ci95": [
+          0.5177,
+          0.7427
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 0.8182,
+        "standard_error": 0.0724,
+        "items": 26,
+        "ci95": [
+          0.6763,
+          0.9601
+        ],
+        "holdout": 0.6364,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.0,
+        "flags": []
+      },
+      "public_minus_resistant": 0.0966
+    },
+    {
       "model": "mom-live-1p",
       "public_composite": 0.8976,
       "specialist": {
@@ -5826,6 +6616,35 @@
       "public_minus_resistant": 0.1649
     },
     {
+      "model": "qwen38-flash-next-ap-iq2s-v100pair",
+      "public_composite": 0.9113,
+      "specialist": {
+        "value": 0.5364,
+        "standard_error": 0.0576,
+        "items": 51,
+        "ci95": [
+          0.4235,
+          0.6494
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 0.7182,
+        "standard_error": 0.0809,
+        "items": 26,
+        "ci95": [
+          0.5596,
+          0.8768
+        ],
+        "holdout": 0.6364,
+        "paraphrased_mmlu": 0.8,
+        "canary_recall": 0.0,
+        "flags": []
+      },
+      "public_minus_resistant": 0.1931
+    },
+    {
       "model": "mom-live-4-tp2",
       "public_composite": 0.578,
       "specialist": {
@@ -5853,6 +6672,64 @@
         "flags": []
       },
       "public_minus_resistant": -0.0523
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4km-six",
+      "public_composite": 0.9342,
+      "specialist": {
+        "value": 0.5208,
+        "standard_error": 0.0571,
+        "items": 51,
+        "ci95": [
+          0.4088,
+          0.6328
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 0.6061,
+        "standard_error": 0.0849,
+        "items": 26,
+        "ci95": [
+          0.4397,
+          0.7725
+        ],
+        "holdout": 0.5455,
+        "paraphrased_mmlu": 0.6667,
+        "canary_recall": 0.0,
+        "flags": []
+      },
+      "public_minus_resistant": 0.3281
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4kxl-six",
+      "public_composite": 0.9193,
+      "specialist": {
+        "value": 0.4479,
+        "standard_error": 0.0563,
+        "items": 51,
+        "ci95": [
+          0.3375,
+          0.5583
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 0.6061,
+        "standard_error": 0.0849,
+        "items": 26,
+        "ci95": [
+          0.4397,
+          0.7725
+        ],
+        "holdout": 0.5455,
+        "paraphrased_mmlu": 0.6667,
+        "canary_recall": 0.0,
+        "flags": []
+      },
+      "public_minus_resistant": 0.3132
     },
     {
       "model": "mom-live-4-q36",

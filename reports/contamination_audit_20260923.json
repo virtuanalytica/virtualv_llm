@@ -6145,6 +6145,1305 @@
           "rescored": "2026-10-07: answer key corrected (pch-001, pch-005, pch-011), pch-009 dropped"
         }
       }
+    },
+    {
+      "model": "cloud-claude-claude-haiku-4-5-20251001",
+      "protocol": "v1-canary-paraphrase-postcutoff-20260923",
+      "access_profile": "sandbox",
+      "results": {
+        "canary_recall": {
+          "status": "unavailable",
+          "reason": "HTTPError: HTTP Error 502: Bad Gateway"
+        },
+        "paraphrase_invariance": {
+          "status": "unavailable",
+          "reason": "HTTPError: HTTP Error 502: Bad Gateway"
+        },
+        "post_cutoff_holdout": {
+          "status": "unavailable",
+          "reason": "HTTPError: HTTP Error 502: Bad Gateway"
+        }
+      }
+    },
+    {
+      "model": "cloud-claude-claude-sonnet-5-5",
+      "protocol": "v1-canary-paraphrase-postcutoff-20260923",
+      "access_profile": "sandbox",
+      "results": {
+        "canary_recall": {
+          "status": "complete",
+          "method": "canary_recall",
+          "recall_rate": 0.9,
+          "n_samples": 10,
+          "interpretation": "Fraction of held-out GSM8K test questions the model could continue verbatim from a short fragment alone. High values indicate the exact published text is present in training data, not just the underlying math skill.",
+          "source": "reports/lm_eval_runs/qwen25-72b-q4/gsm8k/x/samples_gsm8k_2026-09-18T08-44-03.829058.jsonl",
+          "samples": [
+            {
+              "doc_id": 0,
+              "fragment": "Janet’s ducks lay 16 eggs per day. She eats",
+              "token_overlap": 1.0,
+              "verbatim_recall": true
+            },
+            {
+              "doc_id": 1,
+              "fragment": "A robe takes 2 bolts of blue",
+              "token_overlap": 1.0,
+              "verbatim_recall": true
+            },
+            {
+              "doc_id": 2,
+              "fragment": "Josh decides to try flipping a house. He buys",
+              "token_overlap": 0.96,
+              "verbatim_recall": true
+            },
+            {
+              "doc_id": 3,
+              "fragment": "James decides to run 3 sprints 3 times",
+              "token_overlap": 1.0,
+              "verbatim_recall": true
+            },
+            {
+              "doc_id": 4,
+              "fragment": "Every day, Wendi feeds each of her chickens three",
+              "token_overlap": 1.0,
+              "verbatim_recall": true
+            },
+            {
+              "doc_id": 5,
+              "fragment": "Kylar went to the store to buy glasses for",
+              "token_overlap": 1.0,
+              "verbatim_recall": true
+            },
+            {
+              "doc_id": 6,
+              "fragment": "Toulouse has twice as many sheep as Charleston. Charleston",
+              "token_overlap": 1.0,
+              "verbatim_recall": true
+            },
+            {
+              "doc_id": 7,
+              "fragment": "Carla is downloading a 200 GB file. Normally she",
+              "token_overlap": 1.0,
+              "verbatim_recall": true
+            },
+            {
+              "doc_id": 8,
+              "fragment": "John drives for 3 hours at a speed of",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 9,
+              "fragment": "Eliza's rate per hour for the first 40 hours",
+              "token_overlap": 1.0,
+              "verbatim_recall": true
+            }
+          ]
+        },
+        "paraphrase_invariance": {
+          "status": "complete",
+          "method": "paraphrase_invariance",
+          "original_accuracy": 0.8667,
+          "paraphrase_accuracy": 0.9333,
+          "accuracy_gap": -0.0666,
+          "n_samples": 15,
+          "interpretation": "Accuracy on original MMLU questions vs. the same questions with multiple-choice options deterministically reordered (correct answer moved to a different letter, question text unchanged). A large drop under reordering indicates the original score depended on matching a memorized answer-letter pattern rather than the underlying reasoning.",
+          "samples": [
+            {
+              "doc_id": 0,
+              "subject": "abstract_algebra",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "abstract_algebra",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "anatomy",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "anatomy",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "astronomy",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "astronomy",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "college_computer_science",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "college_computer_science",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "formal_logic",
+              "original_correct": false,
+              "paraphrase_correct": false
+            },
+            {
+              "doc_id": 0,
+              "subject": "formal_logic",
+              "original_correct": false,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "high_school_psychology",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "high_school_psychology",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "marketing",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "marketing",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "professional_law",
+              "original_correct": true,
+              "paraphrase_correct": true
+            }
+          ]
+        },
+        "post_cutoff_holdout": {
+          "status": "complete",
+          "method": "post_cutoff_holdout",
+          "accuracy": 0.9091,
+          "n_samples": 11,
+          "question_pack": "config/contamination_audit/post_cutoff_holdout.csv",
+          "pack_sha256": "cfe8a9ef31ebfc962d5f93c14e9a0b8aaea08fe6465aa968bb2d15d5f4a60b40",
+          "interpretation": "Accuracy on original word/logic problems written for this project on 2026-09-23 and never published anywhere before -- no model's training data can contain them by construction. Compare against this same model's gsm8k/mmlu_sample accuracy in well_known_suite_20260917.json: a public-suite score well above this holdout on comparable difficulty is the contamination research signal; a comparable score is reassuring, not proof of an uncontaminated model.",
+          "samples": [
+            {
+              "id": "pch-001",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "pch-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "pch-003",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "pch-004",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "pch-005",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "pch-006",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-007",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-008",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "pch-010",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-011",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "pch-012",
+              "correct": false,
+              "target": "D",
+              "prediction": "C"
+            }
+          ],
+          "rescored": "2026-10-07: answer key corrected (pch-001, pch-005, pch-011), pch-009 dropped"
+        }
+      }
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-v100pair",
+      "protocol": "v1-canary-paraphrase-postcutoff-20260923",
+      "access_profile": "sandbox",
+      "results": {
+        "canary_recall": {
+          "status": "complete",
+          "method": "canary_recall",
+          "recall_rate": 0.0,
+          "n_samples": 10,
+          "interpretation": "Fraction of held-out GSM8K test questions the model could continue verbatim from a short fragment alone. High values indicate the exact published text is present in training data, not just the underlying math skill.",
+          "source": "reports/lm_eval_runs/qwen25-72b-q4/gsm8k/x/samples_gsm8k_2026-09-18T08-44-03.829058.jsonl",
+          "samples": [
+            {
+              "doc_id": 0,
+              "fragment": "Janet’s ducks lay 16 eggs per day. She eats",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 1,
+              "fragment": "A robe takes 2 bolts of blue",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 2,
+              "fragment": "Josh decides to try flipping a house. He buys",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 3,
+              "fragment": "James decides to run 3 sprints 3 times",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 4,
+              "fragment": "Every day, Wendi feeds each of her chickens three",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 5,
+              "fragment": "Kylar went to the store to buy glasses for",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 6,
+              "fragment": "Toulouse has twice as many sheep as Charleston. Charleston",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 7,
+              "fragment": "Carla is downloading a 200 GB file. Normally she",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 8,
+              "fragment": "John drives for 3 hours at a speed of",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 9,
+              "fragment": "Eliza's rate per hour for the first 40 hours",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            }
+          ]
+        },
+        "paraphrase_invariance": {
+          "status": "complete",
+          "method": "paraphrase_invariance",
+          "original_accuracy": 0.8,
+          "paraphrase_accuracy": 0.8,
+          "accuracy_gap": 0.0,
+          "n_samples": 15,
+          "interpretation": "Accuracy on original MMLU questions vs. the same questions with multiple-choice options deterministically reordered (correct answer moved to a different letter, question text unchanged). A large drop under reordering indicates the original score depended on matching a memorized answer-letter pattern rather than the underlying reasoning.",
+          "samples": [
+            {
+              "doc_id": 0,
+              "subject": "abstract_algebra",
+              "original_correct": true,
+              "paraphrase_correct": false
+            },
+            {
+              "doc_id": 0,
+              "subject": "abstract_algebra",
+              "original_correct": true,
+              "paraphrase_correct": false
+            },
+            {
+              "doc_id": 0,
+              "subject": "anatomy",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "anatomy",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "astronomy",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "astronomy",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "college_computer_science",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "college_computer_science",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "formal_logic",
+              "original_correct": false,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "formal_logic",
+              "original_correct": false,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "high_school_psychology",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "high_school_psychology",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "marketing",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "marketing",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "professional_law",
+              "original_correct": false,
+              "paraphrase_correct": false
+            }
+          ]
+        },
+        "post_cutoff_holdout": {
+          "status": "complete",
+          "method": "post_cutoff_holdout",
+          "accuracy": 0.6364,
+          "n_samples": 11,
+          "question_pack": "config/contamination_audit/post_cutoff_holdout.csv",
+          "pack_sha256": "cfe8a9ef31ebfc962d5f93c14e9a0b8aaea08fe6465aa968bb2d15d5f4a60b40",
+          "interpretation": "Accuracy on original word/logic problems written for this project on 2026-09-23 and never published anywhere before -- no model's training data can contain them by construction. Compare against this same model's gsm8k/mmlu_sample accuracy in well_known_suite_20260917.json: a public-suite score well above this holdout on comparable difficulty is the contamination research signal; a comparable score is reassuring, not proof of an uncontaminated model.",
+          "samples": [
+            {
+              "id": "pch-001",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "pch-003",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "pch-004",
+              "correct": false,
+              "target": "C",
+              "prediction": "A"
+            },
+            {
+              "id": "pch-005",
+              "correct": false,
+              "target": "C",
+              "prediction": "A"
+            },
+            {
+              "id": "pch-006",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-007",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-008",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "pch-010",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-011",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "pch-012",
+              "correct": false,
+              "target": "D",
+              "prediction": "C"
+            }
+          ],
+          "rescored": "2026-10-07: answer key corrected (pch-001, pch-005, pch-011), pch-009 dropped"
+        }
+      }
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-six",
+      "protocol": "v1-canary-paraphrase-postcutoff-20260923",
+      "access_profile": "sandbox",
+      "results": {
+        "canary_recall": {
+          "status": "complete",
+          "method": "canary_recall",
+          "recall_rate": 0.0,
+          "n_samples": 10,
+          "interpretation": "Fraction of held-out GSM8K test questions the model could continue verbatim from a short fragment alone. High values indicate the exact published text is present in training data, not just the underlying math skill.",
+          "source": "reports/lm_eval_runs/qwen25-72b-q4/gsm8k/x/samples_gsm8k_2026-09-18T08-44-03.829058.jsonl",
+          "samples": [
+            {
+              "doc_id": 0,
+              "fragment": "Janet’s ducks lay 16 eggs per day. She eats",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 1,
+              "fragment": "A robe takes 2 bolts of blue",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 2,
+              "fragment": "Josh decides to try flipping a house. He buys",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 3,
+              "fragment": "James decides to run 3 sprints 3 times",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 4,
+              "fragment": "Every day, Wendi feeds each of her chickens three",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 5,
+              "fragment": "Kylar went to the store to buy glasses for",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 6,
+              "fragment": "Toulouse has twice as many sheep as Charleston. Charleston",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 7,
+              "fragment": "Carla is downloading a 200 GB file. Normally she",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 8,
+              "fragment": "John drives for 3 hours at a speed of",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 9,
+              "fragment": "Eliza's rate per hour for the first 40 hours",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            }
+          ]
+        },
+        "paraphrase_invariance": {
+          "status": "complete",
+          "method": "paraphrase_invariance",
+          "original_accuracy": 0.8667,
+          "paraphrase_accuracy": 1.0,
+          "accuracy_gap": -0.1333,
+          "n_samples": 15,
+          "interpretation": "Accuracy on original MMLU questions vs. the same questions with multiple-choice options deterministically reordered (correct answer moved to a different letter, question text unchanged). A large drop under reordering indicates the original score depended on matching a memorized answer-letter pattern rather than the underlying reasoning.",
+          "samples": [
+            {
+              "doc_id": 0,
+              "subject": "abstract_algebra",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "abstract_algebra",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "anatomy",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "anatomy",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "astronomy",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "astronomy",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "college_computer_science",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "college_computer_science",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "formal_logic",
+              "original_correct": false,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "formal_logic",
+              "original_correct": false,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "high_school_psychology",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "high_school_psychology",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "marketing",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "marketing",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "professional_law",
+              "original_correct": true,
+              "paraphrase_correct": true
+            }
+          ]
+        },
+        "post_cutoff_holdout": {
+          "status": "complete",
+          "method": "post_cutoff_holdout",
+          "accuracy": 0.6364,
+          "n_samples": 11,
+          "question_pack": "config/contamination_audit/post_cutoff_holdout.csv",
+          "pack_sha256": "cfe8a9ef31ebfc962d5f93c14e9a0b8aaea08fe6465aa968bb2d15d5f4a60b40",
+          "interpretation": "Accuracy on original word/logic problems written for this project on 2026-09-23 and never published anywhere before -- no model's training data can contain them by construction. Compare against this same model's gsm8k/mmlu_sample accuracy in well_known_suite_20260917.json: a public-suite score well above this holdout on comparable difficulty is the contamination research signal; a comparable score is reassuring, not proof of an uncontaminated model.",
+          "samples": [
+            {
+              "id": "pch-001",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "pch-003",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "pch-004",
+              "correct": false,
+              "target": "C",
+              "prediction": "A"
+            },
+            {
+              "id": "pch-005",
+              "correct": false,
+              "target": "C",
+              "prediction": "A"
+            },
+            {
+              "id": "pch-006",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-007",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-008",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "pch-010",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-011",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "pch-012",
+              "correct": false,
+              "target": "D",
+              "prediction": "C"
+            }
+          ],
+          "rescored": "2026-10-07: answer key corrected (pch-001, pch-005, pch-011), pch-009 dropped"
+        }
+      }
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4km-six",
+      "protocol": "v1-canary-paraphrase-postcutoff-20260923",
+      "access_profile": "sandbox",
+      "results": {
+        "canary_recall": {
+          "status": "complete",
+          "method": "canary_recall",
+          "recall_rate": 0.0,
+          "n_samples": 10,
+          "interpretation": "Fraction of held-out GSM8K test questions the model could continue verbatim from a short fragment alone. High values indicate the exact published text is present in training data, not just the underlying math skill.",
+          "source": "reports/lm_eval_runs/qwen25-72b-q4/gsm8k/x/samples_gsm8k_2026-09-18T08-44-03.829058.jsonl",
+          "samples": [
+            {
+              "doc_id": 0,
+              "fragment": "Janet’s ducks lay 16 eggs per day. She eats",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 1,
+              "fragment": "A robe takes 2 bolts of blue",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 2,
+              "fragment": "Josh decides to try flipping a house. He buys",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 3,
+              "fragment": "James decides to run 3 sprints 3 times",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 4,
+              "fragment": "Every day, Wendi feeds each of her chickens three",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 5,
+              "fragment": "Kylar went to the store to buy glasses for",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 6,
+              "fragment": "Toulouse has twice as many sheep as Charleston. Charleston",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 7,
+              "fragment": "Carla is downloading a 200 GB file. Normally she",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 8,
+              "fragment": "John drives for 3 hours at a speed of",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 9,
+              "fragment": "Eliza's rate per hour for the first 40 hours",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            }
+          ]
+        },
+        "paraphrase_invariance": {
+          "status": "complete",
+          "method": "paraphrase_invariance",
+          "original_accuracy": 0.6667,
+          "paraphrase_accuracy": 0.6667,
+          "accuracy_gap": 0.0,
+          "n_samples": 15,
+          "interpretation": "Accuracy on original MMLU questions vs. the same questions with multiple-choice options deterministically reordered (correct answer moved to a different letter, question text unchanged). A large drop under reordering indicates the original score depended on matching a memorized answer-letter pattern rather than the underlying reasoning.",
+          "samples": [
+            {
+              "doc_id": 0,
+              "subject": "abstract_algebra",
+              "original_correct": false,
+              "paraphrase_correct": false
+            },
+            {
+              "doc_id": 0,
+              "subject": "abstract_algebra",
+              "original_correct": false,
+              "paraphrase_correct": false
+            },
+            {
+              "doc_id": 0,
+              "subject": "anatomy",
+              "original_correct": true,
+              "paraphrase_correct": false
+            },
+            {
+              "doc_id": 0,
+              "subject": "anatomy",
+              "original_correct": true,
+              "paraphrase_correct": false
+            },
+            {
+              "doc_id": 0,
+              "subject": "astronomy",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "astronomy",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "college_computer_science",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "college_computer_science",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "formal_logic",
+              "original_correct": false,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "formal_logic",
+              "original_correct": false,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "high_school_psychology",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "high_school_psychology",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "marketing",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "marketing",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "professional_law",
+              "original_correct": false,
+              "paraphrase_correct": false
+            }
+          ]
+        },
+        "post_cutoff_holdout": {
+          "status": "complete",
+          "method": "post_cutoff_holdout",
+          "accuracy": 0.5455,
+          "n_samples": 11,
+          "question_pack": "config/contamination_audit/post_cutoff_holdout.csv",
+          "pack_sha256": "cfe8a9ef31ebfc962d5f93c14e9a0b8aaea08fe6465aa968bb2d15d5f4a60b40",
+          "interpretation": "Accuracy on original word/logic problems written for this project on 2026-09-23 and never published anywhere before -- no model's training data can contain them by construction. Compare against this same model's gsm8k/mmlu_sample accuracy in well_known_suite_20260917.json: a public-suite score well above this holdout on comparable difficulty is the contamination research signal; a comparable score is reassuring, not proof of an uncontaminated model.",
+          "samples": [
+            {
+              "id": "pch-001",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-002",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-003",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "pch-004",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "pch-005",
+              "correct": false,
+              "target": "C",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-006",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-007",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-008",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "pch-010",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-011",
+              "correct": false,
+              "target": "A",
+              "prediction": "C"
+            },
+            {
+              "id": "pch-012",
+              "correct": false,
+              "target": "D",
+              "prediction": "C"
+            }
+          ],
+          "rescored": "2026-10-07: answer key corrected (pch-001, pch-005, pch-011), pch-009 dropped"
+        }
+      }
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4kxl-six",
+      "protocol": "v1-canary-paraphrase-postcutoff-20260923",
+      "access_profile": "sandbox",
+      "results": {
+        "canary_recall": {
+          "status": "complete",
+          "method": "canary_recall",
+          "recall_rate": 0.0,
+          "n_samples": 10,
+          "interpretation": "Fraction of held-out GSM8K test questions the model could continue verbatim from a short fragment alone. High values indicate the exact published text is present in training data, not just the underlying math skill.",
+          "source": "reports/lm_eval_runs/qwen25-72b-q4/gsm8k/x/samples_gsm8k_2026-09-18T08-44-03.829058.jsonl",
+          "samples": [
+            {
+              "doc_id": 0,
+              "fragment": "Janet’s ducks lay 16 eggs per day. She eats",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 1,
+              "fragment": "A robe takes 2 bolts of blue",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 2,
+              "fragment": "Josh decides to try flipping a house. He buys",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 3,
+              "fragment": "James decides to run 3 sprints 3 times",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 4,
+              "fragment": "Every day, Wendi feeds each of her chickens three",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 5,
+              "fragment": "Kylar went to the store to buy glasses for",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 6,
+              "fragment": "Toulouse has twice as many sheep as Charleston. Charleston",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 7,
+              "fragment": "Carla is downloading a 200 GB file. Normally she",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 8,
+              "fragment": "John drives for 3 hours at a speed of",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            },
+            {
+              "doc_id": 9,
+              "fragment": "Eliza's rate per hour for the first 40 hours",
+              "token_overlap": 0.0,
+              "verbatim_recall": false
+            }
+          ]
+        },
+        "paraphrase_invariance": {
+          "status": "complete",
+          "method": "paraphrase_invariance",
+          "original_accuracy": 0.8,
+          "paraphrase_accuracy": 0.6667,
+          "accuracy_gap": 0.1333,
+          "n_samples": 15,
+          "interpretation": "Accuracy on original MMLU questions vs. the same questions with multiple-choice options deterministically reordered (correct answer moved to a different letter, question text unchanged). A large drop under reordering indicates the original score depended on matching a memorized answer-letter pattern rather than the underlying reasoning.",
+          "samples": [
+            {
+              "doc_id": 0,
+              "subject": "abstract_algebra",
+              "original_correct": true,
+              "paraphrase_correct": false
+            },
+            {
+              "doc_id": 0,
+              "subject": "abstract_algebra",
+              "original_correct": true,
+              "paraphrase_correct": false
+            },
+            {
+              "doc_id": 0,
+              "subject": "anatomy",
+              "original_correct": true,
+              "paraphrase_correct": false
+            },
+            {
+              "doc_id": 0,
+              "subject": "anatomy",
+              "original_correct": true,
+              "paraphrase_correct": false
+            },
+            {
+              "doc_id": 0,
+              "subject": "astronomy",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "astronomy",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "college_computer_science",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "college_computer_science",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "formal_logic",
+              "original_correct": false,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "formal_logic",
+              "original_correct": false,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "high_school_psychology",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "high_school_psychology",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "marketing",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "marketing",
+              "original_correct": true,
+              "paraphrase_correct": true
+            },
+            {
+              "doc_id": 0,
+              "subject": "professional_law",
+              "original_correct": false,
+              "paraphrase_correct": false
+            }
+          ]
+        },
+        "post_cutoff_holdout": {
+          "status": "complete",
+          "method": "post_cutoff_holdout",
+          "accuracy": 0.5455,
+          "n_samples": 11,
+          "question_pack": "config/contamination_audit/post_cutoff_holdout.csv",
+          "pack_sha256": "cfe8a9ef31ebfc962d5f93c14e9a0b8aaea08fe6465aa968bb2d15d5f4a60b40",
+          "interpretation": "Accuracy on original word/logic problems written for this project on 2026-09-23 and never published anywhere before -- no model's training data can contain them by construction. Compare against this same model's gsm8k/mmlu_sample accuracy in well_known_suite_20260917.json: a public-suite score well above this holdout on comparable difficulty is the contamination research signal; a comparable score is reassuring, not proof of an uncontaminated model.",
+          "samples": [
+            {
+              "id": "pch-001",
+              "correct": false,
+              "target": "A",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-002",
+              "correct": true,
+              "target": "A",
+              "prediction": "A"
+            },
+            {
+              "id": "pch-003",
+              "correct": false,
+              "target": "C",
+              "prediction": "D"
+            },
+            {
+              "id": "pch-004",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "pch-005",
+              "correct": false,
+              "target": "C",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-006",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-007",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-008",
+              "correct": true,
+              "target": "C",
+              "prediction": "C"
+            },
+            {
+              "id": "pch-010",
+              "correct": true,
+              "target": "B",
+              "prediction": "B"
+            },
+            {
+              "id": "pch-011",
+              "correct": false,
+              "target": "A",
+              "prediction": "C"
+            },
+            {
+              "id": "pch-012",
+              "correct": false,
+              "target": "D",
+              "prediction": "C"
+            }
+          ],
+          "rescored": "2026-10-07: answer key corrected (pch-001, pch-005, pch-011), pch-009 dropped"
+        }
+      }
     }
   ]
 }
