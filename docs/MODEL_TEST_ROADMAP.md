@@ -179,12 +179,18 @@ context). Throughput comes from `omp bench` as a distribution
 
 | Provider key | Models | Smoke test | Full suite |
 |---|---|---|---|
-| `omp-zai` | glm-5.3-flash, glm-5.3 | pass | glm-5.3-flash done (`cloud-omp-zai-glm-5.3-flash`); glm-5.3 running |
-| `omp-openai-codex` | gpt-6-luna, gpt-6-astra, gpt-6-sol | pass | gpt-6-sol: composite 0.9505 (`cloud-omp-openai-codex-gpt-6-sol`); luna and astra re-queued |
+| `omp-zai` | glm-5.3-flash, glm-5.3 | pass | both done: 0.9466 and 0.9436 |
+| `omp-openai-codex` | gpt-6-luna, gpt-6-astra, gpt-6-sol | pass | gpt-6-sol 0.9505, gpt-6-luna 0.9257; astra running |
 | `omp-google` | gemini-3.8-flash | pass | done (`cloud-omp-google-gemini-3.8-flash`) |
 | github-copilot | all tried | 400 "model not supported" | not registered |
 | google-antigravity | gemini-3.8-flash | omp: unhandled API mapping | not registered |
 | grok-build | grok-4.5 | no answer (not signed in) | not registered |
+
+All five omp rows measured so far (0.9257 to 0.9658) are statistically tied
+with each other and with the best local row; the public composite no longer
+separates frontier cloud models from Qwen3.8 Flash-Next on this sample size.
+On the finance lane GLM-5.3 and GPT-6 Luna answer 24 of 24, which with 24
+items bounds the true rate above 86%, not at 100%.
 
 GLM-5.3-Flash as served by Z.ai scores composite 0.9466, against 0.8861 for
 the local REAP50 IQ4_XS quant and 0.6024 for AJ-IQ2_XXS: the first measured
