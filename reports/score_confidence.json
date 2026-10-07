@@ -2,7 +2,7 @@
   "method": "Wilson 95% per component; composite SE from Agresti-Coull binomial variances; unpaired z-test against the profile leader (conservative, see module docstring)",
   "protocol": "v4-mmlu-fewshot-20260918",
   "source_sha256": {
-    "well_known_suite_20260917.json": "bee6a65c3135b631b232f5e05e547f50837181cb1c6274b4181ac2b08ab1846d",
+    "well_known_suite_20260917.json": "60e5be446f0e2c34dd78b4806f81f1bb68aaf23e8d69797cbf765ab3f4ae5dc1",
     "specialist_suite_20260922.json": "f37638905cb8cdf5c7b3a566f0354708e75cae8979c7033cb51cb7414d3603c5"
   },
   "min_items_for_perfect_score_claim": {
@@ -11,6 +11,52 @@
   },
   "well_known": {
     "sandbox": [
+      {
+        "model": "cloud-omp-google-gemini-3.8-flash",
+        "composite": 0.9658,
+        "standard_error": 0.0161,
+        "ci95": [
+          0.9343,
+          0.9973
+        ],
+        "components": {
+          "gsm8k": {
+            "accuracy": 0.98,
+            "n": 50,
+            "ci95": [
+              0.895,
+              0.9965
+            ]
+          },
+          "bbh": {
+            "accuracy": 0.9583,
+            "n": 48,
+            "ci95": [
+              0.8602,
+              0.9885
+            ]
+          },
+          "mmlu": {
+            "accuracy": 0.95,
+            "n": 160,
+            "ci95": [
+              0.9044,
+              0.9744
+            ]
+          },
+          "humaneval": {
+            "accuracy": 0.975,
+            "n": 40,
+            "ci95": [
+              0.8712,
+              0.9956
+            ]
+          }
+        },
+        "rank": 1,
+        "z_vs_leader": 0.0,
+        "tied_with_leader": true
+      },
       {
         "model": "cloud-antigravity-gemini-gemini-3.8-flash",
         "composite": 0.9622,
@@ -53,8 +99,8 @@
             ]
           }
         },
-        "rank": 1,
-        "z_vs_leader": 0.0,
+        "rank": 2,
+        "z_vs_leader": 0.16,
         "tied_with_leader": true
       },
       {
@@ -99,8 +145,8 @@
             ]
           }
         },
-        "rank": 2,
-        "z_vs_leader": 0.12,
+        "rank": 3,
+        "z_vs_leader": 0.28,
         "tied_with_leader": true
       },
       {
@@ -145,8 +191,8 @@
             ]
           }
         },
-        "rank": 3,
-        "z_vs_leader": 0.49,
+        "rank": 4,
+        "z_vs_leader": 0.64,
         "tied_with_leader": true
       },
       {
@@ -191,8 +237,8 @@
             ]
           }
         },
-        "rank": 4,
-        "z_vs_leader": 0.66,
+        "rank": 5,
+        "z_vs_leader": 0.82,
         "tied_with_leader": true
       },
       {
@@ -237,8 +283,8 @@
             ]
           }
         },
-        "rank": 5,
-        "z_vs_leader": 1.41,
+        "rank": 6,
+        "z_vs_leader": 1.57,
         "tied_with_leader": true
       },
       {
@@ -283,8 +329,8 @@
             ]
           }
         },
-        "rank": 6,
-        "z_vs_leader": 1.54,
+        "rank": 7,
+        "z_vs_leader": 1.7,
         "tied_with_leader": true
       },
       {
@@ -329,8 +375,8 @@
             ]
           }
         },
-        "rank": 7,
-        "z_vs_leader": 1.65,
+        "rank": 8,
+        "z_vs_leader": 1.82,
         "tied_with_leader": true
       },
       {
@@ -375,8 +421,8 @@
             ]
           }
         },
-        "rank": 8,
-        "z_vs_leader": 1.71,
+        "rank": 9,
+        "z_vs_leader": 1.88,
         "tied_with_leader": true
       },
       {
@@ -421,8 +467,8 @@
             ]
           }
         },
-        "rank": 9,
-        "z_vs_leader": 1.72,
+        "rank": 10,
+        "z_vs_leader": 1.88,
         "tied_with_leader": true
       },
       {
@@ -467,8 +513,8 @@
             ]
           }
         },
-        "rank": 10,
-        "z_vs_leader": 1.76,
+        "rank": 11,
+        "z_vs_leader": 1.93,
         "tied_with_leader": true
       },
       {
@@ -513,8 +559,8 @@
             ]
           }
         },
-        "rank": 11,
-        "z_vs_leader": 1.77,
+        "rank": 12,
+        "z_vs_leader": 1.93,
         "tied_with_leader": true
       },
       {
@@ -559,9 +605,9 @@
             ]
           }
         },
-        "rank": 12,
-        "z_vs_leader": 1.95,
-        "tied_with_leader": true
+        "rank": 13,
+        "z_vs_leader": 2.12,
+        "tied_with_leader": false
       },
       {
         "model": "deepseek-v4-flash-0731-iq3xxs",
@@ -605,8 +651,8 @@
             ]
           }
         },
-        "rank": 13,
-        "z_vs_leader": 2.03,
+        "rank": 14,
+        "z_vs_leader": 2.19,
         "tied_with_leader": false
       },
       {
@@ -651,8 +697,8 @@
             ]
           }
         },
-        "rank": 14,
-        "z_vs_leader": 2.12,
+        "rank": 15,
+        "z_vs_leader": 2.29,
         "tied_with_leader": false
       },
       {
@@ -697,8 +743,8 @@
             ]
           }
         },
-        "rank": 15,
-        "z_vs_leader": 2.39,
+        "rank": 16,
+        "z_vs_leader": 2.55,
         "tied_with_leader": false
       },
       {
@@ -743,8 +789,8 @@
             ]
           }
         },
-        "rank": 16,
-        "z_vs_leader": 2.42,
+        "rank": 17,
+        "z_vs_leader": 2.59,
         "tied_with_leader": false
       },
       {
@@ -789,8 +835,8 @@
             ]
           }
         },
-        "rank": 17,
-        "z_vs_leader": 2.56,
+        "rank": 18,
+        "z_vs_leader": 2.72,
         "tied_with_leader": false
       },
       {
@@ -835,8 +881,8 @@
             ]
           }
         },
-        "rank": 18,
-        "z_vs_leader": 3.01,
+        "rank": 19,
+        "z_vs_leader": 3.19,
         "tied_with_leader": false
       },
       {
@@ -881,8 +927,8 @@
             ]
           }
         },
-        "rank": 19,
-        "z_vs_leader": 2.81,
+        "rank": 20,
+        "z_vs_leader": 2.97,
         "tied_with_leader": false
       },
       {
@@ -927,8 +973,8 @@
             ]
           }
         },
-        "rank": 20,
-        "z_vs_leader": 2.98,
+        "rank": 21,
+        "z_vs_leader": 3.15,
         "tied_with_leader": false
       },
       {
@@ -973,8 +1019,8 @@
             ]
           }
         },
-        "rank": 21,
-        "z_vs_leader": 3.32,
+        "rank": 22,
+        "z_vs_leader": 3.48,
         "tied_with_leader": false
       },
       {
@@ -1019,8 +1065,8 @@
             ]
           }
         },
-        "rank": 22,
-        "z_vs_leader": 3.42,
+        "rank": 23,
+        "z_vs_leader": 3.58,
         "tied_with_leader": false
       },
       {
@@ -1065,8 +1111,8 @@
             ]
           }
         },
-        "rank": 23,
-        "z_vs_leader": 3.68,
+        "rank": 24,
+        "z_vs_leader": 3.85,
         "tied_with_leader": false
       },
       {
@@ -1111,8 +1157,8 @@
             ]
           }
         },
-        "rank": 24,
-        "z_vs_leader": 3.94,
+        "rank": 25,
+        "z_vs_leader": 4.11,
         "tied_with_leader": false
       },
       {
@@ -1157,8 +1203,8 @@
             ]
           }
         },
-        "rank": 25,
-        "z_vs_leader": 4.09,
+        "rank": 26,
+        "z_vs_leader": 4.27,
         "tied_with_leader": false
       },
       {
@@ -1203,8 +1249,8 @@
             ]
           }
         },
-        "rank": 26,
-        "z_vs_leader": 4.23,
+        "rank": 27,
+        "z_vs_leader": 4.4,
         "tied_with_leader": false
       },
       {
@@ -1249,8 +1295,8 @@
             ]
           }
         },
-        "rank": 27,
-        "z_vs_leader": 4.26,
+        "rank": 28,
+        "z_vs_leader": 4.44,
         "tied_with_leader": false
       },
       {
@@ -1295,8 +1341,8 @@
             ]
           }
         },
-        "rank": 28,
-        "z_vs_leader": 4.79,
+        "rank": 29,
+        "z_vs_leader": 4.96,
         "tied_with_leader": false
       },
       {
@@ -1341,8 +1387,8 @@
             ]
           }
         },
-        "rank": 29,
-        "z_vs_leader": 5.07,
+        "rank": 30,
+        "z_vs_leader": 5.24,
         "tied_with_leader": false
       },
       {
@@ -1387,8 +1433,8 @@
             ]
           }
         },
-        "rank": 30,
-        "z_vs_leader": 4.99,
+        "rank": 31,
+        "z_vs_leader": 5.16,
         "tied_with_leader": false
       },
       {
@@ -1433,8 +1479,8 @@
             ]
           }
         },
-        "rank": 31,
-        "z_vs_leader": 5.24,
+        "rank": 32,
+        "z_vs_leader": 5.41,
         "tied_with_leader": false
       },
       {
@@ -1479,8 +1525,8 @@
             ]
           }
         },
-        "rank": 32,
-        "z_vs_leader": 5.62,
+        "rank": 33,
+        "z_vs_leader": 5.79,
         "tied_with_leader": false
       },
       {
@@ -1525,8 +1571,8 @@
             ]
           }
         },
-        "rank": 33,
-        "z_vs_leader": 6.19,
+        "rank": 34,
+        "z_vs_leader": 6.39,
         "tied_with_leader": false
       },
       {
@@ -1571,8 +1617,8 @@
             ]
           }
         },
-        "rank": 34,
-        "z_vs_leader": 6.57,
+        "rank": 35,
+        "z_vs_leader": 6.75,
         "tied_with_leader": false
       },
       {
@@ -1617,8 +1663,8 @@
             ]
           }
         },
-        "rank": 35,
-        "z_vs_leader": 6.34,
+        "rank": 36,
+        "z_vs_leader": 6.51,
         "tied_with_leader": false
       },
       {
@@ -1663,8 +1709,8 @@
             ]
           }
         },
-        "rank": 36,
-        "z_vs_leader": 7.42,
+        "rank": 37,
+        "z_vs_leader": 7.58,
         "tied_with_leader": false
       },
       {
@@ -1709,8 +1755,8 @@
             ]
           }
         },
-        "rank": 37,
-        "z_vs_leader": 8.45,
+        "rank": 38,
+        "z_vs_leader": 8.64,
         "tied_with_leader": false
       },
       {
@@ -1755,8 +1801,8 @@
             ]
           }
         },
-        "rank": 38,
-        "z_vs_leader": 11.76,
+        "rank": 39,
+        "z_vs_leader": 12.04,
         "tied_with_leader": false
       },
       {
@@ -1801,8 +1847,8 @@
             ]
           }
         },
-        "rank": 39,
-        "z_vs_leader": 11.17,
+        "rank": 40,
+        "z_vs_leader": 11.39,
         "tied_with_leader": false
       },
       {
@@ -1847,8 +1893,8 @@
             ]
           }
         },
-        "rank": 40,
-        "z_vs_leader": 12.62,
+        "rank": 41,
+        "z_vs_leader": 12.88,
         "tied_with_leader": false
       },
       {
@@ -1893,8 +1939,8 @@
             ]
           }
         },
-        "rank": 41,
-        "z_vs_leader": 12.36,
+        "rank": 42,
+        "z_vs_leader": 12.61,
         "tied_with_leader": false
       },
       {
@@ -1939,8 +1985,8 @@
             ]
           }
         },
-        "rank": 42,
-        "z_vs_leader": 10.67,
+        "rank": 43,
+        "z_vs_leader": 10.84,
         "tied_with_leader": false
       },
       {
@@ -1985,8 +2031,8 @@
             ]
           }
         },
-        "rank": 43,
-        "z_vs_leader": 10.74,
+        "rank": 44,
+        "z_vs_leader": 10.91,
         "tied_with_leader": false
       },
       {
@@ -2031,8 +2077,8 @@
             ]
           }
         },
-        "rank": 44,
-        "z_vs_leader": 11.62,
+        "rank": 45,
+        "z_vs_leader": 11.8,
         "tied_with_leader": false
       },
       {
@@ -2077,8 +2123,8 @@
             ]
           }
         },
-        "rank": 45,
-        "z_vs_leader": 13.93,
+        "rank": 46,
+        "z_vs_leader": 14.17,
         "tied_with_leader": false
       },
       {
@@ -2123,8 +2169,8 @@
             ]
           }
         },
-        "rank": 46,
-        "z_vs_leader": 14.11,
+        "rank": 47,
+        "z_vs_leader": 14.33,
         "tied_with_leader": false
       },
       {
@@ -2169,8 +2215,8 @@
             ]
           }
         },
-        "rank": 47,
-        "z_vs_leader": 16.62,
+        "rank": 48,
+        "z_vs_leader": 16.86,
         "tied_with_leader": false
       },
       {
@@ -2215,8 +2261,8 @@
             ]
           }
         },
-        "rank": 48,
-        "z_vs_leader": 18.16,
+        "rank": 49,
+        "z_vs_leader": 18.39,
         "tied_with_leader": false
       }
     ]
@@ -2224,8 +2270,17 @@
   "humaneval_paired": {
     "sandbox": [
       {
+        "model": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
         "model": "cloud-antigravity-gemini-gemini-3.6-flash",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2234,7 +2289,7 @@
       },
       {
         "model": "cloud-omp-openai-codex-gpt-6-sol",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 1,
@@ -2243,7 +2298,7 @@
       },
       {
         "model": "cloud-antigravity-gemini-gemini-3.5-flash",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2252,7 +2307,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-q4kxl-v100",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2261,7 +2316,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq2s-allfour",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2270,7 +2325,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-q4kxl-allfour",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2279,7 +2334,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq4xs-v100",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2288,7 +2343,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq2s-ada4",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2297,7 +2352,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq4xs-allfour",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2306,7 +2361,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-q4km-allfour",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2315,7 +2370,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq2s-v100",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2324,7 +2379,7 @@
       },
       {
         "model": "deepseek-v4-flash-0731-iq3xxs",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 1,
@@ -2333,7 +2388,7 @@
       },
       {
         "model": "kat-coder-v2.5-dev",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2342,7 +2397,7 @@
       },
       {
         "model": "qwen35-122b-a10b-iq3s",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2351,7 +2406,7 @@
       },
       {
         "model": "mom-live-1p",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2360,7 +2415,7 @@
       },
       {
         "model": "mom-live-2p",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2369,7 +2424,7 @@
       },
       {
         "model": "glm53-reap50-iq4xs-v100ada",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 1,
@@ -2378,7 +2433,7 @@
       },
       {
         "model": "mom-live-4",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2387,7 +2442,7 @@
       },
       {
         "model": "mom-live-glm53",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 2,
         "model_only_pass": 0,
@@ -2396,7 +2451,7 @@
       },
       {
         "model": "mom-qwen35-agg",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 6,
         "model_only_pass": 0,
@@ -2405,7 +2460,7 @@
       },
       {
         "model": "mom-live-4-q36",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 4,
         "model_only_pass": 0,
@@ -2414,7 +2469,7 @@
       },
       {
         "model": "llama3-70b-instruct-q4",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2423,7 +2478,7 @@
       },
       {
         "model": "qwen38-27b-q4",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2432,7 +2487,7 @@
       },
       {
         "model": "granite-4.2-30b",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 2,
         "model_only_pass": 0,
@@ -2441,7 +2496,7 @@
       },
       {
         "model": "glm53-reap50-iq3m-v100",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 3,
         "model_only_pass": 0,
@@ -2450,7 +2505,7 @@
       },
       {
         "model": "qwen36-35b-a3b-nvfp4",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2459,7 +2514,7 @@
       },
       {
         "model": "nemotron35-lightning-30b-a3b",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2468,7 +2523,7 @@
       },
       {
         "model": "devstral-small2-24b-q4",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2477,7 +2532,7 @@
       },
       {
         "model": "mistral-small4-119b-q4-adaa4000",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2486,7 +2541,7 @@
       },
       {
         "model": "glm53-reap50-iq3m-allfour",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 5,
         "model_only_pass": 0,
@@ -2495,7 +2550,7 @@
       },
       {
         "model": "mimo-v26-pro-bpw2.5",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 20,
         "model_only_pass": 0,
@@ -2504,7 +2559,7 @@
       },
       {
         "model": "deepseek-v4-flash-reap150b-q2k-adaa4000",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 3,
         "model_only_pass": 0,
@@ -2513,7 +2568,7 @@
       },
       {
         "model": "qwen35-27b-q4",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 2,
         "model_only_pass": 0,
@@ -2522,7 +2577,7 @@
       },
       {
         "model": "qwen25-72b-q4",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2531,7 +2586,7 @@
       },
       {
         "model": "command-r-plus-104b-0824-iq3m",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 18,
         "model_only_pass": 0,
@@ -2540,7 +2595,7 @@
       },
       {
         "model": "mom-gemma4-agg",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2549,7 +2604,7 @@
       },
       {
         "model": "gemma4-26b-a4b-q4",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2558,7 +2613,7 @@
       },
       {
         "model": "mixtral-8x22b-instruct-q3ks",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 34,
         "model_only_pass": 0,
@@ -2567,7 +2622,7 @@
       },
       {
         "model": "llama31-70b-instruct-q4",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 39,
         "model_only_pass": 0,
@@ -2576,7 +2631,7 @@
       },
       {
         "model": "glm53-flash-aj-iq2xxs",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 37,
         "model_only_pass": 0,
@@ -2585,7 +2640,7 @@
       },
       {
         "model": "gpt-oss-120b-q4",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 19,
         "model_only_pass": 0,
@@ -2594,7 +2649,7 @@
       },
       {
         "model": "mom-live-4-tp2",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 17,
         "model_only_pass": 0,
@@ -2603,7 +2658,7 @@
       },
       {
         "model": "gpt-oss-20b-q4",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 18,
         "model_only_pass": 0,
@@ -2612,7 +2667,7 @@
       },
       {
         "model": "deepseek-r1-qwen32b-q4",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 37,
         "model_only_pass": 0,
@@ -2621,7 +2676,7 @@
       },
       {
         "model": "wizardlm2-8x22b-iq3s",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 36,
         "model_only_pass": 0,
@@ -2630,7 +2685,7 @@
       },
       {
         "model": "muse-glimmer-30b",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 36,
         "model_only_pass": 0,
@@ -2639,7 +2694,7 @@
       },
       {
         "model": "qwen38-1cat-vllm-target",
-        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-google-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 30,
         "model_only_pass": 0,

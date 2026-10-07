@@ -1,0 +1,173 @@
+{
+  "suite": "cloud CLI throughput (omp bench, chat profile)",
+  "results": [
+    {
+      "model": "cloud-omp-google-gemini-3.8-flash",
+      "selector": "google/gemini-3.8-flash",
+      "profile": "chat",
+      "requests": 10,
+      "failed_requests": 0,
+      "decode_tokens_per_second": {
+        "min": 83.3,
+        "p50": 94.16,
+        "p95": 702.46,
+        "max": 702.46
+      },
+      "end_to_end_tokens_per_second": {
+        "min": 42.29,
+        "p50": 69.92,
+        "p95": 83.33,
+        "max": 83.33
+      },
+      "time_to_first_token_ms": {
+        "min": 1615,
+        "p50": 2898,
+        "p95": 6333,
+        "max": 6333
+      },
+      "mean_output_tokens": 508,
+      "measured_at": "2026-10-07T14:28:06+00:00",
+      "omp_version": "omp/18.6.1"
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-luna",
+      "selector": "openai-codex/gpt-6-luna",
+      "profile": "chat",
+      "requests": 10,
+      "failed_requests": 0,
+      "decode_tokens_per_second": {
+        "min": 52.85,
+        "p50": 82.91,
+        "p95": 103.89,
+        "max": 103.89
+      },
+      "end_to_end_tokens_per_second": {
+        "min": 44.44,
+        "p50": 61.79,
+        "p95": 85.48,
+        "max": 85.48
+      },
+      "time_to_first_token_ms": {
+        "min": 1526,
+        "p50": 2029,
+        "p95": 3999,
+        "max": 3999
+      },
+      "mean_output_tokens": 657.5,
+      "measured_at": "2026-10-07T14:28:38+00:00",
+      "omp_version": "omp/18.6.1"
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-astra",
+      "selector": "openai-codex/gpt-6-astra",
+      "profile": "chat",
+      "requests": 10,
+      "failed_requests": 0,
+      "decode_tokens_per_second": {
+        "min": 18.24,
+        "p50": 21.39,
+        "p95": 28.38,
+        "max": 28.38
+      },
+      "end_to_end_tokens_per_second": {
+        "min": 17.84,
+        "p50": 20.06,
+        "p95": 25.33,
+        "max": 25.33
+      },
+      "time_to_first_token_ms": {
+        "min": 2152,
+        "p50": 3915,
+        "p95": 9841,
+        "max": 9841
+      },
+      "mean_output_tokens": 1567.2,
+      "measured_at": "2026-10-07T14:32:15+00:00",
+      "omp_version": "omp/18.6.1"
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-sol",
+      "selector": "openai-codex/gpt-6-sol",
+      "profile": "chat",
+      "requests": 10,
+      "failed_requests": 0,
+      "decode_tokens_per_second": {
+        "min": 32.67,
+        "p50": 44.16,
+        "p95": 74.47,
+        "max": 74.47
+      },
+      "end_to_end_tokens_per_second": {
+        "min": 30.58,
+        "p50": 36.92,
+        "p95": 43.29,
+        "max": 43.29
+      },
+      "time_to_first_token_ms": {
+        "min": 1675,
+        "p50": 4525,
+        "p95": 9160,
+        "max": 9160
+      },
+      "mean_output_tokens": 824.7,
+      "measured_at": "2026-10-07T14:33:32+00:00",
+      "omp_version": "omp/18.6.1"
+    },
+    {
+      "model": "cloud-omp-zai-glm-5.3-flash",
+      "selector": "zai/glm-5.3-flash",
+      "profile": "chat",
+      "requests": 10,
+      "failed_requests": 0,
+      "decode_tokens_per_second": {
+        "min": 43.41,
+        "p50": 46.48,
+        "p95": 52.81,
+        "max": 52.81
+      },
+      "end_to_end_tokens_per_second": {
+        "min": 32.34,
+        "p50": 35.05,
+        "p95": 37.67,
+        "max": 37.67
+      },
+      "time_to_first_token_ms": {
+        "min": 3031,
+        "p50": 3372,
+        "p95": 4368,
+        "max": 4368
+      },
+      "mean_output_tokens": 512,
+      "measured_at": "2026-10-07T14:34:17+00:00",
+      "omp_version": "omp/18.6.1"
+    },
+    {
+      "model": "cloud-omp-zai-glm-5.3",
+      "selector": "zai/glm-5.3",
+      "profile": "chat",
+      "requests": 10,
+      "failed_requests": 0,
+      "decode_tokens_per_second": {
+        "min": 46.65,
+        "p50": 59.78,
+        "p95": 72.23,
+        "max": 72.23
+      },
+      "end_to_end_tokens_per_second": {
+        "min": 39.17,
+        "p50": 49.83,
+        "p95": 58.59,
+        "max": 58.59
+      },
+      "time_to_first_token_ms": {
+        "min": 2749,
+        "p50": 3114,
+        "p95": 6666,
+        "max": 6666
+      },
+      "mean_output_tokens": 959.1,
+      "measured_at": "2026-10-07T14:35:11+00:00",
+      "omp_version": "omp/18.6.1"
+    }
+  ]
+}

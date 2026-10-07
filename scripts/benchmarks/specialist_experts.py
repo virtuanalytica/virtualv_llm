@@ -19,6 +19,7 @@ from __future__ import annotations
 import argparse
 import json
 import tempfile
+import time
 from pathlib import Path
 from typing import Callable
 from urllib.request import Request, urlopen
@@ -99,14 +100,25 @@ def video_expert(complete: Complete, trace: list | None = None) -> Complete:
     return expert
 
 
-def http_complete(base_url: str, model: str, timeout: int = 600) -> Complete:
+def http_complete(base_url: str, model: str, timeout: int = 600, attempts: int = 4,
+                  backoff_sec: float = 20.0) -> Complete:
+    """Chat completion with retries: one transient provider error (a 502 on
+    2026-10-07) must not discard a run of several hundred requests. A request
+    that keeps failing still raises; it is never scored as a wrong answer."""
     def complete(prompt: str, max_tokens: int) -> str:
         body = json.dumps({"model": model, "messages": [{"role": "user", "content": prompt}],
                            "max_tokens": max_tokens, "temperature": 0}).encode()
-        request = Request(f"{base_url.rstrip('/')}/v1/chat/completions", data=body,
-                          headers={"Content-Type": "application/json"})
-        with urlopen(request, timeout=timeout) as response:
-            return json.loads(response.read())["choices"][0]["message"]["content"] or ""
+        for attempt in range(1, attempts + 1):
+            request = Request(f"{base_url.rstrip('/')}/v1/chat/completions", data=body,
+                              headers={"Content-Type": "application/json"})
+            try:
+                with urlopen(request, timeout=timeout) as response:
+                    return json.loads(response.read())["choices"][0]["message"]["content"] or ""
+            except OSError:  # URLError, HTTPError and socket timeouts
+                if attempt == attempts:
+                    raise
+                time.sleep(backoff_sec * attempt)
+        raise AssertionError("unreachable")
     return complete
 
 
