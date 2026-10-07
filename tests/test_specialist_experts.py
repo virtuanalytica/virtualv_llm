@@ -74,3 +74,28 @@ def test_video_expert_gives_up_after_the_round_limit():
     rounds = []
     experts.video_expert(complete, rounds)("Return only a filter_complex expression.", 512)
     assert rounds == [experts.MAX_ROUNDS] and len(prompts) == experts.MAX_ROUNDS
+
+
+def test_parametric_fq_pack_is_fixed_and_every_target_is_reachable():
+    rows = experts.fq_parametric_rows()
+    assert len(rows) == 73 and rows == experts.fq_parametric_rows()
+    assert len({(r["target_x_m"], r["target_y_m"], r["target_heading_deg"], r["wheel_radius_m"],
+                 r["wheelbase_m"]) for r in rows}) == 73
+    committed = experts.read_pack(experts.FQ_PACK_V2)
+    assert committed == rows
+
+    def solver(prompt, max_tokens):
+        # Closed-form command for the single arc or segment the task describes.
+        row = next(r for r in rows if r["prompt"] in prompt)
+        radius, base = float(row["wheel_radius_m"]), float(row["wheelbase_m"])
+        x, y, heading = float(row["target_x_m"]), float(row["target_y_m"]), math.radians(float(row["target_heading_deg"]))
+        duration = 5.0
+        if heading == 0:
+            speed, omega = x / duration, 0.0
+        else:
+            omega = heading / duration
+            speed = omega * x / math.sin(heading)
+        return json.dumps({"left_rad_s": (speed - omega * base / 2) / radius,
+                           "right_rad_s": (speed + omega * base / 2) / radius, "duration_s": duration})
+
+    assert suite._run_fq(solver, rows)["accuracy"] == 1.0

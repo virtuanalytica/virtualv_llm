@@ -110,18 +110,78 @@ def http_complete(base_url: str, model: str, timeout: int = 600) -> Complete:
     return complete
 
 
-def run(name: str, complete: Complete, out: Path = OUT) -> dict:
+FQ_PACK_V2 = suite.PACK_DIR / "fq_v2_parametric.csv"
+FQ_COLUMNS = ("id", "discipline", "enabled", "prompt", "wheel_radius_m", "wheelbase_m", "target_x_m",
+              "target_y_m", "target_heading_deg", "max_duration_s", "tolerance", "author", "created_date", "notes")
+
+
+def fq_parametric_rows(count: int = 73, seed: int = 20261007) -> list[dict[str, str]]:
+    """Reachable differential-drive targets with exact ground truth.
+
+    Each target is one straight segment or one circular arc from the origin,
+    so a single (left, right, duration) command reaches it; the scorer's own
+    simulator decides. 73 is the smallest pack on which a perfect score has a
+    95% Wilson lower bound of 0.95. The seed fixes the pack.
+    """
+    import math
+    import random
+
+    rng, rows, seen = random.Random(seed), [], set()
+    while len(rows) < count:
+        radius, base = rng.choice((0.04, 0.05, 0.06, 0.08)), rng.choice((0.25, 0.30, 0.40))
+        if rng.random() < 0.2:
+            x, y, heading = round(rng.uniform(0.3, 2.0), 2), 0.0, 0
+        else:
+            arc, heading = round(rng.uniform(0.3, 1.2), 2), rng.choice((-150, -120, -90, -60, -30, 30, 60, 90, 120, 150))
+            theta = math.radians(heading)
+            x, y = round(arc * math.sin(abs(theta)), 2), round(math.copysign(arc * (1 - math.cos(theta)), heading), 2)
+        if (x, y, heading, radius, base) in seen:
+            continue
+        seen.add((x, y, heading, radius, base))
+        rows.append(dict(zip(FQ_COLUMNS, (
+            f"fq2-{len(rows) + 1:03d}", "fq", "true",
+            f"A differential-drive robot starts at (0 0) heading 0 degrees. Wheel radius is {radius:.2f} m and "
+            f"wheelbase is {base:.2f} m. Select actuator velocities and duration to reach approximately "
+            f"({x:.2f} {y:.2f}) at heading {heading} degrees.",
+            f"{radius:.2f}", f"{base:.2f}", f"{x:.2f}", f"{y:.2f}", str(heading), "10", "0.04",
+            "EDS generator", "2026-10-07", f"parametric, seed {seed}"))))
+    return rows
+
+
+def write_fq_pack(path: Path = FQ_PACK_V2) -> None:
+    import csv
+    with path.open("w", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=FQ_COLUMNS)
+        writer.writeheader()
+        writer.writerows(fq_parametric_rows())
+
+
+def read_pack(path: Path) -> list[dict[str, str]]:
+    import csv
+    with path.open(newline="") as handle:
+        return [row for row in csv.DictReader(handle) if row["enabled"].strip().lower() == "true"]
+
+
+def run(name: str, complete: Complete, out: Path = OUT, fq_pack: Path | None = None, video: bool = True) -> dict:
     """Score bare model and expert on the same FQ and video items."""
+    import hashlib
+    fq_rows = read_pack(fq_pack) if fq_pack else None
     fq_rounds: list[int] = []
     video_rounds: list[int] = []
     result = {
-        "model": name, "protocol": suite.PROTOCOL, "max_rounds": MAX_ROUNDS,
-        "bare": {"fq": suite._run_fq(complete), "video": suite._run_video(complete)},
-        "expert": {"fq": suite._run_fq(fq_expert(complete, fq_rounds)),
-                   "video": suite._run_video(video_expert(complete, video_rounds))},
+        "model": name if not fq_pack else f"{name}@{fq_pack.stem}", "protocol": suite.PROTOCOL,
+        "max_rounds": MAX_ROUNDS,
+        "bare": {"fq": suite._run_fq(complete, fq_rows)},
+        "expert": {"fq": suite._run_fq(fq_expert(complete, fq_rounds), fq_rows)},
         # Rounds actually used per item: the cost side of the expert's score.
-        "expert_rounds": {"fq": fq_rounds, "video": video_rounds},
+        "expert_rounds": {"fq": fq_rounds},
     }
+    if fq_pack:
+        result["fq_pack"] = {"file": fq_pack.name, "sha256": hashlib.sha256(fq_pack.read_bytes()).hexdigest()}
+    if video:
+        result["bare"]["video"] = suite._run_video(complete)
+        result["expert"]["video"] = suite._run_video(video_expert(complete, video_rounds))
+        result["expert_rounds"]["video"] = video_rounds
     upsert_result(out, result, {"suite": "specialist tool experts (bare vs expert, same items)", "results": []})
     return result
 
@@ -132,9 +192,11 @@ def main() -> int:
     parser.add_argument("--url", required=True, help="server root of an OpenAI-compatible endpoint")
     parser.add_argument("--served-model", required=True)
     parser.add_argument("--out", type=Path, default=OUT)
+    parser.add_argument("--fq-pack", type=Path, help="score FQ on this pack instead of the starter pack")
+    parser.add_argument("--no-video", action="store_true")
     args = parser.parse_args()
-    result = run(args.name, http_complete(args.url, args.served_model), args.out)
-    for lane in ("fq", "video"):
+    result = run(args.name, http_complete(args.url, args.served_model), args.out, args.fq_pack, not args.no_video)
+    for lane in result["bare"]:
         bare, expert = result["bare"][lane], result["expert"][lane]
         print(f"{lane}: bare {bare.get('accuracy')} -> expert {expert.get('accuracy')} "
               f"(n={expert.get('n_samples')}, rounds {result['expert_rounds'][lane]})")
