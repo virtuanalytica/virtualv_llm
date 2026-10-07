@@ -30,8 +30,9 @@ strict contribution protocol, and cloud models measured through one CLI.
   `ada4`, `v100pair` and `six`; the Q4_K_M and Q4_K_XL quants are candidates
   again.
 - **Tool experts for the FQ and video lanes** and a 73-item parametric FQ
-  pack: GLM-5.3-Flash goes from 35 of 73 bare to 65 of 73 with the simulator
-  loop (v2 pack; v3 states the duration limit in the task text).
+  pack: with the duration limit stated in the task (v3), GLM-5.3-Flash goes
+  from 31 of 73 bare to 70 of 73 with the simulator loop (v2, limit unstated:
+  35 to 65).
 
 ### Fixed
 

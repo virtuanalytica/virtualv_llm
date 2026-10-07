@@ -231,8 +231,12 @@ p < 0.0001), at 2 or 3 model calls per item instead of 1. Of the bare
 model's 38 misses, 31 were unparseable output and 7 a wrong pose. Of the
 expert's 8 misses, 6 reached the pose within tolerance but took longer than
 the 10 s limit, which the task text does not state; 2 were a wrong pose. The
-next pack version states the limit in the prompt. The lane is not at 100%,
-and 89% on one model is not yet a claim about the mixture.
+next pack version states the limit in the prompt.
+
+Pack v3 (`fq_v3_parametric.csv`, same 73 targets, limit stated): bare 31 of
+73 (42%, 31% to 54%), with the expert 70 of 73 (96%, 89% to 99%); paired, 41
+fixed and 2 broken. The three remaining misses are wrong poses. The lane is
+not at 100%, and one model is not yet a claim about the mixture.
 
 ## 2026-10-07: disk freed for the Flash-Next runs
 
