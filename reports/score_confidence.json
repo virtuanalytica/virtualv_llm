@@ -2,8 +2,8 @@
   "method": "Wilson 95% per component; composite SE from Agresti-Coull binomial variances; unpaired z-test against the profile leader (conservative, see module docstring)",
   "protocol": "v4-mmlu-fewshot-20260918",
   "source_sha256": {
-    "well_known_suite_20260917.json": "4f442d67a7840d895742ab55519897ef161745a724301581f456739bc51024c3",
-    "specialist_suite_20260922.json": "72bcaf8f1bfcdff17a4b5498fc8617069bc294d94440d5bfbf750d7784dff756"
+    "well_known_suite_20260917.json": "1fa8013af1bc8a98890725b5ecdf498347974ffb03ec30085c6f34542cc0c2db",
+    "specialist_suite_20260922.json": "c26f04433128cddbc2233971e3f6d98f91a93fba2cb3947187ec8029170fed5c"
   },
   "min_items_for_perfect_score_claim": {
     "lower_bound_0.90": 35,
@@ -2770,6 +2770,52 @@
         "rank": 60,
         "z_vs_leader": 19.32,
         "tied_with_leader": false
+      },
+      {
+        "model": "qwen38-27b-quasar-nvfp4-1cat-tp2",
+        "composite": 0.3357,
+        "standard_error": 0.0299,
+        "ci95": [
+          0.277,
+          0.3944
+        ],
+        "components": {
+          "gsm8k": {
+            "accuracy": 0.32,
+            "n": 50,
+            "ci95": [
+              0.2076,
+              0.4581
+            ]
+          },
+          "bbh": {
+            "accuracy": 0.3542,
+            "n": 48,
+            "ci95": [
+              0.2344,
+              0.4956
+            ]
+          },
+          "mmlu": {
+            "accuracy": 0.4437,
+            "n": 160,
+            "ci95": [
+              0.3689,
+              0.5211
+            ]
+          },
+          "humaneval": {
+            "accuracy": 0.225,
+            "n": 40,
+            "ci95": [
+              0.1232,
+              0.375
+            ]
+          }
+        },
+        "rank": 61,
+        "z_vs_leader": 19.49,
+        "tied_with_leader": false
       }
     ]
   },
@@ -3299,6 +3345,15 @@
       },
       {
         "model": "qwen38-1cat-vllm-target",
+        "leader": "cloud-claude-claude-opus-5-5",
+        "shared_items": 40,
+        "leader_only_pass": 31,
+        "model_only_pass": 0,
+        "p_value": 0.0,
+        "differs_from_leader": true
+      },
+      {
+        "model": "qwen38-27b-quasar-nvfp4-1cat-tp2",
         "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 31,
@@ -6068,6 +6123,86 @@
         0.862,
         1.0
       ]
+    },
+    {
+      "model": "qwen38-27b-quasar-nvfp4-1cat-tp2",
+      "lane": "chemistry",
+      "accuracy": 0.0,
+      "n": 6,
+      "ci95": [
+        0.0,
+        0.3903
+      ]
+    },
+    {
+      "model": "qwen38-27b-quasar-nvfp4-1cat-tp2",
+      "lane": "physics",
+      "accuracy": 0.5,
+      "n": 6,
+      "ci95": [
+        0.1876,
+        0.8124
+      ]
+    },
+    {
+      "model": "qwen38-27b-quasar-nvfp4-1cat-tp2",
+      "lane": "video",
+      "accuracy": 0.0,
+      "n": 3,
+      "ci95": [
+        0.0,
+        0.5615
+      ]
+    },
+    {
+      "model": "qwen38-27b-quasar-nvfp4-1cat-tp2",
+      "lane": "iq",
+      "accuracy": 0.6667,
+      "n": 3,
+      "ci95": [
+        0.2077,
+        0.9385
+      ]
+    },
+    {
+      "model": "qwen38-27b-quasar-nvfp4-1cat-tp2",
+      "lane": "eq",
+      "accuracy": 0.6667,
+      "n": 3,
+      "ci95": [
+        0.2077,
+        0.9385
+      ]
+    },
+    {
+      "model": "qwen38-27b-quasar-nvfp4-1cat-tp2",
+      "lane": "fq",
+      "accuracy": 0.0,
+      "n": 2,
+      "ci95": [
+        0.0,
+        0.6576
+      ]
+    },
+    {
+      "model": "qwen38-27b-quasar-nvfp4-1cat-tp2",
+      "lane": "qq",
+      "accuracy": 0.5,
+      "n": 4,
+      "ci95": [
+        0.15,
+        0.85
+      ]
+    },
+    {
+      "model": "qwen38-27b-quasar-nvfp4-1cat-tp2",
+      "lane": "finance",
+      "accuracy": 0.7083,
+      "n": 24,
+      "ci95": [
+        0.5083,
+        0.8508
+      ]
     }
   ],
   "resistant_ranking": [
@@ -6838,6 +6973,37 @@
         "flags": []
       },
       "public_minus_resistant": -0.0523
+    },
+    {
+      "model": "qwen38-27b-quasar-nvfp4-1cat-tp2",
+      "public_composite": 0.3357,
+      "specialist": {
+        "value": 0.3802,
+        "standard_error": 0.0581,
+        "items": 51,
+        "ci95": [
+          0.2663,
+          0.4941
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 0.6091,
+        "standard_error": 0.0804,
+        "items": 26,
+        "ci95": [
+          0.4515,
+          0.7667
+        ],
+        "holdout": 0.8182,
+        "paraphrased_mmlu": 0.4,
+        "canary_recall": 0.0,
+        "flags": [
+          "form-sensitive"
+        ]
+      },
+      "public_minus_resistant": -0.2734
     },
     {
       "model": "qwen38-flash-next-ap-q4km-six",

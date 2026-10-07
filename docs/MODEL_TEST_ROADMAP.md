@@ -172,6 +172,17 @@ model up under layer split. Variants 3 and 5 are slower than the baseline and
 statistically level on composite; neither beats it on both axes. Variants 1,
 2 and 4 (1Cat-vLLM and tensor split) are the remaining candidates for speed.
 
+Day-lane quality gate (backlog item 7), measured 2026-10-08 against the live
+server without stopping it: Qwen3.8-27B QUASAR NVFP4 on 1Cat-vLLM TP2
+target-only scores composite 0.3357 (`qwen38-27b-quasar-nvfp4-1cat-tp2`;
+GSM8K 0.32, BBH 0.35, MMLU 0.44, HumanEval 0.225). This reproduces the old
+0.34 row, so that row was not a scoring fault: the answers contain wrong
+arithmetic and loops on the model's own reasoning. The same model as GGUF
+Q4_K_M scores 0.8511 at 33 tok/s. The lane meets its speed goal and fails
+its quality gate; Flash-Next AP-IQ2_S at 40.8 tok/s and 0.915 is the measured
+alternative for the daytime lane. Variant 1 proper (Flash-Next NVFP4) is not
+on disk and stays unmeasured.
+
 Claude through the `claude -p` CLI: Opus 5.5 leads the table at 0.9818
 (tied with GPT-6 Astra at 0.9802) at 86 tok/s, canary recall 0.8; Sonnet 5.5
 scores 0.9542 at 117.7 tok/s, canary recall 0.9. Haiku 4.5
