@@ -18747,6 +18747,16 @@
       ],
       "model_release_date_status": "missing; add primary source before temporal contamination comparison",
       "evaluation_caveat": "Measured against the live day-lane server. The low scores are real model output, not a scoring fault: GSM8K answers contain wrong arithmetic and HumanEval answers loop on their own reasoning. The same model as GGUF Q4_K_M scores 0.8511 (qwen38-27b-q4)."
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-v100pair-tensor",
+      "error": "unsupported: llama.cpp (qwen4exp build) refuses to load: \"LLAMA_SPLIT_MODE_TENSOR not implemented for architecture 'qwen4exp'\" (2026-10-08); no score, no throughput",
+      "engine": "llama.cpp qwen4exp",
+      "hardware_profile": "v100pair-tensor",
+      "topology": "2× Tesla V100-SXM2-32GB · NVLink · tensor split",
+      "source_repo": "agentionai/Qwen3.8-Flash-Next-AP-GGUF",
+      "source_revision": "0061a60e46ad672a73cec31cb627dc841d4760a4",
+      "quantization": "AP-IQ2S"
     }
   ],
   "bbh_scoring_fix": {
