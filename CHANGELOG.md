@@ -10,9 +10,12 @@ strict contribution protocol, and cloud models measured through one CLI.
 - **Contamination-resistant composites** next to the public one: the mean of
   the post-cutoff holdout and option-reordered MMLU, and a specialist
   composite over the eight text lanes, each with a 95% interval. Canary
-  recall and form sensitivity are shown as signals. On current evidence the
-  order changes: MiMo-V2.6-Pro drops from 0.79 public to 0.03, and the three
-  hosted Gemini rows carry a canary-recall signal.
+  recall and form sensitivity are shown as signals. On current evidence
+  MiMo-V2.6-Pro drops from 0.79 public to 0.08 and the local GLM-5.3 REAP50
+  quant from 0.89 to 0.72, while five rows carry a canary-recall signal
+  (GPT-6 Astra continues 7 of 10 held-out GSM8K questions verbatim). At the
+  top the resistant composite is saturated: twelve rows score 0.95 or more
+  on 26 items.
 - **Error bars on every ranked score** (`score_confidence.py`): the public
   composite rests on 298 items and has a margin of about ±3 to ±5 points.
   A paired test shows HumanEval-40 is saturated at the top of the table.
@@ -32,6 +35,12 @@ strict contribution protocol, and cloud models measured through one CLI.
 
 ### Fixed
 
+- **Post-cutoff holdout answer key.** Three keys were wrong and one item had
+  no correct option; nearly every model gave the same "wrong" answer and the
+  arithmetic confirmed the models. Keys corrected, the unsolvable item
+  disabled, all 24 audit rows re-scored from their stored predictions, and a
+  test now recomputes every arithmetic key.
+
 - **The "gsm8k 404" of v1.0.1** was an `--external-url` ending in `/v1`
   while the suite appends `/v1/...` itself. The suite now refuses that URL.
 - The suite checks for the HumanEval data before starting; six runs were
@@ -41,7 +50,7 @@ strict contribution protocol, and cloud models measured through one CLI.
 
 ### Known issues
 
-- The contamination-resistant composite rests on 27 items and the holdout
+- The contamination-resistant composite rests on 26 items and the holdout
   pack is public in this repository; there is no rotating live lane yet.
 - Video scores 0 for every bare model; no lane has the 73 items needed to
   support a "95% correct" claim except FQ.

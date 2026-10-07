@@ -3,7 +3,7 @@
   "protocol": "v4-mmlu-fewshot-20260918",
   "source_sha256": {
     "well_known_suite_20260917.json": "aa5b3daef0090f073569160afd379ae37a26799c6e0e83cec2d613c1c490dd01",
-    "specialist_suite_20260922.json": "77f45491eaafb17fec217754a7fd20dd93ac86433630179ce294b33c783eb0ff"
+    "specialist_suite_20260922.json": "c6737ce14466ad2fa5a437e58d49efe5907c1d650f614b7211922b040bf692e6"
   },
   "min_items_for_perfect_score_claim": {
     "lower_bound_0.90": 35,
@@ -5083,6 +5083,1010 @@
         0.862,
         1.0
       ]
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-sol",
+      "lane": "video",
+      "accuracy": 0.0,
+      "n": 3,
+      "ci95": [
+        0.0,
+        0.5615
+      ]
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-sol",
+      "lane": "iq",
+      "accuracy": 0.3333,
+      "n": 3,
+      "ci95": [
+        0.0615,
+        0.7923
+      ]
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-sol",
+      "lane": "eq",
+      "accuracy": 1.0,
+      "n": 3,
+      "ci95": [
+        0.4385,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-sol",
+      "lane": "fq",
+      "accuracy": 0.5,
+      "n": 2,
+      "ci95": [
+        0.0945,
+        0.9055
+      ]
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-sol",
+      "lane": "qq",
+      "accuracy": 0.75,
+      "n": 4,
+      "ci95": [
+        0.3006,
+        0.9544
+      ]
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-sol",
+      "lane": "finance",
+      "accuracy": 1.0,
+      "n": 24,
+      "ci95": [
+        0.862,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-omp-google-gemini-3.8-flash",
+      "lane": "video",
+      "accuracy": 0.0,
+      "n": 3,
+      "ci95": [
+        0.0,
+        0.5615
+      ]
+    },
+    {
+      "model": "cloud-omp-google-gemini-3.8-flash",
+      "lane": "iq",
+      "accuracy": 1.0,
+      "n": 3,
+      "ci95": [
+        0.4385,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-omp-google-gemini-3.8-flash",
+      "lane": "eq",
+      "accuracy": 1.0,
+      "n": 3,
+      "ci95": [
+        0.4385,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-omp-google-gemini-3.8-flash",
+      "lane": "fq",
+      "accuracy": 1.0,
+      "n": 2,
+      "ci95": [
+        0.3424,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-omp-google-gemini-3.8-flash",
+      "lane": "qq",
+      "accuracy": 0.75,
+      "n": 4,
+      "ci95": [
+        0.3006,
+        0.9544
+      ]
+    },
+    {
+      "model": "cloud-omp-google-gemini-3.8-flash",
+      "lane": "finance",
+      "accuracy": 1.0,
+      "n": 24,
+      "ci95": [
+        0.862,
+        1.0
+      ]
+    }
+  ],
+  "resistant_ranking": [
+    {
+      "model": "mom-live-4",
+      "public_composite": 0.8852,
+      "specialist": {
+        "value": 0.6302,
+        "standard_error": 0.0564,
+        "items": 51,
+        "ci95": [
+          0.5197,
+          0.7407
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 1.0,
+        "standard_error": 0.0563,
+        "items": 26,
+        "ci95": [
+          0.8897,
+          1.0
+        ],
+        "holdout": 1.0,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.0,
+        "flags": []
+      },
+      "public_minus_resistant": -0.1148
+    },
+    {
+      "model": "mom-gemma4-agg",
+      "public_composite": 0.6935,
+      "specialist": {
+        "value": 0.5833,
+        "standard_error": 0.0666,
+        "items": 39,
+        "ci95": [
+          0.4528,
+          0.7139
+        ],
+        "lanes": 6,
+        "complete": false
+      },
+      "resistant": {
+        "value": 1.0,
+        "standard_error": 0.0563,
+        "items": 26,
+        "ci95": [
+          0.8897,
+          1.0
+        ],
+        "holdout": 1.0,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.1,
+        "flags": []
+      },
+      "public_minus_resistant": -0.3065
+    },
+    {
+      "model": "mom-qwen35-agg",
+      "public_composite": 0.8676,
+      "specialist": {
+        "value": 0.5347,
+        "standard_error": 0.068,
+        "items": 39,
+        "ci95": [
+          0.4015,
+          0.668
+        ],
+        "lanes": 6,
+        "complete": false
+      },
+      "resistant": {
+        "value": 1.0,
+        "standard_error": 0.0563,
+        "items": 26,
+        "ci95": [
+          0.8897,
+          1.0
+        ],
+        "holdout": 1.0,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.0,
+        "flags": []
+      },
+      "public_minus_resistant": -0.1324
+    },
+    {
+      "model": "mom-live-2p",
+      "public_composite": 0.8929,
+      "specialist": {
+        "value": 0.507,
+        "standard_error": 0.0683,
+        "items": 39,
+        "ci95": [
+          0.373,
+          0.6409
+        ],
+        "lanes": 6,
+        "complete": false
+      },
+      "resistant": {
+        "value": 1.0,
+        "standard_error": 0.0563,
+        "items": 26,
+        "ci95": [
+          0.8897,
+          1.0
+        ],
+        "holdout": 1.0,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.0,
+        "flags": []
+      },
+      "public_minus_resistant": -0.1071
+    },
+    {
+      "model": "cloud-omp-zai-glm-5.3",
+      "public_composite": 0.9436,
+      "specialist": {
+        "value": 0.7917,
+        "standard_error": 0.0659,
+        "items": 39,
+        "ci95": [
+          0.6626,
+          0.9208
+        ],
+        "lanes": 6,
+        "complete": false
+      },
+      "resistant": {
+        "value": 0.9667,
+        "standard_error": 0.0606,
+        "items": 26,
+        "ci95": [
+          0.8478,
+          1.0
+        ],
+        "holdout": 1.0,
+        "paraphrased_mmlu": 0.9333,
+        "canary_recall": 0.1,
+        "flags": []
+      },
+      "public_minus_resistant": -0.0231
+    },
+    {
+      "model": "cloud-omp-zai-glm-5.3-flash",
+      "public_composite": 0.9466,
+      "specialist": {
+        "value": 0.6667,
+        "standard_error": 0.0678,
+        "items": 39,
+        "ci95": [
+          0.5337,
+          0.7996
+        ],
+        "lanes": 6,
+        "complete": false
+      },
+      "resistant": {
+        "value": 0.9667,
+        "standard_error": 0.0606,
+        "items": 26,
+        "ci95": [
+          0.8478,
+          1.0
+        ],
+        "holdout": 1.0,
+        "paraphrased_mmlu": 0.9333,
+        "canary_recall": 0.3,
+        "flags": [
+          "canary-recall"
+        ]
+      },
+      "public_minus_resistant": -0.0201
+    },
+    {
+      "model": "cloud-omp-google-gemini-3.8-flash",
+      "public_composite": 0.9658,
+      "specialist": {
+        "value": 0.7917,
+        "standard_error": 0.0659,
+        "items": 39,
+        "ci95": [
+          0.6626,
+          0.9208
+        ],
+        "lanes": 6,
+        "complete": false
+      },
+      "resistant": {
+        "value": 0.9546,
+        "standard_error": 0.0625,
+        "items": 26,
+        "ci95": [
+          0.8321,
+          1.0
+        ],
+        "holdout": 0.9091,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.1,
+        "flags": []
+      },
+      "public_minus_resistant": 0.0112
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-luna",
+      "public_composite": 0.9257,
+      "specialist": {
+        "value": 0.7857,
+        "standard_error": 0.0592,
+        "items": 48,
+        "ci95": [
+          0.6697,
+          0.9017
+        ],
+        "lanes": 7,
+        "complete": false
+      },
+      "resistant": {
+        "value": 0.9546,
+        "standard_error": 0.0625,
+        "items": 26,
+        "ci95": [
+          0.8321,
+          1.0
+        ],
+        "holdout": 0.9091,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.0,
+        "flags": []
+      },
+      "public_minus_resistant": -0.0289
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-astra",
+      "public_composite": 0.9802,
+      "specialist": {
+        "value": 0.7396,
+        "standard_error": 0.0558,
+        "items": 51,
+        "ci95": [
+          0.6303,
+          0.8489
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 0.9546,
+        "standard_error": 0.0625,
+        "items": 26,
+        "ci95": [
+          0.8321,
+          1.0
+        ],
+        "holdout": 0.9091,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.7,
+        "flags": [
+          "canary-recall"
+        ]
+      },
+      "public_minus_resistant": 0.0256
+    },
+    {
+      "model": "cloud-antigravity-gemini-gemini-3.8-flash",
+      "public_composite": 0.9622,
+      "specialist": {
+        "value": 0.6786,
+        "standard_error": 0.0616,
+        "items": 27,
+        "ci95": [
+          0.5579,
+          0.7993
+        ],
+        "lanes": 7,
+        "complete": false
+      },
+      "resistant": {
+        "value": 0.9546,
+        "standard_error": 0.0625,
+        "items": 26,
+        "ci95": [
+          0.8321,
+          1.0
+        ],
+        "holdout": 0.9091,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.5,
+        "flags": [
+          "canary-recall"
+        ]
+      },
+      "public_minus_resistant": 0.0076
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-sol",
+      "public_composite": 0.9505,
+      "specialist": {
+        "value": 0.5972,
+        "standard_error": 0.068,
+        "items": 39,
+        "ci95": [
+          0.4639,
+          0.7306
+        ],
+        "lanes": 6,
+        "complete": false
+      },
+      "resistant": {
+        "value": 0.9546,
+        "standard_error": 0.0625,
+        "items": 26,
+        "ci95": [
+          0.8321,
+          1.0
+        ],
+        "holdout": 0.9091,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.1,
+        "flags": []
+      },
+      "public_minus_resistant": -0.0041
+    },
+    {
+      "model": "devstral-small2-24b-q4",
+      "public_composite": 0.8147,
+      "specialist": {
+        "value": 0.4271,
+        "standard_error": 0.0578,
+        "items": 51,
+        "ci95": [
+          0.3138,
+          0.5404
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 0.9546,
+        "standard_error": 0.0625,
+        "items": 26,
+        "ci95": [
+          0.8321,
+          1.0
+        ],
+        "holdout": 0.9091,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.0,
+        "flags": []
+      },
+      "public_minus_resistant": -0.1399
+    },
+    {
+      "model": "cloud-antigravity-gemini-gemini-3.6-flash",
+      "public_composite": 0.9594,
+      "specialist": {
+        "value": 0.7976,
+        "standard_error": 0.0624,
+        "items": 27,
+        "ci95": [
+          0.6753,
+          0.9199
+        ],
+        "lanes": 7,
+        "complete": false
+      },
+      "resistant": {
+        "value": 0.9091,
+        "standard_error": 0.0671,
+        "items": 26,
+        "ci95": [
+          0.7776,
+          1.0
+        ],
+        "holdout": 0.8182,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.2,
+        "flags": [
+          "canary-recall"
+        ]
+      },
+      "public_minus_resistant": 0.0503
+    },
+    {
+      "model": "mom-live-glm53",
+      "public_composite": 0.8836,
+      "specialist": {
+        "value": 0.5365,
+        "standard_error": 0.0589,
+        "items": 51,
+        "ci95": [
+          0.4211,
+          0.6519
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 0.8666,
+        "standard_error": 0.0691,
+        "items": 26,
+        "ci95": [
+          0.7313,
+          1.0
+        ],
+        "holdout": 1.0,
+        "paraphrased_mmlu": 0.7333,
+        "canary_recall": 0.1,
+        "flags": []
+      },
+      "public_minus_resistant": 0.017
+    },
+    {
+      "model": "cloud-antigravity-gemini-gemini-3.5-flash",
+      "public_composite": 0.9463,
+      "specialist": {
+        "value": 0.5833,
+        "standard_error": 0.0644,
+        "items": 27,
+        "ci95": [
+          0.4571,
+          0.7096
+        ],
+        "lanes": 7,
+        "complete": false
+      },
+      "resistant": {
+        "value": 0.8425,
+        "standard_error": 0.0738,
+        "items": 26,
+        "ci95": [
+          0.6978,
+          0.9871
+        ],
+        "holdout": 0.8182,
+        "paraphrased_mmlu": 0.8667,
+        "canary_recall": 0.2,
+        "flags": [
+          "canary-recall"
+        ]
+      },
+      "public_minus_resistant": 0.1038
+    },
+    {
+      "model": "qwen38-27b-q4",
+      "public_composite": 0.8511,
+      "specialist": {
+        "value": 0.5104,
+        "standard_error": 0.0574,
+        "items": 51,
+        "ci95": [
+          0.398,
+          0.6228
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 0.8425,
+        "standard_error": 0.0738,
+        "items": 26,
+        "ci95": [
+          0.6978,
+          0.9871
+        ],
+        "holdout": 0.8182,
+        "paraphrased_mmlu": 0.8667,
+        "canary_recall": 0.0,
+        "flags": []
+      },
+      "public_minus_resistant": 0.0086
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-ada4",
+      "public_composite": 0.918,
+      "specialist": {
+        "value": 0.6667,
+        "standard_error": 0.0687,
+        "items": 39,
+        "ci95": [
+          0.5321,
+          0.8013
+        ],
+        "lanes": 6,
+        "complete": false
+      },
+      "resistant": {
+        "value": 0.8182,
+        "standard_error": 0.0724,
+        "items": 26,
+        "ci95": [
+          0.6763,
+          0.9601
+        ],
+        "holdout": 0.6364,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.0,
+        "flags": []
+      },
+      "public_minus_resistant": 0.0998
+    },
+    {
+      "model": "gemma4-26b-a4b-q4",
+      "public_composite": 0.6482,
+      "specialist": {
+        "value": 0.6406,
+        "standard_error": 0.0554,
+        "items": 51,
+        "ci95": [
+          0.532,
+          0.7492
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 0.8182,
+        "standard_error": 0.0724,
+        "items": 26,
+        "ci95": [
+          0.6763,
+          0.9601
+        ],
+        "holdout": 0.6364,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.0,
+        "flags": []
+      },
+      "public_minus_resistant": -0.17
+    },
+    {
+      "model": "qwen35-27b-q4",
+      "public_composite": 0.7651,
+      "specialist": {
+        "value": 0.6406,
+        "standard_error": 0.0583,
+        "items": 51,
+        "ci95": [
+          0.5264,
+          0.7549
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 0.8182,
+        "standard_error": 0.0724,
+        "items": 26,
+        "ci95": [
+          0.6763,
+          0.9601
+        ],
+        "holdout": 0.6364,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.1,
+        "flags": []
+      },
+      "public_minus_resistant": -0.0531
+    },
+    {
+      "model": "mom-live-1p",
+      "public_composite": 0.8976,
+      "specialist": {
+        "value": 0.625,
+        "standard_error": 0.0688,
+        "items": 39,
+        "ci95": [
+          0.4902,
+          0.7598
+        ],
+        "lanes": 6,
+        "complete": false
+      },
+      "resistant": {
+        "value": 0.8182,
+        "standard_error": 0.0724,
+        "items": 26,
+        "ci95": [
+          0.6763,
+          0.9601
+        ],
+        "holdout": 0.6364,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.0,
+        "flags": []
+      },
+      "public_minus_resistant": 0.0794
+    },
+    {
+      "model": "glm53-reap50-iq4xs-v100ada",
+      "public_composite": 0.8861,
+      "specialist": {
+        "value": 0.5833,
+        "standard_error": 0.0583,
+        "items": 51,
+        "ci95": [
+          0.469,
+          0.6976
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 0.7212,
+        "standard_error": 0.0771,
+        "items": 26,
+        "ci95": [
+          0.5701,
+          0.8723
+        ],
+        "holdout": 0.9091,
+        "paraphrased_mmlu": 0.5333,
+        "canary_recall": 0.0,
+        "flags": []
+      },
+      "public_minus_resistant": 0.1649
+    },
+    {
+      "model": "mom-live-4-tp2",
+      "public_composite": 0.578,
+      "specialist": {
+        "value": 0.3906,
+        "standard_error": 0.0566,
+        "items": 51,
+        "ci95": [
+          0.2797,
+          0.5015
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 0.6303,
+        "standard_error": 0.0836,
+        "items": 26,
+        "ci95": [
+          0.4665,
+          0.7941
+        ],
+        "holdout": 0.7273,
+        "paraphrased_mmlu": 0.5333,
+        "canary_recall": 0.0,
+        "flags": []
+      },
+      "public_minus_resistant": -0.0523
+    },
+    {
+      "model": "mom-live-4-q36",
+      "public_composite": 0.8632,
+      "specialist": {
+        "value": 0.3438,
+        "standard_error": 0.0562,
+        "items": 51,
+        "ci95": [
+          0.2336,
+          0.4539
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 0.4516,
+        "standard_error": 0.0827,
+        "items": 26,
+        "ci95": [
+          0.2894,
+          0.6137
+        ],
+        "holdout": 0.6364,
+        "paraphrased_mmlu": 0.2667,
+        "canary_recall": 0.0,
+        "flags": []
+      },
+      "public_minus_resistant": 0.4116
+    },
+    {
+      "model": "mimo-v26-pro-bpw2.5",
+      "public_composite": 0.7922,
+      "specialist": {
+        "value": 0.131,
+        "standard_error": 0.0641,
+        "items": 27,
+        "ci95": [
+          0.0052,
+          0.2567
+        ],
+        "lanes": 7,
+        "complete": false
+      },
+      "resistant": {
+        "value": 0.0788,
+        "standard_error": 0.0665,
+        "items": 26,
+        "ci95": [
+          0.0,
+          0.2091
+        ],
+        "holdout": 0.0909,
+        "paraphrased_mmlu": 0.0667,
+        "canary_recall": 0.0,
+        "flags": []
+      },
+      "public_minus_resistant": 0.7134
+    },
+    {
+      "model": "glm53-reap50-iq3m-allfour",
+      "public_composite": 0.8071,
+      "specialist": {
+        "value": 0.5167,
+        "standard_error": 0.0811,
+        "items": 15,
+        "ci95": [
+          0.3578,
+          0.6755
+        ],
+        "lanes": 5,
+        "complete": false
+      },
+      "resistant": null
+    },
+    {
+      "model": "glm53-reap50-iq3m-v100",
+      "public_composite": 0.8425,
+      "specialist": {
+        "value": 0.4833,
+        "standard_error": 0.0799,
+        "items": 15,
+        "ci95": [
+          0.3267,
+          0.64
+        ],
+        "lanes": 5,
+        "complete": false
+      },
+      "resistant": null
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4kxl-v100",
+      "public_composite": 0.9272,
+      "specialist": {
+        "value": 0.4667,
+        "standard_error": 0.0784,
+        "items": 15,
+        "ci95": [
+          0.3129,
+          0.6204
+        ],
+        "lanes": 5,
+        "complete": false
+      },
+      "resistant": null
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq4xs-allfour",
+      "public_composite": 0.9177,
+      "specialist": {
+        "value": 0.4167,
+        "standard_error": 0.0646,
+        "items": 27,
+        "ci95": [
+          0.29,
+          0.5433
+        ],
+        "lanes": 7,
+        "complete": false
+      },
+      "resistant": null
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4kxl",
+      "public_composite": null,
+      "specialist": {
+        "value": 0.4167,
+        "standard_error": 0.0799,
+        "items": 15,
+        "ci95": [
+          0.26,
+          0.5733
+        ],
+        "lanes": 5,
+        "complete": false
+      },
+      "resistant": null
+    },
+    {
+      "model": "qwen38-flash-next-ap-q4kxl-allfour",
+      "public_composite": 0.9201,
+      "specialist": {
+        "value": 0.4167,
+        "standard_error": 0.0799,
+        "items": 15,
+        "ci95": [
+          0.26,
+          0.5733
+        ],
+        "lanes": 5,
+        "complete": false
+      },
+      "resistant": null
+    },
+    {
+      "model": "granite-4.2-30b",
+      "public_composite": 0.8464,
+      "specialist": {
+        "value": 0.4,
+        "standard_error": 0.0769,
+        "items": 15,
+        "ci95": [
+          0.2492,
+          0.5508
+        ],
+        "lanes": 5,
+        "complete": false
+      },
+      "resistant": null
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq4xs-v100",
+      "public_composite": 0.9191,
+      "specialist": {
+        "value": 0.3929,
+        "standard_error": 0.0638,
+        "items": 27,
+        "ci95": [
+          0.2678,
+          0.518
+        ],
+        "lanes": 7,
+        "complete": false
+      },
+      "resistant": null
+    },
+    {
+      "model": "qwen35-122b-a10b-iq3s",
+      "public_composite": 0.8985,
+      "specialist": {
+        "value": 0.35,
+        "standard_error": 0.0784,
+        "items": 15,
+        "ci95": [
+          0.1963,
+          0.5037
+        ],
+        "lanes": 5,
+        "complete": false
+      },
+      "resistant": null
+    },
+    {
+      "model": "kat-coder-v2.5-dev",
+      "public_composite": 0.9065,
+      "specialist": {
+        "value": 0.2833,
+        "standard_error": 0.0814,
+        "items": 15,
+        "ci95": [
+          0.1239,
+          0.4428
+        ],
+        "lanes": 5,
+        "complete": false
+      },
+      "resistant": null
+    },
+    {
+      "model": "deepseek-r1-qwen32b-q4",
+      "public_composite": 0.5338,
+      "specialist": {
+        "value": 0.25,
+        "standard_error": 0.0814,
+        "items": 15,
+        "ci95": [
+          0.0906,
+          0.4094
+        ],
+        "lanes": 5,
+        "complete": false
+      },
+      "resistant": null
     }
   ]
 }

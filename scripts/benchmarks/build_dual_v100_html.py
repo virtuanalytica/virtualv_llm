@@ -697,12 +697,13 @@ def resistant_section() -> str:
 <h2 id="contaminatiebestendig">Contaminatiebestendige composites</h2>
 <p>De publieke composite bestaat uit opgaven die in trainingsdata kunnen zitten. Deze tabel zet er twee scores
 naast die daar niet op rusten. <strong>Contaminatiebestendig</strong> is het gemiddelde van de post-cutoff
-holdout (12 eigen opgaven van 2026-09-23) en MMLU met herordende antwoordopties (15 opgaven).
+holdout (11 eigen opgaven van 2026-09-23; antwoordsleutel gecorrigeerd op 2026-10-07) en MMLU met herordende antwoordopties (15 opgaven).
 <strong>Specialisten</strong> is het ongewogen gemiddelde over de acht tekstlanes van de eigen suite (chemie,
 fysica, IQ, EQ, FQ, QQ, finance, video; vision telt niet mee); alleen een rij met 8/8 lanes is volledig
 vergelijkbaar. Canary-recall en vormgevoeligheid zijn signalen en tellen niet mee in het getal. Gesorteerd op
-de contaminatiebestendige score. Met 27 respectievelijk hooguit 51 opgaven zijn de marges breed: lees de
-intervallen, niet de decimalen.</p>
+de contaminatiebestendige score. Met 26 respectievelijk hooguit 51 opgaven zijn de marges breed: lees de
+intervallen, niet de decimalen. Aan de top is de contaminatiebestendige score verzadigd; een groter en
+moeilijker pakket is nodig om de beste modellen te scheiden.</p>
 <div class="tablewrap"><table class="sortable"><thead><tr>{sortable_header("Model")}
 {sortable_header("Contaminatiebestendig")}{sortable_header("95%-interval")}{sortable_header("Holdout")}
 {sortable_header("Geparafraseerde MMLU")}{sortable_header("Canary-recall")}{sortable_header("Specialisten")}

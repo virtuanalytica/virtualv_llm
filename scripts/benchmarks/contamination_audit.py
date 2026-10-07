@@ -45,7 +45,7 @@ import re
 from pathlib import Path
 from typing import Any, Callable
 
-from result_store import upsert_result
+from result_store import locked_report, upsert_result
 
 ROOT = Path(__file__).resolve().parents[2]
 REPORTS = ROOT / "reports"
@@ -197,6 +197,34 @@ def _run_post_cutoff_holdout(complete: Callable[[str, int], str]) -> dict[str, A
                            "reassuring, not proof of an uncontaminated model."),
         "samples": details,
     }
+
+
+def rescore_post_cutoff_holdout(report: Path = OUT) -> int:
+    """Re-score stored holdout predictions against the current answer key.
+
+    On 2026-10-07 three keys turned out to be wrong and one item unsolvable:
+    nearly every model gave the same "wrong" answer on them, and the
+    arithmetic confirmed the models. Predictions are kept per item, so every
+    row is corrected offline without asking any model again.
+    """
+    import hashlib
+    pack = CONFIG / "post_cutoff_holdout.csv"
+    with pack.open(newline="") as fh:
+        key = {row["id"]: row["answer"].strip().upper() for row in csv.DictReader(fh)
+               if row.get("enabled", "true").strip().lower() == "true"}
+    digest, changed = hashlib.sha256(pack.read_bytes()).hexdigest(), 0
+    with locked_report(report) as payload:
+        for row in payload.get("results", []):
+            holdout = (row.get("results") or {}).get("post_cutoff_holdout") or {}
+            if holdout.get("status") != "complete" or holdout.get("pack_sha256") == digest:
+                continue
+            samples = [{**s, "target": key[s["id"]], "correct": s.get("prediction") == key[s["id"]]}
+                       for s in holdout["samples"] if s["id"] in key]
+            holdout.update(samples=samples, n_samples=len(samples), pack_sha256=digest,
+                           accuracy=round(sum(s["correct"] for s in samples) / len(samples), 4),
+                           rescored="2026-10-07: answer key corrected (pch-001, pch-005, pch-011), pch-009 dropped")
+            changed += 1
+    return changed
 
 
 METHODS = ("canary_recall", "paraphrase_invariance", "post_cutoff_holdout")
