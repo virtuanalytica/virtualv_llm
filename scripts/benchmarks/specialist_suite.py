@@ -124,6 +124,41 @@ def _run_vision(vision_complete: Callable[[str, Path, int], str] | None) -> dict
             "pack_sha256": hashlib.sha256(pack.read_bytes()).hexdigest(), "samples": details}
 
 
+def clean_filtergraph(raw: str) -> str:
+    return raw.strip().replace("```", "").strip()
+
+
+def unsafe_filtergraph(graph: str) -> bool:
+    return len(graph) > 8_000 or any(token in graph for token in ("\n", "\r", "`", "$", "../"))
+
+
+def render_filtergraph(graph: str, output: Path) -> tuple[bool, float, str]:
+    """Render one filtergraph; returns (accepted, duration_sec, ffmpeg stderr tail).
+
+    The model supplies data, never an executable command: ffmpeg is invoked
+    with a fixed argv and a controlled output path.
+    """
+    proc = subprocess.run([
+        "ffmpeg", "-y", "-f", "lavfi", "-i", "color=c=black:s=1280x720:r=24:d=7",
+        "-filter_complex", graph, "-t", "7", "-pix_fmt", "yuv420p", str(output),
+    ], cwd=output.parent, capture_output=True, text=True, timeout=70)
+    probe = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of",
+                            "default=nk=1:nw=1", str(output)], capture_output=True, text=True, timeout=20)
+    duration = float(probe.stdout.strip()) if probe.returncode == 0 else 0.0
+    ok = proc.returncode == 0 and output.exists() and output.stat().st_size > 20_000 and 4.5 <= duration <= 7.0
+    return ok, duration, proc.stderr[-600:]
+
+
+def differential_drive(left: float, right: float, duration: float, radius: float, base: float) -> tuple[float, float, float]:
+    """Pose (x m, y m, heading deg) of a differential-drive robot started at the origin."""
+    import math
+    omega, speed = radius * (right - left) / base, radius * (right + left) / 2
+    if abs(omega) < 1e-9:
+        return speed * duration, 0.0, 0.0
+    return (speed / omega * math.sin(omega * duration), speed / omega * (1 - math.cos(omega * duration)),
+            omega * duration * 180 / math.pi)
+
+
 def _run_video(complete: Callable[[str, int], str]) -> dict[str, Any]:
     if not shutil.which("ffmpeg") or not shutil.which("ffprobe"):
         return {"status": "unavailable", "reason": "ffmpeg/ffprobe not installed", "n_samples": 0}
@@ -133,20 +168,11 @@ def _run_video(complete: Callable[[str, int], str]) -> dict[str, Any]:
         for index, row in enumerate(rows):
             if time.monotonic() - started > SOURCES["video"]["max_wall_sec"]:
                 break
-            graph = complete(row["prompt"], 512).strip().replace("```", "").strip()
-            output = Path(tmp) / f"task-{index}.mp4"
-            # The model supplies data, never an executable command.  ffmpeg is
-            # invoked with a fixed argv and controlled output path.
-            if len(graph) > 8_000 or any(token in graph for token in ("\n", "\r", "`", "$", "../")):
+            graph = clean_filtergraph(complete(row["prompt"], 512))
+            if unsafe_filtergraph(graph):
                 details.append({"passed": False, "reason": "unsafe/oversized filtergraph"}); continue
             try:
-                proc = subprocess.run([
-                    "ffmpeg", "-y", "-f", "lavfi", "-i", "color=c=black:s=1280x720:r=24:d=7",
-                    "-filter_complex", graph, "-t", "7", "-pix_fmt", "yuv420p", str(output),
-                ], cwd=tmp, capture_output=True, text=True, timeout=70)
-                probe = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "default=nk=1:nw=1", str(output)], capture_output=True, text=True, timeout=15)
-                duration = float(probe.stdout.strip()) if probe.returncode == 0 else 0.0
-                ok = proc.returncode == 0 and output.exists() and output.stat().st_size > 20_000 and 4.5 <= duration <= 7.0
+                ok, duration, _ = render_filtergraph(graph, Path(tmp) / f"task-{index}.mp4")
                 passed += int(ok); details.append({"passed": ok, "duration_sec": round(duration, 2)})
             except (subprocess.TimeoutExpired, ValueError) as exc:
                 details.append({"passed": False, "reason": type(exc).__name__})
@@ -162,13 +188,8 @@ def _run_fq(complete: Callable[[str, int], str]) -> dict[str, Any]:
         try:
             data = json.loads(raw.strip().replace("```json", "").replace("```", ""))
             left, right, duration = (float(data[key]) for key in ("left_rad_s", "right_rad_s", "duration_s"))
-            radius, base = float(row["wheel_radius_m"]), float(row["wheelbase_m"])
-            omega, speed = radius * (right - left) / base, radius * (right + left) / 2
-            if abs(omega) < 1e-9:
-                x, y = speed * duration, 0.0
-            else:
-                x, y = speed / omega * __import__("math").sin(omega * duration), speed / omega * (1 - __import__("math").cos(omega * duration))
-            heading = omega * duration * 180 / __import__("math").pi
+            x, y, heading = differential_drive(left, right, duration, float(row["wheel_radius_m"]),
+                                               float(row["wheelbase_m"]))
             error = max(abs(x - float(row["target_x_m"])), abs(y - float(row["target_y_m"])), abs(heading - float(row["target_heading_deg"])) / 180)
             ok = duration > 0 and duration <= float(row.get("max_duration_s") or 10) and error <= float(row.get("tolerance") or .03)
             correct += int(ok); details.append({"id": row["id"], "correct": ok, "max_normalized_error": round(error, 4)})
