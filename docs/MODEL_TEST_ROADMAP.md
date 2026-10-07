@@ -3,6 +3,56 @@
 Status date: 2026-10-07 (sections dated 2026-09-24 are kept as written). This document separates measured local evidence from
 upstream reference numbers and from untested hypotheses.
 
+## 2026-10-07 update — EDSQ-Volta takeover cycle (fieldintelligence)
+
+
+**Completed 5–7 Oct.** Tier-balanced MoE judges live and measured: K2.5 1.24,
+DeepSeek-V4-Flash-0731 2.30, GLM-5.3-Flash 2.41–6.20, K2.7-Code 0.68 tok/s
+(E-config flags, 6-GPU attention; full evidence in
+`fieldintelligence/EDSQ-Volta` → `evidence/`). MoM v2 (K2.5 judge)
+19m37s/question → MoM v3 (DSv4 judge) 5m21s at equal verdict quality
+(portfolio 8.2 % vs wrong drafts on all three proposers). PMem 100 Optane
+4×512 G tier live (App Direct/fsdax/DAX): 10.1–10.5 GB/s per mount local
+socket, remote-socket 0.4–1.0 → NUMA-local placement mandatory. 6.4 TB NVMe
+model home (`eds1`, mount by-UUID). Day/night profile live via
+`~/bin/vllm-profile` (cron 07:30/19:00): day = 1Cat TP2 NVFP4 target
+46.6–49.0 t/s (meets the 50 t/s goal), night = judges + queue worker.
+
+**Baseline discrepancy to resolve:** the DSv4-0731 re-test measured 2.30 t/s
+(UD-IQ4_XS, E-config) against the Sept row of 13.89 t/s (UD-IQ3_XXS), and
+GLM-5.3-Flash 2.41–6.20 t/s (UD-Q4) against 21.49 t/s (AJ-IQ2_XXS). Different
+quant, flags and tier state — re-test under the Sept configuration before
+treating either number as canonical.
+
+**Backlog (ordered):**
+1. P1 — gsm8k lm-eval step returns HTTP 404 against llama.cpp external
+   servers right after the MMLU block (reproduced on GLM-5.3-Flash and
+   DSv4-Flash-0731; BBH + MMLU complete normally). Blocks full batteries
+   for both; partial rows and MoM-5/MoM-6 shells are in the Oct report.
+2. K2.7-Code UD-Q3_K_XL (432 G) downloaded — serve + compare vs Q4_K_XL
+   (0.43–0.68 t/s baseline; Q3 fits the page cache without a PMem tail).
+   Test chain pattern: `evidence/microbench/kimi_k27_code_tier_shard_20261006.md`.
+3. K3 UD-IQ2_XXS (662 G) auto-chain armed: download → symlink tier-split
+   (~450 G NVMe + ~212 G PMem) → serve :18022 → portfolio probe. Log:
+   `/tmp/k3_test.log`. 2.5-bit class; projected ceiling ~1–1.5 t/s
+   (bandwidth-bound) — quality verdict decides adoption.
+4. MoM v3.1 day lane: judges are night-profile by design; evaluate the
+   1Cat NVFP4 lane for scored daytime MoM after item 7's quality gate.
+5. GLM-5.3-Flash REAP50 GGUF conversion bug (missing
+   `glm5-next.attention.indexer.kpool` tensor) — report upstream; the
+   official unsloth conversion works.
+6. Colibri source checkout (`coli build` needs a clone) + qwen38 A/B
+   against llama.cpp — decides whether the CPU expert tier switches engines.
+7. NVFP4-TP2 repetition-loop instability: quality gate (8-task battery) on
+   the day lane before scored daytime outputs are trusted.
+8. JEV SystemOne adapter for well_known_suite: stateful protocol
+   (`POST /v1/systemone`, state + questions), key `virtualv-mom-local`
+   (hash-only in `~/.config/toddler-jev/keys.json`) — needs a small
+   adapter, not a suite flag.
+
+## 2026-09-24 decisions This document separates measured local evidence from
+upstream reference numbers and from untested hypotheses.
+
 ## 2026-09-24 decisions
 
 - MiMo-V2.6-Pro q4 (MXFP4) and q3 (BPW3.0/BPW3.5) are not planned. They do

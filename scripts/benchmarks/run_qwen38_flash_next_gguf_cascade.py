@@ -23,6 +23,8 @@ from pathlib import Path
 from typing import Any
 from urllib.request import urlopen
 
+from result_store import patch_result, upsert_result
+
 ROOT = Path(__file__).resolve().parents[2]
 MODELS = Path("/media/knight2/EDS2/models/llm")
 REPORTS = ROOT / "reports"
@@ -183,18 +185,15 @@ def complete(model: str) -> bool:
 
 
 def annotate(model: str, candidate: dict[str, Any], profile: str, topology: str, context: int, digest: str) -> None:
-    payload = load(REPORT, {"results": []})
-    for row in payload["results"]:
-        if row.get("model") == model:
-            row.update({
-                "engine": "llama.cpp qwen4exp", "hardware_profile": profile, "topology": topology,
-                "source_repo": REPO, "model_source": f"https://huggingface.co/{REPO}",
-                "source_revision": REVISION, "source_published_at": PUBLISHED_AT,
-                "quantization": candidate["key"].upper(), "weight_bytes": target(candidate).stat().st_size,
-                "weight_sha256": digest, "context_tokens": context,
-                "split_policy": "layer; V100 tensor split excluded for unattended long suite",
-            })
-    atomic(REPORT, payload)
+    if not patch_result(REPORT, model, {
+        "engine": "llama.cpp qwen4exp", "hardware_profile": profile, "topology": topology,
+        "source_repo": REPO, "model_source": f"https://huggingface.co/{REPO}",
+        "source_revision": REVISION, "source_published_at": PUBLISHED_AT,
+        "quantization": candidate["key"].upper(), "weight_bytes": target(candidate).stat().st_size,
+        "weight_sha256": digest, "context_tokens": context,
+        "split_policy": "layer; V100 tensor split excluded for unattended long suite",
+    }):
+        raise RuntimeError(f"cannot annotate missing result {model}")
 
 
 def run_profile(candidate: dict[str, Any], state: dict[str, Any], profile: str, devices: str,
@@ -230,13 +229,11 @@ def run_profile(candidate: dict[str, Any], state: dict[str, Any], profile: str, 
         annotate(model, candidate, profile, topology, context, sha256(path))
         event(state, candidate, "profile_complete", model=model)
     except Exception as exc:
-        payload = load(REPORT, {"results": []})
-        payload["results"] = [r for r in payload["results"] if r.get("model") != model] + [{
+        upsert_result(REPORT, {
             "model": model, "error": f"{type(exc).__name__}: {exc}", "engine": "llama.cpp qwen4exp",
             "hardware_profile": profile, "topology": topology, "source_repo": REPO,
             "source_revision": REVISION, "quantization": candidate["key"].upper(),
-        }]
-        atomic(REPORT, payload)
+        })
         event(state, candidate, "profile_failed", model=model, error=str(exc))
     finally:
         if proc and proc.poll() is None:

@@ -12,6 +12,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from urllib.request import Request, urlopen
 
+from result_store import patch_result, upsert_result
+
 ROOT = Path(__file__).resolve().parents[2]
 MODELS = Path('/media/knight2/EDS2/models/llm')
 REPORTS = ROOT / 'reports'
@@ -110,16 +112,13 @@ def probe(port):
     if not n: raise RuntimeError('smoke response contained no completion tokens')
     return {'completion_tokens':n,'seconds':round(seconds,3),'tokens_per_second':round(n/seconds,3)}
 def inject_error(model, c, suffix, topology, error):
-    payload=load(REPORT, {'results':[]}); rows=payload.setdefault('results',[])
     row={'model':model,'error':error,'engine':'1Cat-vLLM 1.5.0','topology':topology,
          'hardware_profile':suffix,'source_repo':c['repo'],'model_source':f'https://huggingface.co/{c["repo"]}',
          'source_revision':c['revision'],'source_published_at':c['published_at'],'quantization':c['key']}
-    payload['results']=[r for r in rows if r.get('model') != model]+[row]; atomic(REPORT,payload)
+    upsert_result(REPORT,row)
 def annotate(model,c,suffix,topology,smoke):
-    payload=load(REPORT, {'results':[]})
-    for r in payload.get('results',[]):
-        if r.get('model')==model: r.update({'engine':'1Cat-vLLM 1.5.0','topology':topology,'hardware_profile':suffix,'source_repo':c['repo'],'model_source':f'https://huggingface.co/{c["repo"]}','source_revision':c['revision'],'source_published_at':c['published_at'],'quantization':c['key'],'weight_bytes':c['bytes'],'smoke_probe':smoke})
-    atomic(REPORT,payload)
+    if not patch_result(REPORT,model,{'engine':'1Cat-vLLM 1.5.0','topology':topology,'hardware_profile':suffix,'source_repo':c['repo'],'model_source':f'https://huggingface.co/{c["repo"]}','source_revision':c['revision'],'source_published_at':c['published_at'],'quantization':c['key'],'weight_bytes':c['bytes'],'smoke_probe':smoke}):
+        raise RuntimeError(f'cannot annotate missing result {model}')
 def run_profile(c,state,suffix,devices,topology,offload):
     model=profile_model(c,suffix); port=18021 if suffix=='v100' else 18022; active=[]; proc=None
     log=REPORTS/'vllm_logs'/f'{model}.log'; log.parent.mkdir(parents=True,exist_ok=True)

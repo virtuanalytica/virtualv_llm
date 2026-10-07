@@ -23,6 +23,7 @@ from typing import Any
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import rank_models as rm  # noqa: E402
+from result_store import patch_result  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
 MODELS = Path("/media/knight2/EDS2/models/llm")
@@ -144,20 +145,15 @@ def download(candidate: dict[str, Any], state: dict[str, Any]) -> Path:
 
 
 def annotate(candidate: dict[str, Any], model: str, profile: str) -> None:
-    payload = load(REPORT)
-    for row in payload.get("results", []):
-        if row.get("model") != model:
-            continue
-        row.update({
-            "source_repo": REPO, "model_source": f"https://huggingface.co/{REPO}",
-            "source_revision": REVISION, "source_published_at": PUBLISHED_AT,
-            "quantization": candidate["key"].upper(), "weight_bytes": candidate["bytes"],
-            "glm5_runtime_commit": "2a4a41238175cc5d0ee3e591865653e49096c782",
-            "hardware_profile": profile,
-        })
-    temp = REPORT.with_suffix(".tmp")
-    temp.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n")
-    temp.replace(REPORT)
+    if not patch_result(REPORT, model, {
+        "source_repo": REPO, "model_source": f"https://huggingface.co/{REPO}",
+        "source_revision": REVISION, "source_published_at": PUBLISHED_AT,
+        "quantization": candidate["key"].upper(), "weight_bytes": candidate["bytes"],
+        "weight_sha256": candidate.get("sha256"),
+        "glm5_runtime_commit": "2a4a41238175cc5d0ee3e591865653e49096c782",
+        "hardware_profile": profile,
+    }):
+        raise RuntimeError(f"cannot annotate missing result {model}")
 
 
 def benchmark(candidate: dict[str, Any], state: dict[str, Any], force: bool = False) -> None:
