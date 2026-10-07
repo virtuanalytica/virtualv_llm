@@ -99,3 +99,26 @@ def test_parametric_fq_pack_is_fixed_and_every_target_is_reachable():
                            "right_rad_s": (speed + omega * base / 2) / radius, "duration_s": duration})
 
     assert suite._run_fq(solver, rows)["accuracy"] == 1.0
+
+
+def test_http_complete_retries_a_transient_error_and_raises_a_persistent_one(monkeypatch):
+    import io
+    from urllib.error import HTTPError
+
+    calls = []
+
+    def flaky(request, timeout):
+        calls.append(1)
+        if len(calls) < 3:
+            raise HTTPError(request.full_url, 502, "Bad Gateway", None, None)
+        return io.BytesIO(json.dumps({"choices": [{"message": {"content": "ok"}}]}).encode())
+
+    monkeypatch.setattr(experts, "urlopen", flaky)
+    assert experts.http_complete("http://x", "m", backoff_sec=0)("q", 8) == "ok" and len(calls) == 3
+
+    def down(request, timeout):
+        raise HTTPError(request.full_url, 502, "Bad Gateway", None, None)
+
+    monkeypatch.setattr(experts, "urlopen", down)
+    with pytest.raises(HTTPError):
+        experts.http_complete("http://x", "m", attempts=2, backoff_sec=0)("q", 8)
