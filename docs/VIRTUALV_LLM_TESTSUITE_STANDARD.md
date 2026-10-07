@@ -1,8 +1,8 @@
 # VirtualV LLM-testsuite — standaard en proces
 
 Documenteigenaar: VirtualV AI Assurance  
-Versie: 1.0  
-Peildatum: 22 september 2026  
+Versie: 1.1  
+Peildatum: 7 oktober 2026  
 Status: operationele standaard van de huidige implementatie  
 Classificatie: publiek (onderdeel van de virtualv_llm-repository)
 
@@ -236,6 +236,40 @@ onverklaarde score- of snelheidsafwijking bestaat.
 
 Dezelfde persoon mag meerdere rollen uitvoeren, maar protocolwijzigingen en
 definitieve verwijdering van modelgewichten moeten aantoonbaar worden gereviewd.
+
+## 12. Statistische betrouwbaarheid
+
+Iedere gerangschikte score krijgt een 95%-betrouwbaarheidsinterval.
+`scripts/benchmarks/score_confidence.py` berekent per onderdeel een
+Wilson-interval, voor de composite een standaardfout en per toegangsprofiel
+welke rijen niet van de koploper te onderscheiden zijn. Het dashboard toont
+deze uitkomst naast de ranglijst.
+
+Een verschil dat binnen de marge valt, is geen rangorde. Uitspraken als “beste
+model” of “beter dan” vereisen een verschil buiten de marge, of een
+bevestigingsrun op een grotere steekproef onder een eigen protocol-ID. Voor de
+specialistische lanes geldt hetzelfde: een foutloze score op minder dan 73
+opgaven mag niet als “minstens 95% goed” worden gepresenteerd.
+
+## 13. Bijdragen van buiten
+
+Externe bijdragen verlopen uitsluitend via het protocol in `CONTRIBUTING.md`.
+De kern:
+
+1. Een resultaat is één nieuw JSON-bestand onder
+   `submissions/<github-naam>/`, gemaakt met `submission.py make`, met
+   gehashte gewichten, volledige commits van bron en suite, en openbaar ruw
+   bewijs. Bestaande bestanden zijn onveranderlijk; een correctie is een nieuw
+   bestand met `supersedes`.
+2. Een externe inzending heeft altijd de status `community-unverified` en
+   staat op het dashboard los van de referentieranglijst. Alleen een beheerder
+   die de run heeft gereproduceerd, mag de status verhogen.
+3. Beschermde paden (workflows, `config/`, `reports/`, scorers, validators en
+   deze standaard) worden alleen door beheerders gewijzigd.
+4. De poort `contribution-guard` draait vanaf de basisbranch en leest de pull
+   request als gegevens; een inzender kan de eigen poort dus niet aanpassen.
+5. Mergen vereist groene controles en een goedkeurende beheerder; gemerged
+   wordt de commit die is beoordeeld.
 
 # Bijlage A — Instructiehandleiding voor operators
 

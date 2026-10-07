@@ -1,6 +1,6 @@
 # VirtualV LLM model test roadmap
 
-Status date: 2026-09-24. This document separates measured local evidence from
+Status date: 2026-10-07 (sections dated 2026-09-24 are kept as written). This document separates measured local evidence from
 upstream reference numbers and from untested hypotheses.
 
 ## 2026-09-24 decisions
@@ -75,6 +75,57 @@ and `/tmp/v100_exclusive.lock` is free. The Qwen chat weights stay.
 6. **DS4-specific DeepSeek quant.** A DS4 Q2/mixed checkpoint requires its own
    pinned runtime and a new download. Start only after the disk gate passes and
    keep its score separate from generic llama.cpp GGUF results.
+
+## 2026-10-07: re-baseline on the current hardware
+
+The machine now holds four RTX 4000 Ada 20 GB (CUDA 0, 1, 2, 5) and two Tesla
+V100-SXM2 32 GB on NVLink (CUDA 3, 4); the RTX A4000 is gone. The Qwen3.8
+Flash-Next AP-IQ2_S baselines above were measured on the old four-card set
+(A4000 + 2x V100 + one Ada), so they are historical. They are re-measured
+first, under the unchanged protocol `v4-mmlu-fewshot-20260918`:
+
+| Row to measure | Topology | Old reference | Result |
+|---|---|---|---|
+| Qwen3.8 Flash-Next AP-IQ2_S, six GPUs | 4x Ada 20 GB + 2x V100 32 GB, layer split | 40.79 tok/s, composite 0.9232 (old all-four) | pending |
+| Qwen3.8 Flash-Next AP-IQ2_S, four Ada | 4x RTX 4000 Ada 20 GB, layer split | none | pending |
+| Qwen3.8 Flash-Next AP-IQ2_S, V100 pair | 2x V100 32 GB NVLink, layer split | 42.79 tok/s, composite 0.9113 | pending |
+
+This table is updated in place when a row is measured: the value, the result
+row's model identifier and the pull request that published it.
+
+## 2026-10-07: five variants expected to beat the baseline on both axes
+
+Target to beat: 40.79 tok/s and composite 0.9232 together. Each line is a
+hypothesis with the measurement it rests on; none is a result yet.
+
+| # | Variant | Why it should be faster | Why composite should hold or rise | Result |
+|---|---|---|---|---|
+| 1 | Qwen3.8 Flash-Next NVFP4, 1Cat-vLLM TP2 target-only, V100 pair | Upstream reports 80.7 tok/s; locally the same engine gives 111 tok/s on Qwen3.6-35B-A3B NVFP4 | 4-bit weights versus IQ2_S. The existing `qwen38-1cat-vllm-target` row scores 0.34, which points at a template or scoring fault to fix first | pending |
+| 2 | Variant 1 with DFlash2/MTP speculative decoding | 81.59 tok/s measured at B1 on this pair | Speculation is verified against the target, so quality equals variant 1; reported as its own row | pending |
+| 3 | Qwen3.8 Flash-Next AP-Q4_K_XL, six GPUs, fully in VRAM | 34.59 tok/s on the V100 pair with the remainder outside VRAM; 144 GB now holds all 101 GB | Highest measured local composite, 0.9272 | pending |
+| 4 | Qwen3.8 Flash-Next AP-IQ2_S, V100 pair, tensor split | Tensor split is the fastest llama.cpp topology on this NVLink pair (44.87 tok/s for the 27B model versus 33 with layer split) | Same weights as the baseline | pending |
+| 5 | Qwen3.8 Flash-Next AP-Q4_K_M, six GPUs | 40.00 tok/s on the old set, where the A4000 was the slowest card | 0.9175 measured, inside the baseline's margin, at 4-bit | pending |
+
+Reading the result: the composite has a 95% margin of about ±3.8 points on
+these rows (`reports/score_confidence.json`), and all measured Flash-Next rows
+are tied. A variant counts as faster on a measured tok/s difference. It counts
+as better on composite only if a confirmation run on a larger sample separates
+it; until then "not lower" is the honest claim. Variants that are faster but
+clearly lower (Qwen3.6-35B-A3B NVFP4 at 111 tok/s and 0.841, Kat-Coder v2.5 at
+91.7 tok/s and 0.907) stay in the speed lane and are not listed here.
+
+Execution starts after the runs that are in flight on 2026-10-07 have ended
+and the V100 lock is free.
+
+## 2026-10-07: related plans
+
+- Specialist mixture of experts with the self-healing and self-learning
+  loops: [SPECIALIST_MIXTURE_OF_EXPERTS_PLAN.md](SPECIALIST_MIXTURE_OF_EXPERTS_PLAN.md).
+- Agent CLIs as benchmark rows: Claude, Codex and Gemini rows exist. Z.ai
+  ZCode has a backend in `external_cli_agent_proxy.py`; its first run waits on
+  a model provider in the headless CLI's own config.
+- Lessons from professional suites and what was adopted:
+  [PROFESSIONAL_SUITE_LESSONS.md](PROFESSIONAL_SUITE_LESSONS.md).
 
 ## Sources and non-portable reference results
 

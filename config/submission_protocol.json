@@ -1,0 +1,39 @@
+{
+  "schema": "virtualv-community-submission-v1",
+  "accepted_protocols": {
+    "v4-mmlu-fewshot-20260918": {
+      "gsm8k": 50,
+      "bbh": 48,
+      "mmlu": 160,
+      "humaneval": 40
+    }
+  },
+  "max_submission_bytes": 65536,
+  "max_submissions_per_pull_request": 5,
+  "external_status": "community-unverified",
+  "maintainer_statuses": [
+    "community-unverified",
+    "verified-reproduced",
+    "rejected",
+    "withdrawn"
+  ],
+  "protected_paths": [
+    ".github/",
+    "config/",
+    "reports/",
+    "infra/",
+    "output/",
+    "scripts/reporting/submission.py",
+    "scripts/benchmarks/well_known_suite.py",
+    "scripts/benchmarks/humaneval_harness.py",
+    "scripts/benchmarks/rescore_bbh_from_logs.py",
+    "scripts/benchmarks/specialist_suite.py",
+    "scripts/benchmarks/rank_models.py",
+    "scripts/reporting/validate_publication.py",
+    "scripts/benchmarks/score_confidence.py",
+    "docs/VIRTUALV_LLM_TESTSUITE_STANDARD.md",
+    "CONTRIBUTING.md",
+    "LICENSE",
+    "NOTICE"
+  ]
+}

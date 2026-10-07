@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local OpenAI-compatible proxy in front of an agent CLI (codex exec, claude -p).
+"""Local OpenAI-compatible proxy in front of an agent CLI (codex exec, claude -p, zcode).
 
 Neither Codex nor Claude Code exposes a raw chat-completions HTTP endpoint --
 both are interactive-first CLIs with a non-interactive "print one answer and
@@ -22,6 +22,8 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
+import shlex
 import shutil
 import subprocess
 import tempfile
@@ -141,7 +143,37 @@ def _timings(usage: dict[str, Any] | None) -> dict[str, Any] | None:
     }
 
 
-BACKENDS = {"codex": complete_via_codex, "claude-cli": complete_via_claude_cli}
+# Every tool the ZCode agent registers; a benchmark prompt gets none of them.
+ZCODE_DENIED_TOOLS = ("Agent AskUserQuestion Bash CronList Edit EnterPlanMode ExitPlanMode Read Skill TaskOutput "
+                      "TaskStop TodoRead TodoWrite WebFetch WebSearch Write SendMessage ReadSessionContext")
+_ANSI = re.compile(r"\x1b\[[0-9;?]*[A-Za-z]")
+
+
+def zcode_command(prompt: str, cwd: str) -> list[str]:
+    # The desktop AppImage wrapper named `zcode` opens the GUI; the headless
+    # CLI is the bundled zcode.cjs, whose location changes per AppImage mount,
+    # so the operator supplies it, e.g. VIRTUALV_ZCODE_CLI="node /path/zcode.cjs".
+    launcher = shlex.split(os.environ.get("VIRTUALV_ZCODE_CLI", ""))
+    if not launcher:
+        raise RuntimeError("set VIRTUALV_ZCODE_CLI to the headless ZCode CLI command")
+    return [*launcher, "--prompt", prompt, "--mode", "plan", "--no-color", "--cwd", cwd,
+            "--disallowed-tools", ZCODE_DENIED_TOOLS]
+
+
+def complete_via_zcode(prompt: str, model: str) -> str:
+    # The CLI has no model flag: it serves the model of its own config, which
+    # the operator records as the row's model. Plan mode plus the tool denylist
+    # and an empty cwd keep a benchmark prompt from touching the host.
+    with tempfile.TemporaryDirectory() as cwd:
+        proc = subprocess.run(zcode_command(prompt, cwd), text=True, capture_output=True,
+                              timeout=CLI_TIMEOUT_SEC, cwd=cwd)
+    answer = _ANSI.sub("", proc.stdout).strip()
+    if proc.returncode == 0 and answer:
+        return answer
+    raise RuntimeError(f"zcode --prompt failed (rc={proc.returncode}): {(proc.stderr or proc.stdout)[-500:]}")
+
+
+BACKENDS = {"codex": complete_via_codex, "claude-cli": complete_via_claude_cli, "zcode": complete_via_zcode}
 
 
 _usage_log_lock = threading.Lock()

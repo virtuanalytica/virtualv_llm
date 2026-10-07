@@ -1,0 +1,9 @@
+# Every change needs a maintainer; the paths below are the ones the
+# contribution guard refuses from outside contributors (see CONTRIBUTING.md).
+*                                   @febuz
+/.github/                           @febuz
+/config/                            @febuz
+/reports/                           @febuz
+/submissions/                       @febuz
+/scripts/reporting/submission.py    @febuz
+/docs/VIRTUALV_LLM_TESTSUITE_STANDARD.md @febuz

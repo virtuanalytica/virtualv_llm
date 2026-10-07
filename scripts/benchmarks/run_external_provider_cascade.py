@@ -63,6 +63,13 @@ PROVIDERS = {
         "kind": "cli", "backend": "codex", "engine": "OpenAI Codex CLI",
         "models": ["gpt-6-astra", "gpt-6-sol", "gpt-6-luna"],
     },
+    # Z.ai ZCode's headless CLI serves whichever model its own config names
+    # (no model flag), so the slug below is a label the operator must keep in
+    # step with that config. Needs VIRTUALV_ZCODE_CLI; see the proxy.
+    "zcode": {
+        "kind": "cli", "backend": "zcode", "engine": "Z.ai ZCode CLI (zcode --prompt, plan mode, no tools)",
+        "models": ["glm-5.3-flash"],
+    },
     "antigravity-gemini": {
         "kind": "sanitizing_http",
         "target_base_url": "https://generativelanguage.googleapis.com/v1beta/openai",

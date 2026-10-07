@@ -17,6 +17,8 @@ not universal performance claims.
 - [Curated machine-readable evidence](reports/well_known_suite_20260917.json)
 - [Business standard and operator manual](docs/VIRTUALV_LLM_TESTSUITE_STANDARD.md)
 - [Current model and runtime roadmap](docs/MODEL_TEST_ROADMAP.md)
+- [Score confidence intervals](reports/score_confidence.json) and [lessons from professional suites](docs/PROFESSIONAL_SUITE_LESSONS.md)
+- [Specialist mixture-of-experts plan](docs/SPECIALIST_MIXTURE_OF_EXPERTS_PLAN.md)
 - [Business PDF and weight-free v1 backup](output/pdf/)
 
 The completed migration from `numerai-signals` is documented in Git history.
@@ -60,6 +62,12 @@ for actual GPU runs.
 - No result is comparable without matching protocol, engine, context and
   hardware metadata.
 - Long GPU jobs are resumable, exclusive and independently managed by systemd.
+
+## Contributing
+
+Results measured on your own hardware and code changes are welcome under the
+strict protocol in [CONTRIBUTING.md](CONTRIBUTING.md). Community results are
+listed apart from the reference ranking and start as `community-unverified`.
 
 Licensed under Apache-2.0. Third-party models, datasets and runtimes retain
 their own licenses; consult `NOTICE` before redistributing them.

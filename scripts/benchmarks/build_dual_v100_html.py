@@ -15,8 +15,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import well_known_suite as wks  # noqa: E402
 import rank_models as rm  # noqa: E402
 import benchmark_phase_gate as bpg  # noqa: E402
+import score_confidence  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "scripts/reporting"))
+import submission  # noqa: E402
 REPORTS = ROOT / "reports"
 OUT = Path(os.environ.get("VIRTUALV_DASHBOARD_OUT", REPORTS / "dual_v100_nvlink_benchmark.html"))
 
@@ -627,6 +630,70 @@ SPECIALIST_LABELS = {
     "qq": "QQ · quantum",
     "finance": "Finance · feiten en modellering",
 }
+
+
+def confidence_section() -> str:
+    """Error bars for the public composite, derived from the same curated JSON."""
+    profiles = score_confidence.well_known_confidence(load("well_known_suite_20260917.json"), wks.EVAL_PROTOCOL)
+    entries = profiles.get("sandbox", [])
+    if not entries:
+        return ""
+    tied = sum(e["tied_with_leader"] for e in entries)
+    half_widths = [score_confidence.Z95 * e["standard_error"] for e in entries]
+    body = "".join(
+        f"<tr><td class='num'>{e['rank']}</td><td><strong>{html.escape(e['model'])}</strong></td>"
+        + score_cell(e["composite"])
+        + f"<td class='num' data-sort='{half:.4f}'>± {half * 100:.1f} pp</td>"
+        + f"<td class='num'>{e['ci95'][0] * 100:.1f}% – {e['ci95'][1] * 100:.1f}%</td>"
+        + f"<td class='num'>{e['z_vs_leader']:.2f}</td>"
+        + f"<td>{'niet te onderscheiden van nr. 1' if e['tied_with_leader'] else 'aantoonbaar lager'}</td></tr>"
+        for e, half in zip(entries, half_widths)
+    )
+    need = score_confidence.min_items_for_lower_bound(0.95)
+    return f"""
+<h2 id="betrouwbaarheid">Statistische betrouwbaarheid van de ranglijst</h2>
+<p>De composite rust op 298 opgaven (GSM8K 50, BBH 48, MMLU 160, HumanEval 40). Daardoor heeft elke
+score een steekproefmarge van gemiddeld ± {sum(half_widths) / len(half_widths) * 100:.1f} procentpunt (95%).
+Van de {len(entries)} volledige sandbox-rijen zijn er {tied} statistisch niet te onderscheiden van de
+koploper; een verschil in de derde decimaal is dus geen rangorde. De toets is ongepaard en daarmee
+voorzichtig: zodra per-opgave-uitkomsten voor alle taken bewaard worden, kan een gepaarde toets scherper
+scheiden.</p>
+<div class="tablewrap"><table class="sortable"><thead><tr>{sortable_header("#")}{sortable_header("Model")}
+{sortable_header("Composite")}{sortable_header("Marge (95%)")}{sortable_header("95%-interval")}
+{sortable_header("z t.o.v. nr. 1")}{sortable_header("Oordeel")}</tr></thead><tbody>{body}</tbody></table></div>
+<div class="callout"><strong>Specialistische lanes.</strong> Die pakketten tellen 2 tot 6 opgaven. Een
+foutloze 3 uit 3 bewijst met 95% zekerheid alleen dat de werkelijke score boven 44% ligt. Om “minstens 95%
+goed” te mogen claimen zijn {need} foutloze opgaven per lane nodig.</div>"""
+
+
+def community_section() -> str:
+    """Outside submissions, always apart from the reference ranking."""
+    rows = sorted(submission.load_valid(), key=submission.composite, reverse=True)
+    intro = """<p>Metingen van anderen op hun eigen hardware, ingediend volgens het
+<a href="https://github.com/virtuanalytica/virtualv_llm/blob/main/CONTRIBUTING.md">bijdrageprotocol</a>.
+Ze staan altijd los van de referentieranglijst. “community-unverified” betekent: door de poort, nog niet
+door een beheerder gereproduceerd.</p>"""
+    if not rows:
+        return f"""
+<h2 id="community">Community-inzendingen</h2>{intro}
+<div class="callout">Nog geen inzendingen. Een inzending is één JSON-bestand met gehashte herkomst en
+openbaar ruw bewijs; de poort weigert alles wat daarvan afwijkt.</div>"""
+    body = "".join(
+        f"<tr><td><strong>{html.escape(d['model']['name'])}</strong><br><small>{html.escape(d['model']['quantization'])}"
+        f" · {html.escape(d['runtime']['engine'])}</small></td>" + score_cell(submission.composite(d))
+        + "".join(pct_cell(d["scores"][k]["correct"] / d["scores"][k]["n"]) for k in ("gsm8k", "bbh", "mmlu", "humaneval"))
+        + f"<td class='num'>{fmt((d.get('throughput') or {}).get('completion_tokens_per_second'))}</td>"
+        + f"<td>{html.escape(', '.join(d['hardware']['gpus']))}</td><td>{html.escape(d['submitter']['github'])}</td>"
+        + f"<td>{html.escape(d['status'])}</td>"
+        + f"<td><a href='{html.escape(d['evidence']['url'], quote=True)}'>bewijs</a></td></tr>"
+        for d in rows
+    )
+    return f"""
+<h2 id="community">Community-inzendingen</h2>{intro}
+<div class="tablewrap"><table class="sortable"><thead><tr>{sortable_header("Model")}{sortable_header("Composite")}
+{sortable_header("GSM8K")}{sortable_header("BBH")}{sortable_header("MMLU")}{sortable_header("HumanEval")}
+{sortable_header("t/s")}{sortable_header("Hardware")}{sortable_header("Inzender")}{sortable_header("Status")}
+{sortable_header("Bewijs")}</tr></thead><tbody>{body}</tbody></table></div>"""
 
 
 def specialist_section() -> str:
@@ -1343,6 +1410,8 @@ tabel erboven bevat de bijbehorende prompt-snelheid, VRAM en GPU-utilisatie.</p>
 {benchmark_section(bench_rows)}
 {glm53_completion_summary()}
 {well_known_section(wk_rows)}
+{confidence_section()}
+{community_section()}
 {specialist_section()}
 {live_mixture_section()}
 {contamination_section()}

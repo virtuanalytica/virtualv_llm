@@ -1,0 +1,39 @@
+name: contribution-guard
+
+# Runs the base branch's copy of the guard against every pull request, so a
+# pull request cannot edit its own gate. It never checks out or executes the
+# pull request's code: the head is read as data through the API only.
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, edited]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: contribution-guard-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Enforce the contribution protocol
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_ASSOCIATION: ${{ github.event.pull_request.author_association }}
+        run: |
+          python -I scripts/reporting/submission.py guard \
+            --repo "$GITHUB_REPOSITORY" --pull-request "$PR_NUMBER" \
+            --head-sha "$PR_HEAD_SHA" --author "$PR_AUTHOR" --association "$PR_ASSOCIATION"
