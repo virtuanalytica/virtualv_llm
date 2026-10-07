@@ -172,8 +172,9 @@ model up under layer split. Variants 3 and 5 are slower than the baseline and
 statistically level on composite; neither beats it on both axes. Variants 1,
 2 and 4 (1Cat-vLLM and tensor split) are the remaining candidates for speed.
 
-Claude through the `claude -p` CLI: Sonnet 5.5 composite 0.9542 (tied with
-the leader) at a 117.7 tok/s median, with a canary recall of 0.9. Haiku 4.5
+Claude through the `claude -p` CLI: Opus 5.5 leads the table at 0.9818
+(tied with GPT-6 Astra at 0.9802) at 86 tok/s, canary recall 0.8; Sonnet 5.5
+scores 0.9542 at 117.7 tok/s, canary recall 0.9. Haiku 4.5
 reads 0.8046, but its MMLU cell is a prompt-format artifact and the row is
 flagged. Fable 5.1 is blocked on usage credits and has no score.
 

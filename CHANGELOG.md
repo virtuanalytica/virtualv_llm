@@ -12,8 +12,9 @@ strict contribution protocol, and cloud models measured through one CLI.
   composite over the eight text lanes, each with a 95% interval. Canary
   recall and form sensitivity are shown as signals. On current evidence
   MiMo-V2.6-Pro drops from 0.79 public to 0.08 and the local GLM-5.3 REAP50
-  quant from 0.89 to 0.72, while five rows carry a canary-recall signal
-  (GPT-6 Astra continues 7 of 10 held-out GSM8K questions verbatim). At the
+  quant from 0.89 to 0.72, while seven of 30 audited rows carry a
+  canary-recall signal (Claude Sonnet 5.5 continues 9 of 10 held-out GSM8K
+  questions verbatim, Claude Opus 5.5 8, GPT-6 Astra 7). At the
   top the resistant composite is saturated: twelve rows score 0.95 or more
   on 26 items.
 - **Error bars on every ranked score** (`score_confidence.py`): the public
@@ -34,8 +35,9 @@ strict contribution protocol, and cloud models measured through one CLI.
   AP-Q4_K_XL 0.9193 at 38.31 on six cards. More cards do not speed this model
   up under layer split, and neither Q4 variant beats the baseline on both
   axes.
-- **Claude through the `claude -p` CLI**: Sonnet 5.5 0.9542 (canary recall
-  0.9). Haiku 4.5 is listed with a caveat (MMLU artifact); Fable 5.1 is
+- **Claude through the `claude -p` CLI**: Opus 5.5 0.9818, the new leader
+  and tied with GPT-6 Astra (canary recall 0.8); Sonnet 5.5 0.9542 (canary
+  recall 0.9). Haiku 4.5 is listed with a caveat (MMLU artifact); Fable 5.1 is
   blocked on usage credits.
 - **Tool experts for the FQ and video lanes** and a 73-item parametric FQ
   pack: with the duration limit stated in the task (v3), GLM-5.3-Flash goes

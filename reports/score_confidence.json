@@ -2,8 +2,8 @@
   "method": "Wilson 95% per component; composite SE from Agresti-Coull binomial variances; unpaired z-test against the profile leader (conservative, see module docstring)",
   "protocol": "v4-mmlu-fewshot-20260918",
   "source_sha256": {
-    "well_known_suite_20260917.json": "b9e0486e2e55785801e9a806b8ecc8d0d0ab9df42b3717b62b104e1d8f559fdd",
-    "specialist_suite_20260922.json": "9afd97c2c533eae62db58020e121aebf582889234d573f92f27c7ffe31435af8"
+    "well_known_suite_20260917.json": "4f442d67a7840d895742ab55519897ef161745a724301581f456739bc51024c3",
+    "specialist_suite_20260922.json": "72bcaf8f1bfcdff17a4b5498fc8617069bc294d94440d5bfbf750d7784dff756"
   },
   "min_items_for_perfect_score_claim": {
     "lower_bound_0.90": 35,
@@ -11,6 +11,52 @@
   },
   "well_known": {
     "sandbox": [
+      {
+        "model": "cloud-claude-claude-opus-5-5",
+        "composite": 0.9818,
+        "standard_error": 0.0143,
+        "ci95": [
+          0.9538,
+          1.0
+        ],
+        "components": {
+          "gsm8k": {
+            "accuracy": 1.0,
+            "n": 50,
+            "ci95": [
+              0.9287,
+              1.0
+            ]
+          },
+          "bbh": {
+            "accuracy": 0.9583,
+            "n": 48,
+            "ci95": [
+              0.8602,
+              0.9885
+            ]
+          },
+          "mmlu": {
+            "accuracy": 0.9688,
+            "n": 160,
+            "ci95": [
+              0.929,
+              0.9866
+            ]
+          },
+          "humaneval": {
+            "accuracy": 1.0,
+            "n": 40,
+            "ci95": [
+              0.9124,
+              1.0
+            ]
+          }
+        },
+        "rank": 1,
+        "z_vs_leader": 0.0,
+        "tied_with_leader": true
+      },
       {
         "model": "cloud-omp-openai-codex-gpt-6-astra",
         "composite": 0.9802,
@@ -53,8 +99,8 @@
             ]
           }
         },
-        "rank": 1,
-        "z_vs_leader": 0.0,
+        "rank": 2,
+        "z_vs_leader": 0.08,
         "tied_with_leader": true
       },
       {
@@ -99,8 +145,8 @@
             ]
           }
         },
-        "rank": 2,
-        "z_vs_leader": 0.67,
+        "rank": 3,
+        "z_vs_leader": 0.74,
         "tied_with_leader": true
       },
       {
@@ -145,8 +191,8 @@
             ]
           }
         },
-        "rank": 3,
-        "z_vs_leader": 0.82,
+        "rank": 4,
+        "z_vs_leader": 0.89,
         "tied_with_leader": true
       },
       {
@@ -191,8 +237,8 @@
             ]
           }
         },
-        "rank": 4,
-        "z_vs_leader": 0.96,
+        "rank": 5,
+        "z_vs_leader": 1.03,
         "tied_with_leader": true
       },
       {
@@ -237,8 +283,8 @@
             ]
           }
         },
-        "rank": 5,
-        "z_vs_leader": 1.17,
+        "rank": 6,
+        "z_vs_leader": 1.25,
         "tied_with_leader": true
       },
       {
@@ -283,8 +329,8 @@
             ]
           }
         },
-        "rank": 6,
-        "z_vs_leader": 1.31,
+        "rank": 7,
+        "z_vs_leader": 1.38,
         "tied_with_leader": true
       },
       {
@@ -329,8 +375,8 @@
             ]
           }
         },
-        "rank": 7,
-        "z_vs_leader": 1.5,
+        "rank": 8,
+        "z_vs_leader": 1.57,
         "tied_with_leader": true
       },
       {
@@ -375,8 +421,8 @@
             ]
           }
         },
-        "rank": 8,
-        "z_vs_leader": 1.5,
+        "rank": 9,
+        "z_vs_leader": 1.57,
         "tied_with_leader": true
       },
       {
@@ -421,8 +467,8 @@
             ]
           }
         },
-        "rank": 9,
-        "z_vs_leader": 1.6,
+        "rank": 10,
+        "z_vs_leader": 1.68,
         "tied_with_leader": true
       },
       {
@@ -467,8 +513,8 @@
             ]
           }
         },
-        "rank": 10,
-        "z_vs_leader": 2.01,
+        "rank": 11,
+        "z_vs_leader": 2.08,
         "tied_with_leader": false
       },
       {
@@ -513,8 +559,8 @@
             ]
           }
         },
-        "rank": 11,
-        "z_vs_leader": 2.26,
+        "rank": 12,
+        "z_vs_leader": 2.34,
         "tied_with_leader": false
       },
       {
@@ -559,8 +605,8 @@
             ]
           }
         },
-        "rank": 12,
-        "z_vs_leader": 2.28,
+        "rank": 13,
+        "z_vs_leader": 2.35,
         "tied_with_leader": false
       },
       {
@@ -605,8 +651,8 @@
             ]
           }
         },
-        "rank": 13,
-        "z_vs_leader": 2.37,
+        "rank": 14,
+        "z_vs_leader": 2.45,
         "tied_with_leader": false
       },
       {
@@ -651,8 +697,8 @@
             ]
           }
         },
-        "rank": 14,
-        "z_vs_leader": 2.5,
+        "rank": 15,
+        "z_vs_leader": 2.57,
         "tied_with_leader": false
       },
       {
@@ -697,8 +743,8 @@
             ]
           }
         },
-        "rank": 15,
-        "z_vs_leader": 2.56,
+        "rank": 16,
+        "z_vs_leader": 2.64,
         "tied_with_leader": false
       },
       {
@@ -743,8 +789,8 @@
             ]
           }
         },
-        "rank": 16,
-        "z_vs_leader": 2.56,
+        "rank": 17,
+        "z_vs_leader": 2.64,
         "tied_with_leader": false
       },
       {
@@ -789,8 +835,8 @@
             ]
           }
         },
-        "rank": 17,
-        "z_vs_leader": 2.55,
+        "rank": 18,
+        "z_vs_leader": 2.62,
         "tied_with_leader": false
       },
       {
@@ -835,8 +881,8 @@
             ]
           }
         },
-        "rank": 18,
-        "z_vs_leader": 2.62,
+        "rank": 19,
+        "z_vs_leader": 2.7,
         "tied_with_leader": false
       },
       {
@@ -881,8 +927,8 @@
             ]
           }
         },
-        "rank": 19,
-        "z_vs_leader": 2.62,
+        "rank": 20,
+        "z_vs_leader": 2.69,
         "tied_with_leader": false
       },
       {
@@ -927,8 +973,8 @@
             ]
           }
         },
-        "rank": 20,
-        "z_vs_leader": 2.65,
+        "rank": 21,
+        "z_vs_leader": 2.73,
         "tied_with_leader": false
       },
       {
@@ -973,8 +1019,8 @@
             ]
           }
         },
-        "rank": 21,
-        "z_vs_leader": 2.79,
+        "rank": 22,
+        "z_vs_leader": 2.86,
         "tied_with_leader": false
       },
       {
@@ -1019,8 +1065,8 @@
             ]
           }
         },
-        "rank": 22,
-        "z_vs_leader": 2.79,
+        "rank": 23,
+        "z_vs_leader": 2.86,
         "tied_with_leader": false
       },
       {
@@ -1065,8 +1111,8 @@
             ]
           }
         },
-        "rank": 23,
-        "z_vs_leader": 2.88,
+        "rank": 24,
+        "z_vs_leader": 2.96,
         "tied_with_leader": false
       },
       {
@@ -1111,8 +1157,8 @@
             ]
           }
         },
-        "rank": 24,
-        "z_vs_leader": 2.96,
+        "rank": 25,
+        "z_vs_leader": 3.03,
         "tied_with_leader": false
       },
       {
@@ -1157,8 +1203,8 @@
             ]
           }
         },
-        "rank": 25,
-        "z_vs_leader": 3.22,
+        "rank": 26,
+        "z_vs_leader": 3.29,
         "tied_with_leader": false
       },
       {
@@ -1203,8 +1249,8 @@
             ]
           }
         },
-        "rank": 26,
-        "z_vs_leader": 3.25,
+        "rank": 27,
+        "z_vs_leader": 3.32,
         "tied_with_leader": false
       },
       {
@@ -1249,8 +1295,8 @@
             ]
           }
         },
-        "rank": 27,
-        "z_vs_leader": 3.38,
+        "rank": 28,
+        "z_vs_leader": 3.45,
         "tied_with_leader": false
       },
       {
@@ -1295,8 +1341,8 @@
             ]
           }
         },
-        "rank": 28,
-        "z_vs_leader": 3.93,
+        "rank": 29,
+        "z_vs_leader": 4.01,
         "tied_with_leader": false
       },
       {
@@ -1341,8 +1387,8 @@
             ]
           }
         },
-        "rank": 29,
-        "z_vs_leader": 3.64,
+        "rank": 30,
+        "z_vs_leader": 3.71,
         "tied_with_leader": false
       },
       {
@@ -1387,8 +1433,8 @@
             ]
           }
         },
-        "rank": 30,
-        "z_vs_leader": 3.86,
+        "rank": 31,
+        "z_vs_leader": 3.93,
         "tied_with_leader": false
       },
       {
@@ -1433,8 +1479,8 @@
             ]
           }
         },
-        "rank": 31,
-        "z_vs_leader": 4.12,
+        "rank": 32,
+        "z_vs_leader": 4.19,
         "tied_with_leader": false
       },
       {
@@ -1479,8 +1525,8 @@
             ]
           }
         },
-        "rank": 32,
-        "z_vs_leader": 4.22,
+        "rank": 33,
+        "z_vs_leader": 4.28,
         "tied_with_leader": false
       },
       {
@@ -1525,8 +1571,8 @@
             ]
           }
         },
-        "rank": 33,
-        "z_vs_leader": 4.53,
+        "rank": 34,
+        "z_vs_leader": 4.59,
         "tied_with_leader": false
       },
       {
@@ -1571,8 +1617,8 @@
             ]
           }
         },
-        "rank": 34,
-        "z_vs_leader": 4.79,
+        "rank": 35,
+        "z_vs_leader": 4.86,
         "tied_with_leader": false
       },
       {
@@ -1617,8 +1663,8 @@
             ]
           }
         },
-        "rank": 35,
-        "z_vs_leader": 4.95,
+        "rank": 36,
+        "z_vs_leader": 5.02,
         "tied_with_leader": false
       },
       {
@@ -1663,8 +1709,8 @@
             ]
           }
         },
-        "rank": 36,
-        "z_vs_leader": 5.09,
+        "rank": 37,
+        "z_vs_leader": 5.16,
         "tied_with_leader": false
       },
       {
@@ -1709,8 +1755,8 @@
             ]
           }
         },
-        "rank": 37,
-        "z_vs_leader": 5.12,
+        "rank": 38,
+        "z_vs_leader": 5.19,
         "tied_with_leader": false
       },
       {
@@ -1755,8 +1801,8 @@
             ]
           }
         },
-        "rank": 38,
-        "z_vs_leader": 5.63,
+        "rank": 39,
+        "z_vs_leader": 5.7,
         "tied_with_leader": false
       },
       {
@@ -1801,8 +1847,8 @@
             ]
           }
         },
-        "rank": 39,
-        "z_vs_leader": 5.93,
+        "rank": 40,
+        "z_vs_leader": 6.0,
         "tied_with_leader": false
       },
       {
@@ -1847,8 +1893,8 @@
             ]
           }
         },
-        "rank": 40,
-        "z_vs_leader": 5.82,
+        "rank": 41,
+        "z_vs_leader": 5.89,
         "tied_with_leader": false
       },
       {
@@ -1893,8 +1939,8 @@
             ]
           }
         },
-        "rank": 41,
-        "z_vs_leader": 6.09,
+        "rank": 42,
+        "z_vs_leader": 6.16,
         "tied_with_leader": false
       },
       {
@@ -1939,8 +1985,8 @@
             ]
           }
         },
-        "rank": 42,
-        "z_vs_leader": 7.13,
+        "rank": 43,
+        "z_vs_leader": 7.21,
         "tied_with_leader": false
       },
       {
@@ -1985,8 +2031,8 @@
             ]
           }
         },
-        "rank": 43,
-        "z_vs_leader": 6.46,
+        "rank": 44,
+        "z_vs_leader": 6.52,
         "tied_with_leader": false
       },
       {
@@ -2031,8 +2077,8 @@
             ]
           }
         },
-        "rank": 44,
-        "z_vs_leader": 7.15,
+        "rank": 45,
+        "z_vs_leader": 7.22,
         "tied_with_leader": false
       },
       {
@@ -2077,8 +2123,8 @@
             ]
           }
         },
-        "rank": 45,
-        "z_vs_leader": 7.46,
+        "rank": 46,
+        "z_vs_leader": 7.52,
         "tied_with_leader": false
       },
       {
@@ -2123,8 +2169,8 @@
             ]
           }
         },
-        "rank": 46,
-        "z_vs_leader": 7.17,
+        "rank": 47,
+        "z_vs_leader": 7.24,
         "tied_with_leader": false
       },
       {
@@ -2169,8 +2215,8 @@
             ]
           }
         },
-        "rank": 47,
-        "z_vs_leader": 8.2,
+        "rank": 48,
+        "z_vs_leader": 8.26,
         "tied_with_leader": false
       },
       {
@@ -2215,8 +2261,8 @@
             ]
           }
         },
-        "rank": 48,
-        "z_vs_leader": 9.34,
+        "rank": 49,
+        "z_vs_leader": 9.41,
         "tied_with_leader": false
       },
       {
@@ -2261,8 +2307,8 @@
             ]
           }
         },
-        "rank": 49,
-        "z_vs_leader": 13.08,
+        "rank": 50,
+        "z_vs_leader": 13.17,
         "tied_with_leader": false
       },
       {
@@ -2307,8 +2353,8 @@
             ]
           }
         },
-        "rank": 50,
-        "z_vs_leader": 12.23,
+        "rank": 51,
+        "z_vs_leader": 12.3,
         "tied_with_leader": false
       },
       {
@@ -2353,8 +2399,8 @@
             ]
           }
         },
-        "rank": 51,
-        "z_vs_leader": 13.88,
+        "rank": 52,
+        "z_vs_leader": 13.97,
         "tied_with_leader": false
       },
       {
@@ -2399,8 +2445,8 @@
             ]
           }
         },
-        "rank": 52,
-        "z_vs_leader": 13.54,
+        "rank": 53,
+        "z_vs_leader": 13.62,
         "tied_with_leader": false
       },
       {
@@ -2445,8 +2491,8 @@
             ]
           }
         },
-        "rank": 53,
-        "z_vs_leader": 11.48,
+        "rank": 54,
+        "z_vs_leader": 11.54,
         "tied_with_leader": false
       },
       {
@@ -2491,8 +2537,8 @@
             ]
           }
         },
-        "rank": 54,
-        "z_vs_leader": 11.55,
+        "rank": 55,
+        "z_vs_leader": 11.61,
         "tied_with_leader": false
       },
       {
@@ -2537,8 +2583,8 @@
             ]
           }
         },
-        "rank": 55,
-        "z_vs_leader": 12.45,
+        "rank": 56,
+        "z_vs_leader": 12.51,
         "tied_with_leader": false
       },
       {
@@ -2583,8 +2629,8 @@
             ]
           }
         },
-        "rank": 56,
-        "z_vs_leader": 15.06,
+        "rank": 57,
+        "z_vs_leader": 15.14,
         "tied_with_leader": false
       },
       {
@@ -2629,8 +2675,8 @@
             ]
           }
         },
-        "rank": 57,
-        "z_vs_leader": 15.17,
+        "rank": 58,
+        "z_vs_leader": 15.24,
         "tied_with_leader": false
       },
       {
@@ -2675,8 +2721,8 @@
             ]
           }
         },
-        "rank": 58,
-        "z_vs_leader": 17.73,
+        "rank": 59,
+        "z_vs_leader": 17.81,
         "tied_with_leader": false
       },
       {
@@ -2721,8 +2767,8 @@
             ]
           }
         },
-        "rank": 59,
-        "z_vs_leader": 19.25,
+        "rank": 60,
+        "z_vs_leader": 19.32,
         "tied_with_leader": false
       }
     ]
@@ -2730,8 +2776,17 @@
   "humaneval_paired": {
     "sandbox": [
       {
+        "model": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
         "model": "cloud-omp-google-gemini-3.8-flash",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2740,7 +2795,7 @@
       },
       {
         "model": "cloud-antigravity-gemini-gemini-3.8-flash",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2749,7 +2804,7 @@
       },
       {
         "model": "cloud-antigravity-gemini-gemini-3.6-flash",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2758,7 +2813,7 @@
       },
       {
         "model": "cloud-claude-claude-sonnet-5-5",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2767,7 +2822,7 @@
       },
       {
         "model": "cloud-omp-openai-codex-gpt-6-sol",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2776,7 +2831,7 @@
       },
       {
         "model": "cloud-omp-zai-glm-5.3-flash",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2785,7 +2840,7 @@
       },
       {
         "model": "cloud-antigravity-gemini-gemini-3.5-flash",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2794,7 +2849,7 @@
       },
       {
         "model": "cloud-omp-zai-glm-5.3",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2803,7 +2858,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-q4km-six",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2812,7 +2867,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-q4kxl-v100",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2821,7 +2876,7 @@
       },
       {
         "model": "cloud-omp-openai-codex-gpt-6-luna",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2830,7 +2885,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq2s-allfour",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2839,7 +2894,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-q4kxl-allfour",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2848,7 +2903,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-q4kxl-six",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2857,7 +2912,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq4xs-v100",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2866,7 +2921,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq2s-ada4",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2875,7 +2930,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq4xs-allfour",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2884,7 +2939,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-q4km-allfour",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2893,7 +2948,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq2s-six",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2902,7 +2957,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq2s-v100",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2911,7 +2966,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq2s-v100pair",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2920,7 +2975,7 @@
       },
       {
         "model": "deepseek-v4-flash-0731-iq3xxs",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2929,7 +2984,7 @@
       },
       {
         "model": "kat-coder-v2.5-dev",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2938,7 +2993,7 @@
       },
       {
         "model": "qwen35-122b-a10b-iq3s",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2947,7 +3002,7 @@
       },
       {
         "model": "mom-live-1p",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 2,
         "model_only_pass": 0,
@@ -2956,7 +3011,7 @@
       },
       {
         "model": "mom-live-2p",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2965,7 +3020,7 @@
       },
       {
         "model": "glm53-reap50-iq4xs-v100ada",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2974,7 +3029,7 @@
       },
       {
         "model": "mom-live-4",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2983,7 +3038,7 @@
       },
       {
         "model": "mom-live-glm53",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 3,
         "model_only_pass": 0,
@@ -2992,7 +3047,7 @@
       },
       {
         "model": "mom-qwen35-agg",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 7,
         "model_only_pass": 0,
@@ -3001,7 +3056,7 @@
       },
       {
         "model": "mom-live-4-q36",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 5,
         "model_only_pass": 0,
@@ -3010,7 +3065,7 @@
       },
       {
         "model": "llama3-70b-instruct-q4",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 2,
         "model_only_pass": 0,
@@ -3019,7 +3074,7 @@
       },
       {
         "model": "qwen38-27b-q4",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3028,7 +3083,7 @@
       },
       {
         "model": "granite-4.2-30b",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 3,
         "model_only_pass": 0,
@@ -3037,7 +3092,7 @@
       },
       {
         "model": "glm53-reap50-iq3m-v100",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 4,
         "model_only_pass": 0,
@@ -3046,7 +3101,7 @@
       },
       {
         "model": "qwen36-35b-a3b-nvfp4",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3055,7 +3110,7 @@
       },
       {
         "model": "nemotron35-lightning-30b-a3b",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3064,7 +3119,7 @@
       },
       {
         "model": "devstral-small2-24b-q4",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 2,
         "model_only_pass": 0,
@@ -3073,7 +3128,7 @@
       },
       {
         "model": "mistral-small4-119b-q4-adaa4000",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3082,7 +3137,7 @@
       },
       {
         "model": "glm53-reap50-iq3m-allfour",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 6,
         "model_only_pass": 0,
@@ -3091,7 +3146,7 @@
       },
       {
         "model": "cloud-claude-claude-haiku-4-5-20251001",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3100,7 +3155,7 @@
       },
       {
         "model": "mimo-v26-pro-bpw2.5",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 21,
         "model_only_pass": 0,
@@ -3109,7 +3164,7 @@
       },
       {
         "model": "deepseek-v4-flash-reap150b-q2k-adaa4000",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 4,
         "model_only_pass": 0,
@@ -3118,7 +3173,7 @@
       },
       {
         "model": "qwen35-27b-q4",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 3,
         "model_only_pass": 0,
@@ -3127,7 +3182,7 @@
       },
       {
         "model": "qwen25-72b-q4",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 2,
         "model_only_pass": 0,
@@ -3136,7 +3191,7 @@
       },
       {
         "model": "command-r-plus-104b-0824-iq3m",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 19,
         "model_only_pass": 0,
@@ -3145,7 +3200,7 @@
       },
       {
         "model": "mom-gemma4-agg",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 2,
         "model_only_pass": 0,
@@ -3154,7 +3209,7 @@
       },
       {
         "model": "gemma4-26b-a4b-q4",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3163,7 +3218,7 @@
       },
       {
         "model": "mixtral-8x22b-instruct-q3ks",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 35,
         "model_only_pass": 0,
@@ -3172,7 +3227,7 @@
       },
       {
         "model": "llama31-70b-instruct-q4",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 40,
         "model_only_pass": 0,
@@ -3181,7 +3236,7 @@
       },
       {
         "model": "glm53-flash-aj-iq2xxs",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 38,
         "model_only_pass": 0,
@@ -3190,7 +3245,7 @@
       },
       {
         "model": "gpt-oss-120b-q4",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 20,
         "model_only_pass": 0,
@@ -3199,7 +3254,7 @@
       },
       {
         "model": "mom-live-4-tp2",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 18,
         "model_only_pass": 0,
@@ -3208,7 +3263,7 @@
       },
       {
         "model": "gpt-oss-20b-q4",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 19,
         "model_only_pass": 0,
@@ -3217,7 +3272,7 @@
       },
       {
         "model": "deepseek-r1-qwen32b-q4",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 38,
         "model_only_pass": 0,
@@ -3226,7 +3281,7 @@
       },
       {
         "model": "wizardlm2-8x22b-iq3s",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 37,
         "model_only_pass": 0,
@@ -3235,7 +3290,7 @@
       },
       {
         "model": "muse-glimmer-30b",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 37,
         "model_only_pass": 0,
@@ -3244,7 +3299,7 @@
       },
       {
         "model": "qwen38-1cat-vllm-target",
-        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5-5",
         "shared_items": 40,
         "leader_only_pass": 31,
         "model_only_pass": 0,
@@ -5933,6 +5988,86 @@
         0.862,
         1.0
       ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-5-5",
+      "lane": "chemistry",
+      "accuracy": 0.8333,
+      "n": 6,
+      "ci95": [
+        0.4365,
+        0.9699
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-5-5",
+      "lane": "physics",
+      "accuracy": 1.0,
+      "n": 6,
+      "ci95": [
+        0.6097,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-5-5",
+      "lane": "video",
+      "accuracy": 0.0,
+      "n": 3,
+      "ci95": [
+        0.0,
+        0.5615
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-5-5",
+      "lane": "iq",
+      "accuracy": 0.6667,
+      "n": 3,
+      "ci95": [
+        0.2077,
+        0.9385
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-5-5",
+      "lane": "eq",
+      "accuracy": 1.0,
+      "n": 3,
+      "ci95": [
+        0.4385,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-5-5",
+      "lane": "fq",
+      "accuracy": 1.0,
+      "n": 2,
+      "ci95": [
+        0.3424,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-5-5",
+      "lane": "qq",
+      "accuracy": 0.75,
+      "n": 4,
+      "ci95": [
+        0.3006,
+        0.9544
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-5-5",
+      "lane": "finance",
+      "accuracy": 1.0,
+      "n": 24,
+      "ci95": [
+        0.862,
+        1.0
+      ]
     }
   ],
   "resistant_ranking": [
@@ -6351,6 +6486,37 @@
         ]
       },
       "public_minus_resistant": 0.0503
+    },
+    {
+      "model": "cloud-claude-claude-opus-5-5",
+      "public_composite": 0.9818,
+      "specialist": {
+        "value": 0.7812,
+        "standard_error": 0.0558,
+        "items": 51,
+        "ci95": [
+          0.672,
+          0.8905
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 0.9091,
+        "standard_error": 0.0671,
+        "items": 26,
+        "ci95": [
+          0.7776,
+          1.0
+        ],
+        "holdout": 0.8182,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.8,
+        "flags": [
+          "canary-recall"
+        ]
+      },
+      "public_minus_resistant": 0.0727
     },
     {
       "model": "mom-live-glm53",
