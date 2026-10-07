@@ -2233,6 +2233,15 @@
         "differs_from_leader": false
       },
       {
+        "model": "cloud-omp-openai-codex-gpt-6-sol",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 1,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
         "model": "cloud-antigravity-gemini-gemini-3.5-flash",
         "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
         "shared_items": 40,
@@ -2270,6 +2279,15 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq4xs-v100",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "qwen38-flash-next-ap-iq2s-ada4",
         "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
         "shared_items": 40,
         "leader_only_pass": 0,
