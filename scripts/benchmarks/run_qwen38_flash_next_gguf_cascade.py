@@ -57,9 +57,14 @@ CANDIDATES: tuple[dict[str, Any], ...] = (
     {"key": "ap-iq2s", "file": "AP-IQ2_S/Qwen3.8-Flash-Next-AP-IQ2_S.gguf",
      "published_vram_gib": 49.21, "published_size_gib": 76.03, "v100_context": 4096},
 )
+# Physical layout since 2026-10-05: RTX 4000 Ada 20GB on CUDA 0, 1, 2, 5 and
+# the NVLink V100 pair on 3, 4. The rows named "-v100" and "-allfour" were
+# measured on the previous layout (A4000 + 2x V100 + one Ada) and stay as
+# history, so the re-baseline profiles carry their own names.
 PROFILES = (
-    ("v100", "1,2", "2× Tesla V100-SXM2-32GB · NVLink · layer split", 18031),
-    ("allfour", "0,1,2,3", "RTX A4000 + 2× V100 NVLink + RTX 4000 Ada · layer split", 18032),
+    ("ada4", "0,1,2,5", "4× RTX 4000 Ada 20GB · layer split", 18033),
+    ("v100pair", "3,4", "2× Tesla V100-SXM2-32GB · NVLink · layer split", 18031),
+    ("six", "0,1,2,3,4,5", "4× RTX 4000 Ada 20GB + 2× V100 NVLink · layer split", 18034),
 )
 
 
@@ -153,12 +158,20 @@ def services_restore(stopped: list[str]) -> None:
 
 
 def assert_no_compute_contexts(devices: str) -> None:
-    output = subprocess.run(
-        ["nvidia-smi", "--query-compute-apps=gpu_uuid,pid,process_name,used_memory", "--format=csv,noheader"],
-        capture_output=True, text=True, check=True,
-    ).stdout.strip()
-    if output:
-        raise RuntimeError(f"GPU compute context present before {devices} benchmark: {output}")
+    """Refuse to start while another process computes on one of ``devices``.
+
+    Only the selected cards are checked: a serving lane on the V100 pair must
+    not block a run that uses the Ada cards alone.
+    """
+    def query(what: str, fields: str) -> list[list[str]]:
+        out = subprocess.run(["nvidia-smi", f"--query-{what}={fields}", "--format=csv,noheader"],
+                             capture_output=True, text=True, check=True).stdout
+        return [[cell.strip() for cell in line.split(",")] for line in out.splitlines() if line.strip()]
+
+    selected = {uuid for index, uuid in query("gpu", "index,uuid") if index in devices.split(",")}
+    busy = [row for row in query("compute-apps", "gpu_uuid,pid,process_name,used_memory") if row[0] in selected]
+    if busy:
+        raise RuntimeError(f"GPU compute context present before {devices} benchmark: {busy}")
 
 
 def ready(proc: subprocess.Popen[Any], port: int, log: Path) -> None:
@@ -202,7 +215,7 @@ def run_profile(candidate: dict[str, Any], state: dict[str, Any], profile: str, 
     if complete(model):
         return
     path = target(candidate)
-    context = candidate["v100_context"] if profile == "v100" else 4096
+    context = candidate["v100_context"] if profile == "v100pair" else 4096
     log = REPORTS / "llama_logs" / f"{model}.log"
     log.parent.mkdir(parents=True, exist_ok=True)
     stopped: list[str] = []
@@ -248,7 +261,7 @@ def run_profile(candidate: dict[str, Any], state: dict[str, Any], profile: str, 
 
 def composite(candidate: dict[str, Any]) -> float | None:
     rows = load(REPORT, {"results": []}).get("results", [])
-    row = next((r for r in rows if r.get("model") == model_id(candidate, "v100") and not r.get("error")), None)
+    row = next((r for r in rows if r.get("model") == model_id(candidate, "v100pair") and not r.get("error")), None)
     if not row:
         return None
     values = [
@@ -264,6 +277,8 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--only", choices=[c["key"] for c in CANDIDATES])
     parser.add_argument("--keep-all", action="store_true", help="do not prune the lower-scoring completed quant")
+    parser.add_argument("--profile", choices=[p[0] for p in PROFILES], action="append",
+                        help="repeatable; default: every profile")
     parser.add_argument("--dry-run", action="store_true")
     args = parser.parse_args()
     if not SERVER.is_file():
@@ -277,8 +292,9 @@ def main() -> int:
     for candidate in selected:
         download(candidate, state)
         for profile in PROFILES:
-            run_profile(candidate, state, *profile)
-    if not args.only and not args.keep_all:
+            if not args.profile or profile[0] in args.profile:
+                run_profile(candidate, state, *profile)
+    if not args.only and not args.keep_all and not args.profile:
         scored = [(composite(candidate), candidate) for candidate in CANDIDATES]
         scored = [(score, candidate) for score, candidate in scored if score is not None]
         if len(scored) == len(CANDIDATES):
