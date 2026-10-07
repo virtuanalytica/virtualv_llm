@@ -96,6 +96,842 @@
           3
         ]
       }
+    },
+    {
+      "model": "cloud-omp-zai-glm-5.3-flash@fq_v2_parametric",
+      "protocol": "v3-private-specialist-packs-finance-20260924",
+      "max_rounds": 3,
+      "bare": {
+        "fq": {
+          "status": "complete",
+          "accuracy": 0.4795,
+          "n_samples": 73,
+          "samples": [
+            {
+              "id": "fq2-001",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-002",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-003",
+              "correct": true,
+              "max_normalized_error": 0.0039
+            },
+            {
+              "id": "fq2-004",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-005",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-006",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-007",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-008",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-009",
+              "correct": true,
+              "max_normalized_error": 0.0001
+            },
+            {
+              "id": "fq2-010",
+              "correct": true,
+              "max_normalized_error": 0.0045
+            },
+            {
+              "id": "fq2-011",
+              "correct": true,
+              "max_normalized_error": 0.0032
+            },
+            {
+              "id": "fq2-012",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-013",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-014",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-015",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-016",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-017",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-018",
+              "correct": true,
+              "max_normalized_error": 0.0066
+            },
+            {
+              "id": "fq2-019",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-020",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-021",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-022",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-023",
+              "correct": true,
+              "max_normalized_error": 0.0007
+            },
+            {
+              "id": "fq2-024",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-025",
+              "correct": false,
+              "max_normalized_error": 1.621
+            },
+            {
+              "id": "fq2-026",
+              "correct": true,
+              "max_normalized_error": 0.0019
+            },
+            {
+              "id": "fq2-027",
+              "correct": true,
+              "max_normalized_error": 0.0039
+            },
+            {
+              "id": "fq2-028",
+              "correct": false,
+              "max_normalized_error": 0.2024
+            },
+            {
+              "id": "fq2-029",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-030",
+              "correct": true,
+              "max_normalized_error": 0.0057
+            },
+            {
+              "id": "fq2-031",
+              "correct": true,
+              "max_normalized_error": 0.0003
+            },
+            {
+              "id": "fq2-032",
+              "correct": true,
+              "max_normalized_error": 0.0023
+            },
+            {
+              "id": "fq2-033",
+              "correct": true,
+              "max_normalized_error": 0.0039
+            },
+            {
+              "id": "fq2-034",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-035",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-036",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-037",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-038",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-039",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-040",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-041",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-042",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-043",
+              "correct": true,
+              "max_normalized_error": 0.0025
+            },
+            {
+              "id": "fq2-044",
+              "correct": false,
+              "max_normalized_error": 0.3333
+            },
+            {
+              "id": "fq2-045",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-046",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-047",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-048",
+              "correct": true,
+              "max_normalized_error": 0.0072
+            },
+            {
+              "id": "fq2-049",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-050",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-051",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-052",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-053",
+              "correct": false,
+              "max_normalized_error": 0.7816
+            },
+            {
+              "id": "fq2-054",
+              "correct": true,
+              "max_normalized_error": 0.0018
+            },
+            {
+              "id": "fq2-055",
+              "correct": false,
+              "max_normalized_error": 0.3338
+            },
+            {
+              "id": "fq2-056",
+              "correct": false,
+              "max_normalized_error": 0.8401
+            },
+            {
+              "id": "fq2-057",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-058",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-059",
+              "correct": true,
+              "max_normalized_error": 0.0049
+            },
+            {
+              "id": "fq2-060",
+              "correct": true,
+              "max_normalized_error": 0.0057
+            },
+            {
+              "id": "fq2-061",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-062",
+              "correct": true,
+              "max_normalized_error": 0.0017
+            },
+            {
+              "id": "fq2-063",
+              "correct": false,
+              "max_normalized_error": 0.5835
+            },
+            {
+              "id": "fq2-064",
+              "correct": true,
+              "max_normalized_error": 0.0045
+            },
+            {
+              "id": "fq2-065",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-066",
+              "correct": true,
+              "max_normalized_error": 0.001
+            },
+            {
+              "id": "fq2-067",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-068",
+              "correct": false,
+              "reason": "TypeError"
+            },
+            {
+              "id": "fq2-069",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-070",
+              "correct": true,
+              "max_normalized_error": 0.0027
+            },
+            {
+              "id": "fq2-071",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-072",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq2-073",
+              "correct": true,
+              "max_normalized_error": 0.009
+            }
+          ],
+          "simulator": "differential_drive_v1"
+        }
+      },
+      "expert": {
+        "fq": {
+          "status": "complete",
+          "accuracy": 0.8904,
+          "n_samples": 73,
+          "samples": [
+            {
+              "id": "fq2-001",
+              "correct": false,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-002",
+              "correct": true,
+              "max_normalized_error": 0.0032
+            },
+            {
+              "id": "fq2-003",
+              "correct": true,
+              "max_normalized_error": 0.003
+            },
+            {
+              "id": "fq2-004",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-005",
+              "correct": true,
+              "max_normalized_error": 0.0026
+            },
+            {
+              "id": "fq2-006",
+              "correct": true,
+              "max_normalized_error": 0.0035
+            },
+            {
+              "id": "fq2-007",
+              "correct": false,
+              "max_normalized_error": 0.0012
+            },
+            {
+              "id": "fq2-008",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-009",
+              "correct": true,
+              "max_normalized_error": 0.0001
+            },
+            {
+              "id": "fq2-010",
+              "correct": true,
+              "max_normalized_error": 0.0037
+            },
+            {
+              "id": "fq2-011",
+              "correct": true,
+              "max_normalized_error": 0.0011
+            },
+            {
+              "id": "fq2-012",
+              "correct": false,
+              "max_normalized_error": 3.2378
+            },
+            {
+              "id": "fq2-013",
+              "correct": true,
+              "max_normalized_error": 0.0047
+            },
+            {
+              "id": "fq2-014",
+              "correct": true,
+              "max_normalized_error": 0.0033
+            },
+            {
+              "id": "fq2-015",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-016",
+              "correct": true,
+              "max_normalized_error": 0.0046
+            },
+            {
+              "id": "fq2-017",
+              "correct": true,
+              "max_normalized_error": 0.0005
+            },
+            {
+              "id": "fq2-018",
+              "correct": true,
+              "max_normalized_error": 0.0044
+            },
+            {
+              "id": "fq2-019",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-020",
+              "correct": true,
+              "max_normalized_error": 0.0001
+            },
+            {
+              "id": "fq2-021",
+              "correct": true,
+              "max_normalized_error": 0.002
+            },
+            {
+              "id": "fq2-022",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-023",
+              "correct": true,
+              "max_normalized_error": 0.0005
+            },
+            {
+              "id": "fq2-024",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-025",
+              "correct": true,
+              "max_normalized_error": 0.0001
+            },
+            {
+              "id": "fq2-026",
+              "correct": true,
+              "max_normalized_error": 0.0031
+            },
+            {
+              "id": "fq2-027",
+              "correct": true,
+              "max_normalized_error": 0.0027
+            },
+            {
+              "id": "fq2-028",
+              "correct": true,
+              "max_normalized_error": 0.0019
+            },
+            {
+              "id": "fq2-029",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-030",
+              "correct": true,
+              "max_normalized_error": 0.0053
+            },
+            {
+              "id": "fq2-031",
+              "correct": true,
+              "max_normalized_error": 0.0004
+            },
+            {
+              "id": "fq2-032",
+              "correct": true,
+              "max_normalized_error": 0.0032
+            },
+            {
+              "id": "fq2-033",
+              "correct": true,
+              "max_normalized_error": 0.0037
+            },
+            {
+              "id": "fq2-034",
+              "correct": true,
+              "max_normalized_error": 0.0005
+            },
+            {
+              "id": "fq2-035",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-036",
+              "correct": true,
+              "max_normalized_error": 0.0002
+            },
+            {
+              "id": "fq2-037",
+              "correct": false,
+              "max_normalized_error": 0.0023
+            },
+            {
+              "id": "fq2-038",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-039",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-040",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-041",
+              "correct": false,
+              "max_normalized_error": 1.2275
+            },
+            {
+              "id": "fq2-042",
+              "correct": true,
+              "max_normalized_error": 0.0051
+            },
+            {
+              "id": "fq2-043",
+              "correct": true,
+              "max_normalized_error": 0.0024
+            },
+            {
+              "id": "fq2-044",
+              "correct": true,
+              "max_normalized_error": 0.0053
+            },
+            {
+              "id": "fq2-045",
+              "correct": true,
+              "max_normalized_error": 0.0007
+            },
+            {
+              "id": "fq2-046",
+              "correct": true,
+              "max_normalized_error": 0.0002
+            },
+            {
+              "id": "fq2-047",
+              "correct": true,
+              "max_normalized_error": 0.002
+            },
+            {
+              "id": "fq2-048",
+              "correct": false,
+              "max_normalized_error": 0.0006
+            },
+            {
+              "id": "fq2-049",
+              "correct": true,
+              "max_normalized_error": 0.0018
+            },
+            {
+              "id": "fq2-050",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-051",
+              "correct": true,
+              "max_normalized_error": 0.0006
+            },
+            {
+              "id": "fq2-052",
+              "correct": false,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-053",
+              "correct": true,
+              "max_normalized_error": 0.0014
+            },
+            {
+              "id": "fq2-054",
+              "correct": true,
+              "max_normalized_error": 0.0033
+            },
+            {
+              "id": "fq2-055",
+              "correct": true,
+              "max_normalized_error": 0.0056
+            },
+            {
+              "id": "fq2-056",
+              "correct": true,
+              "max_normalized_error": 0.0024
+            },
+            {
+              "id": "fq2-057",
+              "correct": true,
+              "max_normalized_error": 0.0027
+            },
+            {
+              "id": "fq2-058",
+              "correct": true,
+              "max_normalized_error": 0.0056
+            },
+            {
+              "id": "fq2-059",
+              "correct": false,
+              "max_normalized_error": 0.0038
+            },
+            {
+              "id": "fq2-060",
+              "correct": true,
+              "max_normalized_error": 0.0044
+            },
+            {
+              "id": "fq2-061",
+              "correct": true,
+              "max_normalized_error": 0.0106
+            },
+            {
+              "id": "fq2-062",
+              "correct": true,
+              "max_normalized_error": 0.0015
+            },
+            {
+              "id": "fq2-063",
+              "correct": true,
+              "max_normalized_error": 0.0017
+            },
+            {
+              "id": "fq2-064",
+              "correct": true,
+              "max_normalized_error": 0.004
+            },
+            {
+              "id": "fq2-065",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-066",
+              "correct": true,
+              "max_normalized_error": 0.003
+            },
+            {
+              "id": "fq2-067",
+              "correct": true,
+              "max_normalized_error": 0.0051
+            },
+            {
+              "id": "fq2-068",
+              "correct": true,
+              "max_normalized_error": 0.007
+            },
+            {
+              "id": "fq2-069",
+              "correct": true,
+              "max_normalized_error": 0.0005
+            },
+            {
+              "id": "fq2-070",
+              "correct": true,
+              "max_normalized_error": 0.0023
+            },
+            {
+              "id": "fq2-071",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq2-072",
+              "correct": true,
+              "max_normalized_error": 0.0032
+            },
+            {
+              "id": "fq2-073",
+              "correct": true,
+              "max_normalized_error": 0.004
+            }
+          ],
+          "simulator": "differential_drive_v1"
+        }
+      },
+      "expert_rounds": {
+        "fq": [
+          2,
+          3,
+          2,
+          2,
+          2,
+          3,
+          3,
+          2,
+          3,
+          3,
+          2,
+          3,
+          3,
+          3,
+          2,
+          3,
+          3,
+          3,
+          2,
+          3,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          2,
+          3,
+          2,
+          3,
+          2,
+          2,
+          3,
+          2,
+          2,
+          3,
+          3,
+          2,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          2,
+          3,
+          2,
+          3,
+          3,
+          3,
+          2,
+          3,
+          2,
+          3,
+          2,
+          3,
+          3,
+          3,
+          3,
+          2,
+          2,
+          2,
+          3,
+          2,
+          3,
+          2,
+          3,
+          2
+        ]
+      },
+      "fq_pack": {
+        "file": "fq_v2_parametric.csv",
+        "sha256": "42513231693c4548fc7109893030b7c148800c703e6c7f4d8bd5ccbeb659f711"
+      }
     }
   ]
 }

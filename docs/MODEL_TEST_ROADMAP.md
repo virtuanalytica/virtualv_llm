@@ -204,8 +204,22 @@ render and repair, at most three rounds). Results go to
 `reports/specialist_experts.json`. First row, GLM-5.3-Flash through omp: FQ
 0 of 2 bare to 2 of 2 with the simulator, video 0 of 3 to 1 of 3 with the
 repair loop. The bare FQ answers failed as unparseable JSON, so part of the
-gain is format repair. A 73-item parametric FQ pack
-(`fq_v2_parametric.csv`) is being measured to replace the 2-item reading.
+gain is format repair.
+
+On the 73-item parametric FQ pack (`fq_v2_parametric.csv`), same model:
+
+| | Correct | 95% interval |
+|---|---:|---|
+| Bare model | 35 of 73 (48%) | 37% to 59% |
+| With simulator expert | 65 of 73 (89%) | 80% to 94% |
+
+Paired on the same items the expert fixes 34 and breaks 4 (exact McNemar
+p < 0.0001), at 2 or 3 model calls per item instead of 1. Of the bare
+model's 38 misses, 31 were unparseable output and 7 a wrong pose. Of the
+expert's 8 misses, 6 reached the pose within tolerance but took longer than
+the 10 s limit, which the task text does not state; 2 were a wrong pose. The
+next pack version states the limit in the prompt. The lane is not at 100%,
+and 89% on one model is not yet a claim about the mixture.
 
 ## 2026-10-07: disk freed for the Flash-Next runs
 
