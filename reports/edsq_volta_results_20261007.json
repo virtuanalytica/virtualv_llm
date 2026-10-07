@@ -1,0 +1,12 @@
+{
+  "as_of": "2026-10-07",
+  "repo": "fieldintelligence/EDSQ-Volta",
+  "rows": [
+    {"datum": "2026-10-06", "model": "Kimi K2.5 Tower (unsloth UD-IQ3_XXS, 415G)", "setup": "llama.cpp build-v100, --cpu-moe --no-op-offload, 32 thr, experts DDR4, attention V100-pair", "pp_tps": 14.34, "tg_tps": 1.24, "resultaat": "8-task 0.833 instant / 0.396 thinking (budget-artefact)", "bron": "EDSQ-Volta evidence/baselines/kimi_k25_q3_gguf_llamacpp_repeat_20261006.jsonl"},
+    {"datum": "2026-10-06", "model": "MoM v2 — K2.5 judge + qwen38/devstral/gemma4", "setup": "mixture_proxy 8031, judge thinking-on", "pp_tps": null, "tg_tps": null, "resultaat": "portfolio: alle 3 drafts fout (8.9/9.2%), judge corrigeert naar 8.2%; 19m37s/vraag", "bron": "EDSQ-Volta evidence/microbench/mom_v2_k25_judge_20261006.md"},
+    {"datum": "2026-10-06", "model": "Kimi K2.7-Code UD-Q4_K_XL (544G, symlink-shard NVMe+PMem)", "setup": "380G NVMe page cache + 164G PMem-DAX; v1-thrash 0.41 t/s gefixt", "pp_tps": 1.89, "tg_tps": 0.68, "resultaat": "compute-bound; code-judge correct; nightly rol", "bron": "EDSQ-Volta evidence/microbench/kimi_k27_code_tier_shard_20261006.md"},
+    {"datum": "2026-10-06", "model": "PMem DAX parallel reads (4x512G Optane)", "setup": "N pinned readers per mount", "pp_tps": null, "tg_tps": null, "resultaat": "10.1-10.5 GB/s lokaal per mount (saturatie bij 4); remote-socket 0.4-1.0 -> NUMA-lokaal verplicht", "bron": "EDSQ-Volta evidence/microbench/pmem_dax_parallel_read_20261006.json"},
+    {"datum": "2026-10-07", "model": "DeepSeek-V4-Flash-0731 UD-IQ4_XS (128G, RAM page cache)", "setup": "build-v100-new, zelfde flags, 13B actief", "pp_tps": 15.5, "tg_tps": 2.30, "resultaat": "portfolio: RETURN 6.0% / VOL 8.2% exact; alle drafts gecorrigeerd; 7m36s", "bron": "EDSQ-Volta evidence/microbench/dsv4_flash_judge_mom_v3_20261006.md"},
+    {"datum": "2026-10-07", "model": "MoM v3 — DSv4-Flash-judge + qwen38/devstral/gemma4", "setup": "mixture_proxy 8031", "pp_tps": null, "tg_tps": null, "resultaat": "5m21s/vraag end-to-end = 3.7x sneller dan MoM v2, zelfde oordeelklasse", "bron": "EDSQ-Volta evidence/microbench/dsv4_flash_judge_mom_v3_20261006.md"}
+  ]
+}
