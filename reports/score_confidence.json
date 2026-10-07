@@ -2221,6 +2221,415 @@
       }
     ]
   },
+  "humaneval_paired": {
+    "sandbox": [
+      {
+        "model": "cloud-antigravity-gemini-gemini-3.6-flash",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "cloud-antigravity-gemini-gemini-3.5-flash",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "qwen38-flash-next-ap-q4kxl-v100",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "qwen38-flash-next-ap-iq2s-allfour",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "qwen38-flash-next-ap-q4kxl-allfour",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "qwen38-flash-next-ap-iq4xs-v100",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "qwen38-flash-next-ap-iq4xs-allfour",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "qwen38-flash-next-ap-q4km-allfour",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "qwen38-flash-next-ap-iq2s-v100",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "deepseek-v4-flash-0731-iq3xxs",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 1,
+        "model_only_pass": 1,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "kat-coder-v2.5-dev",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "qwen35-122b-a10b-iq3s",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "mom-live-1p",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 1,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "mom-live-2p",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "glm53-reap50-iq4xs-v100ada",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 1,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "mom-live-4",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "mom-live-glm53",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 2,
+        "model_only_pass": 0,
+        "p_value": 0.5,
+        "differs_from_leader": false
+      },
+      {
+        "model": "mom-qwen35-agg",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 6,
+        "model_only_pass": 0,
+        "p_value": 0.0312,
+        "differs_from_leader": true
+      },
+      {
+        "model": "mom-live-4-q36",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 4,
+        "model_only_pass": 0,
+        "p_value": 0.125,
+        "differs_from_leader": false
+      },
+      {
+        "model": "llama3-70b-instruct-q4",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 1,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "qwen38-27b-q4",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "granite-4.2-30b",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 2,
+        "model_only_pass": 0,
+        "p_value": 0.5,
+        "differs_from_leader": false
+      },
+      {
+        "model": "glm53-reap50-iq3m-v100",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 3,
+        "model_only_pass": 0,
+        "p_value": 0.25,
+        "differs_from_leader": false
+      },
+      {
+        "model": "qwen36-35b-a3b-nvfp4",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "nemotron35-lightning-30b-a3b",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "devstral-small2-24b-q4",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 1,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "mistral-small4-119b-q4-adaa4000",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "glm53-reap50-iq3m-allfour",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 5,
+        "model_only_pass": 0,
+        "p_value": 0.0625,
+        "differs_from_leader": false
+      },
+      {
+        "model": "mimo-v26-pro-bpw2.5",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 20,
+        "model_only_pass": 0,
+        "p_value": 0.0,
+        "differs_from_leader": true
+      },
+      {
+        "model": "deepseek-v4-flash-reap150b-q2k-adaa4000",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 3,
+        "model_only_pass": 0,
+        "p_value": 0.25,
+        "differs_from_leader": false
+      },
+      {
+        "model": "qwen35-27b-q4",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 2,
+        "model_only_pass": 0,
+        "p_value": 0.5,
+        "differs_from_leader": false
+      },
+      {
+        "model": "qwen25-72b-q4",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 1,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "command-r-plus-104b-0824-iq3m",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 18,
+        "model_only_pass": 0,
+        "p_value": 0.0,
+        "differs_from_leader": true
+      },
+      {
+        "model": "mom-gemma4-agg",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 1,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "gemma4-26b-a4b-q4",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "mixtral-8x22b-instruct-q3ks",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 34,
+        "model_only_pass": 0,
+        "p_value": 0.0,
+        "differs_from_leader": true
+      },
+      {
+        "model": "llama31-70b-instruct-q4",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 39,
+        "model_only_pass": 0,
+        "p_value": 0.0,
+        "differs_from_leader": true
+      },
+      {
+        "model": "glm53-flash-aj-iq2xxs",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 37,
+        "model_only_pass": 0,
+        "p_value": 0.0,
+        "differs_from_leader": true
+      },
+      {
+        "model": "gpt-oss-120b-q4",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 19,
+        "model_only_pass": 0,
+        "p_value": 0.0,
+        "differs_from_leader": true
+      },
+      {
+        "model": "mom-live-4-tp2",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 17,
+        "model_only_pass": 0,
+        "p_value": 0.0,
+        "differs_from_leader": true
+      },
+      {
+        "model": "gpt-oss-20b-q4",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 18,
+        "model_only_pass": 0,
+        "p_value": 0.0,
+        "differs_from_leader": true
+      },
+      {
+        "model": "deepseek-r1-qwen32b-q4",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 37,
+        "model_only_pass": 0,
+        "p_value": 0.0,
+        "differs_from_leader": true
+      },
+      {
+        "model": "wizardlm2-8x22b-iq3s",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 36,
+        "model_only_pass": 0,
+        "p_value": 0.0,
+        "differs_from_leader": true
+      },
+      {
+        "model": "muse-glimmer-30b",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 36,
+        "model_only_pass": 0,
+        "p_value": 0.0,
+        "differs_from_leader": true
+      },
+      {
+        "model": "qwen38-1cat-vllm-target",
+        "leader": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "shared_items": 40,
+        "leader_only_pass": 30,
+        "model_only_pass": 0,
+        "p_value": 0.0,
+        "differs_from_leader": true
+      }
+    ]
+  },
   "specialist": [
     {
       "model": "qwen38-flash-next-ap-iq4xs-v100",
