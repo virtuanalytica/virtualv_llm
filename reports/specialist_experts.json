@@ -1,0 +1,101 @@
+{
+  "suite": "specialist tool experts (bare vs expert, same items)",
+  "results": [
+    {
+      "model": "cloud-omp-zai-glm-5.3-flash",
+      "protocol": "v3-private-specialist-packs-finance-20260924",
+      "max_rounds": 3,
+      "bare": {
+        "fq": {
+          "status": "complete",
+          "accuracy": 0.0,
+          "n_samples": 2,
+          "samples": [
+            {
+              "id": "fq-001",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            },
+            {
+              "id": "fq-002",
+              "correct": false,
+              "reason": "JSONDecodeError"
+            }
+          ],
+          "simulator": "differential_drive_v1"
+        },
+        "video": {
+          "status": "complete",
+          "accuracy": 0.0,
+          "n_samples": 3,
+          "elapsed_sec": 52.6,
+          "samples": [
+            {
+              "passed": false,
+              "reason": "unsafe/oversized filtergraph"
+            },
+            {
+              "passed": false,
+              "reason": "unsafe/oversized filtergraph"
+            },
+            {
+              "passed": false,
+              "duration_sec": 0.0
+            }
+          ]
+        }
+      },
+      "expert": {
+        "fq": {
+          "status": "complete",
+          "accuracy": 1.0,
+          "n_samples": 2,
+          "samples": [
+            {
+              "id": "fq-001",
+              "correct": true,
+              "max_normalized_error": 0.0
+            },
+            {
+              "id": "fq-002",
+              "correct": true,
+              "max_normalized_error": 0.0
+            }
+          ],
+          "simulator": "differential_drive_v1"
+        },
+        "video": {
+          "status": "complete",
+          "accuracy": 0.3333,
+          "n_samples": 3,
+          "elapsed_sec": 92.0,
+          "samples": [
+            {
+              "passed": false,
+              "duration_sec": 0.0
+            },
+            {
+              "passed": true,
+              "duration_sec": 7.0
+            },
+            {
+              "passed": false,
+              "duration_sec": 0.0
+            }
+          ]
+        }
+      },
+      "expert_rounds": {
+        "fq": [
+          2,
+          2
+        ],
+        "video": [
+          3,
+          2,
+          3
+        ]
+      }
+    }
+  ]
+}
