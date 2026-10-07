@@ -25,10 +25,15 @@ quant, flags and tier state — re-test under the Sept configuration before
 treating either number as canonical.
 
 **Backlog (ordered):**
-1. P1 — gsm8k lm-eval step returns HTTP 404 against llama.cpp external
-   servers right after the MMLU block (reproduced on GLM-5.3-Flash and
-   DSv4-Flash-0731; BBH + MMLU complete normally). Blocks full batteries
-   for both; partial rows and MoM-5/MoM-6 shells are in the Oct report.
+1. P1 — RESOLVED 2026-10-07. The HTTP 404 was not the gsm8k step (GSM8K
+   and TruthfulQA had finished). The batteries were started with
+   `--external-url http://host:port/v1`, and the suite appends `/v1/...`
+   itself, so its first direct request went to `/v1/v1/chat/completions`;
+   llama-server answers 200 on `/v1/chat/completions` and 404 on the doubled
+   path (checked on the running :8011 server). `well_known_suite.py` now
+   refuses such a URL at start. Still to do: re-run the GLM-5.3-Flash and
+   DSv4-Flash-0731 batteries with the server root; their rows stay failed
+   until then.
 2. K2.7-Code UD-Q3_K_XL (432 G) downloaded — serve + compare vs Q4_K_XL
    (0.43–0.68 t/s baseline; Q3 fits the page cache without a PMem tail).
    Test chain pattern: `evidence/microbench/kimi_k27_code_tier_shard_20261006.md`.
@@ -49,9 +54,6 @@ treating either number as canonical.
    (`POST /v1/systemone`, state + questions), key `virtualv-mom-local`
    (hash-only in `~/.config/toddler-jev/keys.json`) — needs a small
    adapter, not a suite flag.
-
-## 2026-09-24 decisions This document separates measured local evidence from
-upstream reference numbers and from untested hypotheses.
 
 ## 2026-09-24 decisions
 
@@ -167,13 +169,49 @@ clearly lower (Qwen3.6-35B-A3B NVFP4 at 111 tok/s and 0.841, Kat-Coder v2.5 at
 Execution starts after the runs that are in flight on 2026-10-07 have ended
 and the V100 lock is free.
 
+## 2026-10-07: cloud providers through the omp CLI
+
+`omp` (18.6.1) fronts several providers with one print mode and one
+accounting format, so each goes through the same suite as a local model
+(`run_external_provider_cascade.py --provider omp-…`, no tools, no local
+context). Throughput comes from `omp bench` as a distribution
+(`omp_throughput.py`, median and 95th percentile), not from one completion.
+
+| Provider key | Models | Smoke test | Full suite |
+|---|---|---|---|
+| `omp-zai` | glm-5.3-flash, glm-5.3 | pass | running 2026-10-07 |
+| `omp-openai-codex` | gpt-6-luna, gpt-6-astra, gpt-6-sol | pass | queued |
+| `omp-google` | gemini-3.8-flash | pass | queued |
+| github-copilot | all tried | 400 "model not supported" | not registered |
+| google-antigravity | gemini-3.8-flash | omp: unhandled API mapping | not registered |
+| grok-build | grok-4.5 | no answer (not signed in) | not registered |
+
+These rows run without the per-request output cap local rows get (the CLI
+cannot truncate), which the row records in `output_budget`.
+
+## 2026-10-07: tool experts for the FQ and video lanes
+
+`specialist_experts.py` scores the bare model and the same model with one
+tool on identical items (FQ: forward-kinematics simulator; video: FFmpeg
+render and repair, at most three rounds). Results go to
+`reports/specialist_experts.json`. First row: Qwen3.8-27B Q4_K_M, running.
+
+## 2026-10-07: disk freed for the Flash-Next runs
+
+Removed from the model disk after the retention check, with restore commands
+in `ARCHIVED_MODELS_MANIFEST.md`: Qwen3.5-397B-A17B UD-Q4_K_M (244 GB, never
+measured, sizes matched the Hub) and MiMo-V2.6-Pro BPW2.5 (298 GB, complete
+row kept, SHA-256 per shard recorded). The model disk went from 111 GB to
+570 GB free. Kimi K2.7 Q3 and Q4 are kept on purpose. Flash-Next AP-IQ2_S
+(81.6 GB, pinned revision) is downloading for the re-baseline.
+
 ## 2026-10-07: related plans
 
 - Specialist mixture of experts with the self-healing and self-learning
   loops: [SPECIALIST_MIXTURE_OF_EXPERTS_PLAN.md](SPECIALIST_MIXTURE_OF_EXPERTS_PLAN.md).
-- Agent CLIs as benchmark rows: Claude, Codex and Gemini rows exist. Z.ai
-  ZCode has a backend in `external_cli_agent_proxy.py`; its first run waits on
-  a model provider in the headless CLI's own config.
+- Agent CLIs as benchmark rows: see the omp section below. The direct ZCode
+  backend in `external_cli_agent_proxy.py` still waits on a model provider in
+  the headless CLI's own config; Z.ai's GLM is reached through omp instead.
 - Lessons from professional suites and what was adopted:
   [PROFESSIONAL_SUITE_LESSONS.md](PROFESSIONAL_SUITE_LESSONS.md).
 
