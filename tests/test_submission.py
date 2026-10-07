@@ -148,3 +148,25 @@ def test_zcode_backend_runs_read_only_without_tools(monkeypatch):
     monkeypatch.delenv("VIRTUALV_ZCODE_CLI")
     with pytest.raises(RuntimeError):
         proxy.zcode_command("2+2?", "/tmp/empty")
+
+
+@pytest.mark.parametrize("association, permission, expected", [
+    ("MEMBER", None, True),            # event already says maintainer: no lookup needed
+    ("CONTRIBUTOR", "admin", True),    # private org membership, real write access
+    ("CONTRIBUTOR", "write", True),
+    ("CONTRIBUTOR", "read", False),
+    ("NONE", "none", False),
+])
+def test_maintainer_is_decided_by_repository_permission(monkeypatch, association, permission, expected):
+    def fake_api(url, raw=False):
+        assert permission is not None and url.endswith("/collaborators/octo%2Fcat/permission")
+        return json.dumps({"permission": permission}).encode()
+    monkeypatch.setattr(submission, "_api", fake_api)
+    assert submission.is_maintainer("https://api.github.com/repos/o/r", "octo/cat", association) is expected
+
+
+def test_maintainer_lookup_failure_fails_closed(monkeypatch):
+    def broken(url, raw=False):
+        raise OSError("network")
+    monkeypatch.setattr(submission, "_api", broken)
+    assert submission.is_maintainer("https://api.github.com/repos/o/r", "octocat", "CONTRIBUTOR") is False

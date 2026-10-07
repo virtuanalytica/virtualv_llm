@@ -1,0 +1,228 @@
+{
+  "runs": 10,
+  "maxTokens": 256,
+  "models": [
+    {
+      "selector": "openai-codex/gpt-6-luna",
+      "model": "openai-codex/gpt-6-luna",
+      "results": [
+        {
+          "ok": true,
+          "ttftMs": 1644.0126690000002,
+          "generationMs": 7959.019583000001,
+          "durationMs": 9603.032252,
+          "inputTokens": 65,
+          "outputTokens": 679,
+          "tokensPerSecond": 70.70683323578199,
+          "generationTps": 85.3120152449812,
+          "prefillTps": 39.5374082120288,
+          "cost": 0.00034599999999999995,
+          "challenge": "chat"
+        },
+        {
+          "ok": true,
+          "ttftMs": 1479.571085,
+          "generationMs": 11682.042845000002,
+          "durationMs": 13161.613930000001,
+          "inputTokens": 63,
+          "outputTokens": 635,
+          "tokensPerSecond": 48.246362746791185,
+          "generationTps": 54.35693126838552,
+          "prefillTps": 42.579907541245305,
+          "cost": 0.00032379999999999996,
+          "challenge": "chat"
+        },
+        {
+          "ok": true,
+          "ttftMs": 1797.177076,
+          "generationMs": 5272.087079999999,
+          "durationMs": 7069.264155999999,
+          "inputTokens": 63,
+          "outputTokens": 633,
+          "tokensPerSecond": 89.54255860742518,
+          "generationTps": 120.06630209150492,
+          "prefillTps": 35.054976407900725,
+          "cost": 0.0003228,
+          "challenge": "chat"
+        },
+        {
+          "ok": true,
+          "ttftMs": 1929.0648739999997,
+          "generationMs": 5872.767464,
+          "durationMs": 7801.832337999999,
+          "inputTokens": 65,
+          "outputTokens": 620,
+          "tokensPerSecond": 79.46851113169872,
+          "generationTps": 105.57203291303345,
+          "prefillTps": 33.69508245993805,
+          "cost": 0.0003165,
+          "challenge": "chat"
+        },
+        {
+          "ok": true,
+          "ttftMs": 1235.818534,
+          "generationMs": 11295.332852000001,
+          "durationMs": 12531.151386000001,
+          "inputTokens": 66,
+          "outputTokens": 627,
+          "tokensPerSecond": 50.035306468366045,
+          "generationTps": 55.509652368409895,
+          "prefillTps": 53.40589915444657,
+          "cost": 0.0003201,
+          "challenge": "chat"
+        },
+        {
+          "ok": true,
+          "ttftMs": 2769.269668000001,
+          "generationMs": 4987.4771789999995,
+          "durationMs": 7756.746847,
+          "inputTokens": 66,
+          "outputTokens": 615,
+          "tokensPerSecond": 79.28581557845445,
+          "generationTps": 123.30883489341778,
+          "prefillTps": 23.832998556498826,
+          "cost": 0.0003141,
+          "challenge": "chat"
+        },
+        {
+          "ok": true,
+          "ttftMs": 1028.131297,
+          "generationMs": 12221.841417,
+          "durationMs": 13249.972714,
+          "inputTokens": 65,
+          "outputTokens": 679,
+          "tokensPerSecond": 51.24538854956015,
+          "generationTps": 55.556276409833245,
+          "prefillTps": 63.22149728314321,
+          "cost": 0.00034599999999999995,
+          "challenge": "chat"
+        },
+        {
+          "ok": true,
+          "ttftMs": 1579.292582,
+          "generationMs": 10979.689121,
+          "durationMs": 12558.981703,
+          "inputTokens": 65,
+          "outputTokens": 610,
+          "tokensPerSecond": 48.57081684053155,
+          "generationTps": 55.55712855597162,
+          "prefillTps": 41.15766814891555,
+          "cost": 0.0003115,
+          "challenge": "chat"
+        },
+        {
+          "ok": true,
+          "ttftMs": 1328.5629059999992,
+          "generationMs": 11233.352834000001,
+          "durationMs": 12561.91574,
+          "inputTokens": 63,
+          "outputTokens": 623,
+          "tokensPerSecond": 49.59434634768534,
+          "generationTps": 55.45984437650398,
+          "prefillTps": 47.41965902817404,
+          "cost": 0.00031779999999999997,
+          "challenge": "chat"
+        },
+        {
+          "ok": true,
+          "ttftMs": 991.5777110000017,
+          "generationMs": 11827.967743999998,
+          "durationMs": 12819.545455,
+          "inputTokens": 64,
+          "outputTokens": 656,
+          "tokensPerSecond": 51.17186114770869,
+          "generationTps": 55.46176775234873,
+          "prefillTps": 64.54360489351488,
+          "cost": 0.0003344,
+          "challenge": "chat"
+        }
+      ],
+      "stats": {
+        "ttftMs": {
+          "mean": 1578.2478402000002,
+          "min": 991.5777110000017,
+          "p50": 1479.571085,
+          "p95": 2769.269668000001,
+          "max": 2769.269668000001
+        },
+        "durationMs": {
+          "mean": 10911.4056521,
+          "min": 7069.264155999999,
+          "p50": 12531.151386000001,
+          "p95": 13249.972714,
+          "max": 13249.972714
+        },
+        "tokensPerSecond": {
+          "mean": 61.78678006540033,
+          "min": 48.246362746791185,
+          "p50": 51.17186114770869,
+          "p95": 89.54255860742518,
+          "max": 89.54255860742518
+        },
+        "generationTps": {
+          "mean": 76.61607858743903,
+          "min": 54.35693126838552,
+          "p50": 55.556276409833245,
+          "p95": 123.30883489341778,
+          "max": 123.30883489341778
+        },
+        "prefillTps": {
+          "mean": 44.4448701685806,
+          "min": 23.832998556498826,
+          "p50": 41.15766814891555,
+          "p95": 64.54360489351488,
+          "max": 64.54360489351488
+        },
+        "inputTokens": 64.5,
+        "outputTokens": 637.7,
+        "cost": 0.0003253
+      },
+      "byChallenge": {
+        "chat": {
+          "ttftMs": {
+            "mean": 1578.2478402000002,
+            "min": 991.5777110000017,
+            "p50": 1479.571085,
+            "p95": 2769.269668000001,
+            "max": 2769.269668000001
+          },
+          "durationMs": {
+            "mean": 10911.4056521,
+            "min": 7069.264155999999,
+            "p50": 12531.151386000001,
+            "p95": 13249.972714,
+            "max": 13249.972714
+          },
+          "tokensPerSecond": {
+            "mean": 61.78678006540033,
+            "min": 48.246362746791185,
+            "p50": 51.17186114770869,
+            "p95": 89.54255860742518,
+            "max": 89.54255860742518
+          },
+          "generationTps": {
+            "mean": 76.61607858743903,
+            "min": 54.35693126838552,
+            "p50": 55.556276409833245,
+            "p95": 123.30883489341778,
+            "max": 123.30883489341778
+          },
+          "prefillTps": {
+            "mean": 44.4448701685806,
+            "min": 23.832998556498826,
+            "p50": 41.15766814891555,
+            "p95": 64.54360489351488,
+            "max": 64.54360489351488
+          },
+          "inputTokens": 64.5,
+          "outputTokens": 637.7,
+          "cost": 0.0003253
+        }
+      },
+      "phases": {}
+    }
+  ],
+  "failures": 0,
+  "serviceTierByFamily": {},
+  "profile": "chat"
+}
