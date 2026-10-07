@@ -647,6 +647,21 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
                     proc.wait()
 
 
+def external_base_url(url: str, completions_path: str) -> str:
+    """Server root for an external endpoint; refuses a doubled /v1 segment.
+
+    Passing ".../v1" next to the default "/v1/chat/completions" requests
+    ".../v1/v1/...", which llama-server answers with 404. On 2026-10-07 that
+    ended two multi-hour batteries at the first direct request, so it is
+    rejected here, before any work starts.
+    """
+    base = url.rstrip("/")
+    if base.endswith("/v1") and completions_path.startswith("/v1/"):
+        raise SystemExit(f"--external-url {url!r} already ends in /v1 and --completions-path "
+                         f"{completions_path!r} adds it again; pass the server root (drop /v1)")
+    return base
+
+
 def main() -> int:
     global BASE_URL, MODEL_ALIAS, API_KEY, CHAT_COMPLETIONS_PATH, EXTRA_CHAT_BODY
     parser = argparse.ArgumentParser()
@@ -721,7 +736,7 @@ def main() -> int:
     if args.external_url and len(selected) != 1:
         raise SystemExit("--external-url accepts exactly one model name per invocation")
     if args.external_url:
-        BASE_URL = args.external_url.rstrip("/")
+        BASE_URL = external_base_url(args.external_url, args.completions_path)
         MODEL_ALIAS = args.external_model
         CHAT_COMPLETIONS_PATH = args.completions_path
         if args.external_api_key_env:

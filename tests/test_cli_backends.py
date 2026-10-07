@@ -40,3 +40,13 @@ def test_cascade_addresses_omp_models_by_provider():
     command = cascade.proxy_command(cascade.PROVIDERS["omp-zai"], "glm-5.3-flash", 1234)
     assert command[command.index("--model") + 1] == "zai/glm-5.3-flash"
     assert command[command.index("--backend") + 1] == "omp"
+
+
+def test_external_url_with_doubled_v1_is_refused_before_a_run():
+    import well_known_suite as wks
+
+    assert wks.external_base_url("http://127.0.0.1:8027/", "/v1/chat/completions") == "http://127.0.0.1:8027"
+    # Gemini's OpenAI layer: base carries the version, path does not repeat it.
+    assert wks.external_base_url("https://example.test/v1beta/openai", "/chat/completions").endswith("/openai")
+    with pytest.raises(SystemExit, match="drop /v1"):
+        wks.external_base_url("http://127.0.0.1:8027/v1", "/v1/chat/completions")
