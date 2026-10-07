@@ -216,8 +216,26 @@ def _api(url: str, raw: bool = False) -> bytes:
         return response.read(CONFIG["max_submission_bytes"] * 64 if not raw else CONFIG["max_submission_bytes"] + 1)
 
 
+def is_maintainer(base: str, author: str, association: str) -> bool:
+    """Whether the author may change protected paths.
+
+    The event's author_association says CONTRIBUTOR for an organisation member
+    whose membership is private, so it cannot be the only test. The author's
+    actual permission on the repository decides; an API failure counts as no.
+    """
+    if association in MAINTAINERS:
+        return True
+    try:
+        level = json.loads(_api(f"{base}/collaborators/{urllib.parse.quote(author, safe='')}/permission"))
+    except Exception:
+        return False
+    return level.get("permission") in ("admin", "maintain", "write")
+
+
 def cmd_guard(args: argparse.Namespace) -> int:
     base = f"https://api.github.com/repos/{args.repo}"
+    if is_maintainer(base, args.author, args.association):
+        args.association = "COLLABORATOR"
     files: list[dict] = []
     for page in range(1, 31):
         batch = json.loads(_api(f"{base}/pulls/{args.pull_request}/files?per_page=100&page={page}"))
