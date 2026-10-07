@@ -32,6 +32,13 @@ Computed by `scripts/benchmarks/score_confidence.py` from
   true rate is above 44%. Claiming "at least 95% correct" needs 73 consecutive
   correct items in a lane.
 
+- HumanEval (40 items) is the one task with per-item outcomes, so it can be
+  compared pairwise (`humaneval_paired` in the same report). 18 of 45 rows
+  pass exactly the same items as the leader (39 of 40, the same item failed):
+  zero discordant pairs. At the top of the table this component is saturated
+  and adds nothing to the order; it only separates weaker models (13 of 45
+  rows differ from the leader at the 5% level).
+
 ## Adopted in this change
 
 | Lesson | Implementation |
