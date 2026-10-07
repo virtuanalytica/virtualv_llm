@@ -2,8 +2,8 @@
   "method": "Wilson 95% per component; composite SE from Agresti-Coull binomial variances; unpaired z-test against the profile leader (conservative, see module docstring)",
   "protocol": "v4-mmlu-fewshot-20260918",
   "source_sha256": {
-    "well_known_suite_20260917.json": "9946e161f645a6d173c2b02fae90eb6a9ee8a6f2577628e1c5a23b935e88d8cf",
-    "specialist_suite_20260922.json": "61311304404d5c94db151cc40f9c83bda62904daa717a4b82d51037c54689845"
+    "well_known_suite_20260917.json": "aa5b3daef0090f073569160afd379ae37a26799c6e0e83cec2d613c1c490dd01",
+    "specialist_suite_20260922.json": "77f45491eaafb17fec217754a7fd20dd93ac86433630179ce294b33c783eb0ff"
   },
   "min_items_for_perfect_score_claim": {
     "lower_bound_0.90": 35,
@@ -11,6 +11,52 @@
   },
   "well_known": {
     "sandbox": [
+      {
+        "model": "cloud-omp-openai-codex-gpt-6-astra",
+        "composite": 0.9802,
+        "standard_error": 0.0144,
+        "ci95": [
+          0.9521,
+          1.0
+        ],
+        "components": {
+          "gsm8k": {
+            "accuracy": 1.0,
+            "n": 50,
+            "ci95": [
+              0.9287,
+              1.0
+            ]
+          },
+          "bbh": {
+            "accuracy": 0.9583,
+            "n": 48,
+            "ci95": [
+              0.8602,
+              0.9885
+            ]
+          },
+          "mmlu": {
+            "accuracy": 0.9625,
+            "n": 160,
+            "ci95": [
+              0.9206,
+              0.9827
+            ]
+          },
+          "humaneval": {
+            "accuracy": 1.0,
+            "n": 40,
+            "ci95": [
+              0.9124,
+              1.0
+            ]
+          }
+        },
+        "rank": 1,
+        "z_vs_leader": 0.0,
+        "tied_with_leader": true
+      },
       {
         "model": "cloud-omp-google-gemini-3.8-flash",
         "composite": 0.9658,
@@ -53,8 +99,8 @@
             ]
           }
         },
-        "rank": 1,
-        "z_vs_leader": 0.0,
+        "rank": 2,
+        "z_vs_leader": 0.67,
         "tied_with_leader": true
       },
       {
@@ -99,8 +145,8 @@
             ]
           }
         },
-        "rank": 2,
-        "z_vs_leader": 0.16,
+        "rank": 3,
+        "z_vs_leader": 0.82,
         "tied_with_leader": true
       },
       {
@@ -145,8 +191,8 @@
             ]
           }
         },
-        "rank": 3,
-        "z_vs_leader": 0.28,
+        "rank": 4,
+        "z_vs_leader": 0.96,
         "tied_with_leader": true
       },
       {
@@ -191,8 +237,8 @@
             ]
           }
         },
-        "rank": 4,
-        "z_vs_leader": 0.64,
+        "rank": 5,
+        "z_vs_leader": 1.31,
         "tied_with_leader": true
       },
       {
@@ -237,8 +283,8 @@
             ]
           }
         },
-        "rank": 5,
-        "z_vs_leader": 0.81,
+        "rank": 6,
+        "z_vs_leader": 1.5,
         "tied_with_leader": true
       },
       {
@@ -283,8 +329,8 @@
             ]
           }
         },
-        "rank": 6,
-        "z_vs_leader": 0.82,
+        "rank": 7,
+        "z_vs_leader": 1.5,
         "tied_with_leader": true
       },
       {
@@ -329,8 +375,8 @@
             ]
           }
         },
-        "rank": 7,
-        "z_vs_leader": 0.93,
+        "rank": 8,
+        "z_vs_leader": 1.6,
         "tied_with_leader": true
       },
       {
@@ -375,9 +421,9 @@
             ]
           }
         },
-        "rank": 8,
-        "z_vs_leader": 1.57,
-        "tied_with_leader": true
+        "rank": 9,
+        "z_vs_leader": 2.26,
+        "tied_with_leader": false
       },
       {
         "model": "cloud-omp-openai-codex-gpt-6-luna",
@@ -421,9 +467,9 @@
             ]
           }
         },
-        "rank": 9,
-        "z_vs_leader": 1.61,
-        "tied_with_leader": true
+        "rank": 10,
+        "z_vs_leader": 2.28,
+        "tied_with_leader": false
       },
       {
         "model": "qwen38-flash-next-ap-iq2s-allfour",
@@ -467,9 +513,9 @@
             ]
           }
         },
-        "rank": 10,
-        "z_vs_leader": 1.7,
-        "tied_with_leader": true
+        "rank": 11,
+        "z_vs_leader": 2.37,
+        "tied_with_leader": false
       },
       {
         "model": "qwen38-flash-next-ap-q4kxl-allfour",
@@ -513,9 +559,9 @@
             ]
           }
         },
-        "rank": 11,
-        "z_vs_leader": 1.82,
-        "tied_with_leader": true
+        "rank": 12,
+        "z_vs_leader": 2.5,
+        "tied_with_leader": false
       },
       {
         "model": "qwen38-flash-next-ap-iq4xs-v100",
@@ -559,9 +605,9 @@
             ]
           }
         },
-        "rank": 12,
-        "z_vs_leader": 1.88,
-        "tied_with_leader": true
+        "rank": 13,
+        "z_vs_leader": 2.56,
+        "tied_with_leader": false
       },
       {
         "model": "qwen38-flash-next-ap-iq2s-ada4",
@@ -605,9 +651,9 @@
             ]
           }
         },
-        "rank": 13,
-        "z_vs_leader": 1.88,
-        "tied_with_leader": true
+        "rank": 14,
+        "z_vs_leader": 2.55,
+        "tied_with_leader": false
       },
       {
         "model": "qwen38-flash-next-ap-iq4xs-allfour",
@@ -651,9 +697,9 @@
             ]
           }
         },
-        "rank": 14,
-        "z_vs_leader": 1.93,
-        "tied_with_leader": true
+        "rank": 15,
+        "z_vs_leader": 2.62,
+        "tied_with_leader": false
       },
       {
         "model": "qwen38-flash-next-ap-q4km-allfour",
@@ -697,9 +743,9 @@
             ]
           }
         },
-        "rank": 15,
-        "z_vs_leader": 1.93,
-        "tied_with_leader": true
+        "rank": 16,
+        "z_vs_leader": 2.62,
+        "tied_with_leader": false
       },
       {
         "model": "qwen38-flash-next-ap-iq2s-v100",
@@ -743,8 +789,8 @@
             ]
           }
         },
-        "rank": 16,
-        "z_vs_leader": 2.12,
+        "rank": 17,
+        "z_vs_leader": 2.79,
         "tied_with_leader": false
       },
       {
@@ -789,8 +835,8 @@
             ]
           }
         },
-        "rank": 17,
-        "z_vs_leader": 2.19,
+        "rank": 18,
+        "z_vs_leader": 2.88,
         "tied_with_leader": false
       },
       {
@@ -835,8 +881,8 @@
             ]
           }
         },
-        "rank": 18,
-        "z_vs_leader": 2.29,
+        "rank": 19,
+        "z_vs_leader": 2.96,
         "tied_with_leader": false
       },
       {
@@ -881,8 +927,8 @@
             ]
           }
         },
-        "rank": 19,
-        "z_vs_leader": 2.55,
+        "rank": 20,
+        "z_vs_leader": 3.22,
         "tied_with_leader": false
       },
       {
@@ -927,8 +973,8 @@
             ]
           }
         },
-        "rank": 20,
-        "z_vs_leader": 2.59,
+        "rank": 21,
+        "z_vs_leader": 3.25,
         "tied_with_leader": false
       },
       {
@@ -973,8 +1019,8 @@
             ]
           }
         },
-        "rank": 21,
-        "z_vs_leader": 2.72,
+        "rank": 22,
+        "z_vs_leader": 3.38,
         "tied_with_leader": false
       },
       {
@@ -1019,8 +1065,8 @@
             ]
           }
         },
-        "rank": 22,
-        "z_vs_leader": 3.19,
+        "rank": 23,
+        "z_vs_leader": 3.93,
         "tied_with_leader": false
       },
       {
@@ -1065,8 +1111,8 @@
             ]
           }
         },
-        "rank": 23,
-        "z_vs_leader": 2.97,
+        "rank": 24,
+        "z_vs_leader": 3.64,
         "tied_with_leader": false
       },
       {
@@ -1111,8 +1157,8 @@
             ]
           }
         },
-        "rank": 24,
-        "z_vs_leader": 3.15,
+        "rank": 25,
+        "z_vs_leader": 3.86,
         "tied_with_leader": false
       },
       {
@@ -1157,8 +1203,8 @@
             ]
           }
         },
-        "rank": 25,
-        "z_vs_leader": 3.48,
+        "rank": 26,
+        "z_vs_leader": 4.12,
         "tied_with_leader": false
       },
       {
@@ -1203,8 +1249,8 @@
             ]
           }
         },
-        "rank": 26,
-        "z_vs_leader": 3.58,
+        "rank": 27,
+        "z_vs_leader": 4.22,
         "tied_with_leader": false
       },
       {
@@ -1249,8 +1295,8 @@
             ]
           }
         },
-        "rank": 27,
-        "z_vs_leader": 3.85,
+        "rank": 28,
+        "z_vs_leader": 4.53,
         "tied_with_leader": false
       },
       {
@@ -1295,8 +1341,8 @@
             ]
           }
         },
-        "rank": 28,
-        "z_vs_leader": 4.11,
+        "rank": 29,
+        "z_vs_leader": 4.79,
         "tied_with_leader": false
       },
       {
@@ -1341,8 +1387,8 @@
             ]
           }
         },
-        "rank": 29,
-        "z_vs_leader": 4.27,
+        "rank": 30,
+        "z_vs_leader": 4.95,
         "tied_with_leader": false
       },
       {
@@ -1387,8 +1433,8 @@
             ]
           }
         },
-        "rank": 30,
-        "z_vs_leader": 4.4,
+        "rank": 31,
+        "z_vs_leader": 5.09,
         "tied_with_leader": false
       },
       {
@@ -1433,8 +1479,8 @@
             ]
           }
         },
-        "rank": 31,
-        "z_vs_leader": 4.44,
+        "rank": 32,
+        "z_vs_leader": 5.12,
         "tied_with_leader": false
       },
       {
@@ -1479,8 +1525,8 @@
             ]
           }
         },
-        "rank": 32,
-        "z_vs_leader": 4.96,
+        "rank": 33,
+        "z_vs_leader": 5.63,
         "tied_with_leader": false
       },
       {
@@ -1525,8 +1571,8 @@
             ]
           }
         },
-        "rank": 33,
-        "z_vs_leader": 5.24,
+        "rank": 34,
+        "z_vs_leader": 5.93,
         "tied_with_leader": false
       },
       {
@@ -1571,8 +1617,8 @@
             ]
           }
         },
-        "rank": 34,
-        "z_vs_leader": 5.16,
+        "rank": 35,
+        "z_vs_leader": 5.82,
         "tied_with_leader": false
       },
       {
@@ -1617,8 +1663,8 @@
             ]
           }
         },
-        "rank": 35,
-        "z_vs_leader": 5.41,
+        "rank": 36,
+        "z_vs_leader": 6.09,
         "tied_with_leader": false
       },
       {
@@ -1663,8 +1709,8 @@
             ]
           }
         },
-        "rank": 36,
-        "z_vs_leader": 5.79,
+        "rank": 37,
+        "z_vs_leader": 6.46,
         "tied_with_leader": false
       },
       {
@@ -1709,8 +1755,8 @@
             ]
           }
         },
-        "rank": 37,
-        "z_vs_leader": 6.39,
+        "rank": 38,
+        "z_vs_leader": 7.15,
         "tied_with_leader": false
       },
       {
@@ -1755,8 +1801,8 @@
             ]
           }
         },
-        "rank": 38,
-        "z_vs_leader": 6.75,
+        "rank": 39,
+        "z_vs_leader": 7.46,
         "tied_with_leader": false
       },
       {
@@ -1801,8 +1847,8 @@
             ]
           }
         },
-        "rank": 39,
-        "z_vs_leader": 6.51,
+        "rank": 40,
+        "z_vs_leader": 7.17,
         "tied_with_leader": false
       },
       {
@@ -1847,8 +1893,8 @@
             ]
           }
         },
-        "rank": 40,
-        "z_vs_leader": 7.58,
+        "rank": 41,
+        "z_vs_leader": 8.2,
         "tied_with_leader": false
       },
       {
@@ -1893,8 +1939,8 @@
             ]
           }
         },
-        "rank": 41,
-        "z_vs_leader": 8.64,
+        "rank": 42,
+        "z_vs_leader": 9.34,
         "tied_with_leader": false
       },
       {
@@ -1939,8 +1985,8 @@
             ]
           }
         },
-        "rank": 42,
-        "z_vs_leader": 12.04,
+        "rank": 43,
+        "z_vs_leader": 13.08,
         "tied_with_leader": false
       },
       {
@@ -1985,8 +2031,8 @@
             ]
           }
         },
-        "rank": 43,
-        "z_vs_leader": 11.39,
+        "rank": 44,
+        "z_vs_leader": 12.23,
         "tied_with_leader": false
       },
       {
@@ -2031,8 +2077,8 @@
             ]
           }
         },
-        "rank": 44,
-        "z_vs_leader": 12.88,
+        "rank": 45,
+        "z_vs_leader": 13.88,
         "tied_with_leader": false
       },
       {
@@ -2077,8 +2123,8 @@
             ]
           }
         },
-        "rank": 45,
-        "z_vs_leader": 12.61,
+        "rank": 46,
+        "z_vs_leader": 13.54,
         "tied_with_leader": false
       },
       {
@@ -2123,8 +2169,8 @@
             ]
           }
         },
-        "rank": 46,
-        "z_vs_leader": 10.84,
+        "rank": 47,
+        "z_vs_leader": 11.48,
         "tied_with_leader": false
       },
       {
@@ -2169,8 +2215,8 @@
             ]
           }
         },
-        "rank": 47,
-        "z_vs_leader": 10.91,
+        "rank": 48,
+        "z_vs_leader": 11.55,
         "tied_with_leader": false
       },
       {
@@ -2215,8 +2261,8 @@
             ]
           }
         },
-        "rank": 48,
-        "z_vs_leader": 11.8,
+        "rank": 49,
+        "z_vs_leader": 12.45,
         "tied_with_leader": false
       },
       {
@@ -2261,8 +2307,8 @@
             ]
           }
         },
-        "rank": 49,
-        "z_vs_leader": 14.17,
+        "rank": 50,
+        "z_vs_leader": 15.06,
         "tied_with_leader": false
       },
       {
@@ -2307,8 +2353,8 @@
             ]
           }
         },
-        "rank": 50,
-        "z_vs_leader": 14.33,
+        "rank": 51,
+        "z_vs_leader": 15.17,
         "tied_with_leader": false
       },
       {
@@ -2353,8 +2399,8 @@
             ]
           }
         },
-        "rank": 51,
-        "z_vs_leader": 16.86,
+        "rank": 52,
+        "z_vs_leader": 17.73,
         "tied_with_leader": false
       },
       {
@@ -2399,8 +2445,8 @@
             ]
           }
         },
-        "rank": 52,
-        "z_vs_leader": 18.39,
+        "rank": 53,
+        "z_vs_leader": 19.25,
         "tied_with_leader": false
       }
     ]
@@ -2408,233 +2454,206 @@
   "humaneval_paired": {
     "sandbox": [
       {
-        "model": "cloud-antigravity-gemini-gemini-3.8-flash",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "model": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
-        "leader_only_pass": 0,
+        "leader_only_pass": 1,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "cloud-antigravity-gemini-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 1,
         "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "cloud-antigravity-gemini-gemini-3.6-flash",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
-        "leader_only_pass": 0,
+        "leader_only_pass": 1,
         "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "cloud-omp-openai-codex-gpt-6-sol",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
         "leader_only_pass": 0,
-        "model_only_pass": 1,
+        "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "cloud-omp-zai-glm-5.3-flash",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
         "leader_only_pass": 1,
-        "model_only_pass": 1,
+        "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "cloud-antigravity-gemini-gemini-3.5-flash",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
-        "leader_only_pass": 0,
+        "leader_only_pass": 1,
         "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "cloud-omp-zai-glm-5.3",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
         "leader_only_pass": 0,
-        "model_only_pass": 1,
+        "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "qwen38-flash-next-ap-q4kxl-v100",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
-        "leader_only_pass": 0,
+        "leader_only_pass": 1,
         "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "cloud-omp-openai-codex-gpt-6-luna",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
         "leader_only_pass": 0,
-        "model_only_pass": 1,
+        "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "qwen38-flash-next-ap-iq2s-allfour",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
-        "leader_only_pass": 0,
+        "leader_only_pass": 1,
         "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "qwen38-flash-next-ap-q4kxl-allfour",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
-        "leader_only_pass": 0,
+        "leader_only_pass": 1,
         "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "qwen38-flash-next-ap-iq4xs-v100",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
-        "leader_only_pass": 0,
+        "leader_only_pass": 1,
         "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "qwen38-flash-next-ap-iq2s-ada4",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
-        "leader_only_pass": 0,
+        "leader_only_pass": 1,
         "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "qwen38-flash-next-ap-iq4xs-allfour",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
-        "leader_only_pass": 0,
+        "leader_only_pass": 1,
         "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "qwen38-flash-next-ap-q4km-allfour",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
-        "leader_only_pass": 0,
+        "leader_only_pass": 1,
         "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "qwen38-flash-next-ap-iq2s-v100",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
-        "leader_only_pass": 0,
+        "leader_only_pass": 1,
         "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "deepseek-v4-flash-0731-iq3xxs",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
         "leader_only_pass": 1,
-        "model_only_pass": 1,
+        "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "kat-coder-v2.5-dev",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
-        "leader_only_pass": 0,
+        "leader_only_pass": 1,
         "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "qwen35-122b-a10b-iq3s",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
-        "leader_only_pass": 0,
+        "leader_only_pass": 1,
         "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "mom-live-1p",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
-        "leader_only_pass": 1,
+        "leader_only_pass": 2,
         "model_only_pass": 0,
-        "p_value": 1.0,
+        "p_value": 0.5,
         "differs_from_leader": false
       },
       {
         "model": "mom-live-2p",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
-        "leader_only_pass": 0,
+        "leader_only_pass": 1,
         "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "glm53-reap50-iq4xs-v100ada",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
         "leader_only_pass": 0,
-        "model_only_pass": 1,
+        "model_only_pass": 0,
         "p_value": 1.0,
         "differs_from_leader": false
       },
       {
         "model": "mom-live-4",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
-        "shared_items": 40,
-        "leader_only_pass": 0,
-        "model_only_pass": 0,
-        "p_value": 1.0,
-        "differs_from_leader": false
-      },
-      {
-        "model": "mom-live-glm53",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
-        "shared_items": 40,
-        "leader_only_pass": 2,
-        "model_only_pass": 0,
-        "p_value": 0.5,
-        "differs_from_leader": false
-      },
-      {
-        "model": "mom-qwen35-agg",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
-        "shared_items": 40,
-        "leader_only_pass": 6,
-        "model_only_pass": 0,
-        "p_value": 0.0312,
-        "differs_from_leader": true
-      },
-      {
-        "model": "mom-live-4-q36",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
-        "shared_items": 40,
-        "leader_only_pass": 4,
-        "model_only_pass": 0,
-        "p_value": 0.125,
-        "differs_from_leader": false
-      },
-      {
-        "model": "llama3-70b-instruct-q4",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2642,26 +2661,8 @@
         "differs_from_leader": false
       },
       {
-        "model": "qwen38-27b-q4",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
-        "shared_items": 40,
-        "leader_only_pass": 0,
-        "model_only_pass": 0,
-        "p_value": 1.0,
-        "differs_from_leader": false
-      },
-      {
-        "model": "granite-4.2-30b",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
-        "shared_items": 40,
-        "leader_only_pass": 2,
-        "model_only_pass": 0,
-        "p_value": 0.5,
-        "differs_from_leader": false
-      },
-      {
-        "model": "glm53-reap50-iq3m-v100",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "model": "mom-live-glm53",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
         "leader_only_pass": 3,
         "model_only_pass": 0,
@@ -2669,44 +2670,17 @@
         "differs_from_leader": false
       },
       {
-        "model": "qwen36-35b-a3b-nvfp4",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "model": "mom-qwen35-agg",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
-        "leader_only_pass": 0,
+        "leader_only_pass": 7,
         "model_only_pass": 0,
-        "p_value": 1.0,
-        "differs_from_leader": false
+        "p_value": 0.0156,
+        "differs_from_leader": true
       },
       {
-        "model": "nemotron35-lightning-30b-a3b",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
-        "shared_items": 40,
-        "leader_only_pass": 0,
-        "model_only_pass": 0,
-        "p_value": 1.0,
-        "differs_from_leader": false
-      },
-      {
-        "model": "devstral-small2-24b-q4",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
-        "shared_items": 40,
-        "leader_only_pass": 1,
-        "model_only_pass": 0,
-        "p_value": 1.0,
-        "differs_from_leader": false
-      },
-      {
-        "model": "mistral-small4-119b-q4-adaa4000",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
-        "shared_items": 40,
-        "leader_only_pass": 0,
-        "model_only_pass": 0,
-        "p_value": 1.0,
-        "differs_from_leader": false
-      },
-      {
-        "model": "glm53-reap50-iq3m-allfour",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "model": "mom-live-4-q36",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
         "leader_only_pass": 5,
         "model_only_pass": 0,
@@ -2714,26 +2688,8 @@
         "differs_from_leader": false
       },
       {
-        "model": "mimo-v26-pro-bpw2.5",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
-        "shared_items": 40,
-        "leader_only_pass": 20,
-        "model_only_pass": 0,
-        "p_value": 0.0,
-        "differs_from_leader": true
-      },
-      {
-        "model": "deepseek-v4-flash-reap150b-q2k-adaa4000",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
-        "shared_items": 40,
-        "leader_only_pass": 3,
-        "model_only_pass": 0,
-        "p_value": 0.25,
-        "differs_from_leader": false
-      },
-      {
-        "model": "qwen35-27b-q4",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "model": "llama3-70b-instruct-q4",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
         "leader_only_pass": 2,
         "model_only_pass": 0,
@@ -2741,71 +2697,116 @@
         "differs_from_leader": false
       },
       {
-        "model": "qwen25-72b-q4",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "model": "qwen38-27b-q4",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
         "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "granite-4.2-30b",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 3,
+        "model_only_pass": 0,
+        "p_value": 0.25,
+        "differs_from_leader": false
+      },
+      {
+        "model": "glm53-reap50-iq3m-v100",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 4,
+        "model_only_pass": 0,
+        "p_value": 0.125,
+        "differs_from_leader": false
+      },
+      {
+        "model": "qwen36-35b-a3b-nvfp4",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 1,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "nemotron35-lightning-30b-a3b",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 1,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "devstral-small2-24b-q4",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 2,
+        "model_only_pass": 0,
+        "p_value": 0.5,
+        "differs_from_leader": false
+      },
+      {
+        "model": "mistral-small4-119b-q4-adaa4000",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 1,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "glm53-reap50-iq3m-allfour",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 6,
+        "model_only_pass": 0,
+        "p_value": 0.0312,
+        "differs_from_leader": true
+      },
+      {
+        "model": "mimo-v26-pro-bpw2.5",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 21,
+        "model_only_pass": 0,
+        "p_value": 0.0,
+        "differs_from_leader": true
+      },
+      {
+        "model": "deepseek-v4-flash-reap150b-q2k-adaa4000",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 4,
+        "model_only_pass": 0,
+        "p_value": 0.125,
+        "differs_from_leader": false
+      },
+      {
+        "model": "qwen35-27b-q4",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 3,
+        "model_only_pass": 0,
+        "p_value": 0.25,
+        "differs_from_leader": false
+      },
+      {
+        "model": "qwen25-72b-q4",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 2,
+        "model_only_pass": 0,
+        "p_value": 0.5,
         "differs_from_leader": false
       },
       {
         "model": "command-r-plus-104b-0824-iq3m",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
-        "shared_items": 40,
-        "leader_only_pass": 18,
-        "model_only_pass": 0,
-        "p_value": 0.0,
-        "differs_from_leader": true
-      },
-      {
-        "model": "mom-gemma4-agg",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
-        "shared_items": 40,
-        "leader_only_pass": 1,
-        "model_only_pass": 0,
-        "p_value": 1.0,
-        "differs_from_leader": false
-      },
-      {
-        "model": "gemma4-26b-a4b-q4",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
-        "shared_items": 40,
-        "leader_only_pass": 0,
-        "model_only_pass": 0,
-        "p_value": 1.0,
-        "differs_from_leader": false
-      },
-      {
-        "model": "mixtral-8x22b-instruct-q3ks",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
-        "shared_items": 40,
-        "leader_only_pass": 34,
-        "model_only_pass": 0,
-        "p_value": 0.0,
-        "differs_from_leader": true
-      },
-      {
-        "model": "llama31-70b-instruct-q4",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
-        "shared_items": 40,
-        "leader_only_pass": 39,
-        "model_only_pass": 0,
-        "p_value": 0.0,
-        "differs_from_leader": true
-      },
-      {
-        "model": "glm53-flash-aj-iq2xxs",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
-        "shared_items": 40,
-        "leader_only_pass": 37,
-        "model_only_pass": 0,
-        "p_value": 0.0,
-        "differs_from_leader": true
-      },
-      {
-        "model": "gpt-oss-120b-q4",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
         "leader_only_pass": 19,
         "model_only_pass": 0,
@@ -2813,17 +2814,62 @@
         "differs_from_leader": true
       },
       {
-        "model": "mom-live-4-tp2",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "model": "mom-gemma4-agg",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
-        "leader_only_pass": 17,
+        "leader_only_pass": 2,
+        "model_only_pass": 0,
+        "p_value": 0.5,
+        "differs_from_leader": false
+      },
+      {
+        "model": "gemma4-26b-a4b-q4",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 1,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "mixtral-8x22b-instruct-q3ks",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 35,
         "model_only_pass": 0,
         "p_value": 0.0,
         "differs_from_leader": true
       },
       {
-        "model": "gpt-oss-20b-q4",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "model": "llama31-70b-instruct-q4",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 40,
+        "model_only_pass": 0,
+        "p_value": 0.0,
+        "differs_from_leader": true
+      },
+      {
+        "model": "glm53-flash-aj-iq2xxs",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 38,
+        "model_only_pass": 0,
+        "p_value": 0.0,
+        "differs_from_leader": true
+      },
+      {
+        "model": "gpt-oss-120b-q4",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 20,
+        "model_only_pass": 0,
+        "p_value": 0.0,
+        "differs_from_leader": true
+      },
+      {
+        "model": "mom-live-4-tp2",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
         "leader_only_pass": 18,
         "model_only_pass": 0,
@@ -2831,8 +2877,26 @@
         "differs_from_leader": true
       },
       {
+        "model": "gpt-oss-20b-q4",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 19,
+        "model_only_pass": 0,
+        "p_value": 0.0,
+        "differs_from_leader": true
+      },
+      {
         "model": "deepseek-r1-qwen32b-q4",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
+        "shared_items": 40,
+        "leader_only_pass": 38,
+        "model_only_pass": 0,
+        "p_value": 0.0,
+        "differs_from_leader": true
+      },
+      {
+        "model": "wizardlm2-8x22b-iq3s",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
         "leader_only_pass": 37,
         "model_only_pass": 0,
@@ -2840,28 +2904,19 @@
         "differs_from_leader": true
       },
       {
-        "model": "wizardlm2-8x22b-iq3s",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
-        "shared_items": 40,
-        "leader_only_pass": 36,
-        "model_only_pass": 0,
-        "p_value": 0.0,
-        "differs_from_leader": true
-      },
-      {
         "model": "muse-glimmer-30b",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
-        "leader_only_pass": 36,
+        "leader_only_pass": 37,
         "model_only_pass": 0,
         "p_value": 0.0,
         "differs_from_leader": true
       },
       {
         "model": "qwen38-1cat-vllm-target",
-        "leader": "cloud-omp-google-gemini-3.8-flash",
+        "leader": "cloud-omp-openai-codex-gpt-6-astra",
         "shared_items": 40,
-        "leader_only_pass": 30,
+        "leader_only_pass": 31,
         "model_only_pass": 0,
         "p_value": 0.0,
         "differs_from_leader": true
@@ -4941,6 +4996,86 @@
     },
     {
       "model": "cloud-omp-openai-codex-gpt-6-luna",
+      "lane": "finance",
+      "accuracy": 1.0,
+      "n": 24,
+      "ci95": [
+        0.862,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-astra",
+      "lane": "chemistry",
+      "accuracy": 0.8333,
+      "n": 6,
+      "ci95": [
+        0.4365,
+        0.9699
+      ]
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-astra",
+      "lane": "physics",
+      "accuracy": 1.0,
+      "n": 6,
+      "ci95": [
+        0.6097,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-astra",
+      "lane": "video",
+      "accuracy": 0.0,
+      "n": 3,
+      "ci95": [
+        0.0,
+        0.5615
+      ]
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-astra",
+      "lane": "iq",
+      "accuracy": 0.3333,
+      "n": 3,
+      "ci95": [
+        0.0615,
+        0.7923
+      ]
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-astra",
+      "lane": "eq",
+      "accuracy": 1.0,
+      "n": 3,
+      "ci95": [
+        0.4385,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-astra",
+      "lane": "fq",
+      "accuracy": 1.0,
+      "n": 2,
+      "ci95": [
+        0.3424,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-astra",
+      "lane": "qq",
+      "accuracy": 0.75,
+      "n": 4,
+      "ci95": [
+        0.3006,
+        0.9544
+      ]
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-astra",
       "lane": "finance",
       "accuracy": 1.0,
       "n": 24,

@@ -16069,6 +16069,284 @@
       },
       "output_budget": "uncapped: the agent CLI cannot truncate at max_tokens (local rows are capped)",
       "throughput_source": "omp bench chat, median of 10 requests (p95 103.89); see cloud_cli_throughput.json"
+    },
+    {
+      "model": "cloud-omp-openai-codex-gpt-6-astra",
+      "access_profile": "sandbox",
+      "eval_protocol": "v4-mmlu-fewshot-20260918",
+      "gsm8k": {
+        "name": "gsm8k",
+        "alias": "gsm8k",
+        "sample_len": 50,
+        "exact_match,strict-match": 1.0,
+        "exact_match_stderr,strict-match": 0.0,
+        "exact_match,flexible-extract": 1.0,
+        "exact_match_stderr,flexible-extract": 0.0
+      },
+      "truthfulqa_gen": {
+        "name": "truthfulqa_gen",
+        "alias": "truthfulqa_gen",
+        "sample_len": 30,
+        "bleu_max,none": 17.65251914649597,
+        "bleu_max_stderr,none": 3.5017304138585406,
+        "bleu_acc,none": 0.4666666666666667,
+        "bleu_acc_stderr,none": 0.09264111117062016,
+        "bleu_diff,none": 2.3532989502673987,
+        "bleu_diff_stderr,none": 2.22852948111367,
+        "rouge1_max,none": 46.96982513091403,
+        "rouge1_max_stderr,none": 3.9638792624120875,
+        "rouge1_acc,none": 0.5666666666666667,
+        "rouge1_acc_stderr,none": 0.09201865544655373,
+        "rouge1_diff,none": 3.8974404013868402,
+        "rouge1_diff_stderr,none": 2.234855735706212,
+        "rouge2_max,none": 32.251141753882884,
+        "rouge2_max_stderr,none": 4.740282047848934,
+        "rouge2_acc,none": 0.5666666666666667,
+        "rouge2_acc_stderr,none": 0.09201865544655373,
+        "rouge2_diff,none": 4.103669094735438,
+        "rouge2_diff_stderr,none": 2.7318408992691943,
+        "rougeL_max,none": 44.25123484338687,
+        "rougeL_max_stderr,none": 4.141129756634478,
+        "rougeL_acc,none": 0.5666666666666667,
+        "rougeL_acc_stderr,none": 0.09201865544655373,
+        "rougeL_diff,none": 5.047803774650168,
+        "rougeL_diff_stderr,none": 2.363430168498528
+      },
+      "bbh": {
+        "per_subtask": {
+          "bbh_cot_fewshot_boolean_expressions": 1.0,
+          "bbh_cot_fewshot_causal_judgement": 0.875,
+          "bbh_cot_fewshot_date_understanding": 0.875,
+          "bbh_cot_fewshot_logical_deduction_five_objects": 1.0,
+          "bbh_cot_fewshot_navigate": 1.0,
+          "bbh_cot_fewshot_temporal_sequences": 1.0
+        },
+        "mean_accuracy": 0.9583,
+        "n_samples": 48,
+        "scorer": "normalized_logged_answer_v1"
+      },
+      "mmlu_sample": {
+        "per_subject": {
+          "abstract_algebra": 0.95,
+          "anatomy": 0.95,
+          "astronomy": 0.95,
+          "college_computer_science": 0.95,
+          "high_school_psychology": 1.0,
+          "formal_logic": 1.0,
+          "professional_law": 0.95,
+          "marketing": 0.95
+        },
+        "mean_accuracy": 0.9625,
+        "n_samples": 160
+      },
+      "humaneval": {
+        "benchmark": "humaneval",
+        "n_problems": 40,
+        "n_passed": 40,
+        "per_task": {
+          "HumanEval/0": {
+            "passed": true,
+            "code": "\nfrom typing import List\n\n\ndef has_close_elements(numbers: List[float], threshold: float) -> bool:\n    \"\"\"Return whether any two distinct elements differ by less than threshold.\n\n    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)\n    False\n    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)\n    True\n    \"\"\"\n    return any(\n        abs(numbers[i] - numbers[j]) < threshold\n        for i in range(len(numbers))\n        for j in range(i + 1, len(numbers))\n    )\n\n\nif __name__ == \"__main__\":\n    import doctest\n    doctest.testmod()\n"
+          },
+          "HumanEval/1": {
+            "passed": true,
+            "code": "\nfrom typing import List\n\n\ndef separate_paren_groups(paren_string: str) -> List[str]:\n    \"\"\"Return balanced, top-level parenthesis groups, ignoring spaces.\"\"\"\n    groups = []\n    current = []\n    depth = 0\n\n    for char in paren_string:\n        if char.isspace():\n            continue\n\n        current.append(char)\n        if char == \"(\":\n            depth += 1\n        elif char == \")\":\n            depth -= 1\n\n        if depth == 0:\n            groups.append(\"\".join(current))\n            current = []\n\n    return groups\n"
+          },
+          "HumanEval/2": {
+            "passed": true,
+            "code": "\ndef truncate_number(number: float) -> float:\n    \"\"\"Return the decimal part of a positive floating-point number.\n\n    >>> truncate_number(3.5)\n    0.5\n    \"\"\"\n    return number % 1\n"
+          },
+          "HumanEval/3": {
+            "passed": true,
+            "code": "\nfrom typing import List\n\n\ndef below_zero(operations: List[int]) -> bool:\n    balance = 0\n    for operation in operations:\n        balance += operation\n        if balance < 0:\n            return True\n    return False\n"
+          },
+          "HumanEval/4": {
+            "passed": true,
+            "code": "\nfrom typing import List\n\n\ndef mean_absolute_deviation(numbers: List[float]) -> float:\n    \"\"\"Calculate the mean absolute deviation around the dataset's mean.\n\n    >>> mean_absolute_deviation([1.0, 2.0, 3.0, 4.0])\n    1.0\n    \"\"\"\n    mean = sum(numbers) / len(numbers)\n    return sum(abs(number - mean) for number in numbers) / len(numbers)\n"
+          },
+          "HumanEval/5": {
+            "passed": true,
+            "code": "\nfrom typing import List\n\n\ndef intersperse(numbers: List[int], delimeter: int) -> List[int]:\n    \"\"\"Insert delimeter between every two consecutive elements of numbers.\n\n    >>> intersperse([], 4)\n    []\n    >>> intersperse([1, 2, 3], 4)\n    [1, 4, 2, 4, 3]\n    \"\"\"\n    result = []\n    for i, number in enumerate(numbers):\n        if i > 0:\n            result.append(delimeter)\n        result.append(number)\n    return result\n"
+          },
+          "HumanEval/6": {
+            "passed": true,
+            "code": "\nfrom typing import List\n\n\ndef parse_nested_parens(paren_string: str) -> List[int]:\n    \"\"\"Return the maximum nesting depth for each space-separated group.\n\n    >>> parse_nested_parens('(()()) ((())) () ((())()())')\n    [2, 3, 1, 3]\n    \"\"\"\n    result = []\n    for group in paren_string.split():\n        depth = max_depth = 0\n        for char in group:\n            if char == '(':\n                depth += 1\n                max_depth = max(max_depth, depth)\n            elif char == ')':\n                depth -= 1\n        result.append(max_depth)\n    return result\n\n\nassert parse_nested_parens('(()()) ((())) () ((())()())') == [2, 3, 1, 3]\nassert parse_nested_parens('') == []\nassert parse_nested_parens('() (()) (((())))') == [1, 2, 4]\n"
+          },
+          "HumanEval/7": {
+            "passed": true,
+            "code": "\nfrom typing import List\n\n\ndef filter_by_substring(strings: List[str], substring: str) -> List[str]:\n    \"\"\"Filter an input list of strings only for ones that contain given substring.\n\n    >>> filter_by_substring([], 'a')\n    []\n    >>> filter_by_substring(['abc', 'bacd', 'cde', 'array'], 'a')\n    ['abc', 'bacd', 'array']\n    \"\"\"\n    return [string for string in strings if substring in string]\n"
+          },
+          "HumanEval/8": {
+            "passed": true,
+            "code": "\nfrom typing import List, Tuple\n\n\ndef sum_product(numbers: List[int]) -> Tuple[int, int]:\n    \"\"\"Return the sum and product of all integers in numbers.\n\n    >>> sum_product([])\n    (0, 1)\n    >>> sum_product([1, 2, 3, 4])\n    (10, 24)\n    \"\"\"\n    total = 0\n    product = 1\n    for number in numbers:\n        total += number\n        product *= number\n    return total, product\n"
+          },
+          "HumanEval/9": {
+            "passed": true,
+            "code": "\nfrom typing import List\n\n\ndef rolling_max(numbers: List[int]) -> List[int]:\n    \"\"\"Return the maximum element seen up to each position.\n\n    >>> rolling_max([1, 2, 3, 2, 3, 4, 2])\n    [1, 2, 3, 3, 3, 4, 4]\n    >>> rolling_max([])\n    []\n    >>> rolling_max([-3, -5, -1])\n    [-3, -3, -1]\n    \"\"\"\n    result = []\n    for number in numbers:\n        result.append(max(result[-1], number) if result else number)\n    return result\n"
+          },
+          "HumanEval/10": {
+            "passed": true,
+            "code": "\ndef is_palindrome(string: str) -> bool:\n    \"\"\"Test if given string is a palindrome.\"\"\"\n    return string == string[::-1]\n\n\ndef make_palindrome(string: str) -> str:\n    \"\"\"Find the shortest palindrome that begins with a supplied string.\n\n    >>> make_palindrome('')\n    ''\n    >>> make_palindrome('cat')\n    'catac'\n    >>> make_palindrome('cata')\n    'catac'\n    \"\"\"\n    start = 0\n    while not is_palindrome(string[start:]):\n        start += 1\n    return string + string[:start][::-1]\n"
+          },
+          "HumanEval/11": {
+            "passed": true,
+            "code": "from typing import List\n\n\ndef string_xor(a: str, b: str) -> str:\n    \"\"\" Input are two strings a and b consisting only of 1s and 0s.\n    Perform binary XOR on these inputs and return result also as a string.\n    >>> string_xor('010', '110')\n    '100'\n    \"\"\"\n\ndef string_xor(a: str, b: str) -> str:\n    \"\"\"Return the binary XOR of two equal-length binary strings.\n\n    >>> string_xor('010', '110')\n    '100'\n    \"\"\"\n    return ''.join('1' if x != y else '0' for x, y in zip(a, b))\n"
+          },
+          "HumanEval/12": {
+            "passed": true,
+            "code": "\nfrom typing import List, Optional\n\n\ndef longest(strings: List[str]) -> Optional[str]:\n    \"\"\"Return the first longest string, or None if the list is empty.\"\"\"\n    return max(strings, key=len, default=None)\n\n\nassert longest([]) is None\nassert longest(['a', 'b', 'c']) == 'a'\nassert longest(['a', 'bb', 'ccc']) == 'ccc'\nassert longest(['']) == ''\n"
+          },
+          "HumanEval/13": {
+            "passed": true,
+            "code": "\ndef greatest_common_divisor(a: int, b: int) -> int:\n    \"\"\"Return the nonnegative greatest common divisor of a and b.\n\n    >>> greatest_common_divisor(3, 5)\n    1\n    >>> greatest_common_divisor(25, 15)\n    5\n    >>> greatest_common_divisor(-12, 18)\n    6\n    >>> greatest_common_divisor(0, 0)\n    0\n    \"\"\"\n    a, b = abs(a), abs(b)\n    while b:\n        a, b = b, a % b\n    return a\n"
+          },
+          "HumanEval/14": {
+            "passed": true,
+            "code": "\nfrom typing import List\n\n\ndef all_prefixes(string: str) -> List[str]:\n    \"\"\"Return list of all prefixes from shortest to longest of the input string.\n\n    >>> all_prefixes('abc')\n    ['a', 'ab', 'abc']\n    \"\"\"\n    return [string[:i] for i in range(1, len(string) + 1)]\n"
+          },
+          "HumanEval/15": {
+            "passed": true,
+            "code": "\ndef string_sequence(n: int) -> str:\n    \"\"\"Return space-delimited numbers from 0 up to n inclusive.\n\n    >>> string_sequence(0)\n    '0'\n    >>> string_sequence(5)\n    '0 1 2 3 4 5'\n    \"\"\"\n    return \" \".join(str(i) for i in range(n + 1))\n"
+          },
+          "HumanEval/16": {
+            "passed": true,
+            "code": "\ndef count_distinct_characters(string: str) -> int:\n    \"\"\"Return the number of distinct characters, ignoring case.\n\n    >>> count_distinct_characters('xyzXYZ')\n    3\n    >>> count_distinct_characters('Jerry')\n    4\n    \"\"\"\n    return len(set(string.lower()))\n"
+          },
+          "HumanEval/17": {
+            "passed": true,
+            "code": "\nfrom typing import List\n\n\ndef parse_music(music_string: str) -> List[int]:\n    \"\"\"Convert whitespace-separated ASCII musical notes into beat counts.\"\"\"\n    beats = {\"o\": 4, \"o|\": 2, \".|\": 1}\n    return [beats[note] for note in music_string.split()]\n"
+          },
+          "HumanEval/18": {
+            "passed": true,
+            "code": "\ndef how_many_times(string: str, substring: str) -> int:\n    \"\"\"Count occurrences of substring in string, including overlapping cases.\n\n    >>> how_many_times('', 'a')\n    0\n    >>> how_many_times('aaa', 'a')\n    3\n    >>> how_many_times('aaaa', 'aa')\n    3\n    \"\"\"\n    return sum(\n        string.startswith(substring, i)\n        for i in range(len(string) - len(substring) + 1)\n    )\n"
+          },
+          "HumanEval/19": {
+            "passed": true,
+            "code": "from typing import List\n\n\ndef sort_numbers(numbers: str) -> str:\n    \"\"\" Input is a space-delimited string of numberals from 'zero' to 'nine'.\n    Valid choices are 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight' and 'nine'.\n    Return the string with numbers sorted from smallest to largest\n    >>> sort_numbers('three one five')\n    'one three five'\n    \"\"\"\n\ndef sort_numbers(numbers: str) -> str:\n    \"\"\"Return space-delimited number words sorted from smallest to largest.\"\"\"\n    words = [\n        \"zero\", \"one\", \"two\", \"three\", \"four\",\n        \"five\", \"six\", \"seven\", \"eight\", \"nine\",\n    ]\n    order = {word: value for value, word in enumerate(words)}\n    return \" \".join(sorted(numbers.split(), key=order.__getitem__))\n"
+          },
+          "HumanEval/20": {
+            "passed": true,
+            "code": "\nfrom typing import List, Tuple\n\n\ndef find_closest_elements(numbers: List[float]) -> Tuple[float, float]:\n    \"\"\"Return the closest pair of numbers, ordered from smaller to larger.\n\n    >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.2])\n    (2.0, 2.2)\n    >>> find_closest_elements([1.0, 2.0, 3.0, 4.0, 5.0, 2.0])\n    (2.0, 2.0)\n    \"\"\"\n    ordered = sorted(numbers)\n    return min(\n        zip(ordered, ordered[1:]),\n        key=lambda pair: pair[1] - pair[0],\n    )\n"
+          },
+          "HumanEval/21": {
+            "passed": true,
+            "code": "from typing import List\n\n\ndef rescale_to_unit(numbers: List[float]) -> List[float]:\n    \"\"\"Linearly rescale numbers so the minimum is 0 and the maximum is 1.\n\n    Raises:\n        ValueError: If fewer than two numbers are given or all numbers are equal.\n\n    >>> rescale_to_unit([1.0, 2.0, 3.0, 4.0, 5.0])\n    [0.0, 0.25, 0.5, 0.75, 1.0]\n    \"\"\"\n    if len(numbers) < 2:\n        raise ValueError(\"At least two numbers are required.\")\n\n    minimum, maximum = min(numbers), max(numbers)\n    if minimum == maximum:\n        raise ValueError(\"Cannot rescale a list of equal numbers.\")\n\n    return [(number - minimum) / (maximum - minimum) for number in numbers]\n"
+          },
+          "HumanEval/22": {
+            "passed": true,
+            "code": "\nfrom typing import List, Any\n\n\ndef filter_integers(values: List[Any]) -> List[int]:\n    \"\"\"Filter given list of any Python values only for integers.\n\n    >>> filter_integers(['a', 3.14, 5])\n    [5]\n    >>> filter_integers([1, 2, 3, 'abc', {}, []])\n    [1, 2, 3]\n    \"\"\"\n    return [value for value in values if isinstance(value, int)]\n"
+          },
+          "HumanEval/23": {
+            "passed": true,
+            "code": "\ndef strlen(string: str) -> int:\n    \"\"\"Return length of given string.\n\n    >>> strlen('')\n    0\n    >>> strlen('abc')\n    3\n    \"\"\"\n    return len(string)\n"
+          },
+          "HumanEval/24": {
+            "passed": true,
+            "code": "\n\ndef largest_divisor(n: int) -> int:\n    \"\"\" For a given number n, find the largest number that divides n evenly, smaller than n\n    >>> largest_divisor(15)\n    5\n    \"\"\"\n\nfrom math import isqrt\n\ndef largest_divisor(n: int) -> int:\n    \"\"\"Return the largest positive divisor of n smaller than n.\n\n    >>> largest_divisor(15)\n    5\n    >>> largest_divisor(12)\n    6\n    >>> largest_divisor(7)\n    1\n    \"\"\"\n    if n <= 1:\n        raise ValueError(\"n must be greater than 1\")\n\n    for divisor in range(2, isqrt(n) + 1):\n        if n % divisor == 0:\n            return n // divisor\n\n    return 1\n"
+          },
+          "HumanEval/25": {
+            "passed": true,
+            "code": "\nfrom typing import List\n\n\ndef factorize(n: int) -> List[int]:\n    \"\"\"Return the prime factors of a positive integer in ascending order.\n\n    >>> factorize(8)\n    [2, 2, 2]\n    >>> factorize(25)\n    [5, 5]\n    >>> factorize(70)\n    [2, 5, 7]\n    >>> factorize(1)\n    []\n    \"\"\"\n    if n < 1:\n        raise ValueError(\"n must be a positive integer\")\n\n    factors = []\n\n    while n % 2 == 0:\n        factors.append(2)\n        n //= 2\n\n    divisor = 3\n    while divisor * divisor <= n:\n        while n % divisor == 0:\n            factors.append(divisor)\n            n //= divisor\n        divisor += 2\n\n    if n > 1:\n        factors.append(n)\n\n    return factors\n\n\nif __name__ == \"__main__\":\n    import doctest\n    doctest.testmod()\n"
+          },
+          "HumanEval/26": {
+            "passed": true,
+            "code": "from typing import List\n\n\ndef remove_duplicates(numbers: List[int]) -> List[int]:\n    \"\"\" From a list of integers, remove all elements that occur more than once.\n    Keep order of elements left the same as in the input.\n    >>> remove_duplicates([1, 2, 3, 2, 4])\n    [1, 3, 4]\n    \"\"\"\n\nfrom collections import Counter\nfrom typing import List\n\n\ndef remove_duplicates(numbers: List[int]) -> List[int]:\n    \"\"\"Remove all elements that occur more than once, preserving order.\n\n    >>> remove_duplicates([1, 2, 3, 2, 4])\n    [1, 3, 4]\n    \"\"\"\n    counts = Counter(numbers)\n    return [number for number in numbers if counts[number] == 1]\n"
+          },
+          "HumanEval/27": {
+            "passed": true,
+            "code": "\ndef flip_case(string: str) -> str:\n    \"\"\"For a given string, flip lowercase characters to uppercase and uppercase to lowercase.\n    >>> flip_case('Hello')\n    'hELLO'\n    \"\"\"\n    return string.swapcase()\n"
+          },
+          "HumanEval/28": {
+            "passed": true,
+            "code": "\nfrom typing import List\n\n\ndef concatenate(strings: List[str]) -> str:\n    \"\"\"Concatenate list of strings into a single string.\n\n    >>> concatenate([])\n    ''\n    >>> concatenate(['a', 'b', 'c'])\n    'abc'\n    \"\"\"\n    return ''.join(strings)\n"
+          },
+          "HumanEval/29": {
+            "passed": true,
+            "code": "\nfrom typing import List\n\n\ndef filter_by_prefix(strings: List[str], prefix: str) -> List[str]:\n    \"\"\"Filter an input list of strings only for ones that start with a given prefix.\n\n    >>> filter_by_prefix([], 'a')\n    []\n    >>> filter_by_prefix(['abc', 'bcd', 'cde', 'array'], 'a')\n    ['abc', 'array']\n    \"\"\"\n    return [s for s in strings if s.startswith(prefix)]\n"
+          },
+          "HumanEval/30": {
+            "passed": true,
+            "code": "\ndef get_positive(l: list):\n    \"\"\"Return only positive numbers in the list.\n    >>> get_positive([-1, 2, -4, 5, 6])\n    [2, 5, 6]\n    >>> get_positive([5, 3, -5, 2, -3, 3, 9, 0, 123, 1, -10])\n    [5, 3, 2, 3, 9, 123, 1]\n    \"\"\"\n    return [x for x in l if x > 0]\n"
+          },
+          "HumanEval/31": {
+            "passed": true,
+            "code": "\ndef is_prime(n):\n    \"\"\"Return true if a given number is prime, and false otherwise.\n    >>> is_prime(6)\n    False\n    >>> is_prime(101)\n    True\n    >>> is_prime(11)\n    True\n    >>> is_prime(13441)\n    True\n    >>> is_prime(61)\n    True\n    >>> is_prime(4)\n    False\n    >>> is_prime(1)\n    False\n    \"\"\"\n    if n < 2:\n        return False\n    if n % 2 == 0:\n        return n == 2\n\n    divisor = 3\n    while divisor * divisor <= n:\n        if n % divisor == 0:\n            return False\n        divisor += 2\n\n    return True\n"
+          },
+          "HumanEval/32": {
+            "passed": true,
+            "code": "import math\n\n\ndef poly(xs: list, x: float):\n    \"\"\"\n    Evaluates polynomial with coefficients xs at point x.\n    return xs[0] + xs[1] * x + xs[1] * x^2 + .... xs[n] * x^n\n    \"\"\"\n    return sum([coeff * math.pow(x, i) for i, coeff in enumerate(xs)])\n\n\ndef find_zero(xs: list):\n    \"\"\" xs are coefficients of a polynomial.\n    find_zero find x such that poly(x) = 0.\n    find_zero returns only only zero point, even if there are many.\n    Moreover, find_zero only takes list xs having even number of coefficients\n    and largest non zero coefficient as it guarantees\n    a solution.\n    >>> round(find_zero([1, 2]), 2) # f(x) = 1 + 2x\n    -0.5\n    >>> round(find_zero([-6, 11, -6, 1]), 2) # (x - 1) * (x - 2) * (x - 3) = -6 + 11x - 6x^2 + x^3\n    1.0\n    \"\"\"\n\ndef find_zero(xs: list):\n    \"\"\"Return one real root of an odd-degree polynomial.\"\"\"\n    left, right = -1.0, 1.0\n    f_left, f_right = poly(xs, left), poly(xs, right)\n\n    # An odd-degree polynomial eventually has opposite signs at its ends.\n    while (f_left < 0) == (f_right < 0):\n        if f_left == 0:\n            return left\n        if f_right == 0:\n            return right\n        left *= 2\n        right *= 2\n        f_left, f_right = poly(xs, left), poly(xs, right)\n\n    if f_left == 0:\n        return left\n    if f_right == 0:\n        return right\n\n    # Bisect until an exact root or floating-point precision is reached.\n    while True:\n        mid = left / 2 + right / 2\n        if mid == left or mid == right:\n            return mid\n\n        f_mid = poly(xs, mid)\n        if f_mid == 0:\n            return mid\n\n        if (f_mid < 0) == (f_left < 0):\n            left, f_left = mid, f_mid\n        else:\n            right = mid\n"
+          },
+          "HumanEval/33": {
+            "passed": true,
+            "code": "\ndef sort_third(l: list):\n    \"\"\"Return a copy with values at indices divisible by three sorted.\"\"\"\n    result = l.copy()\n    result[::3] = sorted(l[::3])\n    return result\n"
+          },
+          "HumanEval/34": {
+            "passed": true,
+            "code": "\ndef unique(l: list):\n    \"\"\"Return sorted unique elements in a list.\n\n    >>> unique([5, 3, 5, 2, 3, 3, 9, 0, 123])\n    [0, 2, 3, 5, 9, 123]\n    \"\"\"\n    return sorted(set(l))\n"
+          },
+          "HumanEval/35": {
+            "passed": true,
+            "code": "\ndef max_element(l: list):\n    \"\"\"Return maximum element in the list.\n    >>> max_element([1, 2, 3])\n    3\n    >>> max_element([5, 3, -5, 2, -3, 3, 9, 0, 123, 1, -10])\n    123\n    \"\"\"\n    return max(l)\n"
+          },
+          "HumanEval/36": {
+            "passed": true,
+            "code": "\ndef fizz_buzz(n: int):\n    \"\"\"Return the number of times the digit 7 appears in integers less than n which are divisible by 11 or 13.\n    >>> fizz_buzz(50)\n    0\n    >>> fizz_buzz(78)\n    2\n    >>> fizz_buzz(79)\n    3\n    \"\"\"\n    return sum(\n        str(i).count(\"7\")\n        for i in range(n)\n        if i % 11 == 0 or i % 13 == 0\n    )\n"
+          },
+          "HumanEval/37": {
+            "passed": true,
+            "code": "\ndef sort_even(l: list):\n    \"\"\"Return a copy with even-indexed values sorted and odd-indexed values unchanged.\"\"\"\n    result = l.copy()\n    result[::2] = sorted(l[::2])\n    return result\n"
+          },
+          "HumanEval/38": {
+            "passed": true,
+            "code": "\n\ndef encode_cyclic(s: str):\n    \"\"\"\n    returns encoded string by cycling groups of three characters.\n    \"\"\"\n    # split string to groups. Each of length 3.\n    groups = [s[(3 * i):min((3 * i + 3), len(s))] for i in range((len(s) + 2) // 3)]\n    # cycle elements in each group. Unless group has fewer elements than 3.\n    groups = [(group[1:] + group[0]) if len(group) == 3 else group for group in groups]\n    return \"\".join(groups)\n\n\ndef decode_cyclic(s: str):\n    \"\"\"\n    takes as input string encoded with encode_cyclic function. Returns decoded string.\n    \"\"\"\n\ndef decode_cyclic(s: str):\n    \"\"\"\n    Takes a string encoded with encode_cyclic and returns the decoded string.\n    \"\"\"\n    groups = [s[i:i + 3] for i in range(0, len(s), 3)]\n    groups = [\n        group[-1] + group[:-1] if len(group) == 3 else group\n        for group in groups\n    ]\n    return \"\".join(groups)\n"
+          },
+          "HumanEval/39": {
+            "passed": true,
+            "code": "\n\ndef prime_fib(n: int):\n    \"\"\"\n    prime_fib returns n-th number that is a Fibonacci number and it's also prime.\n    >>> prime_fib(1)\n    2\n    >>> prime_fib(2)\n    3\n    >>> prime_fib(3)\n    5\n    >>> prime_fib(4)\n    13\n    >>> prime_fib(5)\n    89\n    \"\"\"\n\nfrom math import isqrt\n\n\ndef prime_fib(n: int):\n    \"\"\"\n    Return the n-th Fibonacci number that is also prime.\n\n    >>> prime_fib(1)\n    2\n    >>> prime_fib(2)\n    3\n    >>> prime_fib(3)\n    5\n    >>> prime_fib(4)\n    13\n    >>> prime_fib(5)\n    89\n    \"\"\"\n    if n < 1:\n        raise ValueError(\"n must be a positive integer\")\n\n    def is_prime(value: int) -> bool:\n        if value < 2:\n            return False\n        if value % 2 == 0:\n            return value == 2\n        return all(\n            value % divisor != 0\n            for divisor in range(3, isqrt(value) + 1, 2)\n        )\n\n    a, b = 0, 1\n    while True:\n        a, b = b, a + b\n        if is_prime(a):\n            n -= 1\n            if n == 0:\n                return a\n"
+          }
+        },
+        "pass_at_1": 1.0,
+        "failed_task_ids": []
+      },
+      "specialist_protocol": "v3-private-specialist-packs-finance-20260924",
+      "completion_tokens_per_second": 21.39,
+      "prompt_tokens_per_second": null,
+      "gpu_decode_telemetry": {
+        "9": {
+          "samples": 0,
+          "max_util_pct": null,
+          "mean_util_pct": null,
+          "max_memory_mib": null,
+          "max_power_w": null,
+          "max_temperature_c": null
+        }
+      },
+      "runtime_sec": 4584.9,
+      "engine": "omp CLI (omp -p, no tools) via OpenAI Codex subscription",
+      "hardware_profile": "dual-layer",
+      "physical_gpus": [
+        9
+      ],
+      "topology": "cloud/agent-CLI provider; no local GPU (omp-openai-codex)",
+      "cuda_device_order": "PCI_BUS_ID",
+      "external_base_url": "http://127.0.0.1:59771",
+      "external_model_alias": "gpt-6-astra",
+      "excluded_physical_gpus": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "model_release_date_status": "missing; add primary source before temporal contamination comparison",
+      "cli_usage": {
+        "requests": 432,
+        "prompt_tokens": 282434,
+        "completion_tokens": 24413,
+        "cost_usd_list_price": 4.045,
+        "source": "reports/benchmark_logs/cloud-omp-openai-codex-gpt-6-astra_cli_usage.jsonl"
+      },
+      "output_budget": "uncapped: the agent CLI cannot truncate at max_tokens (local rows are capped)",
+      "throughput_source": "omp bench chat, median of 10 requests (p95 28.38); see cloud_cli_throughput.json"
     }
   ],
   "bbh_scoring_fix": {

@@ -180,15 +180,17 @@ context). Throughput comes from `omp bench` as a distribution
 | Provider key | Models | Smoke test | Full suite |
 |---|---|---|---|
 | `omp-zai` | glm-5.3-flash, glm-5.3 | pass | both done: 0.9466 and 0.9436 |
-| `omp-openai-codex` | gpt-6-luna, gpt-6-astra, gpt-6-sol | pass | gpt-6-sol 0.9505, gpt-6-luna 0.9257; astra running |
+| `omp-openai-codex` | gpt-6-luna, gpt-6-astra, gpt-6-sol | pass | gpt-6-astra 0.9802, gpt-6-sol 0.9505, gpt-6-luna 0.9257 |
 | `omp-google` | gemini-3.8-flash | pass | done (`cloud-omp-google-gemini-3.8-flash`) |
 | github-copilot | all tried | 400 "model not supported" | not registered |
 | google-antigravity | gemini-3.8-flash | omp: unhandled API mapping | not registered |
 | grok-build | grok-4.5 | no answer (not signed in) | not registered |
 
-All five omp rows measured so far (0.9257 to 0.9658) are statistically tied
-with each other and with the best local row; the public composite no longer
-separates frontier cloud models from Qwen3.8 Flash-Next on this sample size.
+GPT-6 Astra leads the table at 0.9802 (0.952 to 1.000), at 21 tok/s and
+about 4 USD list price for the suite. With it on top, 8 of 53 complete rows
+are tied with the leader; the best local row (Qwen3.8 Flash-Next AP-Q4_K_XL,
+0.9272) is now measurably below it. The other five omp rows (0.9257 to
+0.9658) remain tied with each other.
 On the finance lane GLM-5.3 and GPT-6 Luna answer 24 of 24, which with 24
 items bounds the true rate above 86%, not at 100%.
 
