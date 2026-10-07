@@ -139,7 +139,7 @@ first, under the unchanged protocol `v4-mmlu-fewshot-20260918`:
 | Row to measure | Topology | Old reference | Result |
 |---|---|---|---|
 | Qwen3.8 Flash-Next AP-IQ2_S, six GPUs | 4x Ada 20 GB + 2x V100 32 GB, layer split | 40.79 tok/s, composite 0.9232 (old all-four) | pending |
-| Qwen3.8 Flash-Next AP-IQ2_S, four Ada | 4x RTX 4000 Ada 20 GB, layer split | none | pending |
+| Qwen3.8 Flash-Next AP-IQ2_S, four Ada | 4x RTX 4000 Ada 20 GB, layer split | none | **40.61 tok/s, composite 0.9180** (`qwen38-flash-next-ap-iq2s-ada4`, 4K context, about 53 GB in VRAM); inside the margin of the old 0.9232 |
 | Qwen3.8 Flash-Next AP-IQ2_S, V100 pair | 2x V100 32 GB NVLink, layer split | 42.79 tok/s, composite 0.9113 | pending |
 
 This table is updated in place when a row is measured: the value, the result
@@ -179,8 +179,8 @@ context). Throughput comes from `omp bench` as a distribution
 
 | Provider key | Models | Smoke test | Full suite |
 |---|---|---|---|
-| `omp-zai` | glm-5.3-flash, glm-5.3 | pass | running 2026-10-07 |
-| `omp-openai-codex` | gpt-6-luna, gpt-6-astra, gpt-6-sol | pass | queued |
+| `omp-zai` | glm-5.3-flash, glm-5.3 | pass | re-queued (first runs lost to a missing HumanEval file) |
+| `omp-openai-codex` | gpt-6-luna, gpt-6-astra, gpt-6-sol | pass | gpt-6-sol: composite 0.9505 (`cloud-omp-openai-codex-gpt-6-sol`); luna and astra re-queued |
 | `omp-google` | gemini-3.8-flash | pass | queued |
 | github-copilot | all tried | 400 "model not supported" | not registered |
 | google-antigravity | gemini-3.8-flash | omp: unhandled API mapping | not registered |
@@ -194,7 +194,11 @@ cannot truncate), which the row records in `output_budget`.
 `specialist_experts.py` scores the bare model and the same model with one
 tool on identical items (FQ: forward-kinematics simulator; video: FFmpeg
 render and repair, at most three rounds). Results go to
-`reports/specialist_experts.json`. First row: Qwen3.8-27B Q4_K_M, running.
+`reports/specialist_experts.json`. First row, GLM-5.3-Flash through omp: FQ
+0 of 2 bare to 2 of 2 with the simulator, video 0 of 3 to 1 of 3 with the
+repair loop. The bare FQ answers failed as unparseable JSON, so part of the
+gain is format repair. A 73-item parametric FQ pack
+(`fq_v2_parametric.csv`) is being measured to replace the 2-item reading.
 
 ## 2026-10-07: disk freed for the Flash-Next runs
 

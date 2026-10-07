@@ -2,8 +2,8 @@
   "method": "Wilson 95% per component; composite SE from Agresti-Coull binomial variances; unpaired z-test against the profile leader (conservative, see module docstring)",
   "protocol": "v4-mmlu-fewshot-20260918",
   "source_sha256": {
-    "well_known_suite_20260917.json": "631738670ef1fb331443a3954c9d8f3bcf76a5556b4dc24b988fe3e1002c84e8",
-    "specialist_suite_20260922.json": "35fa178975c3808c095826f49fbf4739486e1b9b05db5407d7fb00c730c3b202"
+    "well_known_suite_20260917.json": "bee6a65c3135b631b232f5e05e547f50837181cb1c6274b4181ac2b08ab1846d",
+    "specialist_suite_20260922.json": "f37638905cb8cdf5c7b3a566f0354708e75cae8979c7033cb51cb7414d3603c5"
   },
   "min_items_for_perfect_score_claim": {
     "lower_bound_0.90": 35,
@@ -104,6 +104,52 @@
         "tied_with_leader": true
       },
       {
+        "model": "cloud-omp-openai-codex-gpt-6-sol",
+        "composite": 0.9505,
+        "standard_error": 0.0175,
+        "ci95": [
+          0.9163,
+          0.9848
+        ],
+        "components": {
+          "gsm8k": {
+            "accuracy": 1.0,
+            "n": 50,
+            "ci95": [
+              0.9287,
+              1.0
+            ]
+          },
+          "bbh": {
+            "accuracy": 0.8333,
+            "n": 48,
+            "ci95": [
+              0.7042,
+              0.913
+            ]
+          },
+          "mmlu": {
+            "accuracy": 0.9688,
+            "n": 160,
+            "ci95": [
+              0.929,
+              0.9866
+            ]
+          },
+          "humaneval": {
+            "accuracy": 1.0,
+            "n": 40,
+            "ci95": [
+              0.9124,
+              1.0
+            ]
+          }
+        },
+        "rank": 3,
+        "z_vs_leader": 0.49,
+        "tied_with_leader": true
+      },
+      {
         "model": "cloud-antigravity-gemini-gemini-3.5-flash",
         "composite": 0.9463,
         "standard_error": 0.0175,
@@ -145,7 +191,7 @@
             ]
           }
         },
-        "rank": 3,
+        "rank": 4,
         "z_vs_leader": 0.66,
         "tied_with_leader": true
       },
@@ -191,7 +237,7 @@
             ]
           }
         },
-        "rank": 4,
+        "rank": 5,
         "z_vs_leader": 1.41,
         "tied_with_leader": true
       },
@@ -237,7 +283,7 @@
             ]
           }
         },
-        "rank": 5,
+        "rank": 6,
         "z_vs_leader": 1.54,
         "tied_with_leader": true
       },
@@ -283,7 +329,7 @@
             ]
           }
         },
-        "rank": 6,
+        "rank": 7,
         "z_vs_leader": 1.65,
         "tied_with_leader": true
       },
@@ -329,8 +375,54 @@
             ]
           }
         },
-        "rank": 7,
+        "rank": 8,
         "z_vs_leader": 1.71,
+        "tied_with_leader": true
+      },
+      {
+        "model": "qwen38-flash-next-ap-iq2s-ada4",
+        "composite": 0.918,
+        "standard_error": 0.0197,
+        "ci95": [
+          0.8794,
+          0.9566
+        ],
+        "components": {
+          "gsm8k": {
+            "accuracy": 0.92,
+            "n": 50,
+            "ci95": [
+              0.8116,
+              0.9685
+            ]
+          },
+          "bbh": {
+            "accuracy": 0.8958,
+            "n": 48,
+            "ci95": [
+              0.7783,
+              0.9547
+            ]
+          },
+          "mmlu": {
+            "accuracy": 0.8812,
+            "n": 160,
+            "ci95": [
+              0.8219,
+              0.9226
+            ]
+          },
+          "humaneval": {
+            "accuracy": 0.975,
+            "n": 40,
+            "ci95": [
+              0.8712,
+              0.9956
+            ]
+          }
+        },
+        "rank": 9,
+        "z_vs_leader": 1.72,
         "tied_with_leader": true
       },
       {
@@ -375,7 +467,7 @@
             ]
           }
         },
-        "rank": 8,
+        "rank": 10,
         "z_vs_leader": 1.76,
         "tied_with_leader": true
       },
@@ -421,7 +513,7 @@
             ]
           }
         },
-        "rank": 9,
+        "rank": 11,
         "z_vs_leader": 1.77,
         "tied_with_leader": true
       },
@@ -467,7 +559,7 @@
             ]
           }
         },
-        "rank": 10,
+        "rank": 12,
         "z_vs_leader": 1.95,
         "tied_with_leader": true
       },
@@ -513,7 +605,7 @@
             ]
           }
         },
-        "rank": 11,
+        "rank": 13,
         "z_vs_leader": 2.03,
         "tied_with_leader": false
       },
@@ -559,7 +651,7 @@
             ]
           }
         },
-        "rank": 12,
+        "rank": 14,
         "z_vs_leader": 2.12,
         "tied_with_leader": false
       },
@@ -605,7 +697,7 @@
             ]
           }
         },
-        "rank": 13,
+        "rank": 15,
         "z_vs_leader": 2.39,
         "tied_with_leader": false
       },
@@ -651,7 +743,7 @@
             ]
           }
         },
-        "rank": 14,
+        "rank": 16,
         "z_vs_leader": 2.42,
         "tied_with_leader": false
       },
@@ -697,7 +789,7 @@
             ]
           }
         },
-        "rank": 15,
+        "rank": 17,
         "z_vs_leader": 2.56,
         "tied_with_leader": false
       },
@@ -743,7 +835,7 @@
             ]
           }
         },
-        "rank": 16,
+        "rank": 18,
         "z_vs_leader": 3.01,
         "tied_with_leader": false
       },
@@ -789,7 +881,7 @@
             ]
           }
         },
-        "rank": 17,
+        "rank": 19,
         "z_vs_leader": 2.81,
         "tied_with_leader": false
       },
@@ -835,7 +927,7 @@
             ]
           }
         },
-        "rank": 18,
+        "rank": 20,
         "z_vs_leader": 2.98,
         "tied_with_leader": false
       },
@@ -881,7 +973,7 @@
             ]
           }
         },
-        "rank": 19,
+        "rank": 21,
         "z_vs_leader": 3.32,
         "tied_with_leader": false
       },
@@ -927,7 +1019,7 @@
             ]
           }
         },
-        "rank": 20,
+        "rank": 22,
         "z_vs_leader": 3.42,
         "tied_with_leader": false
       },
@@ -973,7 +1065,7 @@
             ]
           }
         },
-        "rank": 21,
+        "rank": 23,
         "z_vs_leader": 3.68,
         "tied_with_leader": false
       },
@@ -1019,7 +1111,7 @@
             ]
           }
         },
-        "rank": 22,
+        "rank": 24,
         "z_vs_leader": 3.94,
         "tied_with_leader": false
       },
@@ -1065,7 +1157,7 @@
             ]
           }
         },
-        "rank": 23,
+        "rank": 25,
         "z_vs_leader": 4.09,
         "tied_with_leader": false
       },
@@ -1111,7 +1203,7 @@
             ]
           }
         },
-        "rank": 24,
+        "rank": 26,
         "z_vs_leader": 4.23,
         "tied_with_leader": false
       },
@@ -1157,7 +1249,7 @@
             ]
           }
         },
-        "rank": 25,
+        "rank": 27,
         "z_vs_leader": 4.26,
         "tied_with_leader": false
       },
@@ -1203,7 +1295,7 @@
             ]
           }
         },
-        "rank": 26,
+        "rank": 28,
         "z_vs_leader": 4.79,
         "tied_with_leader": false
       },
@@ -1249,7 +1341,7 @@
             ]
           }
         },
-        "rank": 27,
+        "rank": 29,
         "z_vs_leader": 5.07,
         "tied_with_leader": false
       },
@@ -1295,7 +1387,7 @@
             ]
           }
         },
-        "rank": 28,
+        "rank": 30,
         "z_vs_leader": 4.99,
         "tied_with_leader": false
       },
@@ -1341,7 +1433,7 @@
             ]
           }
         },
-        "rank": 29,
+        "rank": 31,
         "z_vs_leader": 5.24,
         "tied_with_leader": false
       },
@@ -1387,7 +1479,7 @@
             ]
           }
         },
-        "rank": 30,
+        "rank": 32,
         "z_vs_leader": 5.62,
         "tied_with_leader": false
       },
@@ -1433,7 +1525,7 @@
             ]
           }
         },
-        "rank": 31,
+        "rank": 33,
         "z_vs_leader": 6.19,
         "tied_with_leader": false
       },
@@ -1479,7 +1571,7 @@
             ]
           }
         },
-        "rank": 32,
+        "rank": 34,
         "z_vs_leader": 6.57,
         "tied_with_leader": false
       },
@@ -1525,7 +1617,7 @@
             ]
           }
         },
-        "rank": 33,
+        "rank": 35,
         "z_vs_leader": 6.34,
         "tied_with_leader": false
       },
@@ -1571,7 +1663,7 @@
             ]
           }
         },
-        "rank": 34,
+        "rank": 36,
         "z_vs_leader": 7.42,
         "tied_with_leader": false
       },
@@ -1617,7 +1709,7 @@
             ]
           }
         },
-        "rank": 35,
+        "rank": 37,
         "z_vs_leader": 8.45,
         "tied_with_leader": false
       },
@@ -1663,7 +1755,7 @@
             ]
           }
         },
-        "rank": 36,
+        "rank": 38,
         "z_vs_leader": 11.76,
         "tied_with_leader": false
       },
@@ -1709,7 +1801,7 @@
             ]
           }
         },
-        "rank": 37,
+        "rank": 39,
         "z_vs_leader": 11.17,
         "tied_with_leader": false
       },
@@ -1755,7 +1847,7 @@
             ]
           }
         },
-        "rank": 38,
+        "rank": 40,
         "z_vs_leader": 12.62,
         "tied_with_leader": false
       },
@@ -1801,7 +1893,7 @@
             ]
           }
         },
-        "rank": 39,
+        "rank": 41,
         "z_vs_leader": 12.36,
         "tied_with_leader": false
       },
@@ -1847,7 +1939,7 @@
             ]
           }
         },
-        "rank": 40,
+        "rank": 42,
         "z_vs_leader": 10.67,
         "tied_with_leader": false
       },
@@ -1893,7 +1985,7 @@
             ]
           }
         },
-        "rank": 41,
+        "rank": 43,
         "z_vs_leader": 10.74,
         "tied_with_leader": false
       },
@@ -1939,7 +2031,7 @@
             ]
           }
         },
-        "rank": 42,
+        "rank": 44,
         "z_vs_leader": 11.62,
         "tied_with_leader": false
       },
@@ -1985,7 +2077,7 @@
             ]
           }
         },
-        "rank": 43,
+        "rank": 45,
         "z_vs_leader": 13.93,
         "tied_with_leader": false
       },
@@ -2031,7 +2123,7 @@
             ]
           }
         },
-        "rank": 44,
+        "rank": 46,
         "z_vs_leader": 14.11,
         "tied_with_leader": false
       },
@@ -2077,7 +2169,7 @@
             ]
           }
         },
-        "rank": 45,
+        "rank": 47,
         "z_vs_leader": 16.62,
         "tied_with_leader": false
       },
@@ -2123,7 +2215,7 @@
             ]
           }
         },
-        "rank": 46,
+        "rank": 48,
         "z_vs_leader": 18.16,
         "tied_with_leader": false
       }
@@ -3958,6 +4050,66 @@
       "ci95": [
         0.6414,
         0.9332
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-ada4",
+      "lane": "video",
+      "accuracy": 0.6667,
+      "n": 3,
+      "ci95": [
+        0.2077,
+        0.9385
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-ada4",
+      "lane": "iq",
+      "accuracy": 0.6667,
+      "n": 3,
+      "ci95": [
+        0.2077,
+        0.9385
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-ada4",
+      "lane": "eq",
+      "accuracy": 1.0,
+      "n": 3,
+      "ci95": [
+        0.4385,
+        1.0
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-ada4",
+      "lane": "fq",
+      "accuracy": 0.0,
+      "n": 2,
+      "ci95": [
+        0.0,
+        0.6576
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-ada4",
+      "lane": "qq",
+      "accuracy": 0.75,
+      "n": 4,
+      "ci95": [
+        0.3006,
+        0.9544
+      ]
+    },
+    {
+      "model": "qwen38-flash-next-ap-iq2s-ada4",
+      "lane": "finance",
+      "accuracy": 0.9167,
+      "n": 24,
+      "ci95": [
+        0.7416,
+        0.9769
       ]
     }
   ]
