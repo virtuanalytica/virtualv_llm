@@ -50,3 +50,17 @@ def test_external_url_with_doubled_v1_is_refused_before_a_run():
     assert wks.external_base_url("https://example.test/v1beta/openai", "/chat/completions").endswith("/openai")
     with pytest.raises(SystemExit, match="drop /v1"):
         wks.external_base_url("http://127.0.0.1:8027/v1", "/v1/chat/completions")
+
+
+def test_omp_bench_payload_reduces_to_published_distribution():
+    import json
+
+    import omp_throughput
+
+    # Recorded 2026-10-07: `omp bench openai-codex/gpt-6-luna --profile chat --runs 10 --json`.
+    bench = json.loads((ROOT / "tests/fixtures/omp_bench_gpt6_luna.json").read_text())
+    summary = omp_throughput.summarise(bench, "openai-codex/gpt-6-luna")
+    assert summary["requests"] == 10 and summary["failed_requests"] == 0
+    decode = summary["decode_tokens_per_second"]
+    assert decode["min"] <= decode["p50"] <= decode["p95"] <= decode["max"]
+    assert decode["p50"] == 55.56 and summary["time_to_first_token_ms"]["p50"] == 1480
