@@ -65,7 +65,12 @@ PROFILES = (
     ("ada4", "0,1,2,5", "4× RTX 4000 Ada 20GB · layer split", 18033),
     ("v100pair", "3,4", "2× Tesla V100-SXM2-32GB · NVLink · layer split", 18031),
     ("six", "0,1,2,3,4,5", "4× RTX 4000 Ada 20GB + 2× V100 NVLink · layer split", 18034),
+    # Tensor split is the fastest llama.cpp topology on the NVLink pair but
+    # once produced driver handle errors in a long unattended run, so it is
+    # never part of the default set: select it explicitly and watch it.
+    ("v100pair-tensor", "3,4", "2× Tesla V100-SXM2-32GB · NVLink · tensor split", 18035),
 )
+DEFAULT_PROFILES = ("ada4", "v100pair", "six")
 
 
 def now() -> str:
@@ -90,6 +95,10 @@ def event(state: dict[str, Any], candidate: dict[str, Any], kind: str, **data: A
 
 def target(candidate: dict[str, Any]) -> Path:
     return MODELS / f"qwen38-flash-next-{candidate['key']}" / candidate["file"]
+
+
+def split_mode(profile: str) -> str:
+    return "tensor" if profile.endswith("-tensor") else "layer"
 
 
 def model_id(candidate: dict[str, Any], profile: str) -> str:
@@ -204,7 +213,8 @@ def annotate(model: str, candidate: dict[str, Any], profile: str, topology: str,
         "source_revision": REVISION, "source_published_at": PUBLISHED_AT,
         "quantization": candidate["key"].upper(), "weight_bytes": target(candidate).stat().st_size,
         "weight_sha256": digest, "context_tokens": context,
-        "split_policy": "layer; V100 tensor split excluded for unattended long suite",
+        "split_policy": ("tensor; attended run" if split_mode(profile) == "tensor"
+                         else "layer; V100 tensor split excluded for unattended long suite"),
     }):
         raise RuntimeError(f"cannot annotate missing result {model}")
 
@@ -215,7 +225,7 @@ def run_profile(candidate: dict[str, Any], state: dict[str, Any], profile: str, 
     if complete(model):
         return
     path = target(candidate)
-    context = candidate["v100_context"] if profile == "v100pair" else 4096
+    context = candidate["v100_context"] if profile.startswith("v100pair") else 4096
     log = REPORTS / "llama_logs" / f"{model}.log"
     log.parent.mkdir(parents=True, exist_ok=True)
     stopped: list[str] = []
@@ -228,7 +238,7 @@ def run_profile(candidate: dict[str, Any], state: dict[str, Any], profile: str, 
         env.update({"CUDA_DEVICE_ORDER": "PCI_BUS_ID", "CUDA_VISIBLE_DEVICES": devices})
         command = [str(SERVER), "--model", str(path), "--alias", "qwen38-flash-next",
                    "--host", "127.0.0.1", "--port", str(port), "--ctx-size", str(context),
-                   "--parallel", "1", "--split-mode", "layer", "--gpu-layers", "99",
+                   "--parallel", "1", "--split-mode", split_mode(profile), "--gpu-layers", "99",
                    "--flash-attn", "on", "--reasoning", "off", "--cache-type-k", "q8_0",
                    "--cache-type-v", "q8_0", "--jinja"]
         with log.open("w") as handle:
@@ -292,7 +302,7 @@ def main() -> int:
     for candidate in selected:
         download(candidate, state)
         for profile in PROFILES:
-            if not args.profile or profile[0] in args.profile:
+            if profile[0] in (args.profile or DEFAULT_PROFILES):
                 run_profile(candidate, state, *profile)
     if not args.only and not args.keep_all and not args.profile:
         scored = [(composite(candidate), candidate) for candidate in CANDIDATES]
