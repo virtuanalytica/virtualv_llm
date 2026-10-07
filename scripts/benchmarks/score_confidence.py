@@ -112,6 +112,50 @@ def well_known_confidence(payload: dict, protocol: str) -> dict:
     return by_profile
 
 
+def mcnemar_exact(only_first: int, only_second: int) -> float:
+    """Two-sided exact McNemar p-value from the two discordant counts."""
+    n, k = only_first + only_second, min(only_first, only_second)
+    if n == 0:
+        return 1.0
+    tail = sum(math.comb(n, i) for i in range(k + 1)) / 2 ** n
+    return min(1.0, 2 * tail)
+
+
+def humaneval_paired(payload: dict, protocol: str) -> dict[str, list[dict]]:
+    """Paired comparison with the profile leader on the HumanEval items both ran.
+
+    HumanEval is the one task whose per-item outcomes are in the curated JSON.
+    Pairing uses only the items where the two models disagree, which is why it
+    can separate models the unpaired composite test leaves tied.
+    """
+    ranked = well_known_confidence(payload, protocol)
+    rows = {r.get("model"): r for r in payload.get("results", [])}
+
+    def outcomes(model: str) -> dict[str, bool]:
+        tasks = (rows[model].get("humaneval") or {}).get("per_task") or {}
+        return {task: bool(cell.get("passed")) for task, cell in tasks.items() if isinstance(cell, dict)}
+
+    result: dict[str, list[dict]] = {}
+    for profile, entries in ranked.items():
+        leader = outcomes(entries[0]["model"])
+        if not leader:
+            continue
+        for entry in entries[1:]:
+            other = outcomes(entry["model"])
+            shared = sorted(set(leader) & set(other))
+            if not shared:
+                continue
+            leader_only = sum(leader[t] and not other[t] for t in shared)
+            other_only = sum(other[t] and not leader[t] for t in shared)
+            p_value = mcnemar_exact(leader_only, other_only)
+            result.setdefault(profile, []).append({
+                "model": entry["model"], "leader": entries[0]["model"], "shared_items": len(shared),
+                "leader_only_pass": leader_only, "model_only_pass": other_only,
+                "p_value": round(p_value, 4), "differs_from_leader": p_value < 0.05,
+            })
+    return result
+
+
 def specialist_confidence(payload: dict) -> list[dict]:
     rows = []
     for result in payload.get("results", []):
@@ -137,6 +181,7 @@ def build(protocol: str) -> dict:
             "lower_bound_0.95": min_items_for_lower_bound(0.95),
         },
         "well_known": well_known_confidence(well_known, protocol),
+        "humaneval_paired": humaneval_paired(well_known, protocol),
     }
     if SPECIALIST.exists():
         report["source_sha256"][SPECIALIST.name] = hashlib.sha256(SPECIALIST.read_bytes()).hexdigest()

@@ -33,3 +33,19 @@ def test_curated_report_yields_ranked_rows_with_intervals():
         assert 0 <= low <= entry["composite"] <= high <= 1
         assert entry["standard_error"] > 0
     assert not entries[-1]["tied_with_leader"]
+
+
+def test_mcnemar_exact_reference_values():
+    assert sc.mcnemar_exact(0, 0) == 1.0
+    assert sc.mcnemar_exact(5, 5) == 1.0
+    assert round(sc.mcnemar_exact(6, 0), 5) == 0.03125   # 2 * 0.5**6
+    assert round(sc.mcnemar_exact(9, 1), 4) == 0.0215
+
+
+def test_paired_humaneval_uses_only_shared_items_of_curated_rows():
+    payload = json.loads(sc.WELL_KNOWN.read_text())
+    paired = sc.humaneval_paired(payload, sc.current_protocol())["sandbox"]
+    assert paired and all(0 <= e["p_value"] <= 1 for e in paired)
+    for entry in paired:
+        assert entry["leader_only_pass"] + entry["model_only_pass"] <= entry["shared_items"] <= 40
+        assert entry["differs_from_leader"] == (entry["p_value"] < 0.05)
