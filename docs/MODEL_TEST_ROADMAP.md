@@ -181,10 +181,17 @@ context). Throughput comes from `omp bench` as a distribution
 |---|---|---|---|
 | `omp-zai` | glm-5.3-flash, glm-5.3 | pass | re-queued (first runs lost to a missing HumanEval file) |
 | `omp-openai-codex` | gpt-6-luna, gpt-6-astra, gpt-6-sol | pass | gpt-6-sol: composite 0.9505 (`cloud-omp-openai-codex-gpt-6-sol`); luna and astra re-queued |
-| `omp-google` | gemini-3.8-flash | pass | queued |
+| `omp-google` | gemini-3.8-flash | pass | done (`cloud-omp-google-gemini-3.8-flash`) |
 | github-copilot | all tried | 400 "model not supported" | not registered |
 | google-antigravity | gemini-3.8-flash | omp: unhandled API mapping | not registered |
 | grok-build | grok-4.5 | no answer (not signed in) | not registered |
+
+Decode rate over 10 chat requests each (`reports/cloud_cli_throughput.json`),
+median with the observed range: Gemini 3.8 Flash 94 tok/s (83 to 702; the top
+value is a burst on a very short decode window, which is why the median is
+published), GPT-6 Luna 83 (53 to 104), GLM-5.3 60 (47 to 72), GLM-5.3-Flash
+46 (43 to 53), GPT-6 Sol 44 (33 to 74), GPT-6 Astra 21 (18 to 28). Time to
+first token is 2.0 to 4.5 s at the median.
 
 These rows run without the per-request output cap local rows get (the CLI
 cannot truncate), which the row records in `output_budget`.
@@ -206,8 +213,9 @@ Removed from the model disk after the retention check, with restore commands
 in `ARCHIVED_MODELS_MANIFEST.md`: Qwen3.5-397B-A17B UD-Q4_K_M (244 GB, never
 measured, sizes matched the Hub) and MiMo-V2.6-Pro BPW2.5 (298 GB, complete
 row kept, SHA-256 per shard recorded). The model disk went from 111 GB to
-570 GB free. Kimi K2.7 Q3 and Q4 are kept on purpose. Flash-Next AP-IQ2_S
-(81.6 GB, pinned revision) is downloading for the re-baseline.
+570 GB free. Kimi K2.7 Q3 and Q4 are kept on purpose. Flash-Next AP-IQ2_S,
+AP-Q4_K_M and AP-Q4_K_XL (81.6, 94.5 and 101.1 GB, pinned revision) are on
+disk for the re-baseline and for variants 3 and 5; 378 GB remains free.
 
 ## 2026-10-07: related plans
 
