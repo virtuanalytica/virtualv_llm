@@ -28,11 +28,14 @@ def test_superseded_and_retired_rows_are_labelled_not_promised_a_retry():
     by_name = {r["model"]: r for r in _report_rows()}
     status = {row["model"]: row["status"] for row in dashboard.well_known_rows()}
     for name, row in by_name.items():
+        if not (row.get("superseded_by") or row.get("retired_reason")):
+            continue
+        shown = status[dashboard.WELL_KNOWN_LABELS.get(name, name)]
         if row.get("superseded_by"):
             assert row["superseded_by"] in by_name
-            assert status[name].startswith("achterhaald")
+            assert shown.startswith("achterhaald")
         if row.get("retired_reason"):
-            assert status[name].startswith("niet vervolgd")
+            assert shown.startswith("niet vervolgd")
 
 
 def test_skip_flag_writes_the_row_without_rebuilding(tmp_path, monkeypatch):
