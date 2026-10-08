@@ -2,8 +2,8 @@
   "method": "Wilson 95% per component; composite SE from Agresti-Coull binomial variances; unpaired z-test against the profile leader (conservative, see module docstring)",
   "protocol": "v4-mmlu-fewshot-20260918",
   "source_sha256": {
-    "well_known_suite_20260917.json": "7a07044883f833c77cf4d326cd999819a7220c526586da205a9cc56f45d593d4",
-    "specialist_suite_20260922.json": "c26f04433128cddbc2233971e3f6d98f91a93fba2cb3947187ec8029170fed5c"
+    "well_known_suite_20260917.json": "d515220aca9d26eda3ee9b5a33bb4c1bb18ca264b4ea8ae7942dc7c91ad97e84",
+    "specialist_suite_20260922.json": "46eadc9b5435f0ba58b3b7554977463049be33aaa42d8af0756688e44b0880aa"
   },
   "min_items_for_perfect_score_claim": {
     "lower_bound_0.90": 35,
@@ -11,6 +11,52 @@
   },
   "well_known": {
     "sandbox": [
+      {
+        "model": "cloud-claude-claude-opus-5",
+        "composite": 0.982,
+        "standard_error": 0.0143,
+        "ci95": [
+          0.9541,
+          1.0
+        ],
+        "components": {
+          "gsm8k": {
+            "accuracy": 0.98,
+            "n": 50,
+            "ci95": [
+              0.895,
+              0.9965
+            ]
+          },
+          "bbh": {
+            "accuracy": 0.9792,
+            "n": 48,
+            "ci95": [
+              0.8911,
+              0.9963
+            ]
+          },
+          "mmlu": {
+            "accuracy": 0.9688,
+            "n": 160,
+            "ci95": [
+              0.929,
+              0.9866
+            ]
+          },
+          "humaneval": {
+            "accuracy": 1.0,
+            "n": 40,
+            "ci95": [
+              0.9124,
+              1.0
+            ]
+          }
+        },
+        "rank": 1,
+        "z_vs_leader": 0.0,
+        "tied_with_leader": true
+      },
       {
         "model": "cloud-claude-claude-opus-5-5",
         "composite": 0.9818,
@@ -53,8 +99,8 @@
             ]
           }
         },
-        "rank": 1,
-        "z_vs_leader": 0.0,
+        "rank": 2,
+        "z_vs_leader": 0.01,
         "tied_with_leader": true
       },
       {
@@ -99,8 +145,8 @@
             ]
           }
         },
-        "rank": 2,
-        "z_vs_leader": 0.08,
+        "rank": 3,
+        "z_vs_leader": 0.09,
         "tied_with_leader": true
       },
       {
@@ -145,8 +191,54 @@
             ]
           }
         },
-        "rank": 3,
-        "z_vs_leader": 0.74,
+        "rank": 4,
+        "z_vs_leader": 0.75,
+        "tied_with_leader": true
+      },
+      {
+        "model": "cloud-claude-claude-sonnet-5",
+        "composite": 0.9643,
+        "standard_error": 0.0155,
+        "ci95": [
+          0.9339,
+          0.9946
+        ],
+        "components": {
+          "gsm8k": {
+            "accuracy": 0.98,
+            "n": 50,
+            "ci95": [
+              0.895,
+              0.9965
+            ]
+          },
+          "bbh": {
+            "accuracy": 0.9583,
+            "n": 48,
+            "ci95": [
+              0.8602,
+              0.9885
+            ]
+          },
+          "mmlu": {
+            "accuracy": 0.9187,
+            "n": 160,
+            "ci95": [
+              0.8659,
+              0.9519
+            ]
+          },
+          "humaneval": {
+            "accuracy": 1.0,
+            "n": 40,
+            "ci95": [
+              0.9124,
+              1.0
+            ]
+          }
+        },
+        "rank": 5,
+        "z_vs_leader": 0.84,
         "tied_with_leader": true
       },
       {
@@ -191,8 +283,8 @@
             ]
           }
         },
-        "rank": 4,
-        "z_vs_leader": 0.89,
+        "rank": 6,
+        "z_vs_leader": 0.9,
         "tied_with_leader": true
       },
       {
@@ -237,8 +329,8 @@
             ]
           }
         },
-        "rank": 5,
-        "z_vs_leader": 1.03,
+        "rank": 7,
+        "z_vs_leader": 1.04,
         "tied_with_leader": true
       },
       {
@@ -283,8 +375,8 @@
             ]
           }
         },
-        "rank": 6,
-        "z_vs_leader": 1.25,
+        "rank": 8,
+        "z_vs_leader": 1.26,
         "tied_with_leader": true
       },
       {
@@ -329,8 +421,8 @@
             ]
           }
         },
-        "rank": 7,
-        "z_vs_leader": 1.38,
+        "rank": 9,
+        "z_vs_leader": 1.39,
         "tied_with_leader": true
       },
       {
@@ -375,8 +467,8 @@
             ]
           }
         },
-        "rank": 8,
-        "z_vs_leader": 1.57,
+        "rank": 10,
+        "z_vs_leader": 1.58,
         "tied_with_leader": true
       },
       {
@@ -421,8 +513,8 @@
             ]
           }
         },
-        "rank": 9,
-        "z_vs_leader": 1.57,
+        "rank": 11,
+        "z_vs_leader": 1.58,
         "tied_with_leader": true
       },
       {
@@ -467,8 +559,8 @@
             ]
           }
         },
-        "rank": 10,
-        "z_vs_leader": 1.68,
+        "rank": 12,
+        "z_vs_leader": 1.69,
         "tied_with_leader": true
       },
       {
@@ -513,8 +605,8 @@
             ]
           }
         },
-        "rank": 11,
-        "z_vs_leader": 2.08,
+        "rank": 13,
+        "z_vs_leader": 2.09,
         "tied_with_leader": false
       },
       {
@@ -559,7 +651,7 @@
             ]
           }
         },
-        "rank": 12,
+        "rank": 14,
         "z_vs_leader": 2.34,
         "tied_with_leader": false
       },
@@ -605,8 +697,8 @@
             ]
           }
         },
-        "rank": 13,
-        "z_vs_leader": 2.35,
+        "rank": 15,
+        "z_vs_leader": 2.36,
         "tied_with_leader": false
       },
       {
@@ -651,8 +743,8 @@
             ]
           }
         },
-        "rank": 14,
-        "z_vs_leader": 2.45,
+        "rank": 16,
+        "z_vs_leader": 2.46,
         "tied_with_leader": false
       },
       {
@@ -697,8 +789,8 @@
             ]
           }
         },
-        "rank": 15,
-        "z_vs_leader": 2.57,
+        "rank": 17,
+        "z_vs_leader": 2.58,
         "tied_with_leader": false
       },
       {
@@ -743,8 +835,8 @@
             ]
           }
         },
-        "rank": 16,
-        "z_vs_leader": 2.64,
+        "rank": 18,
+        "z_vs_leader": 2.65,
         "tied_with_leader": false
       },
       {
@@ -789,8 +881,8 @@
             ]
           }
         },
-        "rank": 17,
-        "z_vs_leader": 2.64,
+        "rank": 19,
+        "z_vs_leader": 2.65,
         "tied_with_leader": false
       },
       {
@@ -835,8 +927,8 @@
             ]
           }
         },
-        "rank": 18,
-        "z_vs_leader": 2.62,
+        "rank": 20,
+        "z_vs_leader": 2.63,
         "tied_with_leader": false
       },
       {
@@ -881,7 +973,7 @@
             ]
           }
         },
-        "rank": 19,
+        "rank": 21,
         "z_vs_leader": 2.7,
         "tied_with_leader": false
       },
@@ -927,8 +1019,8 @@
             ]
           }
         },
-        "rank": 20,
-        "z_vs_leader": 2.69,
+        "rank": 22,
+        "z_vs_leader": 2.7,
         "tied_with_leader": false
       },
       {
@@ -973,7 +1065,7 @@
             ]
           }
         },
-        "rank": 21,
+        "rank": 23,
         "z_vs_leader": 2.73,
         "tied_with_leader": false
       },
@@ -1019,8 +1111,8 @@
             ]
           }
         },
-        "rank": 22,
-        "z_vs_leader": 2.86,
+        "rank": 24,
+        "z_vs_leader": 2.87,
         "tied_with_leader": false
       },
       {
@@ -1065,8 +1157,8 @@
             ]
           }
         },
-        "rank": 23,
-        "z_vs_leader": 2.86,
+        "rank": 25,
+        "z_vs_leader": 2.87,
         "tied_with_leader": false
       },
       {
@@ -1111,8 +1203,8 @@
             ]
           }
         },
-        "rank": 24,
-        "z_vs_leader": 2.96,
+        "rank": 26,
+        "z_vs_leader": 2.97,
         "tied_with_leader": false
       },
       {
@@ -1157,8 +1249,8 @@
             ]
           }
         },
-        "rank": 25,
-        "z_vs_leader": 3.03,
+        "rank": 27,
+        "z_vs_leader": 3.04,
         "tied_with_leader": false
       },
       {
@@ -1203,8 +1295,8 @@
             ]
           }
         },
-        "rank": 26,
-        "z_vs_leader": 3.29,
+        "rank": 28,
+        "z_vs_leader": 3.3,
         "tied_with_leader": false
       },
       {
@@ -1249,8 +1341,8 @@
             ]
           }
         },
-        "rank": 27,
-        "z_vs_leader": 3.32,
+        "rank": 29,
+        "z_vs_leader": 3.33,
         "tied_with_leader": false
       },
       {
@@ -1295,8 +1387,8 @@
             ]
           }
         },
-        "rank": 28,
-        "z_vs_leader": 3.45,
+        "rank": 30,
+        "z_vs_leader": 3.46,
         "tied_with_leader": false
       },
       {
@@ -1341,8 +1433,8 @@
             ]
           }
         },
-        "rank": 29,
-        "z_vs_leader": 4.01,
+        "rank": 31,
+        "z_vs_leader": 4.02,
         "tied_with_leader": false
       },
       {
@@ -1387,7 +1479,7 @@
             ]
           }
         },
-        "rank": 30,
+        "rank": 32,
         "z_vs_leader": 3.71,
         "tied_with_leader": false
       },
@@ -1433,8 +1525,8 @@
             ]
           }
         },
-        "rank": 31,
-        "z_vs_leader": 3.93,
+        "rank": 33,
+        "z_vs_leader": 3.94,
         "tied_with_leader": false
       },
       {
@@ -1479,8 +1571,8 @@
             ]
           }
         },
-        "rank": 32,
-        "z_vs_leader": 4.19,
+        "rank": 34,
+        "z_vs_leader": 4.2,
         "tied_with_leader": false
       },
       {
@@ -1525,8 +1617,8 @@
             ]
           }
         },
-        "rank": 33,
-        "z_vs_leader": 4.28,
+        "rank": 35,
+        "z_vs_leader": 4.29,
         "tied_with_leader": false
       },
       {
@@ -1571,8 +1663,8 @@
             ]
           }
         },
-        "rank": 34,
-        "z_vs_leader": 4.59,
+        "rank": 36,
+        "z_vs_leader": 4.6,
         "tied_with_leader": false
       },
       {
@@ -1617,7 +1709,7 @@
             ]
           }
         },
-        "rank": 35,
+        "rank": 37,
         "z_vs_leader": 4.86,
         "tied_with_leader": false
       },
@@ -1663,7 +1755,7 @@
             ]
           }
         },
-        "rank": 36,
+        "rank": 38,
         "z_vs_leader": 5.02,
         "tied_with_leader": false
       },
@@ -1709,8 +1801,8 @@
             ]
           }
         },
-        "rank": 37,
-        "z_vs_leader": 5.16,
+        "rank": 39,
+        "z_vs_leader": 5.17,
         "tied_with_leader": false
       },
       {
@@ -1755,7 +1847,7 @@
             ]
           }
         },
-        "rank": 38,
+        "rank": 40,
         "z_vs_leader": 5.19,
         "tied_with_leader": false
       },
@@ -1801,8 +1893,8 @@
             ]
           }
         },
-        "rank": 39,
-        "z_vs_leader": 5.7,
+        "rank": 41,
+        "z_vs_leader": 5.71,
         "tied_with_leader": false
       },
       {
@@ -1847,8 +1939,8 @@
             ]
           }
         },
-        "rank": 40,
-        "z_vs_leader": 6.0,
+        "rank": 42,
+        "z_vs_leader": 6.01,
         "tied_with_leader": false
       },
       {
@@ -1893,7 +1985,7 @@
             ]
           }
         },
-        "rank": 41,
+        "rank": 43,
         "z_vs_leader": 5.89,
         "tied_with_leader": false
       },
@@ -1939,8 +2031,8 @@
             ]
           }
         },
-        "rank": 42,
-        "z_vs_leader": 6.16,
+        "rank": 44,
+        "z_vs_leader": 6.17,
         "tied_with_leader": false
       },
       {
@@ -1985,8 +2077,8 @@
             ]
           }
         },
-        "rank": 43,
-        "z_vs_leader": 7.21,
+        "rank": 45,
+        "z_vs_leader": 7.22,
         "tied_with_leader": false
       },
       {
@@ -2031,8 +2123,8 @@
             ]
           }
         },
-        "rank": 44,
-        "z_vs_leader": 6.52,
+        "rank": 46,
+        "z_vs_leader": 6.53,
         "tied_with_leader": false
       },
       {
@@ -2077,8 +2169,8 @@
             ]
           }
         },
-        "rank": 45,
-        "z_vs_leader": 7.22,
+        "rank": 47,
+        "z_vs_leader": 7.23,
         "tied_with_leader": false
       },
       {
@@ -2123,8 +2215,8 @@
             ]
           }
         },
-        "rank": 46,
-        "z_vs_leader": 7.52,
+        "rank": 48,
+        "z_vs_leader": 7.53,
         "tied_with_leader": false
       },
       {
@@ -2169,7 +2261,7 @@
             ]
           }
         },
-        "rank": 47,
+        "rank": 49,
         "z_vs_leader": 7.24,
         "tied_with_leader": false
       },
@@ -2215,8 +2307,8 @@
             ]
           }
         },
-        "rank": 48,
-        "z_vs_leader": 8.26,
+        "rank": 50,
+        "z_vs_leader": 8.27,
         "tied_with_leader": false
       },
       {
@@ -2261,8 +2353,8 @@
             ]
           }
         },
-        "rank": 49,
-        "z_vs_leader": 9.41,
+        "rank": 51,
+        "z_vs_leader": 9.42,
         "tied_with_leader": false
       },
       {
@@ -2307,8 +2399,8 @@
             ]
           }
         },
-        "rank": 50,
-        "z_vs_leader": 13.17,
+        "rank": 52,
+        "z_vs_leader": 13.18,
         "tied_with_leader": false
       },
       {
@@ -2353,8 +2445,8 @@
             ]
           }
         },
-        "rank": 51,
-        "z_vs_leader": 12.3,
+        "rank": 53,
+        "z_vs_leader": 12.31,
         "tied_with_leader": false
       },
       {
@@ -2399,7 +2491,7 @@
             ]
           }
         },
-        "rank": 52,
+        "rank": 54,
         "z_vs_leader": 13.97,
         "tied_with_leader": false
       },
@@ -2445,8 +2537,8 @@
             ]
           }
         },
-        "rank": 53,
-        "z_vs_leader": 13.62,
+        "rank": 55,
+        "z_vs_leader": 13.63,
         "tied_with_leader": false
       },
       {
@@ -2491,8 +2583,8 @@
             ]
           }
         },
-        "rank": 54,
-        "z_vs_leader": 11.54,
+        "rank": 56,
+        "z_vs_leader": 11.55,
         "tied_with_leader": false
       },
       {
@@ -2537,8 +2629,8 @@
             ]
           }
         },
-        "rank": 55,
-        "z_vs_leader": 11.61,
+        "rank": 57,
+        "z_vs_leader": 11.62,
         "tied_with_leader": false
       },
       {
@@ -2583,8 +2675,8 @@
             ]
           }
         },
-        "rank": 56,
-        "z_vs_leader": 12.51,
+        "rank": 58,
+        "z_vs_leader": 12.52,
         "tied_with_leader": false
       },
       {
@@ -2629,8 +2721,8 @@
             ]
           }
         },
-        "rank": 57,
-        "z_vs_leader": 15.14,
+        "rank": 59,
+        "z_vs_leader": 15.15,
         "tied_with_leader": false
       },
       {
@@ -2675,8 +2767,8 @@
             ]
           }
         },
-        "rank": 58,
-        "z_vs_leader": 15.24,
+        "rank": 60,
+        "z_vs_leader": 15.25,
         "tied_with_leader": false
       },
       {
@@ -2721,8 +2813,8 @@
             ]
           }
         },
-        "rank": 59,
-        "z_vs_leader": 17.81,
+        "rank": 61,
+        "z_vs_leader": 17.82,
         "tied_with_leader": false
       },
       {
@@ -2767,8 +2859,8 @@
             ]
           }
         },
-        "rank": 60,
-        "z_vs_leader": 19.32,
+        "rank": 62,
+        "z_vs_leader": 19.33,
         "tied_with_leader": false
       },
       {
@@ -2813,8 +2905,8 @@
             ]
           }
         },
-        "rank": 61,
-        "z_vs_leader": 19.49,
+        "rank": 63,
+        "z_vs_leader": 19.5,
         "tied_with_leader": false
       }
     ]
@@ -2822,8 +2914,17 @@
   "humaneval_paired": {
     "sandbox": [
       {
+        "model": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
         "model": "cloud-omp-openai-codex-gpt-6-astra",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2832,7 +2933,7 @@
       },
       {
         "model": "cloud-omp-google-gemini-3.8-flash",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2840,8 +2941,17 @@
         "differs_from_leader": false
       },
       {
+        "model": "cloud-claude-claude-sonnet-5",
+        "leader": "cloud-claude-claude-opus-5",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
         "model": "cloud-antigravity-gemini-gemini-3.8-flash",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2850,7 +2960,7 @@
       },
       {
         "model": "cloud-antigravity-gemini-gemini-3.6-flash",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2859,7 +2969,7 @@
       },
       {
         "model": "cloud-claude-claude-sonnet-5-5",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2868,7 +2978,7 @@
       },
       {
         "model": "cloud-omp-openai-codex-gpt-6-sol",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2877,7 +2987,7 @@
       },
       {
         "model": "cloud-omp-zai-glm-5.3-flash",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2886,7 +2996,7 @@
       },
       {
         "model": "cloud-antigravity-gemini-gemini-3.5-flash",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2895,7 +3005,7 @@
       },
       {
         "model": "cloud-omp-zai-glm-5.3",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2904,7 +3014,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-q4km-six",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2913,7 +3023,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-q4kxl-v100",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2922,7 +3032,7 @@
       },
       {
         "model": "cloud-omp-openai-codex-gpt-6-luna",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -2931,7 +3041,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq2s-allfour",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2940,7 +3050,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-q4kxl-allfour",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2949,7 +3059,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-q4kxl-six",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2958,7 +3068,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq4xs-v100",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2967,7 +3077,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq2s-ada4",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2976,7 +3086,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq4xs-allfour",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2985,7 +3095,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-q4km-allfour",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -2994,7 +3104,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq2s-six",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3003,7 +3113,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq2s-v100",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3012,7 +3122,7 @@
       },
       {
         "model": "qwen38-flash-next-ap-iq2s-v100pair",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3021,7 +3131,7 @@
       },
       {
         "model": "deepseek-v4-flash-0731-iq3xxs",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3030,7 +3140,7 @@
       },
       {
         "model": "kat-coder-v2.5-dev",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3039,7 +3149,7 @@
       },
       {
         "model": "qwen35-122b-a10b-iq3s",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3048,7 +3158,7 @@
       },
       {
         "model": "mom-live-1p",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 2,
         "model_only_pass": 0,
@@ -3057,7 +3167,7 @@
       },
       {
         "model": "mom-live-2p",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3066,7 +3176,7 @@
       },
       {
         "model": "glm53-reap50-iq4xs-v100ada",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 0,
         "model_only_pass": 0,
@@ -3075,7 +3185,7 @@
       },
       {
         "model": "mom-live-4",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3084,7 +3194,7 @@
       },
       {
         "model": "mom-live-glm53",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 3,
         "model_only_pass": 0,
@@ -3093,7 +3203,7 @@
       },
       {
         "model": "mom-qwen35-agg",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 7,
         "model_only_pass": 0,
@@ -3102,7 +3212,7 @@
       },
       {
         "model": "mom-live-4-q36",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 5,
         "model_only_pass": 0,
@@ -3111,7 +3221,7 @@
       },
       {
         "model": "llama3-70b-instruct-q4",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 2,
         "model_only_pass": 0,
@@ -3120,7 +3230,7 @@
       },
       {
         "model": "qwen38-27b-q4",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3129,7 +3239,7 @@
       },
       {
         "model": "granite-4.2-30b",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 3,
         "model_only_pass": 0,
@@ -3138,7 +3248,7 @@
       },
       {
         "model": "glm53-reap50-iq3m-v100",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 4,
         "model_only_pass": 0,
@@ -3147,7 +3257,7 @@
       },
       {
         "model": "qwen36-35b-a3b-nvfp4",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3156,7 +3266,7 @@
       },
       {
         "model": "nemotron35-lightning-30b-a3b",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3165,7 +3275,7 @@
       },
       {
         "model": "devstral-small2-24b-q4",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 2,
         "model_only_pass": 0,
@@ -3174,7 +3284,7 @@
       },
       {
         "model": "mistral-small4-119b-q4-adaa4000",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3183,7 +3293,7 @@
       },
       {
         "model": "glm53-reap50-iq3m-allfour",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 6,
         "model_only_pass": 0,
@@ -3192,7 +3302,7 @@
       },
       {
         "model": "cloud-claude-claude-haiku-4-5-20251001",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3201,7 +3311,7 @@
       },
       {
         "model": "mimo-v26-pro-bpw2.5",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 21,
         "model_only_pass": 0,
@@ -3210,7 +3320,7 @@
       },
       {
         "model": "deepseek-v4-flash-reap150b-q2k-adaa4000",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 4,
         "model_only_pass": 0,
@@ -3219,7 +3329,7 @@
       },
       {
         "model": "qwen35-27b-q4",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 3,
         "model_only_pass": 0,
@@ -3228,7 +3338,7 @@
       },
       {
         "model": "qwen25-72b-q4",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 2,
         "model_only_pass": 0,
@@ -3237,7 +3347,7 @@
       },
       {
         "model": "command-r-plus-104b-0824-iq3m",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 19,
         "model_only_pass": 0,
@@ -3246,7 +3356,7 @@
       },
       {
         "model": "mom-gemma4-agg",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 2,
         "model_only_pass": 0,
@@ -3255,7 +3365,7 @@
       },
       {
         "model": "gemma4-26b-a4b-q4",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 1,
         "model_only_pass": 0,
@@ -3264,7 +3374,7 @@
       },
       {
         "model": "mixtral-8x22b-instruct-q3ks",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 35,
         "model_only_pass": 0,
@@ -3273,7 +3383,7 @@
       },
       {
         "model": "llama31-70b-instruct-q4",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 40,
         "model_only_pass": 0,
@@ -3282,7 +3392,7 @@
       },
       {
         "model": "glm53-flash-aj-iq2xxs",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 38,
         "model_only_pass": 0,
@@ -3291,7 +3401,7 @@
       },
       {
         "model": "gpt-oss-120b-q4",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 20,
         "model_only_pass": 0,
@@ -3300,7 +3410,7 @@
       },
       {
         "model": "mom-live-4-tp2",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 18,
         "model_only_pass": 0,
@@ -3309,7 +3419,7 @@
       },
       {
         "model": "gpt-oss-20b-q4",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 19,
         "model_only_pass": 0,
@@ -3318,7 +3428,7 @@
       },
       {
         "model": "deepseek-r1-qwen32b-q4",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 38,
         "model_only_pass": 0,
@@ -3327,7 +3437,7 @@
       },
       {
         "model": "wizardlm2-8x22b-iq3s",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 37,
         "model_only_pass": 0,
@@ -3336,7 +3446,7 @@
       },
       {
         "model": "muse-glimmer-30b",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 37,
         "model_only_pass": 0,
@@ -3345,7 +3455,7 @@
       },
       {
         "model": "qwen38-1cat-vllm-target",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 31,
         "model_only_pass": 0,
@@ -3354,7 +3464,7 @@
       },
       {
         "model": "qwen38-27b-quasar-nvfp4-1cat-tp2",
-        "leader": "cloud-claude-claude-opus-5-5",
+        "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 31,
         "model_only_pass": 0,
@@ -6203,9 +6313,221 @@
         0.5083,
         0.8508
       ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-5",
+      "lane": "chemistry",
+      "accuracy": 0.8333,
+      "n": 6,
+      "ci95": [
+        0.4365,
+        0.9699
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-5",
+      "lane": "physics",
+      "accuracy": 1.0,
+      "n": 6,
+      "ci95": [
+        0.6097,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-5",
+      "lane": "video",
+      "accuracy": 0.0,
+      "n": 3,
+      "ci95": [
+        0.0,
+        0.5615
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-5",
+      "lane": "iq",
+      "accuracy": 0.6667,
+      "n": 3,
+      "ci95": [
+        0.2077,
+        0.9385
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-5",
+      "lane": "eq",
+      "accuracy": 1.0,
+      "n": 3,
+      "ci95": [
+        0.4385,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-5",
+      "lane": "fq",
+      "accuracy": 1.0,
+      "n": 2,
+      "ci95": [
+        0.3424,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-5",
+      "lane": "qq",
+      "accuracy": 0.75,
+      "n": 4,
+      "ci95": [
+        0.3006,
+        0.9544
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-5",
+      "lane": "finance",
+      "accuracy": 0.9167,
+      "n": 24,
+      "ci95": [
+        0.7416,
+        0.9769
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-sonnet-5",
+      "lane": "physics",
+      "accuracy": 1.0,
+      "n": 6,
+      "ci95": [
+        0.6097,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-sonnet-5",
+      "lane": "video",
+      "accuracy": 0.0,
+      "n": 3,
+      "ci95": [
+        0.0,
+        0.5615
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-sonnet-5",
+      "lane": "iq",
+      "accuracy": 0.3333,
+      "n": 3,
+      "ci95": [
+        0.0615,
+        0.7923
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-sonnet-5",
+      "lane": "eq",
+      "accuracy": 1.0,
+      "n": 3,
+      "ci95": [
+        0.4385,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-sonnet-5",
+      "lane": "fq",
+      "accuracy": 0.5,
+      "n": 2,
+      "ci95": [
+        0.0945,
+        0.9055
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-sonnet-5",
+      "lane": "qq",
+      "accuracy": 0.75,
+      "n": 4,
+      "ci95": [
+        0.3006,
+        0.9544
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-sonnet-5",
+      "lane": "finance",
+      "accuracy": 0.9583,
+      "n": 24,
+      "ci95": [
+        0.7975,
+        0.9926
+      ]
     }
   ],
   "resistant_ranking": [
+    {
+      "model": "cloud-claude-claude-opus-5",
+      "public_composite": 0.982,
+      "specialist": {
+        "value": 0.7708,
+        "standard_error": 0.056,
+        "items": 51,
+        "ci95": [
+          0.661,
+          0.8807
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 1.0,
+        "standard_error": 0.0563,
+        "items": 26,
+        "ci95": [
+          0.8897,
+          1.0
+        ],
+        "holdout": 1.0,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.8,
+        "flags": [
+          "canary-recall"
+        ]
+      },
+      "public_minus_resistant": -0.018
+    },
+    {
+      "model": "cloud-claude-claude-sonnet-5",
+      "public_composite": 0.9643,
+      "specialist": {
+        "value": 0.6488,
+        "standard_error": 0.0612,
+        "items": 45,
+        "ci95": [
+          0.5288,
+          0.7688
+        ],
+        "lanes": 7,
+        "complete": false
+      },
+      "resistant": {
+        "value": 1.0,
+        "standard_error": 0.0563,
+        "items": 26,
+        "ci95": [
+          0.8897,
+          1.0
+        ],
+        "holdout": 1.0,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.4,
+        "flags": [
+          "canary-recall"
+        ]
+      },
+      "public_minus_resistant": -0.0357
+    },
     {
       "model": "mom-live-4",
       "public_composite": 0.8852,
