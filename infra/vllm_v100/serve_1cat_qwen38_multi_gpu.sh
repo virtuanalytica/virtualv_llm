@@ -21,7 +21,7 @@ MAX_NUM_SEQS=${MAX_NUM_SEQS:-4}
 KV_CACHE_DTYPE=${KV_CACHE_DTYPE:-fp8_e5m2}
 ROOT=/media/knight2/EDS2
 ENV_DIR="$ROOT/envs/1cat-vllm-1.5.0"
-TARGET="$ROOT/models/1cat-vllm/Qwen3.8-27B-QUASAR-NVFP4"
+TARGET=${TARGET:-"$ROOT/models/1cat-vllm/Qwen3.8-27B-QUASAR-NVFP4"}
 MODEL_NAME=${MODEL_NAME:-qwen38-1cat-target}
 
 test -x "$ENV_DIR/bin/vllm"
@@ -68,6 +68,12 @@ ARGS=(
   --host 127.0.0.1
   --port "$PORT"
 )
+
+# Per-GPU CPU offload for checkpoints larger than the selected cards' VRAM
+# (Flash-Next NVFP4 is 135 GB against 64 GB on the V100 pair).
+if [[ -n "${CPU_OFFLOAD_GB:-}" ]]; then
+  ARGS+=(--cpu-offload-gb "$CPU_OFFLOAD_GB")
+fi
 
 if [[ -n "${FORCE_ATTN_BACKEND:-}" ]]; then
   ARGS+=(--attention-backend "$FORCE_ATTN_BACKEND")
