@@ -663,7 +663,7 @@ def external_base_url(url: str, completions_path: str) -> str:
 
 
 def main() -> int:
-    global BASE_URL, MODEL_ALIAS, API_KEY, CHAT_COMPLETIONS_PATH, EXTRA_CHAT_BODY
+    global BASE_URL, MODEL_ALIAS, API_KEY, CHAT_COMPLETIONS_PATH, EXTRA_CHAT_BODY, LM_EVAL_TIMEOUT, REQUEST_TIMEOUT
     parser = argparse.ArgumentParser()
     parser.add_argument("models", nargs="*")
     # Tensor split has twice reproduced a driver-level V100 hang during long
@@ -697,9 +697,18 @@ def main() -> int:
     parser.add_argument("--model-release-source", help="Primary release-note or model-card URL for that date")
     parser.add_argument("--access-profile", default="sandbox", choices=("sandbox", "disk", "internet_disk"),
                         help="tool-access condition; non-sandbox needs the dedicated agent runner")
+    parser.add_argument("--lm-eval-timeout", type=int, metavar="SEC",
+                        help=f"per-task lm-eval ceiling (default {LM_EVAL_TIMEOUT}); raise it for models "
+                             "below ~10 tok/s, whose 50-item GSM8K batch alone exceeds the default")
+    parser.add_argument("--request-timeout", type=int, metavar="SEC",
+                        help="per-request HTTP ceiling for the suite's own calls")
     parser.add_argument("--resume", action="store_true",
                         help="reuse lm-eval task outputs already present for this model (interrupted run)")
     args = parser.parse_args()
+    if args.lm_eval_timeout:
+        LM_EVAL_TIMEOUT = args.lm_eval_timeout
+    if args.request_timeout:
+        REQUEST_TIMEOUT = args.request_timeout
     # HumanEval runs last. On 2026-10-07 six runs each spent up to two hours on
     # the earlier tasks and then died on this missing file, so check it first.
     if not HUMANEVAL_DATA.is_file():
