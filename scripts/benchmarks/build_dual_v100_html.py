@@ -1388,6 +1388,43 @@ lokaal getest model onmogelijk maakt zonder scratchpad -- een reëel, verwacht m
 
 
 
+BETTERBENCH_STAGES = {"design": "Ontwerp", "implementation": "Implementatie",
+                      "documentation": "Documentatie", "maintenance": "Onderhoud"}
+
+
+def betterbench_section() -> str:
+    """Quality of the suite itself (not of a model), scored on the BetterBench criteria."""
+    name = "betterbench_self_assessment_20261008.json"
+    if not (REPORTS / name).exists():
+        return ""
+    data = load(name)
+    stages = data.get("stages", {})
+    if not stages:
+        return ""
+    rows, zero = "", []
+    for key, label in BETTERBENCH_STAGES.items():
+        criteria = stages.get(key, {}).get("criteria", [])
+        if not criteria:
+            continue
+        counts = {score: sum(c["score"] == score for c in criteria) for score in (15, 10, 5, 0)}
+        zero += [c["criterion"] for c in criteria if c["score"] == 0]
+        rows += (f"<tr><td><strong>{label}</strong></td><td class='num'>{len(criteria)}</td>"
+                 f"<td class='num' data-sort='{stages[key]['mean']:.2f}'>{fmt(stages[key]['mean'], 1)}</td>"
+                 + "".join(f"<td class='num'>{counts[score]}</td>" for score in (15, 10, 5, 0)) + "</tr>")
+    gaps = "".join(f"<li>{html.escape(item)}</li>" for item in zero)
+    return f"""
+<h2 id="suitekwaliteit">Suitekwaliteit volgens BetterBench</h2>
+<p>Deze tabel beoordeelt de testsuite zelf, niet een model. De criteria komen letterlijk uit
+<a href="{html.escape(data.get('source_url', 'https://arxiv.org/abs/2411.12990'))}">BetterBench (Reuel e.a., NeurIPS 2024)</a>;
+elk criterium krijgt 0, 5, 10 of 15 punten. Het is een eigen beoordeling van {html.escape(str(data.get('assessed', '')))},
+niet getoetst door de auteurs. De onderbouwing per criterium staat in <code>reports/{name}</code>.</p>
+<div class="tablewrap"><table class="sortable"><thead><tr>{sortable_header("Fase")}{sortable_header("Criteria")}
+{sortable_header("Gemiddelde (0–15)")}{sortable_header("Volledig (15)")}{sortable_header("Deels (10)")}
+{sortable_header("Genoemd (5)")}{sortable_header("Ontbreekt (0)")}</tr></thead><tbody>{rows}</tbody></table></div>
+<div class="callout"><strong>Totaal {fmt(data.get('overall_mean'), 1)} van 15.</strong> Het paper leest 10 of hoger als
+redelijk goed. Deze criteria scoren nul en zijn de concrete verbeterpunten:<ul>{gaps}</ul></div>"""
+
+
 def edsq_volta_section() -> str:
     """EDSQ-Volta (fieldintelligence): K2.5/K2.7 judges, MoM v2/v3, DSv4-Flash — okt 2026."""
     data = load("edsq_volta_results_20261007.json")
@@ -1553,6 +1590,7 @@ tabel erboven bevat de bijbehorende prompt-snelheid, VRAM en GPU-utilisatie.</p>
 {large_model_provenance_section()}
 {qwen38_flash_next_vllm_section()}
 {candidate_research_section()}
+{betterbench_section()}
 {edsq_volta_section()}
 <h2>Wat gebruikt NVLink het best?</h2><div class="twocol"><div class="card"><h3>Tensor split</h3><p>Beste llama.cpp-topologie. Qwen3.8 bereikt circa 85–86% gemiddelde utiliteit per V100; Qwen-72B circa 95–97%. De zes NVLinks maken de benodigde tensorcollectives praktisch.</p></div><div class="card"><h3>Layer split</h3><p>Goed om modellen te laten passen, maar geen decodeversnelling voor 27B: 33,33 versus 33,53 t/s single. De lagen worden grotendeels na elkaar uitgevoerd.</p></div><div class="card"><h3>1Cat TP2</h3><p>Qwen3.8 NVFP4 gebruikt beide V100’s op 100%. DFlash2 is sterk bij B1; target-only schaalt beter bij vier gelijktijdige requests.</p></div><div class="card"><h3>72B–100B envelope</h3><p>72,7B dense Q4_K_M gebruikt circa 22,27 GiB per kaart en is stabiel op 8K. Een dense 100B Q4 zou te weinig allocator- en KV-marge laten; de betrouwbare grens ligt op deze machine daarom rond 70–80B.</p></div></div>
 <h2>Meetintegriteit</h2><div class="tablewrap"><table><tbody><tr><th>V100-modelranglijst</th><td>Fysieke GPU 1 + 2: Tesla V100-SXM2-32GB; A4000/Ada zijn onzichtbaar en uitgesloten</td></tr><tr><th>RTX-profielen</th><td>Sinds 2026-10-05: vier RTX 4000 Ada 20GB (CUDA 0, 1, 2, 5) en twee V100-SXM2-32GB met NVLink (CUDA 3, 4); de RTX A4000 zit niet meer in de machine. Oudere rijen met GPU0 = RTX A4000 15GB blijven historische metingen. Single-card, PCIe layer split en parallel serving worden als verschillende configuraties gerapporteerd.</td></tr><tr><th>Device contract</th><td><code>CUDA_DEVICE_ORDER=PCI_BUS_ID</code> plus een expliciete <code>CUDA_VISIBLE_DEVICES</code>-set; de llama.cpp device probe en telemetry moeten exact met het profiel overeenkomen</td></tr><tr><th>Interconnect</th><td>NV6; 6 actieve links per V100, elk 25,781 GB/s gerapporteerd. Tussen A4000 en Ada bestaat geen NVLink.</td></tr><tr><th>Temperatuur</th><td>Maximaal 65°C in de 72B tensor-run</td></tr><tr><th>Brondata</th><td>JSON-artefacten in <code>reports/</code>; pagina wordt daar rechtstreeks uit gegenereerd</td></tr></tbody></table></div>
