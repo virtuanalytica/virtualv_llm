@@ -276,7 +276,10 @@
         0,
         3
       ],
-      "engine": "llama.cpp-gguf"
+      "engine": "llama.cpp-gguf",
+      "model_release_date": "2024-09-16",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen2.5-72B-Instruct",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "llama31-70b-instruct-q4",
@@ -880,7 +883,10 @@
       },
       "runtime_sec": 998.1,
       "engine": "1cat-vllm-nvfp4-target",
-      "note": "CORRECTED 2026-09-18. The original 0.348 composite was attributed to a missing --generation-config vllm flag (server was silently falling back to the checkpoints generation_config.json temperature=1.0/top_k=20/top_p=0.95 instead of deterministic sampling -- confirmed via the servers own startup warning). That flag is now permanently added to infra/vllm_v100/serve_1cat_qwen38_tp2.sh. This rerun (composite ~0.334, see gsm8k/humaneval/mmlu/bbh above) used the fix and did NOT improve -- essentially unchanged from the buggy run. A second isolated test (--kv-cache-dtype auto/fp16 instead of fp8_e5m2) also did not fix it: identical repetition-loop failure reproduced on the exact same HumanEval-style prompt at temperature=0 (\"The user is asking me to implement...\" repeated verbatim, finish_reason=stop, not a truncation artifact). One early one-off manual diagnostic sample (before this correction) DID come back clean on the same prompt -- that was a lucky draw, not representative; the failure is intermittent/non-deterministic even at temperature=0, most plausibly from TP=2 all-reduce floating-point non-determinism interacting with NVFP4 quantization precision sensitivity in this experimental SM70 backend, not a config mistake. This matches and explains the independent 8-task eval_suite.py measurement from 2026-09-17 (mean 0.675, \"runaway repetition\" already listed as a known failure mode there, on a different rubric). Conclusion: this checkpoint is genuinely unreliable on this backend, not merely misconfigured. GGUF Q4 remains the recommended serving path for Qwen3.8-27B."
+      "note": "CORRECTED 2026-09-18. The original 0.348 composite was attributed to a missing --generation-config vllm flag (server was silently falling back to the checkpoints generation_config.json temperature=1.0/top_k=20/top_p=0.95 instead of deterministic sampling -- confirmed via the servers own startup warning). That flag is now permanently added to infra/vllm_v100/serve_1cat_qwen38_tp2.sh. This rerun (composite ~0.334, see gsm8k/humaneval/mmlu/bbh above) used the fix and did NOT improve -- essentially unchanged from the buggy run. A second isolated test (--kv-cache-dtype auto/fp16 instead of fp8_e5m2) also did not fix it: identical repetition-loop failure reproduced on the exact same HumanEval-style prompt at temperature=0 (\"The user is asking me to implement...\" repeated verbatim, finish_reason=stop, not a truncation artifact). One early one-off manual diagnostic sample (before this correction) DID come back clean on the same prompt -- that was a lucky draw, not representative; the failure is intermittent/non-deterministic even at temperature=0, most plausibly from TP=2 all-reduce floating-point non-determinism interacting with NVFP4 quantization precision sensitivity in this experimental SM70 backend, not a config mistake. This matches and explains the independent 8-task eval_suite.py measurement from 2026-09-17 (mean 0.675, \"runaway repetition\" already listed as a known failure mode there, on a different rubric). Conclusion: this checkpoint is genuinely unreliable on this backend, not merely misconfigured. GGUF Q4 remains the recommended serving path for Qwen3.8-27B.",
+      "model_release_date": "2026-08-05",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-27B",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "qwen36-35b-a3b-nvfp4",
@@ -1122,7 +1128,10 @@
         ]
       },
       "runtime_sec": 554.1,
-      "completion_tokens_per_second": 114.81
+      "completion_tokens_per_second": 114.81,
+      "model_release_date": "2026-04-15",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "nemotron35-lightning-30b-a3b",
@@ -1366,7 +1375,10 @@
         ]
       },
       "completion_tokens_per_second": 127.77862128370914,
-      "runtime_sec": 609.6
+      "runtime_sec": 609.6,
+      "model_release_date": "2026-08-01",
+      "model_release_source": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "muse-glimmer-30b",
@@ -1651,7 +1663,10 @@
     },
     {
       "model": "glm45-air-106b-q4",
-      "error": "Excluded on speed, not a crash (the stale RuntimeError from an earlier attempt was overwritten here). bartowski/zai-org_GLM-4.5-Air-GGUF Q4_K_M (~69GB, glm4_moe arch) does NOT fit on 2xV100 (64GB combined) with a plain 50/50 layer split -- needs ~34.7GB on a single card, OOMs. --n-cpu-moe 4 and 8 both still OOM'd at the same ~33GB figure (not bisected further); --n-cpu-moe 30 was the first value tried that loaded successfully. But at that offload level, measured decode speed is only 7.57 tok/s (direct /v1/chat/completions timing, temperature=0, cache warm) -- ~8% of the current best-composite model's 95.7 tok/s, far below any throughput floor discussed this session (25%/50% of best-composite, or 25%/50% of the 33.5 tok/s fixed reference). Killed before the full well_known_suite finished -- no composite/quality score exists for this model, only the disqualifying speed measurement. Weights deleted per the disk rule. Not worth re-attempting without a materially different idea (e.g. a smaller quant of the same model, or bisecting n-cpu-moe down from 30 for a speed gain that still plausibly stays far below the floor)."
+      "error": "Excluded on speed, not a crash (the stale RuntimeError from an earlier attempt was overwritten here). bartowski/zai-org_GLM-4.5-Air-GGUF Q4_K_M (~69GB, glm4_moe arch) does NOT fit on 2xV100 (64GB combined) with a plain 50/50 layer split -- needs ~34.7GB on a single card, OOMs. --n-cpu-moe 4 and 8 both still OOM'd at the same ~33GB figure (not bisected further); --n-cpu-moe 30 was the first value tried that loaded successfully. But at that offload level, measured decode speed is only 7.57 tok/s (direct /v1/chat/completions timing, temperature=0, cache warm) -- ~8% of the current best-composite model's 95.7 tok/s, far below any throughput floor discussed this session (25%/50% of best-composite, or 25%/50% of the 33.5 tok/s fixed reference). Killed before the full well_known_suite finished -- no composite/quality score exists for this model, only the disqualifying speed measurement. Weights deleted per the disk rule. Not worth re-attempting without a materially different idea (e.g. a smaller quant of the same model, or bisecting n-cpu-moe down from 30 for a speed gain that still plausibly stays far below the floor).",
+      "model_release_date": "2025-07-20",
+      "model_release_source": "https://huggingface.co/zai-org/GLM-4.5-Air",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "gpt-oss-120b-q4",
@@ -1940,7 +1955,10 @@
       "excluded_physical_gpus": [
         0,
         3
-      ]
+      ],
+      "model_release_date": "2025-08-04",
+      "model_release_source": "https://huggingface.co/openai/gpt-oss-120b",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "gpt-oss-20b-q4",
@@ -2228,7 +2246,10 @@
       "excluded_physical_gpus": [
         0,
         3
-      ]
+      ],
+      "model_release_date": "2025-08-04",
+      "model_release_source": "https://huggingface.co/openai/gpt-oss-20b",
+      "model_release_basis": "createdAt of the model repo itself"
     },
     {
       "model": "mixture-of-models",
@@ -3414,7 +3435,10 @@
       "source_revision": "875f77142cf5c7b5d12d3c47e882bd8ac5ae660d",
       "source_published_at": "2024-04-19T01:16:05Z",
       "quantization": "Q4_K_M",
-      "weight_bytes": 42520906176
+      "weight_bytes": 42520906176,
+      "model_release_date": "2024-04-19",
+      "model_release_source": "https://huggingface.co/NousResearch/Meta-Llama-3-70B-Instruct-GGUF",
+      "model_release_basis": "createdAt of the earliest public GGUF repo used; the original repo is gated or gone, so this is an upper bound"
     },
     {
       "model": "command-r-plus-104b-0824-iq3m",
@@ -3708,7 +3732,10 @@
       "source_revision": "4cb2af9f9be9b2753915e67aa8d658cd031b8a21",
       "source_published_at": "2024-08-30T14:28:25Z",
       "quantization": "IQ3_M",
-      "weight_bytes": 47683357504
+      "weight_bytes": 47683357504,
+      "model_release_date": "2024-08-21",
+      "model_release_source": "https://huggingface.co/CohereForAI/c4ai-command-r-plus-08-2024",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "mixtral-8x22b-instruct-q3ks",
@@ -4018,7 +4045,10 @@
       "source_revision": "9f2f6c5ec37f9bce5f5f3a7ff07b11d573443e62",
       "source_published_at": "2024-04-17T17:29:25Z",
       "quantization": "Q3_K_S",
-      "weight_bytes": 61504109376
+      "weight_bytes": 61504109376,
+      "model_release_date": "2024-04-16",
+      "model_release_source": "https://huggingface.co/mistralai/Mixtral-8x22B-Instruct-v0.1",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "wizardlm2-8x22b-iq3s",
@@ -4330,7 +4360,10 @@
       "source_revision": "0e209c6d5f26385bd9584da7f1f8183532f86217",
       "source_published_at": "2024-04-16T17:30:47Z",
       "quantization": "IQ3_S",
-      "weight_bytes": 61498188480
+      "weight_bytes": 61498188480,
+      "model_release_date": "2024-04-16",
+      "model_release_source": "https://huggingface.co/bartowski/WizardLM-2-8x22B-GGUF",
+      "model_release_basis": "createdAt of the earliest public GGUF repo used; the original repo is gated or gone, so this is an upper bound"
     },
     {
       "model": "glm53-flash-aj-iq2xxs",
@@ -4650,7 +4683,10 @@
       "topology": "physical GPU [0, 1, 2, 3], split=layer",
       "cuda_device_order": "PCI_BUS_ID",
       "cuda_visible_devices": "0,1,2,3",
-      "excluded_physical_gpus": []
+      "excluded_physical_gpus": [],
+      "model_release_date": "2026-08-25",
+      "model_release_source": "https://huggingface.co/zai-org/GLM-5.3-Flash",
+      "model_release_basis": "createdAt of the model repo itself"
     },
     {
       "model": "qwen38-flash-next-merlin-w4a16-v100",
@@ -4663,7 +4699,10 @@
       "source_revision": "483ee0015419568c7014b011db0c08b6ddcb2ceb",
       "source_published_at": "2026-09-19T09:43:31Z",
       "quantization": "merlin-w4a16",
-      "retired_reason": "het Qwen4Exp-pad van 1Cat-vLLM 1.5.0 past niet op twee V100's (zie qwen38-flash-next-nvfp4-1cat-tp2, 2026-10-08)"
+      "retired_reason": "het Qwen4Exp-pad van 1Cat-vLLM 1.5.0 past niet op twee V100's (zie qwen38-flash-next-nvfp4-1cat-tp2, 2026-10-08)",
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "qwen38-flash-next-merlin-w4a16-allfour",
@@ -4675,7 +4714,10 @@
       "model_source": "https://huggingface.co/halt95/Qwen3.8-Flash-Next-W4A16-Merlin",
       "source_revision": "483ee0015419568c7014b011db0c08b6ddcb2ceb",
       "source_published_at": "2026-09-19T09:43:31Z",
-      "quantization": "merlin-w4a16"
+      "quantization": "merlin-w4a16",
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "qwen38-flash-next-ap-iq4xs-v100",
@@ -4949,7 +4991,6 @@
         0,
         3
       ],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison",
       "hardware_profile": "v100",
       "source_repo": "agentionai/Qwen3.8-Flash-Next-AP-GGUF",
       "model_source": "https://huggingface.co/agentionai/Qwen3.8-Flash-Next-AP-GGUF",
@@ -4959,7 +5000,10 @@
       "weight_bytes": 90447294368,
       "weight_sha256": "55d8f995bbde76634a318c1ba9009a663ccb795aceb31b0d723de2236b731bf5",
       "context_tokens": 4096,
-      "split_policy": "layer; V100 tensor split excluded for unattended long suite"
+      "split_policy": "layer; V100 tensor split excluded for unattended long suite",
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "qwen38-flash-next-ap-iq4xs-allfour",
@@ -5246,7 +5290,6 @@
       "external_base_url": "http://127.0.0.1:18032",
       "external_model_alias": "qwen38-flash-next",
       "excluded_physical_gpus": [],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison",
       "hardware_profile": "allfour",
       "source_repo": "agentionai/Qwen3.8-Flash-Next-AP-GGUF",
       "model_source": "https://huggingface.co/agentionai/Qwen3.8-Flash-Next-AP-GGUF",
@@ -5256,7 +5299,10 @@
       "weight_bytes": 90447294368,
       "weight_sha256": "55d8f995bbde76634a318c1ba9009a663ccb795aceb31b0d723de2236b731bf5",
       "context_tokens": 4096,
-      "split_policy": "layer; V100 tensor split excluded for unattended long suite"
+      "split_policy": "layer; V100 tensor split excluded for unattended long suite",
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "qwen38-flash-next-ap-q4km-v100",
@@ -5267,7 +5313,10 @@
       "source_repo": "agentionai/Qwen3.8-Flash-Next-AP-GGUF",
       "source_revision": "0061a60e46ad672a73cec31cb627dc841d4760a4",
       "quantization": "AP-Q4KM",
-      "superseded_by": "qwen38-flash-next-ap-q4km-six"
+      "superseded_by": "qwen38-flash-next-ap-q4km-six",
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "qwen38-flash-next-ap-q4km-allfour",
@@ -5554,7 +5603,6 @@
       "external_base_url": "http://127.0.0.1:18032",
       "external_model_alias": "qwen38-flash-next",
       "excluded_physical_gpus": [],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison",
       "hardware_profile": "allfour",
       "source_repo": "agentionai/Qwen3.8-Flash-Next-AP-GGUF",
       "model_source": "https://huggingface.co/agentionai/Qwen3.8-Flash-Next-AP-GGUF",
@@ -5564,7 +5612,10 @@
       "weight_bytes": 94536740736,
       "weight_sha256": "fa519f1f87d537ba0afa58abd83c81bfaed42f6774812d03d038bb906ccca87a",
       "context_tokens": 4096,
-      "split_policy": "layer; V100 tensor split excluded for unattended long suite"
+      "split_policy": "layer; V100 tensor split excluded for unattended long suite",
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "deepseek-v4-flash-0731-iq3xxs",
@@ -5837,7 +5888,9 @@
         0,
         3
       ],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison"
+      "model_release_date": "2026-07-31",
+      "model_release_source": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731",
+      "model_release_basis": "createdAt of the model repo itself"
     },
     {
       "model": "qwen38-flash-next-ap-iq2s-v100",
@@ -6111,7 +6164,6 @@
         0,
         3
       ],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison",
       "hardware_profile": "v100",
       "source_repo": "agentionai/Qwen3.8-Flash-Next-AP-GGUF",
       "model_source": "https://huggingface.co/agentionai/Qwen3.8-Flash-Next-AP-GGUF",
@@ -6121,7 +6173,10 @@
       "weight_bytes": 81641739136,
       "weight_sha256": "7296b652432390f6a3964f4e671b59f2e9c45353d2ceb01e4cbfdefcc29c5a8f",
       "context_tokens": 4096,
-      "split_policy": "layer; V100 tensor split excluded for unattended long suite"
+      "split_policy": "layer; V100 tensor split excluded for unattended long suite",
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "qwen38-flash-next-ap-iq2s-allfour",
@@ -6408,7 +6463,6 @@
       "external_base_url": "http://127.0.0.1:18032",
       "external_model_alias": "qwen38-flash-next",
       "excluded_physical_gpus": [],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison",
       "hardware_profile": "allfour",
       "source_repo": "agentionai/Qwen3.8-Flash-Next-AP-GGUF",
       "model_source": "https://huggingface.co/agentionai/Qwen3.8-Flash-Next-AP-GGUF",
@@ -6418,7 +6472,10 @@
       "weight_bytes": 81641739136,
       "weight_sha256": "7296b652432390f6a3964f4e671b59f2e9c45353d2ceb01e4cbfdefcc29c5a8f",
       "context_tokens": 4096,
-      "split_policy": "layer; V100 tensor split excluded for unattended long suite"
+      "split_policy": "layer; V100 tensor split excluded for unattended long suite",
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "mixture-ultimate-6-explicit",
@@ -6804,7 +6861,6 @@
         0,
         3
       ],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison",
       "source_repo": "patrickbdevaney/GLM-5.3-Flash-REAP50-GGUF",
       "model_source": "https://huggingface.co/patrickbdevaney/GLM-5.3-Flash-REAP50-GGUF",
       "source_revision": "8654e38254ee6b80946b5d5d00cbfcc96ed88659",
@@ -6812,7 +6868,10 @@
       "quantization": "IQ3M",
       "weight_bytes": 72132392352,
       "glm5_runtime_commit": "2a4a41238175cc5d0ee3e591865653e49096c782",
-      "hardware_profile": "dual-layer"
+      "hardware_profile": "dual-layer",
+      "model_release_date": "2026-08-25",
+      "model_release_source": "https://huggingface.co/zai-org/GLM-5.3-Flash",
+      "model_release_basis": "createdAt of the model repo itself"
     },
     {
       "model": "glm53-reap50-iq3m-allfour",
@@ -7103,7 +7162,6 @@
       "cuda_device_order": "PCI_BUS_ID",
       "cuda_visible_devices": "0,1,2,3",
       "excluded_physical_gpus": [],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison",
       "source_repo": "patrickbdevaney/GLM-5.3-Flash-REAP50-GGUF",
       "model_source": "https://huggingface.co/patrickbdevaney/GLM-5.3-Flash-REAP50-GGUF",
       "source_revision": "8654e38254ee6b80946b5d5d00cbfcc96ed88659",
@@ -7111,7 +7169,10 @@
       "quantization": "IQ3M",
       "weight_bytes": 72132392352,
       "glm5_runtime_commit": "2a4a41238175cc5d0ee3e591865653e49096c782",
-      "hardware_profile": "all-four-layer"
+      "hardware_profile": "all-four-layer",
+      "model_release_date": "2026-08-25",
+      "model_release_source": "https://huggingface.co/zai-org/GLM-5.3-Flash",
+      "model_release_basis": "createdAt of the model repo itself"
     },
     {
       "model": "qwen38-flash-next-ap-q4kxl-v100",
@@ -7384,7 +7445,9 @@
         0,
         3
       ],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison"
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "granite-4.2-30b",
@@ -7652,7 +7715,9 @@
         1,
         2
       ],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison"
+      "model_release_date": "2026-08-07",
+      "model_release_source": "https://huggingface.co/ibm-granite/granite-4.2-30b",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "deepseek-r1-qwen32b-q4",
@@ -7962,7 +8027,9 @@
         1,
         2
       ],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison"
+      "model_release_date": "2025-01-20",
+      "model_release_source": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
+      "model_release_basis": "createdAt of the model repo itself"
     },
     {
       "model": "qwen35-122b-a10b-iq3s",
@@ -8235,7 +8302,9 @@
         0,
         3
       ],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison"
+      "model_release_date": "2026-02-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.5-122B-A10B",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "kat-coder-v2.5-dev",
@@ -8508,7 +8577,9 @@
         1,
         2
       ],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison"
+      "model_release_date": "2026-07-23",
+      "model_release_source": "https://huggingface.co/Kwaipilot/KAT-Coder-V2.5-Dev",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "qwen38-flash-next-ap-q4kxl-allfour",
@@ -8794,7 +8865,9 @@
       "cuda_device_order": "PCI_BUS_ID",
       "cuda_visible_devices": "0,1,2,3",
       "excluded_physical_gpus": [],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison"
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "mixture-optimized-2",
@@ -11043,7 +11116,10 @@
         0,
         3
       ],
-      "engine": "llama.cpp-gguf"
+      "engine": "llama.cpp-gguf",
+      "model_release_date": "2026-08-05",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-27B",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "devstral-small2-24b-q4",
@@ -11315,7 +11391,10 @@
         0,
         3
       ],
-      "engine": "llama.cpp-gguf"
+      "engine": "llama.cpp-gguf",
+      "model_release_date": "2025-11-28",
+      "model_release_source": "https://huggingface.co/mistralai/Devstral-Small-2-24B-Instruct-2512",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "qwen35-27b-q4",
@@ -11588,7 +11667,10 @@
         0,
         3
       ],
-      "engine": "llama.cpp-gguf"
+      "engine": "llama.cpp-gguf",
+      "model_release_date": "2026-02-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.5-27B",
+      "model_release_basis": "createdAt of the model repo itself"
     },
     {
       "model": "gemma4-26b-a4b-q4",
@@ -11859,7 +11941,10 @@
         0,
         3
       ],
-      "engine": "llama.cpp-gguf"
+      "engine": "llama.cpp-gguf",
+      "model_release_date": "2026-03-11",
+      "model_release_source": "https://huggingface.co/google/gemma-4-26B-A4B-it",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "mom-live-4-tp2",
@@ -12796,7 +12881,9 @@
         0,
         1
       ],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison"
+      "model_release_date": "2026-08-25",
+      "model_release_source": "https://huggingface.co/zai-org/GLM-5.3-Flash",
+      "model_release_basis": "createdAt of the model repo itself"
     },
     {
       "model": "mom-live-glm53",
@@ -14671,7 +14758,6 @@
       "excluded_physical_gpus": [
         3
       ],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison",
       "source_repo": "agentionai/Qwen3.8-Flash-Next-AP-GGUF",
       "model_source": "https://huggingface.co/agentionai/Qwen3.8-Flash-Next-AP-GGUF",
       "source_revision": "0061a60e46ad672a73cec31cb627dc841d4760a4",
@@ -14680,7 +14766,10 @@
       "weight_bytes": 81641739136,
       "weight_sha256": "7296b652432390f6a3964f4e671b59f2e9c45353d2ceb01e4cbfdefcc29c5a8f",
       "context_tokens": 4096,
-      "split_policy": "layer; V100 tensor split excluded for unattended long suite"
+      "split_policy": "layer; V100 tensor split excluded for unattended long suite",
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "cloud-omp-openai-codex-gpt-6-sol",
@@ -17190,7 +17279,6 @@
         1,
         2
       ],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison",
       "source_repo": "agentionai/Qwen3.8-Flash-Next-AP-GGUF",
       "model_source": "https://huggingface.co/agentionai/Qwen3.8-Flash-Next-AP-GGUF",
       "source_revision": "0061a60e46ad672a73cec31cb627dc841d4760a4",
@@ -17199,7 +17287,10 @@
       "weight_bytes": 81641739136,
       "weight_sha256": "7296b652432390f6a3964f4e671b59f2e9c45353d2ceb01e4cbfdefcc29c5a8f",
       "context_tokens": 4096,
-      "split_policy": "layer; V100 tensor split excluded for unattended long suite"
+      "split_policy": "layer; V100 tensor split excluded for unattended long suite",
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "qwen38-flash-next-ap-iq2s-six",
@@ -17510,7 +17601,6 @@
       "external_base_url": "http://127.0.0.1:18034",
       "external_model_alias": "qwen38-flash-next",
       "excluded_physical_gpus": [],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison",
       "source_repo": "agentionai/Qwen3.8-Flash-Next-AP-GGUF",
       "model_source": "https://huggingface.co/agentionai/Qwen3.8-Flash-Next-AP-GGUF",
       "source_revision": "0061a60e46ad672a73cec31cb627dc841d4760a4",
@@ -17519,7 +17609,10 @@
       "weight_bytes": 81641739136,
       "weight_sha256": "7296b652432390f6a3964f4e671b59f2e9c45353d2ceb01e4cbfdefcc29c5a8f",
       "context_tokens": 4096,
-      "split_policy": "layer; V100 tensor split excluded for unattended long suite"
+      "split_policy": "layer; V100 tensor split excluded for unattended long suite",
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "qwen38-flash-next-ap-q4km-six",
@@ -17830,7 +17923,6 @@
       "external_base_url": "http://127.0.0.1:18034",
       "external_model_alias": "qwen38-flash-next",
       "excluded_physical_gpus": [],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison",
       "source_repo": "agentionai/Qwen3.8-Flash-Next-AP-GGUF",
       "model_source": "https://huggingface.co/agentionai/Qwen3.8-Flash-Next-AP-GGUF",
       "source_revision": "0061a60e46ad672a73cec31cb627dc841d4760a4",
@@ -17839,7 +17931,10 @@
       "weight_bytes": 94536740736,
       "weight_sha256": "fa519f1f87d537ba0afa58abd83c81bfaed42f6774812d03d038bb906ccca87a",
       "context_tokens": 4096,
-      "split_policy": "layer; V100 tensor split excluded for unattended long suite"
+      "split_policy": "layer; V100 tensor split excluded for unattended long suite",
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "qwen38-flash-next-ap-q4kxl-six",
@@ -18150,7 +18245,6 @@
       "external_base_url": "http://127.0.0.1:18034",
       "external_model_alias": "qwen38-flash-next",
       "excluded_physical_gpus": [],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison",
       "source_repo": "agentionai/Qwen3.8-Flash-Next-AP-GGUF",
       "model_source": "https://huggingface.co/agentionai/Qwen3.8-Flash-Next-AP-GGUF",
       "source_revision": "0061a60e46ad672a73cec31cb627dc841d4760a4",
@@ -18159,7 +18253,10 @@
       "weight_bytes": 101142769536,
       "weight_sha256": "bbff0a2cdc2bb461c92b873f5dd175d551928cbff61ebed8022375b8df1d0269",
       "context_tokens": 4096,
-      "split_policy": "layer; V100 tensor split excluded for unattended long suite"
+      "split_policy": "layer; V100 tensor split excluded for unattended long suite",
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "cloud-claude-claude-opus-5-5",
@@ -18745,8 +18842,10 @@
         1,
         2
       ],
-      "model_release_date_status": "missing; add primary source before temporal contamination comparison",
-      "evaluation_caveat": "Measured against the live day-lane server. The low scores are real model output, not a scoring fault: GSM8K answers contain wrong arithmetic and HumanEval answers loop on their own reasoning. The same model as GGUF Q4_K_M scores 0.8511 (qwen38-27b-q4)."
+      "evaluation_caveat": "Measured against the live day-lane server. The low scores are real model output, not a scoring fault: GSM8K answers contain wrong arithmetic and HumanEval answers loop on their own reasoning. The same model as GGUF Q4_K_M scores 0.8511 (qwen38-27b-q4).",
+      "model_release_date": "2026-08-05",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-27B",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "qwen38-flash-next-ap-iq2s-v100pair-tensor",
@@ -18756,7 +18855,10 @@
       "topology": "2× Tesla V100-SXM2-32GB · NVLink · tensor split",
       "source_repo": "agentionai/Qwen3.8-Flash-Next-AP-GGUF",
       "source_revision": "0061a60e46ad672a73cec31cb627dc841d4760a4",
-      "quantization": "AP-IQ2S"
+      "quantization": "AP-IQ2S",
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     },
     {
       "model": "cloud-claude-claude-opus-5",
@@ -19319,7 +19421,10 @@
       "topology": "2× Tesla V100-SXM2-32GB · NVLink · TP2 · CPU offload",
       "source_repo": "RadixArk/Qwen3.8-Flash-Next-NVFP4",
       "source_revision": "7b719225242aacd3dbd3f9407468c2ee9a9d2594",
-      "weight_bytes": 135253622894
+      "weight_bytes": 135253622894,
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "model_release_basis": "createdAt of the base model repo named on the quantisation's model card"
     }
   ],
   "bbh_scoring_fix": {
