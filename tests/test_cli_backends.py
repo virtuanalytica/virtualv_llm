@@ -64,3 +64,21 @@ def test_omp_bench_payload_reduces_to_published_distribution():
     decode = summary["decode_tokens_per_second"]
     assert decode["min"] <= decode["p50"] <= decode["p95"] <= decode["max"]
     assert decode["p50"] == 55.56 and summary["time_to_first_token_ms"]["p50"] == 1480
+
+
+def test_cli_calls_are_retried_and_persistent_failures_still_raise():
+    calls = []
+
+    def flaky(prompt, model):
+        calls.append(model)
+        if len(calls) < 3:
+            raise RuntimeError("rate limited")
+        return "391"
+
+    assert proxy.complete_with_retries(flaky, "q", "m", backoff_sec=0) == "391" and len(calls) == 3
+
+    def down(prompt, model):
+        raise RuntimeError("still down")
+
+    with pytest.raises(RuntimeError, match="still down"):
+        proxy.complete_with_retries(down, "q", "m", attempts=2, backoff_sec=0)

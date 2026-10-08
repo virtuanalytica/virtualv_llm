@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+- The day lane is Qwen3.8 Flash-Next AP-IQ2_S (composite 0.915) instead of
+  the 1Cat NVFP4 lane, which scored 0.34.
+- Claude models from 4.5 to current, Fable excluded: Opus 5 0.9820 and
+  Sonnet 5 0.9643 added; the Fable 5.1 row is removed.
+- Roadmap variant 1 (Flash-Next NVFP4 on 1Cat) does not load on two V100s;
+  recorded as unsupported. Variant 4 (tensor split) is unsupported too.
+- The CLI proxy retries transient provider errors; the suite takes
+  `--lm-eval-timeout` and `--request-timeout` for slow models.
+
 ## v1.0.2 — 2026-10-07
 
 Measurement integrity: error bars, contamination-resistant composites, a

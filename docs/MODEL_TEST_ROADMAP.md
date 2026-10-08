@@ -152,8 +152,8 @@ hypothesis with the measurement it rests on; none is a result yet.
 
 | # | Variant | Why it should be faster | Why composite should hold or rise | Result |
 |---|---|---|---|---|
-| 1 | Qwen3.8 Flash-Next NVFP4, 1Cat-vLLM TP2 target-only, V100 pair | Upstream reports 80.7 tok/s; locally the same engine gives 111 tok/s on Qwen3.6-35B-A3B NVFP4 | 4-bit weights versus IQ2_S. The existing `qwen38-1cat-vllm-target` row scores 0.34, which points at a template or scoring fault to fix first | pending |
-| 2 | Variant 1 with DFlash2/MTP speculative decoding | 81.59 tok/s measured at B1 on this pair | Speculation is verified against the target, so quality equals variant 1; reported as its own row | pending |
+| 1 | Qwen3.8 Flash-Next NVFP4, 1Cat-vLLM TP2 target-only, V100 pair | Upstream reports 80.7 tok/s; locally the same engine gives 111 tok/s on Qwen3.6-35B-A3B NVFP4 | 4-bit weights versus IQ2_S. The existing `qwen38-1cat-vllm-target` row scores 0.34, which points at a template or scoring fault to fix first | **Not servable here** (`qwen38-flash-next-nvfp4-1cat-tp2`): 1Cat 1.5.0 needs `--language-model-only` and an FP16 KV cache, then runs out of memory on two 32 GB V100s even with 62 GB CPU offload per GPU; its SM70 route is gated on four V100s |
+| 2 | Variant 1 with DFlash2/MTP speculative decoding | 81.59 tok/s measured at B1 on this pair | Speculation is verified against the target, so quality equals variant 1; reported as its own row | Not measurable: depends on variant 1 |
 | 3 | Qwen3.8 Flash-Next AP-Q4_K_XL, six GPUs, fully in VRAM | 34.59 tok/s on the V100 pair with the remainder outside VRAM; 144 GB now holds all 101 GB | Highest measured local composite, 0.9272 | **Not faster: 38.31 tok/s, composite 0.9193** (`qwen38-flash-next-ap-q4kxl-six`); about 73 GB was in VRAM, so the model was not fully offloaded |
 | 4 | Qwen3.8 Flash-Next AP-IQ2_S, V100 pair, tensor split | Tensor split is the fastest llama.cpp topology on this NVLink pair (44.87 tok/s for the 27B model versus 33 with layer split) | Same weights as the baseline | **Not supported**: llama.cpp reports `LLAMA_SPLIT_MODE_TENSOR not implemented for architecture 'qwen4exp'` (`qwen38-flash-next-ap-iq2s-v100pair-tensor`); only the `build-v100` binary was tried |
 | 5 | Qwen3.8 Flash-Next AP-Q4_K_M, six GPUs | 40.00 tok/s on the old set, where the A4000 was the slowest card | 0.9175 measured, inside the baseline's margin, at 4-bit | **Not faster: 38.52 tok/s, composite 0.9342** (`qwen38-flash-next-ap-q4km-six`); highest local composite so far, inside the margin of the baseline |
@@ -170,8 +170,9 @@ Measured 2026-10-07: AP-IQ2_S runs at about 40.7 tok/s on four Ada cards, on
 the V100 pair and on all six cards alike, so adding cards does not speed this
 model up under layer split. Variants 3 and 5 are slower than the baseline and
 statistically level on composite; neither beats it on both axes. Variants 1,
-2 (1Cat-vLLM) are the remaining candidates for speed; variant 4 is not
-supported by the runtime.
+2 cannot run on this hardware either (variant 1 does not load on two V100s),
+and variant 4 is not supported by the runtime. The AP-IQ2_S baseline stands
+and is the day lane since 2026-10-08.
 
 Day-lane quality gate (backlog item 7), measured 2026-10-08 against the live
 server without stopping it: Qwen3.8-27B QUASAR NVFP4 on 1Cat-vLLM TP2
@@ -188,7 +189,9 @@ Claude through the `claude -p` CLI: Opus 5.5 leads the table at 0.9818
 (tied with GPT-6 Astra at 0.9802) at 86 tok/s, canary recall 0.8; Sonnet 5.5
 scores 0.9542 at 117.7 tok/s, canary recall 0.9. Haiku 4.5
 reads 0.8046, but its MMLU cell is a prompt-format artifact and the row is
-flagged. Fable 5.1 is blocked on usage credits and has no score.
+flagged. Scope is every Claude model from 4.5 to the current one, Fable
+excluded: Opus 5 scores 0.9820 at 58 tok/s and Sonnet 5 0.9643 at 74 tok/s;
+Opus 4.8, 4.7, 4.6, 4.5 and Sonnet 4.6 and 4.5 are being measured.
 
 ## 2026-10-07: cloud providers through the omp CLI
 
