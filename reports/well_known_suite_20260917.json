@@ -9318,25 +9318,29 @@
       "model": "cloud-antigravity-gemini-gemini-3.1-pro-preview",
       "error": "HTTPError: HTTP Error 400: Bad Request",
       "hardware_profile": "dual-layer",
-      "access_profile": "sandbox"
+      "access_profile": "sandbox",
+      "retired_reason": "pro-variant weigert reasoning_effort=none (HTTP 400); flash-varianten gemeten"
     },
     {
       "model": "cloud-codex-gpt-6-astra",
       "error": "HTTPError: HTTP Error 502: Bad Gateway",
       "hardware_profile": "dual-layer",
-      "access_profile": "sandbox"
+      "access_profile": "sandbox",
+      "superseded_by": "cloud-omp-openai-codex-gpt-6-astra"
     },
     {
       "model": "cloud-codex-gpt-6-sol",
       "error": "HTTPError: HTTP Error 502: Bad Gateway",
       "hardware_profile": "dual-layer",
-      "access_profile": "sandbox"
+      "access_profile": "sandbox",
+      "superseded_by": "cloud-omp-openai-codex-gpt-6-sol"
     },
     {
       "model": "cloud-codex-gpt-6-luna",
       "error": "HTTPError: HTTP Error 502: Bad Gateway",
       "hardware_profile": "dual-layer",
-      "access_profile": "sandbox"
+      "access_profile": "sandbox",
+      "superseded_by": "cloud-omp-openai-codex-gpt-6-luna"
     },
     {
       "model": "cloud-antigravity-gemini-gemini-3.6-flash",

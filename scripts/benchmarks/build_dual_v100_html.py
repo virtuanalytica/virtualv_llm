@@ -450,7 +450,13 @@ def well_known_rows() -> list[dict]:
         name for name in results
         if isinstance(name, str) and name.startswith("mixture-optimized-")
     )
-    for name in WELL_KNOWN_ORDER + dynamic_mixtures:
+    # Every measured row belongs in this table. WELL_KNOWN_ORDER only fixes the
+    # position and label of the planned local models; cloud/agent-CLI rows and
+    # later hardware profiles are appended from the report itself, so a new
+    # result can never be measured, ranked elsewhere and still missing here.
+    listed = set(WELL_KNOWN_ORDER) | set(dynamic_mixtures)
+    unlisted = sorted(name for name in results if isinstance(name, str) and name not in listed)
+    for name in WELL_KNOWN_ORDER + dynamic_mixtures + unlisted:
         r = results.get(name, {})
         gsm8k = rm.gsm8k_score(r) if r else None
         bbh = (r.get("bbh") or {}).get("mean_accuracy")
@@ -470,7 +476,15 @@ def well_known_rows() -> list[dict]:
         # completeness is judged on the composite's 4 metrics only.
         is_complete_current = current_protocol and composite is not None
         error = str(r.get("error", ""))
-        if r.get("status") == "running":
+        if r.get("superseded_by"):
+            # A failed or retired route whose model was measured another way:
+            # keep the row (the attempt is evidence) but say where the result is.
+            status = f"achterhaald · zie {WELL_KNOWN_LABELS.get(r['superseded_by'], r['superseded_by'])}"
+        elif r.get("retired_reason"):
+            # Attempted, failed, and deliberately not retried: say why instead of
+            # promising a retry that is not planned.
+            status = f"niet vervolgd · {r['retired_reason']}"
+        elif r.get("status") == "running":
             status = str(r.get("progress_note") or "bezig · suite loopt")
         elif (name.startswith("qwen38-flash-next-merlin-w4a16-") and name.endswith("-v100")) or (
                 "Min capability: 75" in error and "Current capability: 70" in error):
@@ -486,6 +500,8 @@ def well_known_rows() -> list[dict]:
             status = "mislukt · diagnose/herpoging gepland"
         elif is_complete_current:
             status = f"compleet · {r.get('engine', 'llama.cpp-gguf')}"
+            if r.get("evaluation_caveat"):
+                status += " · kanttekening: " + str(r["evaluation_caveat"]).split(". ")[0].rstrip(".")
         elif current_protocol:
             status = "huidig protocol · onvolledig"
         elif r:
