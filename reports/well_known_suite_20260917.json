@@ -4662,7 +4662,8 @@
       "model_source": "https://huggingface.co/halt95/Qwen3.8-Flash-Next-W4A16-Merlin",
       "source_revision": "483ee0015419568c7014b011db0c08b6ddcb2ceb",
       "source_published_at": "2026-09-19T09:43:31Z",
-      "quantization": "merlin-w4a16"
+      "quantization": "merlin-w4a16",
+      "retired_reason": "het Qwen4Exp-pad van 1Cat-vLLM 1.5.0 past niet op twee V100's (zie qwen38-flash-next-nvfp4-1cat-tp2, 2026-10-08)"
     },
     {
       "model": "qwen38-flash-next-merlin-w4a16-allfour",
@@ -5265,7 +5266,8 @@
       "topology": "2× Tesla V100-SXM2-32GB · NVLink · layer split",
       "source_repo": "agentionai/Qwen3.8-Flash-Next-AP-GGUF",
       "source_revision": "0061a60e46ad672a73cec31cb627dc841d4760a4",
-      "quantization": "AP-Q4KM"
+      "quantization": "AP-Q4KM",
+      "superseded_by": "qwen38-flash-next-ap-q4km-six"
     },
     {
       "model": "qwen38-flash-next-ap-q4km-allfour",
@@ -9318,25 +9320,29 @@
       "model": "cloud-antigravity-gemini-gemini-3.1-pro-preview",
       "error": "HTTPError: HTTP Error 400: Bad Request",
       "hardware_profile": "dual-layer",
-      "access_profile": "sandbox"
+      "access_profile": "sandbox",
+      "retired_reason": "pro-variant weigert reasoning_effort=none (HTTP 400); flash-varianten gemeten"
     },
     {
       "model": "cloud-codex-gpt-6-astra",
       "error": "HTTPError: HTTP Error 502: Bad Gateway",
       "hardware_profile": "dual-layer",
-      "access_profile": "sandbox"
+      "access_profile": "sandbox",
+      "superseded_by": "cloud-omp-openai-codex-gpt-6-astra"
     },
     {
       "model": "cloud-codex-gpt-6-sol",
       "error": "HTTPError: HTTP Error 502: Bad Gateway",
       "hardware_profile": "dual-layer",
-      "access_profile": "sandbox"
+      "access_profile": "sandbox",
+      "superseded_by": "cloud-omp-openai-codex-gpt-6-sol"
     },
     {
       "model": "cloud-codex-gpt-6-luna",
       "error": "HTTPError: HTTP Error 502: Bad Gateway",
       "hardware_profile": "dual-layer",
-      "access_profile": "sandbox"
+      "access_profile": "sandbox",
+      "superseded_by": "cloud-omp-openai-codex-gpt-6-luna"
     },
     {
       "model": "cloud-antigravity-gemini-gemini-3.6-flash",

@@ -319,6 +319,12 @@ def publish_partial(report_path: Path, model: str, note: str, **fields: Any) -> 
             row["status"] = "running"
             row["progress_note"] = note
             row.update(fields)
+        # Several sessions share the dashboard HTML. A run that sets this only
+        # writes its own row (under the lock above) and leaves the rebuild to
+        # the one PR that publishes the result.
+        if os.environ.get("VIRTUALV_SKIP_DASHBOARD") == "1":
+            print(f"row {note} (dashboard rebuild skipped)", flush=True)
+            return
         dest = Path(os.environ.get("VIRTUALV_DASHBOARD_OUT", str(NUMERAI_DASHBOARD)))
         env = os.environ.copy()
         env["VIRTUALV_DASHBOARD_OUT"] = str(dest)
