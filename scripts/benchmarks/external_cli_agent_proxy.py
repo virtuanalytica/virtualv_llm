@@ -232,6 +232,26 @@ BACKENDS = {"codex": complete_via_codex, "claude-cli": complete_via_claude_cli, 
 
 
 _usage_log_lock = threading.Lock()
+CLI_ATTEMPTS = 4
+CLI_BACKOFF_SEC = 30.0
+
+
+def complete_with_retries(backend, prompt: str, model: str, attempts: int = CLI_ATTEMPTS,
+                          backoff_sec: float = CLI_BACKOFF_SEC) -> str:
+    """Retry a CLI call that fails transiently (rate limit, gateway error).
+
+    On 2026-10-08 one refused request ended two multi-hour Claude runs, and
+    the next six models then failed their preflight at once. A call that keeps
+    failing still raises, so it is never scored as an answer.
+    """
+    for attempt in range(1, attempts + 1):
+        try:
+            return backend(prompt, model)
+        except Exception:
+            if attempt == attempts:
+                raise
+            time.sleep(backoff_sec * attempt)
+    raise AssertionError("unreachable")
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -271,7 +291,7 @@ class Handler(BaseHTTPRequestHandler):
         started = time.time()
         _claude_usage.value = None
         try:
-            content = BACKENDS[self.backend_name](prompt, model)
+            content = complete_with_retries(BACKENDS[self.backend_name], prompt, model)
         except Exception as exc:
             self._send_json(502, {"error": f"{type(exc).__name__}: {exc}"})
             return
