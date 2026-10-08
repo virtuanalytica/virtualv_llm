@@ -484,6 +484,12 @@ def well_known_rows() -> list[dict]:
             # Attempted, failed, and deliberately not retried: say why instead of
             # promising a retry that is not planned.
             status = f"niet vervolgd · {r['retired_reason']}"
+        elif error.lower().startswith("excluded on speed"):
+            # Loaded and answered, but too slow to finish the suite: a verdict, not a failure to retry.
+            status = "uitgesloten op snelheid · geen crash"
+        elif error.lower().startswith("unsupported"):
+            # The runtime or hardware cannot load this configuration; the row's error text says which.
+            status = "niet ondersteund door runtime/hardware · geen herpoging"
         elif r.get("status") == "running":
             status = str(r.get("progress_note") or "bezig · suite loopt")
         elif (name.startswith("qwen38-flash-next-merlin-w4a16-") and name.endswith("-v100")) or (
@@ -1386,6 +1392,11 @@ def edsq_volta_section() -> str:
 
 
 def main() -> int:
+    # Cascades and suite runs call this script after each step. A session that
+    # shares the page with others sets the flag so only the publishing PR rebuilds.
+    if os.environ.get("VIRTUALV_SKIP_DASHBOARD") == "1":
+        print("dashboard rebuild skipped (VIRTUALV_SKIP_DASHBOARD=1)")
+        return 0
     rows = gguf_rows() + onecat_rows() + live_mixture_rows()
     throughput = throughput_rows(rows)
     bench_rows = benchmark_score_rows()

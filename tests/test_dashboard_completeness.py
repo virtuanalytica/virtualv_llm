@@ -47,3 +47,22 @@ def test_skip_flag_writes_the_row_without_rebuilding(tmp_path, monkeypatch):
     wks.publish_partial(report, "some-model", "bezig · GSM8K af", gsm8k={"exact_match,strict-match": 1.0})
     row = json.loads(report.read_text())["results"][0]
     assert row["model"] == "some-model" and row["status"] == "running" and "gsm8k" in row
+
+
+def test_error_text_decides_the_status_not_a_blanket_retry_promise():
+    by_name = {r["model"]: r for r in _report_rows()}
+    status = {row["model"]: row["status"] for row in dashboard.well_known_rows()}
+    for name, row in by_name.items():
+        error = str(row.get("error", "")).lower()
+        shown = status.get(dashboard.WELL_KNOWN_LABELS.get(name, name), "")
+        if error.startswith("excluded on speed"):
+            assert shown.startswith("uitgesloten op snelheid"), name
+        if error.startswith("unsupported") and not row.get("superseded_by") and not row.get("retired_reason"):
+            assert shown.startswith("niet ondersteund"), name
+
+
+def test_builder_honours_the_skip_flag(monkeypatch, capsys):
+    monkeypatch.setenv("VIRTUALV_SKIP_DASHBOARD", "1")
+    monkeypatch.setattr(dashboard, "well_known_rows", lambda: (_ for _ in ()).throw(AssertionError("must not build")))
+    assert dashboard.main() == 0
+    assert "skipped" in capsys.readouterr().out
