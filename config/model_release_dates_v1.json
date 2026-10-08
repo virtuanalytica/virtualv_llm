@@ -278,8 +278,15 @@
     "deepseek-v4-flash-reap150b-q2k-adaa4000": "no unambiguous repository found in the manifest, scripts or result row; date left open",
     "kimi25-iq3xxs-6gpu-cpumoe": "no unambiguous repository found in the manifest, scripts or result row; date left open",
     "llama31-70b-instruct-q4": "no unambiguous repository found in the manifest, scripts or result row; date left open",
-    "mimo-v26-pro-bpw2.5": "no unambiguous repository found in the manifest, scripts or result row; date left open",
     "mistral-small4-119b-q4-adaa4000": "no unambiguous repository found in the manifest, scripts or result row; date left open",
     "muse-glimmer-30b": "no unambiguous repository found in the manifest, scripts or result row; date left open"
+  },
+  "already_dated_in_report": [
+    "mimo-v26-pro-bpw2.5"
+  ],
+  "counts": {
+    "mapped": 42,
+    "unmapped": 23,
+    "already_dated": 1
   }
 }
