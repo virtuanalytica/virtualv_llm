@@ -1,0 +1,285 @@
+{
+  "purpose": "Sourced publication dates for the temporal contamination comparison. Not yet applied to the result rows.",
+  "method": "Hugging Face API /api/models/<repo>: createdAt, following cardData.base_model one hop for quantised repos. Queried 2026-10-08.",
+  "limits": "createdAt is when the repository was created, which can precede or follow the vendor's announcement by days. Fine-tunes and prunes (KAT-Coder, GLM REAP50, Flash-Next quantisations) take the date of the model they name as base, not of the pruned or quantised artefact.",
+  "rows": {
+    "command-r-plus-104b-0824-iq3m": {
+      "model_release_date": "2024-08-21",
+      "model_release_source": "https://huggingface.co/CohereForAI/c4ai-command-r-plus-08-2024",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "bartowski/c4ai-command-r-plus-08-2024-GGUF"
+    },
+    "deepseek-r1-qwen32b-q4": {
+      "model_release_date": "2025-01-20",
+      "model_release_source": "https://huggingface.co/deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
+      "basis": "createdAt of the model repo itself",
+      "looked_up_via": "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B"
+    },
+    "deepseek-v4-flash-0731-iq3xxs": {
+      "model_release_date": "2026-07-31",
+      "model_release_source": "https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-0731",
+      "basis": "createdAt of the model repo itself",
+      "looked_up_via": "deepseek-ai/DeepSeek-V4-Flash-0731"
+    },
+    "devstral-small2-24b-q4": {
+      "model_release_date": "2025-11-28",
+      "model_release_source": "https://huggingface.co/mistralai/Devstral-Small-2-24B-Instruct-2512",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "lmstudio-community/Devstral-Small-2-24B-Instruct-2512-GGUF"
+    },
+    "gemma4-26b-a4b-q4": {
+      "model_release_date": "2026-03-11",
+      "model_release_source": "https://huggingface.co/google/gemma-4-26B-A4B-it",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "lmstudio-community/gemma-4-26B-A4B-it-GGUF"
+    },
+    "glm45-air-106b-q4": {
+      "model_release_date": "2025-07-20",
+      "model_release_source": "https://huggingface.co/zai-org/GLM-4.5-Air",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "unsloth/GLM-4.5-Air-GGUF"
+    },
+    "glm53-flash-aj-iq2xxs": {
+      "model_release_date": "2026-08-25",
+      "model_release_source": "https://huggingface.co/zai-org/GLM-5.3-Flash",
+      "basis": "createdAt of the model repo itself",
+      "looked_up_via": "zai-org/GLM-5.3-Flash"
+    },
+    "glm53-reap50-iq3m-allfour": {
+      "model_release_date": "2026-08-25",
+      "model_release_source": "https://huggingface.co/zai-org/GLM-5.3-Flash",
+      "basis": "createdAt of the model repo itself",
+      "looked_up_via": "zai-org/GLM-5.3-Flash"
+    },
+    "glm53-reap50-iq3m-v100": {
+      "model_release_date": "2026-08-25",
+      "model_release_source": "https://huggingface.co/zai-org/GLM-5.3-Flash",
+      "basis": "createdAt of the model repo itself",
+      "looked_up_via": "zai-org/GLM-5.3-Flash"
+    },
+    "glm53-reap50-iq4xs-v100ada": {
+      "model_release_date": "2026-08-25",
+      "model_release_source": "https://huggingface.co/zai-org/GLM-5.3-Flash",
+      "basis": "createdAt of the model repo itself",
+      "looked_up_via": "zai-org/GLM-5.3-Flash"
+    },
+    "gpt-oss-120b-q4": {
+      "model_release_date": "2025-08-04",
+      "model_release_source": "https://huggingface.co/openai/gpt-oss-120b",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "unsloth/gpt-oss-120b-GGUF"
+    },
+    "gpt-oss-20b-q4": {
+      "model_release_date": "2025-08-04",
+      "model_release_source": "https://huggingface.co/openai/gpt-oss-20b",
+      "basis": "createdAt of the model repo itself",
+      "looked_up_via": "openai/gpt-oss-20b"
+    },
+    "granite-4.2-30b": {
+      "model_release_date": "2026-08-07",
+      "model_release_source": "https://huggingface.co/ibm-granite/granite-4.2-30b",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "bartowski/granite-4.2-30b-GGUF"
+    },
+    "kat-coder-v2.5-dev": {
+      "model_release_date": "2026-07-23",
+      "model_release_source": "https://huggingface.co/Kwaipilot/KAT-Coder-V2.5-Dev",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "bartowski/Kwaipilot_KAT-Coder-V2.5-Dev-GGUF"
+    },
+    "llama3-70b-instruct-q4": {
+      "model_release_date": "2024-04-19",
+      "model_release_source": "https://huggingface.co/NousResearch/Meta-Llama-3-70B-Instruct-GGUF",
+      "basis": "createdAt of the earliest public GGUF repo used; the original repo is gated or gone, so this is an upper bound",
+      "looked_up_via": "NousResearch/Meta-Llama-3-70B-Instruct-GGUF"
+    },
+    "mixtral-8x22b-instruct-q3ks": {
+      "model_release_date": "2024-04-16",
+      "model_release_source": "https://huggingface.co/mistralai/Mixtral-8x22B-Instruct-v0.1",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "MaziyarPanahi/Mixtral-8x22B-Instruct-v0.1-GGUF"
+    },
+    "nemotron35-lightning-30b-a3b": {
+      "model_release_date": "2026-08-01",
+      "model_release_source": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "unsloth/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-GGUF"
+    },
+    "qwen25-72b-q4": {
+      "model_release_date": "2024-09-16",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen2.5-72B-Instruct",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "Qwen/Qwen2.5-72B-Instruct-GGUF"
+    },
+    "qwen35-122b-a10b-iq3s": {
+      "model_release_date": "2026-02-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.5-122B-A10B",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "unsloth/Qwen3.5-122B-A10B-GGUF"
+    },
+    "qwen35-27b-q4": {
+      "model_release_date": "2026-02-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.5-27B",
+      "basis": "createdAt of the model repo itself",
+      "looked_up_via": "Qwen/Qwen3.5-27B"
+    },
+    "qwen36-35b-a3b-nvfp4": {
+      "model_release_date": "2026-04-15",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.6-35B-A3B",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "nvidia/Qwen3.6-35B-A3B-NVFP4"
+    },
+    "qwen38-1cat-vllm-target": {
+      "model_release_date": "2026-08-05",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-27B",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "unsloth/Qwen3.8-27B-GGUF"
+    },
+    "qwen38-27b-q4": {
+      "model_release_date": "2026-08-05",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-27B",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "unsloth/Qwen3.8-27B-GGUF"
+    },
+    "qwen38-27b-quasar-nvfp4-1cat-tp2": {
+      "model_release_date": "2026-08-05",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-27B",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "unsloth/Qwen3.8-27B-GGUF"
+    },
+    "qwen38-flash-next-ap-iq2s-ada4": {
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "agentionai/Qwen3.8-Flash-Next-AP-GGUF"
+    },
+    "qwen38-flash-next-ap-iq2s-allfour": {
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "agentionai/Qwen3.8-Flash-Next-AP-GGUF"
+    },
+    "qwen38-flash-next-ap-iq2s-six": {
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "agentionai/Qwen3.8-Flash-Next-AP-GGUF"
+    },
+    "qwen38-flash-next-ap-iq2s-v100": {
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "agentionai/Qwen3.8-Flash-Next-AP-GGUF"
+    },
+    "qwen38-flash-next-ap-iq2s-v100pair": {
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "agentionai/Qwen3.8-Flash-Next-AP-GGUF"
+    },
+    "qwen38-flash-next-ap-iq2s-v100pair-tensor": {
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "agentionai/Qwen3.8-Flash-Next-AP-GGUF"
+    },
+    "qwen38-flash-next-ap-iq4xs-allfour": {
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "agentionai/Qwen3.8-Flash-Next-AP-GGUF"
+    },
+    "qwen38-flash-next-ap-iq4xs-v100": {
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "agentionai/Qwen3.8-Flash-Next-AP-GGUF"
+    },
+    "qwen38-flash-next-ap-q4km-allfour": {
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "agentionai/Qwen3.8-Flash-Next-AP-GGUF"
+    },
+    "qwen38-flash-next-ap-q4km-six": {
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "agentionai/Qwen3.8-Flash-Next-AP-GGUF"
+    },
+    "qwen38-flash-next-ap-q4km-v100": {
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "agentionai/Qwen3.8-Flash-Next-AP-GGUF"
+    },
+    "qwen38-flash-next-ap-q4kxl-allfour": {
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "agentionai/Qwen3.8-Flash-Next-AP-GGUF"
+    },
+    "qwen38-flash-next-ap-q4kxl-six": {
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "agentionai/Qwen3.8-Flash-Next-AP-GGUF"
+    },
+    "qwen38-flash-next-ap-q4kxl-v100": {
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "agentionai/Qwen3.8-Flash-Next-AP-GGUF"
+    },
+    "qwen38-flash-next-merlin-w4a16-allfour": {
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "halt95/Qwen3.8-Flash-Next-W4A16-Merlin"
+    },
+    "qwen38-flash-next-merlin-w4a16-v100": {
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "halt95/Qwen3.8-Flash-Next-W4A16-Merlin"
+    },
+    "qwen38-flash-next-nvfp4-1cat-tp2": {
+      "model_release_date": "2026-08-24",
+      "model_release_source": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next",
+      "basis": "createdAt of the base model repo named on the quantisation's model card",
+      "looked_up_via": "RadixArk/Qwen3.8-Flash-Next-NVFP4"
+    },
+    "wizardlm2-8x22b-iq3s": {
+      "model_release_date": "2024-04-16",
+      "model_release_source": "https://huggingface.co/bartowski/WizardLM-2-8x22B-GGUF",
+      "basis": "createdAt of the earliest public GGUF repo used; the original repo is gated or gone, so this is an upper bound",
+      "looked_up_via": "bartowski/WizardLM-2-8x22B-GGUF"
+    }
+  },
+  "unmapped": {
+    "cloud-antigravity-gemini-gemini-3.1-pro-preview": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "cloud-antigravity-gemini-gemini-3.5-flash": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "cloud-antigravity-gemini-gemini-3.6-flash": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "cloud-antigravity-gemini-gemini-3.8-flash": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "cloud-claude-claude-haiku-4-5-20251001": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "cloud-claude-claude-opus-5": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "cloud-claude-claude-opus-5-5": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "cloud-claude-claude-sonnet-5": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "cloud-claude-claude-sonnet-5-5": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "cloud-codex-gpt-6-astra": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "cloud-codex-gpt-6-luna": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "cloud-codex-gpt-6-sol": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "cloud-omp-google-gemini-3.8-flash": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "cloud-omp-openai-codex-gpt-6-astra": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "cloud-omp-openai-codex-gpt-6-luna": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "cloud-omp-openai-codex-gpt-6-sol": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "cloud-omp-zai-glm-5.3": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "cloud-omp-zai-glm-5.3-flash": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "deepseek-v4-flash-reap150b-q2k-adaa4000": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "kimi25-iq3xxs-6gpu-cpumoe": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "llama31-70b-instruct-q4": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "mimo-v26-pro-bpw2.5": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "mistral-small4-119b-q4-adaa4000": "no unambiguous repository found in the manifest, scripts or result row; date left open",
+    "muse-glimmer-30b": "no unambiguous repository found in the manifest, scripts or result row; date left open"
+  }
+}
