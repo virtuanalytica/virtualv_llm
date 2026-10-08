@@ -2,7 +2,7 @@
   "method": "Wilson 95% per component; composite SE from Agresti-Coull binomial variances; unpaired z-test against the profile leader (conservative, see module docstring)",
   "protocol": "v4-mmlu-fewshot-20260918",
   "source_sha256": {
-    "well_known_suite_20260917.json": "3b7b1fb8d749a926ae4ae0d044e251555cbd7dfd4f456de043d5bf2ac4d0877d",
+    "well_known_suite_20260917.json": "5d8ad38f2537c907487c54dffa8d8d3a5f027c7f6cd1fc97d7624db362087d4d",
     "specialist_suite_20260922.json": "46eadc9b5435f0ba58b3b7554977463049be33aaa42d8af0756688e44b0880aa"
   },
   "min_items_for_perfect_score_claim": {

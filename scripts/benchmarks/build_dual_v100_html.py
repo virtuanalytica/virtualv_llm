@@ -853,7 +853,8 @@ def contamination_section() -> str:
         gap = static_score - private_score if static_score is not None and private_score is not None else None
         release = base.get("model_release_date") or "nog vast te leggen"
         release_source = base.get("model_release_source")
-        release_html = html.escape(release) + (" <small>bron opgeslagen</small>" if release_source else "")
+        release_html = html.escape(release) + (
+            f" <small><a href=\"{html.escape(release_source)}\">bron</a></small>" if release_source else "")
         status = "vergelijkbaar" if gap is not None else "wacht op private/live score + releasebron"
 
         methods = (audit.get(name, {}).get("results") or {})
