@@ -66,3 +66,14 @@ def test_builder_honours_the_skip_flag(monkeypatch, capsys):
     monkeypatch.setattr(dashboard, "well_known_rows", lambda: (_ for _ in ()).throw(AssertionError("must not build")))
     assert dashboard.main() == 0
     assert "skipped" in capsys.readouterr().out
+
+
+def test_placeholders_point_at_measured_rows_and_only_planned_work_stays_queued():
+    measured = {r["model"] for r in _report_rows()}
+    order = set(dashboard.WELL_KNOWN_ORDER)
+    assert set(dashboard.PLACEHOLDER_SUPERSEDED_BY) | set(dashboard.PLACEHOLDER_RETIRED) <= order
+    assert set(dashboard.PLACEHOLDER_SUPERSEDED_BY.values()) <= measured
+    # A placeholder that has since been measured must not keep a stale disposition.
+    assert not (set(dashboard.PLACEHOLDER_SUPERSEDED_BY) | set(dashboard.PLACEHOLDER_RETIRED)) & measured
+    queued = [row["model"] for row in dashboard.well_known_rows() if row["status"] == "in benchmarkwachtrij"]
+    assert queued == [dashboard.WELL_KNOWN_LABELS["qwen36-27b-iq3"]]

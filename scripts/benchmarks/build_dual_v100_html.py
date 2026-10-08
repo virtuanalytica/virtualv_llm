@@ -417,6 +417,25 @@ WELL_KNOWN_LABELS = {
     "mimo-v26-pro-bpw2.5": "MiMo-V2.6-Pro 1T BPW2.5 (q2.5)",
 }
 WELL_KNOWN_ORDER = list(WELL_KNOWN_LABELS)
+# Planned rows that were never run and will not be. They exist only in the
+# order above (no report row), so their outcome is recorded here: either the
+# measured row that answers the same question, or why the plan was dropped.
+# Agreed with the roadmap owner on 2026-10-08.
+_OFF_ROADMAP = "niet op de huidige roadmap; gewichten verwijderd"
+PLACEHOLDER_SUPERSEDED_BY = {
+    "glm45-air-106b-iq3": "glm45-air-106b-q4",
+    "glm53-reap50-iq3m": "glm53-reap50-iq3m-allfour",
+    "glm53-reap50-iq4xs": "glm53-reap50-iq4xs-v100ada",
+    "glm53-reap50-iq4xs-v100": "glm53-reap50-iq4xs-v100ada",
+    "glm53-reap50-iq4xs-allfour": "glm53-reap50-iq4xs-v100ada",
+}
+PLACEHOLDER_RETIRED = {
+    **{f"glm53-reap50-{quant}{profile}": _OFF_ROADMAP
+       for quant in ("q3km", "q4km") for profile in ("", "-v100", "-allfour")},
+    "qwen38-flash-next-awq-w4a16-v100": _OFF_ROADMAP,
+    "qwen38-flash-next-awq-w4a16-allfour": _OFF_ROADMAP,
+    "mom-live-kimi25": "Kimi K2.5 is uitgesloten op snelheid (1,2 tok/s), dus geen live mixture ermee",
+}
 ACCESS_PROFILES = (
     ("sandbox", "Sandbox · geen internet of schijftools"),
     ("disk", "Disk · gecontroleerde read-only werkmap, geen internet"),
@@ -476,7 +495,12 @@ def well_known_rows() -> list[dict]:
         # completeness is judged on the composite's 4 metrics only.
         is_complete_current = current_protocol and composite is not None
         error = str(r.get("error", ""))
-        if r.get("superseded_by"):
+        if not r and name in PLACEHOLDER_SUPERSEDED_BY:
+            target = PLACEHOLDER_SUPERSEDED_BY[name]
+            status = f"achterhaald · zie {WELL_KNOWN_LABELS.get(target, target)}"
+        elif not r and name in PLACEHOLDER_RETIRED:
+            status = f"niet vervolgd · {PLACEHOLDER_RETIRED[name]}"
+        elif r.get("superseded_by"):
             # A failed or retired route whose model was measured another way:
             # keep the row (the attempt is evidence) but say where the result is.
             status = f"achterhaald · zie {WELL_KNOWN_LABELS.get(r['superseded_by'], r['superseded_by'])}"
