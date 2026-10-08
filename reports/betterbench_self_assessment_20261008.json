@@ -1,0 +1,274 @@
+{
+  "assessed": "2026-10-08",
+  "object": "VirtualV LLM test suite as a whole (well-known suite, specialist suite, contamination audit, publication tooling)",
+  "assessor": "self-assessment by the maintainers' agent; not reviewed by the BetterBench authors",
+  "criteria_file": "config/betterbench_criteria_v1.json",
+  "stages": {
+    "design": {
+      "mean": 7.5,
+      "criteria": [
+        {
+          "criterion": "Tested capability, characteristic, or concept is defined",
+          "score": 10,
+          "evidence": "docs/VIRTUALV_LLM_TESTSUITE_STANDARD.md §5 and §7 name the tasks per capability (arithmetic reasoning, code, knowledge, logic; specialist lanes), but give no formal definition of the capability each task stands for."
+        },
+        {
+          "criterion": "How tested capability or concept translates to benchmark task is described",
+          "score": 10,
+          "evidence": "docs/VIRTUALV_LLM_TESTSUITE_STANDARD.md §5 describes how each task is scored and combined into the composite; the link from capability to task is stated per task, not argued."
+        },
+        {
+          "criterion": "Domain experts are involved",
+          "score": 5,
+          "evidence": "Specialist packs are written in-house ('eigen holdout'); no external domain expert is named for any lane."
+        },
+        {
+          "criterion": "Domain literature is integrated",
+          "score": 10,
+          "evidence": "docs/PROFESSIONAL_SUITE_LESSONS.md and the dashboard's contamination section cite the literature (LiveBench, MMMU-Pro, lm-eval tasks); the specialist lanes cite one reference each."
+        },
+        {
+          "criterion": "Use cases or user personas are described",
+          "score": 10,
+          "evidence": "docs/VIRTUALV_LLM_TESTSUITE_STANDARD.md §1 and §11 describe scope and operator roles; README states the user (someone choosing a local model for given hardware). No explicit personas."
+        },
+        {
+          "criterion": "Differences to related benchmarks are explained",
+          "score": 10,
+          "evidence": "docs/PROFESSIONAL_SUITE_LESSONS.md compares against professional suites; the difference (hardware-aware, failures explicit) is in the README."
+        },
+        {
+          "criterion": "Input sensitivity is addressed",
+          "score": 15,
+          "evidence": "Contamination audit runs a paraphrased-MMLU lane and reports the paraphrase gap per model (scripts/benchmarks/contamination_audit.py; dashboard 'Parafrase-gap')."
+        },
+        {
+          "criterion": "Has validated automatic evaluation",
+          "score": 10,
+          "evidence": "Scoring is deterministic and unit-tested (tests/test_eval_suite.py, HumanEval executes code), and the post-cutoff holdout key was corrected after a cross-model check; no separate validation study of the automatic scorers against human grading."
+        },
+        {
+          "criterion": "How benchmark score should or shouldn't be interpreted or used is described",
+          "score": 10,
+          "evidence": "docs/VIRTUALV_LLM_TESTSUITE_STANDARD.md §12 and the dashboard say a third-decimal difference is no ranking and give the interval; README says the numbers are not universal claims."
+        },
+        {
+          "criterion": "How knowing about the tested concept is helpful in the real world is described",
+          "score": 5,
+          "evidence": "README motivates the suite in one paragraph; no description of what a given score means for a real task."
+        },
+        {
+          "criterion": "Informed performance metric choice",
+          "score": 10,
+          "evidence": "docs/VIRTUALV_LLM_TESTSUITE_STANDARD.md §5 fixes the metrics and the unweighted composite and records why TruthfulQA is excluded from it; alternatives are not discussed."
+        },
+        {
+          "criterion": "Metric floors and ceilings are included",
+          "score": 0,
+          "evidence": "No metric floor or ceiling is published for any task."
+        },
+        {
+          "criterion": "Human performance level is included",
+          "score": 0,
+          "evidence": "No human performance level is included."
+        },
+        {
+          "criterion": "Random performance level is included",
+          "score": 0,
+          "evidence": "No random-guess level is included, although MMLU and BBH are multiple choice and the level is known."
+        }
+      ]
+    },
+    "implementation": {
+      "mean": 10.91,
+      "criteria": [
+        {
+          "criterion": "Evaluation code is available",
+          "score": 15,
+          "evidence": "scripts/benchmarks/ is public under Apache-2.0."
+        },
+        {
+          "criterion": "Evaluation data or generation mechanism is accessible",
+          "score": 10,
+          "evidence": "Public tasks are fetched by scripts/benchmarks/bootstrap_public_data.py; the specialist and holdout packs are deliberately private, so that part is not accessible."
+        },
+        {
+          "criterion": "Evaluation of models via API is supported",
+          "score": 15,
+          "evidence": "--external-url plus the sanitising and CLI proxies; cloud rows for Claude, GPT-6, GLM and Gemini were measured this way."
+        },
+        {
+          "criterion": "Evaluation of local models is supported",
+          "score": 15,
+          "evidence": "llama.cpp and 1Cat-vLLM runners with hardware profiles."
+        },
+        {
+          "criterion": "Globally unique identifier or encryption of evaluation instances is added",
+          "score": 5,
+          "evidence": "The contamination audit has a canary-recall lane, but evaluation instances carry no GUID and the private packs are withheld rather than encrypted."
+        },
+        {
+          "criterion": "Task to identify if model has been trained on benchmark data is included",
+          "score": 15,
+          "evidence": "Canary-recall, paraphrase-gap and post-cutoff holdout lanes (contamination_audit.py)."
+        },
+        {
+          "criterion": "Script to replicate results is explicitly included",
+          "score": 10,
+          "evidence": "scripts/reporting/build_release_evidence.py and validate_publication.py rebuild and check the published evidence; a single command that reproduces a published row end to end is not provided."
+        },
+        {
+          "criterion": "Statistical significance or uncertainty quantification of benchmark results is reported",
+          "score": 15,
+          "evidence": "scripts/benchmarks/score_confidence.py: Wilson intervals per component and a z-test against the leader, shown on the dashboard."
+        },
+        {
+          "criterion": "Need for warnings for sensitive/harmful content is assessed",
+          "score": 0,
+          "evidence": "No assessment of whether the tasks or model outputs need a content warning."
+        },
+        {
+          "criterion": "Build status is implemented",
+          "score": 10,
+          "evidence": ".github/workflows/ci.yml runs on every push and PR; the README shows no build-status badge."
+        },
+        {
+          "criterion": "Release requirements are specified",
+          "score": 10,
+          "evidence": "CONTRIBUTING.md and docs §10 state acceptance rules, and CHANGELOG.md plus tagged releases exist; a release checklist is in a maintainer's notes, not in the repository."
+        }
+      ]
+    },
+    "documentation": {
+      "mean": 7.89,
+      "criteria": [
+        {
+          "criterion": "Requirements file available or equivalent is available",
+          "score": 5,
+          "evidence": "README names Python 3.12+ and lm-eval; there is no requirements file or pyproject."
+        },
+        {
+          "criterion": "Quick-start guide or demo is available",
+          "score": 15,
+          "evidence": "README 'Quick start' with a runnable example."
+        },
+        {
+          "criterion": "In-line code comments are used",
+          "score": 15,
+          "evidence": "Scripts carry rationale comments throughout (for example well_known_suite.py, result_store.py)."
+        },
+        {
+          "criterion": "Code documentation is available",
+          "score": 10,
+          "evidence": "docs/VIRTUALV_LLM_TESTSUITE_STANDARD.md Appendix A is an operator manual; there is no per-module API reference."
+        },
+        {
+          "criterion": "Accompanying paper is accepted at peer-reviewed venue",
+          "score": 0,
+          "evidence": "No accompanying peer-reviewed paper."
+        },
+        {
+          "criterion": "Benchmark design process is documented",
+          "score": 10,
+          "evidence": "docs/VIRTUALV_LLM_TESTSUITE_STANDARD.md §9 and §10 document the process and change policy; the history of design decisions lives in commit messages and docs/MODEL_TEST_ROADMAP.md."
+        },
+        {
+          "criterion": "Test tasks & rationale are documented",
+          "score": 10,
+          "evidence": "docs/VIRTUALV_LLM_TESTSUITE_STANDARD.md §5 and §7 list the tasks; the rationale for the chosen samples (50/48/160/40 items) is not given."
+        },
+        {
+          "criterion": "Assumptions of normative properties are documented",
+          "score": 5,
+          "evidence": "The standard states that only matching protocol, engine and hardware are comparable; normative assumptions (what a 'good' model is) are not written down."
+        },
+        {
+          "criterion": "Limitations are documented",
+          "score": 10,
+          "evidence": "README and §12 state that results are not universal and that small differences are noise; the row-level evaluation_caveat field records known artefacts. No single limitations section."
+        },
+        {
+          "criterion": "Test environment design or prompt design process is documented",
+          "score": 10,
+          "evidence": "The prompt format is fixed by the protocol id (v4-mmlu-fewshot-20260918) and described in §5; how the prompts were designed is not documented."
+        },
+        {
+          "criterion": "Globally unique, persistent identifier for a dataset and its metadata is provided",
+          "score": 5,
+          "evidence": "Raw evidence is a checksummed GitHub release artefact; there is no DOI or other persistent dataset identifier."
+        },
+        {
+          "criterion": "Standardized metadata is included",
+          "score": 0,
+          "evidence": "No standardised metadata (for example Croissant) for the datasets or results."
+        },
+        {
+          "criterion": "Data sources and data collection process are explained",
+          "score": 10,
+          "evidence": "Public sources are named with their lm-eval task; the origin of the private specialist items is described only as in-house."
+        },
+        {
+          "criterion": "Data preprocessing steps are described (if applicable)",
+          "score": 10,
+          "evidence": "Sampling limits and the few-shot format are documented; the preprocessing of the private packs is not."
+        },
+        {
+          "criterion": "Data annotation process is described (if applicable)",
+          "score": 5,
+          "evidence": "Answer keys are in-house; one key was found wrong and corrected (CHANGELOG, contamination_audit.rescore_post_cutoff_holdout). No description of the annotation process."
+        },
+        {
+          "criterion": "Evaluation metric is documented",
+          "score": 15,
+          "evidence": "docs/VIRTUALV_LLM_TESTSUITE_STANDARD.md §5, §6 and §12 document every metric and the composite."
+        },
+        {
+          "criterion": "Applicable license is specified",
+          "score": 15,
+          "evidence": "LICENSE (Apache-2.0) and NOTICE."
+        },
+        {
+          "criterion": "Data representativeness is explained (if applicable)",
+          "score": 0,
+          "evidence": "No statement on how representative the 298 public items or the specialist items are."
+        },
+        {
+          "criterion": "Data is documented using a standardized format.",
+          "score": 0,
+          "evidence": "No datasheet or other standard documentation format for the data."
+        }
+      ]
+    },
+    "maintenance": {
+      "mean": 11.67,
+      "criteria": [
+        {
+          "criterion": "Code usability was checked within the last year",
+          "score": 15,
+          "evidence": "CI runs the suite's tests and validators on every push; last green run 2026-10-08."
+        },
+        {
+          "criterion": "Maintained feedback channel for users is available",
+          "score": 10,
+          "evidence": "GitHub issues and PRs are open and CONTRIBUTING.md routes disputes there; no stated response commitment."
+        },
+        {
+          "criterion": "Contact person is listed",
+          "score": 10,
+          "evidence": ".github/CODEOWNERS names the maintainer account; no contact address in the README."
+        }
+      ]
+    }
+  },
+  "overall_mean": 8.72,
+  "zero_scores": [
+    "Metric floors and ceilings are included",
+    "Human performance level is included",
+    "Random performance level is included",
+    "Need for warnings for sensitive/harmful content is assessed",
+    "Accompanying paper is accepted at peer-reviewed venue",
+    "Standardized metadata is included",
+    "Data representativeness is explained (if applicable)",
+    "Data is documented using a standardized format."
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "source": "Reuel, Hardy, Smith, Lamparth, Hardy, Kochenderfer. BetterBench: Assessing AI Benchmarks, Uncovering Issues, and Establishing Best Practices. NeurIPS 2024 Datasets & Benchmarks (spotlight). arXiv:2411.12990",
+  "source_url": "https://arxiv.org/abs/2411.12990",
+  "extracted_from": "arXiv LaTeX e-print, figs/{design,implementation,documentation,maintenance}_criteria.pdf",
+  "eprint_sha256": "9899d0916e345e66ef5cce2ea932a24a91585c27d60e789ad105bf404bbda5bd",
+  "extracted": "2026-10-08 with pdftotext -layout; the two-column figures were de-interleaved by hand",
+  "scale": {"15": "fully meets", "10": "partially meets", "5": "mentioned but not fulfilled", "0": "neither referenced nor satisfied"},
+  "aggregation": "stage score = mean of its criteria; usability = weighted mean of implementation, documentation and maintenance; the paper reads a mean of 10 or more as reasonably good",
+  "count_note": "The figures list 47 items (14 + 11 + 19 + 3) while the paper text says 46. All 47 are kept verbatim; which one the authors count differently is not stated in the source.",
+  "criteria": {
+    "design": [
+      "Tested capability, characteristic, or concept is defined",
+      "How tested capability or concept translates to benchmark task is described",
+      "Domain experts are involved",
+      "Domain literature is integrated",
+      "Use cases or user personas are described",
+      "Differences to related benchmarks are explained",
+      "Input sensitivity is addressed",
+      "Has validated automatic evaluation",
+      "How benchmark score should or shouldn't be interpreted or used is described",
+      "How knowing about the tested concept is helpful in the real world is described",
+      "Informed performance metric choice",
+      "Metric floors and ceilings are included",
+      "Human performance level is included",
+      "Random performance level is included"
+    ],
+    "implementation": [
+      "Evaluation code is available",
+      "Evaluation data or generation mechanism is accessible",
+      "Evaluation of models via API is supported",
+      "Evaluation of local models is supported",
+      "Globally unique identifier or encryption of evaluation instances is added",
+      "Task to identify if model has been trained on benchmark data is included",
+      "Script to replicate results is explicitly included",
+      "Statistical significance or uncertainty quantification of benchmark results is reported",
+      "Need for warnings for sensitive/harmful content is assessed",
+      "Build status is implemented",
+      "Release requirements are specified"
+    ],
+    "documentation": [
+      "Requirements file available or equivalent is available",
+      "Quick-start guide or demo is available",
+      "In-line code comments are used",
+      "Code documentation is available",
+      "Accompanying paper is accepted at peer-reviewed venue",
+      "Benchmark design process is documented",
+      "Test tasks & rationale are documented",
+      "Assumptions of normative properties are documented",
+      "Limitations are documented",
+      "Test environment design or prompt design process is documented",
+      "Globally unique, persistent identifier for a dataset and its metadata is provided",
+      "Standardized metadata is included",
+      "Data sources and data collection process are explained",
+      "Data preprocessing steps are described (if applicable)",
+      "Data annotation process is described (if applicable)",
+      "Evaluation metric is documented",
+      "Applicable license is specified",
+      "Data representativeness is explained (if applicable)",
+      "Data is documented using a standardized format."
+    ],
+    "maintenance": [
+      "Code usability was checked within the last year",
+      "Maintained feedback channel for users is available",
+      "Contact person is listed"
+    ]
+  }
+}
