@@ -75,6 +75,13 @@ if [[ -n "${CPU_OFFLOAD_GB:-}" ]]; then
   ARGS+=(--cpu-offload-gb "$CPU_OFFLOAD_GB")
 fi
 
+# Extra flags for one checkpoint, e.g. --language-model-only for Flash-Next,
+# whose vision tower the 1Cat SM70 route does not serve.
+if [[ -n "${EXTRA_ARGS:-}" ]]; then
+  read -r -a EXTRA <<< "$EXTRA_ARGS"
+  ARGS+=("${EXTRA[@]}")
+fi
+
 if [[ -n "${FORCE_ATTN_BACKEND:-}" ]]; then
   ARGS+=(--attention-backend "$FORCE_ATTN_BACKEND")
 fi
