@@ -37,10 +37,14 @@ treating either number as canonical.
 2. K2.7-Code UD-Q3_K_XL (432 G) downloaded — serve + compare vs Q4_K_XL
    (0.43–0.68 t/s baseline; Q3 fits the page cache without a PMem tail).
    Test chain pattern: `evidence/microbench/kimi_k27_code_tier_shard_20261006.md`.
-3. K3 UD-IQ2_XXS (662 G) auto-chain armed: download → symlink tier-split
-   (~450 G NVMe + ~212 G PMem) → serve :18022 → portfolio probe. Log:
-   `/tmp/k3_test.log`. 2.5-bit class; projected ceiling ~1–1.5 t/s
-   (bandwidth-bound) — quality verdict decides adoption.
+3. K3 UD-IQ2_XXS (662 G) — **VERDICT (2026-10-08): not viable on this
+   box as configured.** The wt-pub2 served instance measured 0.24 t/s cold
+   (662 G page-in) and died mid-probe under memory competition with the
+   other judges; the parallel 227 G partial download was removed. Even at
+   best-case ~1 t/s the space/energy cost per answer exceeds K2.5
+   IQ3_XXS (1.24 t/s, proven 0.833 battery) with unproven 2.5-bit
+   quality. K3 returns only via a GPU path or a much smaller quant —
+   both out of scope for this box.
 4. MoM v3.1 day lane: judges are night-profile by design; evaluate the
    1Cat NVFP4 lane for scored daytime MoM after item 7's quality gate.
 5. GLM-5.3-Flash REAP50 GGUF conversion bug (missing
