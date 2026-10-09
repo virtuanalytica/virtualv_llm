@@ -22,6 +22,37 @@ Both append to `reports/lm_eval_runs/cron_sweep.log`. The current crontab is the
 | `mixture_of_models.py`, `optimize_model_mixture.py`, `materialize_mixture_frontier.py` | Post-hoc and routed mixtures from retained per-question logs | well-known-suite mixture rows |
 | `build_dual_v100_html.py` | Dashboard renderer; does no inference | `reports/dual_v100_nvlink_benchmark.html` |
 
+## Private software- en datatoetsen
+
+`software_data_suite.py` meet acht rollen in twee afzonderlijke tabellen.
+De private pack staat buiten de checkout; alleen
+`reports/software_data_pack_commitment.json` staat in Git. De runner controleert
+bestandstoegang, SHA-256 en rolverdeling vóór de eerste modelaanroep. Code
+wordt in een netwerkloze, begrensde Docker-container beoordeeld; SQL is
+alleen-lezen. Start de pilot pas nadat het huidige benchmarkslot vrij is en
+gebruik dezelfde pack en decodeerinstellingen voor alle te vergelijken modellen.
+
+```bash
+python3 scripts/benchmarks/software_data_suite.py \
+  --pack "$PRIVATE_PACK_PATH" \
+  --base http://127.0.0.1:PORT --alias MODEL_ALIAS --model-id MODEL_ID
+```
+
+De 16-item pilot is alleen kalibratie. `software_agent_comparison.py` beantwoordt
+de afzonderlijke vraag of **Toddler + Teacher + agent op ClaudeClaw** beter is
+dan gewone ClaudeClaw-workers. Het script accepteert alleen gepaarde,
+onafhankelijk geverifieerde agentresultaten op een verse, elders beheerde
+toetsset; zonder die gegevens blijft de uitkomst “nee, nog niet”. Zie
+`docs/SOFTWARE_DATA_SPECIALIST_PROTOCOL.md`.
+
+De tweede, cloud-toegestane pack heeft een afzonderlijk commitment in
+`reports/software_data_cloud_pack_commitment.json`. Draai eerst minstens twee
+lokale kandidaten op precies die pack; sluit de reeks af met
+`software_data_suite.py --provider haiku55 --effort medium` op dezelfde hash.
+De runner blokkeert Haiku als de twee lokale rijen ontbreken of als een
+lokale-only pack wordt aangeboden. Vergelijk de kwaliteit per item; de CLI
+heeft een ander decodeprofiel en geen meetbare lokale GPU-board-energie.
+
 ## Specialist suite
 
 The tracked starter packs are `config/benchmark_specialist_holdout_v1.csv` (Chemistry and Physics) and `config/specialist_benchmarks/{vision,video,iq,eq,fq,qq}.csv`. Before a real comparison, copy each selected pack to the ignored private path `data/eval_cache/specialist_packs/<specialist>.csv`, replace/rotate its questions, and use that private file thereafter. The runner automatically prefers private packs. Multiple-choice lanes expose only prompt and options to the model; `answer` stays in the scorer. Vision rows additionally name a local image asset. FQ rows contain robot geometry and target-pose fields; the model returns actuator JSON and the scorer runs the kinematic simulation.

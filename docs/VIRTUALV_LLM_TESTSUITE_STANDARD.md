@@ -239,6 +239,28 @@ definitieve verwijdering van modelgewichten moeten aantoonbaar worden gereviewd.
 
 ## 12. Statistische betrouwbaarheid
 
+### Afzonderlijke software- en datatabellen
+
+Protocol `software-data-private-v1-20261009` meet coder, reviewer, architect,
+debugger, data engineer, data analyst, data architect en data steward. Het
+dashboard geeft softwareontwikkeling en data elk een eigen tabel met
+slagingspercentage per model en per rol. De private pilot heeft twee items per
+rol; deze scores worden niet bij de tien-lane inhoudscomposiet opgeteld en
+leveren geen promotieclaim. De items en sleutels blijven buiten de repository;
+alleen het SHA-256-commitment wordt gepubliceerd. De scorer weigert een
+gewijzigde of in de repository geplaatste pack. Zie
+`docs/SOFTWARE_DATA_SPECIALIST_PROTOCOL.md` voor de scorers en beperkingen.
+Een tweede, afzonderlijk gecommitteerde cloud-toegestane pack dient voor een
+gelijke itemvergelijking van minstens twee lokale modellen en **als laatste**
+Haiku 5.5. De lokale-only pack wordt niet naar de cloud gestuurd. Haiku's
+afwijkende CLI-decodeprofiel blijft zichtbaar in iedere resultaatrij.
+
+De vraag of **Toddler + Teacher + agent op ClaudeClaw** beter is op
+softwaretaken, vereist een afzonderlijke gepaarde vergelijking met gewone
+ClaudeClaw-workers. Losse modelscores en de historische 115 reviewbevindingen
+beantwoorden die vraag niet. Het dashboard toont tot een geldige vergelijking
+expliciet “nee, nog niet”.
+
 Iedere gerangschikte score krijgt een 95%-betrouwbaarheidsinterval.
 `scripts/benchmarks/score_confidence.py` berekent per onderdeel een
 Wilson-interval, voor de composite een standaardfout en per toegangsprofiel

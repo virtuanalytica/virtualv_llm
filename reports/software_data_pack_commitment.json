@@ -1,0 +1,21 @@
+{
+  "protocol": "software-data-private-v1-20261009",
+  "sha256": "76f4d82e5822a84bb6c802326b880c91e0a6f359566874e9de89a59d7f9fe586",
+  "counts": {
+    "software": {
+      "coder": 2,
+      "reviewer": 2,
+      "architect": 2,
+      "debugger": 2
+    },
+    "data": {
+      "data_engineer": 2,
+      "data_analyst": 2,
+      "data_architect": 2,
+      "data_steward": 2
+    }
+  },
+  "status": "sealed-pilot",
+  "answers_in_repository": false,
+  "prompt_optimizer_access": "training-only; sealed pack is not an optimizer input"
+}
