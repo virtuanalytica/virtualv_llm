@@ -1,7 +1,113 @@
 # VirtualV LLM model test roadmap
 
-Status date: 2026-10-07 (sections dated 2026-09-24 are kept as written). This document separates measured local evidence from
+Status date: 2026-10-09 (older dated sections remain historical). This document separates measured local evidence from
 upstream reference numbers and from untested hypotheses.
+
+## 2026-10-09 besluit — private Kimi-vergelijking en drie NVMe-volumes
+
+De publieke GSM8K/BBH/MMLU/HumanEval-full-suite wordt nooit meer gestart.
+Bestaande scores blijven historische referentie en tellen niet mee voor
+promotie. Het actieve protocol `v3-private-specialist-anti-eight-gamedev-gamer-20261009`
+combineert acht vaste taken, alle tien specialistische lanes op ongepubliceerde
+packs, canary/parafrase/post-cutoff-audit, geforceerde 256-outputtoken-t/s
+en GPU-board-Wh per antwoord. Eenzelfde prompt- en decodeerprofiel geldt voor
+alle quants. De lopende K3 IQ2_XXS-pilot bevat nog geen specialistensuite en
+kan daardoor niet worden gepromoveerd.
+
+Op 9 oktober zijn de verse lokale specialistpacks en twaalf procedurele
+gamedev-cases vóór de eerste modelrespons verzegeld. Alleen SHA-256-
+commitments staan in de repository; vragen en sleutels blijven onder de
+genegeerde `data/eval_cache/`-map. De gamedev-lane toetst collision/pickup,
+platformerfysica en combat-state met een onafhankelijke simulator en telt als
+negende, even zwaar gewogen specialist. Het nieuwe protocol vergelijkt dus
+10/10 met de nieuwe interactieve gamer-lane; historische 8/8- en 9/9-rijen
+worden niet met 10/10 gerangschikt. De verse
+private post-cutoff-holdout is eveneens vóór de K3-audit gecommit op hash.
+Nieuwe versies van de private specialistensuite vereisen ten minste de huidige
+tien lanes; een ontbrekende gamedev- of gamer-score geeft een partiële composiet.
+De gamer-v1-lane toetst vier verzegelde, interactieve navigatie-episodes met
+onbekende knoppen via tekstscherm. Hij bewijst nog geen visueel gamebegrip of
+PlayStation-besturing; die capaciteiten krijgen aparte metingen.
+
+**Herstelstatus 9 oktober, 01:25 CEST:** de K3-run voltooide alle acht vaste
+taken (gemiddelde 0,8125), maar de lopende Bash-pipeline stopte door een
+syntaxisfout voordat de 256-tokenprobe en private audit begonnen. Vijf grote
+shards en de kleine header-shard waren inmiddels op EDS1 verwijderd. Service
+`k3-recover-shards-20261009` haalt alleen deze zes bestanden op uit de
+vastgepinde Unsloth-revisie, controleert SHA-256 en verdeelt ze over EDS1 en
+EDS2 met minimaal 200 GB reserve per schijf. Service
+`k3-resume-after-recovery-20261009` herstart daarna het zes-GPU/48-thread-
+profiel en alleen de ontbrekende metingen. De dagdienst en night judges blijven
+uit totdat de gevalideerde handoff slaagt; de acht-takenscore alleen is geen
+promotieresultaat.
+
+**Volgorde:** (1) rond K3 UD-IQ2_XXS op zes GPU's af; (2) hervat de dagdienst
+alleen na gevalideerde voltooiing, onafhankelijk van 07:00/07:30; (3) vergelijk
+K2.7-Code UD-Q4_K_XL en UD-Q3_K_XL met dezelfde private kernset, t/s en
+GPU-energie; (4) kies pas dan een judge en maak de eventuele verliezer vrij;
+(5) test [K3 UD-Q2_K_XL](https://huggingface.co/unsloth/Kimi-K3-GGUF/tree/main/UD-Q2_K_XL)
+van circa 861 GB; (6) test [Colibrì native K3 MXFP4](https://github.com/JustVugg/colibri/blob/main/docs/kimi_k3.md)
+op de [officiële K3-snapshot](https://huggingface.co/moonshotai/Kimi-K3/tree/main)
+van circa 1,56 TB. Publiceerde quantisatiecijfers vormen alleen een reden om
+te testen, geen lokale kwaliteitsuitslag. Colibrì kan de HF-safetensors direct
+lezen; `.qs`-repack is optioneel en vereist afzonderlijke ruimte.
+
+**Opslag en PCIe:** EDS2 (`nvme0n1p2`, Intel SSDPEDMW012T4), EDS1
+(`nvme1n1p3`, Intel SSDPECKE064T8) en `claude-data` (`nvme2n1p1`, dezelfde
+SSDPECKE064T8) zijn drie fysieke NVMe-volumes. Alle drie rapporteren PCIe
+8,0 GT/s ×4; EDS2 hangt aan PCIe-root `17`, de twee andere aan root `85`.
+Daarom hoort EDS2 nadrukkelijk bij de shardindeling om ook het andere
+PCIe-pad te benutten. Verdeel hele GGUF-shards over EDS1, EDS2 en eventueel
+`claude-data` met een manifest en symlinks; kies aantallen op gemeten
+leesdoorvoer en de werkelijke expertaanroepen, niet op alleen bytegrootte.
+Gebruik VRAM voor toegewezen lagen/KV, DRAM voor CPU-experts en paginacache,
+PMem100 alleen als gemeten warm/koud-cachelaag, en NVMe voor de resterende
+shards. Colibrì's directe safetensorsbron staat op `claude-data`; behoud
+minimaal 200 GB vrije ruimte per NVMe-volume en controleer vóór iedere
+download of runtime ook staging/logruimte nodig heeft.
+
+Peiling 9 oktober 2026: EDS2 319 GB, EDS1 162 GB en `claude-data` 2.029 TB
+vrij. De lopende K3-server houdt nog circa 243 GB verwijderde EDS1-shards
+gemapt; ruimte keert pas na serverstop terug. K2.7 Q3 gebruikt circa 464 GB
+en Q4 circa 584 GB op EDS1. Verwijder geen van beide vóór vergelijk en
+judge-omschakeling. Als Q3 verliest, kan EDS1 na serverstop/opruimen circa
+669 GB boven de 200 GB-reserve leveren en EDS2 circa 119 GB; voor de
+861 GB-Q2_K_XL resteert circa 73 GB op `claude-data`. Als Q4 verliest,
+kan EDS1 circa 789 GB leveren en EDS2 de resterende circa 72 GB. Dit zijn
+capaciteitsgrenzen, geen voorgeschreven snelheidsoptimum: een per-shard
+manifest moet de actuele `df`, hashes, mounts en gemeten I/O vastleggen.
+Het vastgezette 19-shardmanifest staat in
+`config/kimi_k3_q2kxl_shards_20261009.json` (revisie
+`a0836360ce58dfec088d966a97f2ddc8a606279b`, 861.277.858.912 bytes).
+`scripts/benchmarks/plan_kimi_shards.py` plant hele shards op alle drie
+volumes; standaard reserveert het 200 GB op EDS1/EDS2 en 300 GB op
+`claude-data` voor de Colibrì-bron en overhead. Een simulatie na vrijgave van
+de K3-mmap en de verliezende K2.7-quant, met de officiële 1,56 TB-snapshot
+gereserveerd, plaatst circa 612 GB op EDS1, 100 GB op EDS2 en 150 GB op
+`claude-data`. Dit is een capaciteitsvoorbeeld; meet eerst de I/O en herplan
+met werkelijk vrije ruimte voordat een shard wordt gedownload.
+Behoud logs, hashes en bronrevisie voordat oude K3-shards worden verwijderd.
+
+**Promotie:** voor interactieve judge minstens 3 gemeten decode-t/s, volledige
+private score en geen betekenisvolle achteruitgang versus de huidige judge.
+Een tragere quant kan alleen als offline specialist worden behouden bij
+minstens 0,05 absolute specialistwinst zonder holdoutverlies. Overlappende
+betrouwbaarheidsintervallen betekenen onbeslist: behoud dan beide quants.
+GPU-board-Wh bevat geen CPU, DRAM, PMem, SSD of koeling.
+
+**BridgeMind/BridgeBench-besluit:** niet toevoegen aan de actieve suite. De
+[huidige BridgeBench-uitleg](https://www.bridgebench.ai/blog/how-the-leaderboard-works)
+noemt de methode uitdrukkelijk niet openbaar. De eerder geïndexeerde
+[GitHub-repository](https://github.com/bridge-mind/bridgebench) met MIT-claim
+geeft op 9 oktober 2026 HTTP 404; een controleerbare open-source release is
+dus niet beschikbaar. Het gearchiveerde ontwerp noemt 336 openbare taken en
+verborgen rubrics, maar geen bewijs dat de prompts zelf tegen pretraining-
+contaminatie zijn afgeschermd. Bovendien leveren de eerste K3 Q2-taken
+0,21–0,24 decode-t/s: twee uur omvat hoogstens circa 1.500–1.700
+outputtokens vóór prefill, scoring en opstart. Een betekenisvolle 336-taakrun
+past daarmee niet binnen twee uur. Herbeoordeel alleen als een openbare,
+gelicentieerde bron met aantoonbare anti-contaminatie en een afgebakende
+subsuite beschikbaar komt; een enkele taak is geen benchmarkscore.
 
 ## 2026-10-07 update — EDSQ-Volta takeover cycle (fieldintelligence)
 
@@ -37,14 +143,10 @@ treating either number as canonical.
 2. K2.7-Code UD-Q3_K_XL (432 G) downloaded — serve + compare vs Q4_K_XL
    (0.43–0.68 t/s baseline; Q3 fits the page cache without a PMem tail).
    Test chain pattern: `evidence/microbench/kimi_k27_code_tier_shard_20261006.md`.
-3. K3 UD-IQ2_XXS (662 G) — **VERDICT (2026-10-08): not viable on this
-   box as configured.** The wt-pub2 served instance measured 0.24 t/s cold
-   (662 G page-in) and died mid-probe under memory competition with the
-   other judges; the parallel 227 G partial download was removed. Even at
-   best-case ~1 t/s the space/energy cost per answer exceeds K2.5
-   IQ3_XXS (1.24 t/s, proven 0.833 battery) with unproven 2.5-bit
-   quality. K3 returns only via a GPU path or a much smaller quant —
-   both out of scope for this box.
+3. K3 UD-IQ2_XXS (662 G) auto-chain armed: download → symlink tier-split
+   (~450 G NVMe + ~212 G PMem) → serve :18022 → portfolio probe. Log:
+   `/tmp/k3_test.log`. 2.5-bit class; projected ceiling ~1–1.5 t/s
+   (bandwidth-bound) — quality verdict decides adoption.
 4. MoM v3.1 day lane: judges are night-profile by design; evaluate the
    1Cat NVFP4 lane for scored daytime MoM after item 7's quality gate.
 5. GLM-5.3-Flash REAP50 GGUF conversion bug (missing
@@ -177,6 +279,17 @@ statistically level on composite; neither beats it on both axes. Variants 1,
 2 cannot run on this hardware either (variant 1 does not load on two V100s),
 and variant 4 is not supported by the runtime. The AP-IQ2_S baseline stands
 and is the day lane since 2026-10-08.
+
+Day-lane quality gate (backlog item 7), measured 2026-10-08 against the live
+server without stopping it: Qwen3.8-27B QUASAR NVFP4 on 1Cat-vLLM TP2
+target-only scores composite 0.3357 (`qwen38-27b-quasar-nvfp4-1cat-tp2`;
+GSM8K 0.32, BBH 0.35, MMLU 0.44, HumanEval 0.225). This reproduces the old
+0.34 row, so that row was not a scoring fault: the answers contain wrong
+arithmetic and loops on the model's own reasoning. The same model as GGUF
+Q4_K_M scores 0.8511 at 33 tok/s. The lane meets its speed goal and fails
+its quality gate; Flash-Next AP-IQ2_S at 40.8 tok/s and 0.915 is the measured
+alternative for the daytime lane. Variant 1 proper (Flash-Next NVFP4) is not
+on disk and stays unmeasured.
 
 Day-lane quality gate (backlog item 7), measured 2026-10-08 against the live
 server without stopping it: Qwen3.8-27B QUASAR NVFP4 on 1Cat-vLLM TP2
