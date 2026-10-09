@@ -7,8 +7,8 @@ VirtualV LLM is a hardware-aware evaluation suite for GGUF/llama.cpp and
 hardware topology and provenance together, while failures remain explicit
 instead of becoming invented scores.
 
-The reference host combines an RTX A4000, two Tesla V100-SXM2 32 GB cards over
-NVLink and an RTX 4000 Ada. Its measurements illustrate the method; they are
+The reference host combines four RTX 4000 Ada 20 GB cards and two Tesla
+V100-SXM2 32 GB cards over NVLink. Its measurements illustrate the method; they are
 not universal performance claims.
 
 ## Current results

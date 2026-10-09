@@ -4,8 +4,8 @@
   "origin": "SHA256-verified against local node2 pub2 reports; GLM and TP2 transient service journals record completion",
   "published_files": {
     "private_benchmark_aggregates_20261009.json": {
-      "sha256": "15d6b2062d397b0ae6bd7b133fb784a94fca1e3cd0d57271b162cb0f831479ac",
-      "bytes": 8360
+      "sha256": "1294086da826fdc17966468d25cb3e09ec3643c6e86eae610f47c896762dd5ef",
+      "bytes": 8631
     },
     "glm53_private_handoff_status_20261009.json": {
       "sha256": "888a4470f210d65ef0d153e13f4a4a3e0f075d7a5645da6285ec1bc0036020e2",
