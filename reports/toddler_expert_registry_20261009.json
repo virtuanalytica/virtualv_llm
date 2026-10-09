@@ -1,0 +1,1821 @@
+{
+  "purpose": "Toddler mixture-of-models expert candidates, one expert per model and domain, from measured local rows",
+  "route_contract": "toddler/specialize.py Expert: quality measured 0..1, evidence required; eur_per_1k_tokens 0 because local compute cost is set by the caller's eur_per_joule",
+  "caveats": [
+    "joules_per_1k_tokens = max board power / decode speed (upper bound; telemetry has no mean power)",
+    "quality from single small samples (n=40-160); per-domain differences of a few points are noise",
+    "rows measured with the local server's output cap; not like-for-like with uncapped cloud rows",
+    "gemma4 row uses the official chat template (see backlog GEMMA4_BBH_CHAT_TEMPLATE_HYPOTHESIS)",
+    "agent domain = mean of the 8-task battery (eval_suite); arithmetic_payout is failed by most local models and is included, so the agent score is conservative",
+    "gemma4-26b-a4b-q4 in the agent domain comes from the 2026-09-17 run, before the official chat template; re-measure before use"
+  ],
+  "skipped_models": [
+    "qwen38-1cat-vllm-target",
+    "qwen36-35b-a3b-nvfp4",
+    "nemotron35-lightning-30b-a3b",
+    "muse-glimmer-30b",
+    "glm45-air-106b-q4",
+    "mixture-of-models",
+    "mixture-of-models-4-quality",
+    "mixture-of-models-4-gemma-direct",
+    "mixture-of-models-4-gemma-routed",
+    "qwen38-flash-next-merlin-w4a16-v100",
+    "qwen38-flash-next-merlin-w4a16-allfour",
+    "qwen38-flash-next-ap-q4km-v100",
+    "mixture-ultimate-6-explicit",
+    "mixture-optimized-2",
+    "mixture-optimized-3",
+    "mixture-optimized-4",
+    "mixture-optimized-5",
+    "mixture-optimized-6",
+    "kimi25-iq3xxs-6gpu-cpumoe",
+    "qwen38-27b-quasar-nvfp4-1cat-tp2",
+    "qwen38-flash-next-ap-iq2s-v100pair-tensor",
+    "qwen38-flash-next-nvfp4-1cat-tp2"
+  ],
+  "experts": [
+    {
+      "model_id": "qwen25-72b-q4",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.54,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 21483.6,
+      "tokens_per_second": 14.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen25-72b-q4 (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen25-72b-q4",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.5208,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 21483.6,
+      "tokens_per_second": 14.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen25-72b-q4 (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen25-72b-q4",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8625,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 21483.6,
+      "tokens_per_second": 14.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen25-72b-q4 (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen25-72b-q4",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.95,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 21483.6,
+      "tokens_per_second": 14.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen25-72b-q4 (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "llama31-70b-instruct-q4",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.48,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 19477.5,
+      "tokens_per_second": 15.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row llama31-70b-instruct-q4 (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "llama31-70b-instruct-q4",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.8333,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 19477.5,
+      "tokens_per_second": 15.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row llama31-70b-instruct-q4 (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "llama31-70b-instruct-q4",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 19477.5,
+      "tokens_per_second": 15.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row llama31-70b-instruct-q4 (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "llama31-70b-instruct-q4",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.0,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 19477.5,
+      "tokens_per_second": 15.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row llama31-70b-instruct-q4 (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "gpt-oss-120b-q4",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.12,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1908.0,
+      "tokens_per_second": 96.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row gpt-oss-120b-q4 (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "gpt-oss-120b-q4",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.6458,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1908.0,
+      "tokens_per_second": 96.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row gpt-oss-120b-q4 (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "gpt-oss-120b-q4",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.6312,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1908.0,
+      "tokens_per_second": 96.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row gpt-oss-120b-q4 (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "gpt-oss-120b-q4",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.5,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1908.0,
+      "tokens_per_second": 96.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row gpt-oss-120b-q4 (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "gpt-oss-20b-q4",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.14,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 412.3,
+      "tokens_per_second": 99.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row gpt-oss-20b-q4 (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "gpt-oss-20b-q4",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.6458,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 412.3,
+      "tokens_per_second": 99.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row gpt-oss-20b-q4 (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "gpt-oss-20b-q4",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.5062,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 412.3,
+      "tokens_per_second": 99.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row gpt-oss-20b-q4 (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "gpt-oss-20b-q4",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.525,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 412.3,
+      "tokens_per_second": 99.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row gpt-oss-20b-q4 (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "mistral-small4-119b-q4-adaa4000",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.76,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 5017.5,
+      "tokens_per_second": 11.6,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row mistral-small4-119b-q4-adaa4000 (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "mistral-small4-119b-q4-adaa4000",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.6458,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 5017.5,
+      "tokens_per_second": 11.6,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row mistral-small4-119b-q4-adaa4000 (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "mistral-small4-119b-q4-adaa4000",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8125,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 5017.5,
+      "tokens_per_second": 11.6,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row mistral-small4-119b-q4-adaa4000 (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "mistral-small4-119b-q4-adaa4000",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.975,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 5017.5,
+      "tokens_per_second": 11.6,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row mistral-small4-119b-q4-adaa4000 (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "deepseek-v4-flash-reap150b-q2k-adaa4000",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.94,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 9763.5,
+      "tokens_per_second": 5.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row deepseek-v4-flash-reap150b-q2k-adaa4000 (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "deepseek-v4-flash-reap150b-q2k-adaa4000",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 9763.5,
+      "tokens_per_second": 5.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row deepseek-v4-flash-reap150b-q2k-adaa4000 (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "deepseek-v4-flash-reap150b-q2k-adaa4000",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.4375,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 9763.5,
+      "tokens_per_second": 5.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row deepseek-v4-flash-reap150b-q2k-adaa4000 (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "deepseek-v4-flash-reap150b-q2k-adaa4000",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.9,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 9763.5,
+      "tokens_per_second": 5.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row deepseek-v4-flash-reap150b-q2k-adaa4000 (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "llama3-70b-instruct-q4",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.88,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 20286.3,
+      "tokens_per_second": 15.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row llama3-70b-instruct-q4 (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "llama3-70b-instruct-q4",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.8125,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 20286.3,
+      "tokens_per_second": 15.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row llama3-70b-instruct-q4 (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "llama3-70b-instruct-q4",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.7562,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 20286.3,
+      "tokens_per_second": 15.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row llama3-70b-instruct-q4 (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "llama3-70b-instruct-q4",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.95,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 20286.3,
+      "tokens_per_second": 15.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row llama3-70b-instruct-q4 (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "command-r-plus-104b-0824-iq3m",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.72,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 31460.6,
+      "tokens_per_second": 10.7,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row command-r-plus-104b-0824-iq3m (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "command-r-plus-104b-0824-iq3m",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.8125,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 31460.6,
+      "tokens_per_second": 10.7,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row command-r-plus-104b-0824-iq3m (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "command-r-plus-104b-0824-iq3m",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.775,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 31460.6,
+      "tokens_per_second": 10.7,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row command-r-plus-104b-0824-iq3m (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "command-r-plus-104b-0824-iq3m",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.525,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 31460.6,
+      "tokens_per_second": 10.7,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row command-r-plus-104b-0824-iq3m (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "mixtral-8x22b-instruct-q3ks",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.82,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 16692.8,
+      "tokens_per_second": 19.1,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row mixtral-8x22b-instruct-q3ks (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "mixtral-8x22b-instruct-q3ks",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.8333,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 16692.8,
+      "tokens_per_second": 19.1,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row mixtral-8x22b-instruct-q3ks (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "mixtral-8x22b-instruct-q3ks",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.7188,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 16692.8,
+      "tokens_per_second": 19.1,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row mixtral-8x22b-instruct-q3ks (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "mixtral-8x22b-instruct-q3ks",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.125,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 16692.8,
+      "tokens_per_second": 19.1,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row mixtral-8x22b-instruct-q3ks (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "wizardlm2-8x22b-iq3s",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.66,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 11293.8,
+      "tokens_per_second": 25.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row wizardlm2-8x22b-iq3s (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "wizardlm2-8x22b-iq3s",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.6042,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 11293.8,
+      "tokens_per_second": 25.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row wizardlm2-8x22b-iq3s (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "wizardlm2-8x22b-iq3s",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.6625,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 11293.8,
+      "tokens_per_second": 25.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row wizardlm2-8x22b-iq3s (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "wizardlm2-8x22b-iq3s",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.075,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 11293.8,
+      "tokens_per_second": 25.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row wizardlm2-8x22b-iq3s (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "glm53-flash-aj-iq2xxs",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.78,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 13436.9,
+      "tokens_per_second": 21.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row glm53-flash-aj-iq2xxs (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "glm53-flash-aj-iq2xxs",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.8333,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 13436.9,
+      "tokens_per_second": 21.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row glm53-flash-aj-iq2xxs (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "glm53-flash-aj-iq2xxs",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.7063,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 13436.9,
+      "tokens_per_second": 21.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row glm53-flash-aj-iq2xxs (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "glm53-flash-aj-iq2xxs",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.05,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 13436.9,
+      "tokens_per_second": 21.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row glm53-flash-aj-iq2xxs (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq4xs-v100",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.92,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3809.6,
+      "tokens_per_second": 42.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq4xs-v100 (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq4xs-v100",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.9375,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3809.6,
+      "tokens_per_second": 42.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq4xs-v100 (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq4xs-v100",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8438,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3809.6,
+      "tokens_per_second": 42.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq4xs-v100 (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq4xs-v100",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.975,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3809.6,
+      "tokens_per_second": 42.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq4xs-v100 (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq4xs-allfour",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.9,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3224.6,
+      "tokens_per_second": 37.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq4xs-allfour (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq4xs-allfour",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.9583,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3224.6,
+      "tokens_per_second": 37.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq4xs-allfour (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq4xs-allfour",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8375,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3224.6,
+      "tokens_per_second": 37.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq4xs-allfour (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq4xs-allfour",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.975,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3224.6,
+      "tokens_per_second": 37.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq4xs-allfour (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4km-allfour",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.92,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3183.2,
+      "tokens_per_second": 40.0,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4km-allfour (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4km-allfour",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.9375,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3183.2,
+      "tokens_per_second": 40.0,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4km-allfour (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4km-allfour",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8375,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3183.2,
+      "tokens_per_second": 40.0,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4km-allfour (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4km-allfour",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.975,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3183.2,
+      "tokens_per_second": 40.0,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4km-allfour (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "deepseek-v4-flash-0731-iq3xxs",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.84,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 15380.4,
+      "tokens_per_second": 13.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row deepseek-v4-flash-0731-iq3xxs (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "deepseek-v4-flash-0731-iq3xxs",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 15380.4,
+      "tokens_per_second": 13.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row deepseek-v4-flash-0731-iq3xxs (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "deepseek-v4-flash-0731-iq3xxs",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8313,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 15380.4,
+      "tokens_per_second": 13.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row deepseek-v4-flash-0731-iq3xxs (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "deepseek-v4-flash-0731-iq3xxs",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.975,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 15380.4,
+      "tokens_per_second": 13.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row deepseek-v4-flash-0731-iq3xxs (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-v100",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.9,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3849.6,
+      "tokens_per_second": 42.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-v100 (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-v100",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3849.6,
+      "tokens_per_second": 42.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-v100 (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-v100",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3849.6,
+      "tokens_per_second": 42.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-v100 (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-v100",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.975,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3849.6,
+      "tokens_per_second": 42.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-v100 (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-allfour",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.92,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3107.9,
+      "tokens_per_second": 40.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-allfour (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-allfour",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.9167,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3107.9,
+      "tokens_per_second": 40.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-allfour (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-allfour",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8812,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3107.9,
+      "tokens_per_second": 40.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-allfour (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-allfour",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.975,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3107.9,
+      "tokens_per_second": 40.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-allfour (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "glm53-reap50-iq3m-v100",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.92,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 10773.7,
+      "tokens_per_second": 16.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row glm53-reap50-iq3m-v100 (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "glm53-reap50-iq3m-v100",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 10773.7,
+      "tokens_per_second": 16.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row glm53-reap50-iq3m-v100 (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "glm53-reap50-iq3m-v100",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.675,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 10773.7,
+      "tokens_per_second": 16.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row glm53-reap50-iq3m-v100 (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "glm53-reap50-iq3m-v100",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.9,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 10773.7,
+      "tokens_per_second": 16.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row glm53-reap50-iq3m-v100 (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "glm53-reap50-iq3m-allfour",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.92,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7679.3,
+      "tokens_per_second": 22.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row glm53-reap50-iq3m-allfour (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "glm53-reap50-iq3m-allfour",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.8333,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7679.3,
+      "tokens_per_second": 22.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row glm53-reap50-iq3m-allfour (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "glm53-reap50-iq3m-allfour",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.625,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7679.3,
+      "tokens_per_second": 22.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row glm53-reap50-iq3m-allfour (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "glm53-reap50-iq3m-allfour",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.85,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7679.3,
+      "tokens_per_second": 22.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row glm53-reap50-iq3m-allfour (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4kxl-v100",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.94,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 4139.9,
+      "tokens_per_second": 34.6,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4kxl-v100 (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4kxl-v100",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.9375,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 4139.9,
+      "tokens_per_second": 34.6,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4kxl-v100 (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4kxl-v100",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8562,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 4139.9,
+      "tokens_per_second": 34.6,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4kxl-v100 (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4kxl-v100",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.975,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 4139.9,
+      "tokens_per_second": 34.6,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4kxl-v100 (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "granite-4.2-30b",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.86,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7427.0,
+      "tokens_per_second": 17.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row granite-4.2-30b (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "granite-4.2-30b",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.8542,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7427.0,
+      "tokens_per_second": 17.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row granite-4.2-30b (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "granite-4.2-30b",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.7063,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7427.0,
+      "tokens_per_second": 17.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row granite-4.2-30b (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "granite-4.2-30b",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.925,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7427.0,
+      "tokens_per_second": 17.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row granite-4.2-30b (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "deepseek-r1-qwen32b-q4",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.66,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7812.7,
+      "tokens_per_second": 16.2,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row deepseek-r1-qwen32b-q4 (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "deepseek-r1-qwen32b-q4",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.8125,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7812.7,
+      "tokens_per_second": 16.2,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row deepseek-r1-qwen32b-q4 (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "deepseek-r1-qwen32b-q4",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.6125,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7812.7,
+      "tokens_per_second": 16.2,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row deepseek-r1-qwen32b-q4 (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "deepseek-r1-qwen32b-q4",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.05,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7812.7,
+      "tokens_per_second": 16.2,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row deepseek-r1-qwen32b-q4 (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen35-122b-a10b-iq3s",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.8,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 5833.9,
+      "tokens_per_second": 49.1,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen35-122b-a10b-iq3s (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen35-122b-a10b-iq3s",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.9167,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 5833.9,
+      "tokens_per_second": 49.1,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen35-122b-a10b-iq3s (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen35-122b-a10b-iq3s",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8625,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 5833.9,
+      "tokens_per_second": 49.1,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen35-122b-a10b-iq3s (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen35-122b-a10b-iq3s",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.975,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 5833.9,
+      "tokens_per_second": 49.1,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen35-122b-a10b-iq3s (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "kat-coder-v2.5-dev",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.9,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1199.0,
+      "tokens_per_second": 91.7,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row kat-coder-v2.5-dev (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "kat-coder-v2.5-dev",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1199.0,
+      "tokens_per_second": 91.7,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row kat-coder-v2.5-dev (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "kat-coder-v2.5-dev",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8562,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1199.0,
+      "tokens_per_second": 91.7,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row kat-coder-v2.5-dev (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "kat-coder-v2.5-dev",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.975,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1199.0,
+      "tokens_per_second": 91.7,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row kat-coder-v2.5-dev (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4kxl-allfour",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.92,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3182.7,
+      "tokens_per_second": 37.7,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4kxl-allfour (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4kxl-allfour",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.9167,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3182.7,
+      "tokens_per_second": 37.7,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4kxl-allfour (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4kxl-allfour",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8688,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3182.7,
+      "tokens_per_second": 37.7,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4kxl-allfour (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4kxl-allfour",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.975,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 3182.7,
+      "tokens_per_second": 37.7,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4kxl-allfour (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "mimo-v26-pro-bpw2.5",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.9,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 19772.0,
+      "tokens_per_second": 4.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row mimo-v26-pro-bpw2.5 (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "mimo-v26-pro-bpw2.5",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.9375,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 19772.0,
+      "tokens_per_second": 4.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row mimo-v26-pro-bpw2.5 (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "mimo-v26-pro-bpw2.5",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8562,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 19772.0,
+      "tokens_per_second": 4.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row mimo-v26-pro-bpw2.5 (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "mimo-v26-pro-bpw2.5",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.475,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 19772.0,
+      "tokens_per_second": 4.4,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row mimo-v26-pro-bpw2.5 (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-27b-q4",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.94,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7598.0,
+      "tokens_per_second": 33.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-27b-q4 (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-27b-q4",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.6458,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7598.0,
+      "tokens_per_second": 33.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-27b-q4 (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-27b-q4",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8438,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7598.0,
+      "tokens_per_second": 33.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-27b-q4 (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-27b-q4",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.975,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7598.0,
+      "tokens_per_second": 33.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-27b-q4 (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "devstral-small2-24b-q4",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.94,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7249.4,
+      "tokens_per_second": 34.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row devstral-small2-24b-q4 (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "devstral-small2-24b-q4",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.5625,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7249.4,
+      "tokens_per_second": 34.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row devstral-small2-24b-q4 (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "devstral-small2-24b-q4",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8063,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7249.4,
+      "tokens_per_second": 34.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row devstral-small2-24b-q4 (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "devstral-small2-24b-q4",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.95,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7249.4,
+      "tokens_per_second": 34.9,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row devstral-small2-24b-q4 (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen35-27b-q4",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.86,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7812.8,
+      "tokens_per_second": 32.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen35-27b-q4 (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen35-27b-q4",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.4167,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7812.8,
+      "tokens_per_second": 32.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen35-27b-q4 (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen35-27b-q4",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8187,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7812.8,
+      "tokens_per_second": 32.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen35-27b-q4 (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen35-27b-q4",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.925,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 7812.8,
+      "tokens_per_second": 32.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen35-27b-q4 (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "gemma4-26b-a4b-q4",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.82,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1820.6,
+      "tokens_per_second": 84.1,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row gemma4-26b-a4b-q4 (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "gemma4-26b-a4b-q4",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.0417,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1820.6,
+      "tokens_per_second": 84.1,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row gemma4-26b-a4b-q4 (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "gemma4-26b-a4b-q4",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.7562,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1820.6,
+      "tokens_per_second": 84.1,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row gemma4-26b-a4b-q4 (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "gemma4-26b-a4b-q4",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.975,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1820.6,
+      "tokens_per_second": 84.1,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row gemma4-26b-a4b-q4 (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "glm53-reap50-iq4xs-v100ada",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.92,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 8525.7,
+      "tokens_per_second": 23.6,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row glm53-reap50-iq4xs-v100ada (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "glm53-reap50-iq4xs-v100ada",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.9167,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 8525.7,
+      "tokens_per_second": 23.6,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row glm53-reap50-iq4xs-v100ada (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "glm53-reap50-iq4xs-v100ada",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.6875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 8525.7,
+      "tokens_per_second": 23.6,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row glm53-reap50-iq4xs-v100ada (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "glm53-reap50-iq4xs-v100ada",
+      "domains": [
+        "code"
+      ],
+      "quality": 1.0,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 8525.7,
+      "tokens_per_second": 23.6,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row glm53-reap50-iq4xs-v100ada (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-ada4",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.92,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1373.6,
+      "tokens_per_second": 40.6,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-ada4 (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-ada4",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.8958,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1373.6,
+      "tokens_per_second": 40.6,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-ada4 (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-ada4",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8812,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1373.6,
+      "tokens_per_second": 40.6,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-ada4 (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-ada4",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.975,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1373.6,
+      "tokens_per_second": 40.6,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-ada4 (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-v100pair",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.9,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 4064.2,
+      "tokens_per_second": 40.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-v100pair (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-v100pair",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 4064.2,
+      "tokens_per_second": 40.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-v100pair (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-v100pair",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 4064.2,
+      "tokens_per_second": 40.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-v100pair (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-v100pair",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.975,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 4064.2,
+      "tokens_per_second": 40.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-v100pair (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-six",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.86,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 2605.2,
+      "tokens_per_second": 40.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-six (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-six",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.9167,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 2605.2,
+      "tokens_per_second": 40.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-six (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-six",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 2605.2,
+      "tokens_per_second": 40.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-six (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s-six",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.975,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 2605.2,
+      "tokens_per_second": 40.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-iq2s-six (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4km-six",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.92,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 2850.5,
+      "tokens_per_second": 38.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4km-six (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4km-six",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.9792,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 2850.5,
+      "tokens_per_second": 38.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4km-six (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4km-six",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8625,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 2850.5,
+      "tokens_per_second": 38.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4km-six (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4km-six",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.975,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 2850.5,
+      "tokens_per_second": 38.5,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4km-six (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4kxl-six",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.9,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 2762.2,
+      "tokens_per_second": 38.3,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4kxl-six (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4kxl-six",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.9583,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 2762.2,
+      "tokens_per_second": 38.3,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4kxl-six (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4kxl-six",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8438,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 2762.2,
+      "tokens_per_second": 38.3,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4kxl-six (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-q4kxl-six",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.975,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 2762.2,
+      "tokens_per_second": 38.3,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row qwen38-flash-next-ap-q4kxl-six (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "dsv4-flash-0731",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.84,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 23480.7,
+      "tokens_per_second": 3.2,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row dsv4-flash-0731 (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "dsv4-flash-0731",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.8958,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 23480.7,
+      "tokens_per_second": 3.2,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row dsv4-flash-0731 (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "dsv4-flash-0731",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.8688,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 23480.7,
+      "tokens_per_second": 3.2,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row dsv4-flash-0731 (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "dsv4-flash-0731",
+      "domains": [
+        "code"
+      ],
+      "quality": 1.0,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 23480.7,
+      "tokens_per_second": 3.2,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row dsv4-flash-0731 (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "gemma4-26b-a4b-q4-official-template",
+      "domains": [
+        "math"
+      ],
+      "quality": 0.82,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1348.5,
+      "tokens_per_second": 87.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row gemma4-26b-a4b-q4-official-template (gsm8k, gsm8k strict, n=50; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "gemma4-26b-a4b-q4-official-template",
+      "domains": [
+        "logic"
+      ],
+      "quality": 0.8125,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1348.5,
+      "tokens_per_second": 87.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row gemma4-26b-a4b-q4-official-template (bbh, BBH 6 subtasks, n=48; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "gemma4-26b-a4b-q4-official-template",
+      "domains": [
+        "knowledge"
+      ],
+      "quality": 0.7625,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1348.5,
+      "tokens_per_second": 87.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row gemma4-26b-a4b-q4-official-template (mmlu, MMLU sample, n=160; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "gemma4-26b-a4b-q4-official-template",
+      "domains": [
+        "code"
+      ],
+      "quality": 0.975,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1348.5,
+      "tokens_per_second": 87.8,
+      "evidence": "virtualv_llm reports/well_known_suite_20260917.json row gemma4-26b-a4b-q4-official-template (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s",
+      "domains": [
+        "agent"
+      ],
+      "quality": 0.875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 4562.4,
+      "tokens_per_second": 42.6,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row qwen38-flash-next-ap-iq2s (8-task battery mean; arithmetic_payout included)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq4xs",
+      "domains": [
+        "agent"
+      ],
+      "quality": 0.8542,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 6050.9,
+      "tokens_per_second": 38.0,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row qwen38-flash-next-ap-iq4xs (8-task battery mean; arithmetic_payout included)"
+    },
+    {
+      "model_id": "qwen38-27b-q4",
+      "domains": [
+        "agent"
+      ],
+      "quality": 0.8542,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 5120.9,
+      "tokens_per_second": 45.4,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row qwen38-27b-q4 (8-task battery mean; arithmetic_payout included)"
+    },
+    {
+      "model_id": "deepseek-r1-qwen32b-q4",
+      "domains": [
+        "agent"
+      ],
+      "quality": 0.375,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 5971.1,
+      "tokens_per_second": 44.4,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row deepseek-r1-qwen32b-q4 (8-task battery mean; arithmetic_payout included)"
+    },
+    {
+      "model_id": "qwen36-27b-iq3",
+      "domains": [
+        "agent"
+      ],
+      "quality": 0.875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 5393.8,
+      "tokens_per_second": 46.1,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row qwen36-27b-iq3 (8-task battery mean; arithmetic_payout included)"
+    },
+    {
+      "model_id": "qwen35-27b-q4",
+      "domains": [
+        "agent"
+      ],
+      "quality": 0.8542,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 5399.8,
+      "tokens_per_second": 45.4,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row qwen35-27b-q4 (8-task battery mean; arithmetic_payout included)"
+    },
+    {
+      "model_id": "gemma4-26b-a4b-q4",
+      "domains": [
+        "agent"
+      ],
+      "quality": 0.875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1943.1,
+      "tokens_per_second": 78.4,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row gemma4-26b-a4b-q4 (8-task battery mean; arithmetic_payout included)"
+    },
+    {
+      "model_id": "devstral-small2-24b-q4",
+      "domains": [
+        "agent"
+      ],
+      "quality": 0.875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 5021.2,
+      "tokens_per_second": 45.5,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row devstral-small2-24b-q4 (8-task battery mean; arithmetic_payout included)"
+    },
+    {
+      "model_id": "qwen25-72b-q4",
+      "domains": [
+        "agent"
+      ],
+      "quality": 0.875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 11953.8,
+      "tokens_per_second": 24.3,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row qwen25-72b-q4 (8-task battery mean; arithmetic_payout included)"
+    },
+    {
+      "model_id": "deepseek-v4-flash-0731-iq3xxs",
+      "domains": [
+        "agent"
+      ],
+      "quality": 1.0,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 13156.6,
+      "tokens_per_second": 12.8,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row deepseek-v4-flash-0731-iq3xxs (8-task battery mean; arithmetic_payout included)"
+    }
+  ],
+  "agent_domain_note": "8-task battery rows from local_gguf_8bench_dual_v100_20260917 and hardware_scaling_qwen36_20260921 only; cloud and MoM rows excluded (no speed)"
+}
