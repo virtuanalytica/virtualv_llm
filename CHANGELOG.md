@@ -1,15 +1,48 @@
 # Changelog
 
-## Unreleased
+## v1.0.3 — 2026-10-09
 
-- The day lane is Qwen3.8 Flash-Next AP-IQ2_S (composite 0.915) instead of
-  the 1Cat NVFP4 lane, which scored 0.34.
-- Claude models from 4.5 to current, Fable excluded: Opus 5 0.9820 and
-  Sonnet 5 0.9643 added; the Fable 5.1 row is removed.
-- Roadmap variant 1 (Flash-Next NVFP4 on 1Cat) does not load on two V100s;
-  recorded as unsupported. Variant 4 (tensor split) is unsupported too.
-- The CLI proxy retries transient provider errors; the suite takes
-  `--lm-eval-timeout` and `--request-timeout` for slow models.
+A working day lane, the Claude line from 4.5 upward, a complete dashboard
+and the first Kimi numbers on the V100 pair.
+
+### Added
+
+- **Claude models from 4.5 to current, Fable excluded**: Opus 5 0.9820,
+  Opus 5.5 0.9818, Opus 4.8 0.9700, Sonnet 5 0.9643, Sonnet 5.5 0.9542.
+  Opus 4.7, 4.6, 4.5 and Sonnet 4.6, 4.5 are not measured yet: the Claude
+  CLI returned 502 on three attempts.
+- **DeepSeek-V4-Flash-0731 UD-IQ4_XS** on the V100 pair with experts in RAM:
+  composite 0.9362 at 3.16 tok/s (`dsv4-flash-0731`).
+- **Kimi K2.7-Code Q3 vs Q4 and Kimi K3 IQ2_XXS** on the V100 pair, as fixed
+  probes rather than suite rows (under 1 to 3 tok/s): Q3 1.04 tok/s on a
+  1200-token code task against 0.68 for Q4, K3 0.14 to 0.22 tok/s. Raw
+  evidence is in fieldintelligence/EDSQ-Volta.
+- **The main table lists every measured row** (72 to 99 rows), with statuses
+  for superseded, retired, unsupported and speed-excluded rows.
+- **Publication dates** with a source URL on 42 rows, and a **BetterBench
+  self-assessment** section on the dashboard.
+
+### Changed
+
+- **The day lane is Qwen3.8 Flash-Next AP-IQ2_S** (composite 0.915 at 40.8
+  tok/s). The 1Cat NVFP4 lane it replaces scored 0.34 on the same suite.
+- The Fable 5.1 row is removed; Fable is out of scope.
+
+### Fixed
+
+- The agent-CLI proxy retries transient provider errors.
+- The suite takes `--lm-eval-timeout` and `--request-timeout` for slow
+  models, and `VIRTUALV_SKIP_DASHBOARD=1` skips the dashboard rebuild.
+
+### Known issues
+
+- Roadmap variants 1, 2 and 4 cannot run on this hardware (Flash-Next NVFP4
+  does not load on two V100s; llama.cpp has no tensor split for qwen4exp).
+- GLM-5.3-Flash UD-Q4_K_XL has no complete row: at about 1 tok/s the suite
+  needs some 15 hours and two attempts were cut short.
+- DeepSeek-V4 and GLM need `--reasoning off` on llama-server; with reasoning
+  on, 78% of GSM8K answers came back empty.
+- Kimi K3 on six GPUs is being measured in a separate run.
 
 ## v1.0.2 — 2026-10-07
 
