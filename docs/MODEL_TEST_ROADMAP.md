@@ -191,7 +191,29 @@ scores 0.9542 at 117.7 tok/s, canary recall 0.9. Haiku 4.5
 reads 0.8046, but its MMLU cell is a prompt-format artifact and the row is
 flagged. Scope is every Claude model from 4.5 to the current one, Fable
 excluded: Opus 5 scores 0.9820 at 58 tok/s and Sonnet 5 0.9643 at 74 tok/s;
-Opus 4.8, 4.7, 4.6, 4.5 and Sonnet 4.6 and 4.5 are being measured.
+Opus 4.8 scores 0.9700 at 61 tok/s. Opus 4.7, 4.6, 4.5 and Sonnet 4.6 and
+4.5 are still open: the Claude CLI returned 502 on three attempts.
+
+## 2026-10-09: batteries and Kimi on the V100 pair
+
+- **DeepSeek-V4-Flash-0731 UD-IQ4_XS**, experts in RAM, reasoning off:
+  composite 0.9362 at 3.16 tok/s (`dsv4-flash-0731`), above the 0.9103 of the
+  UD-IQ3_XXS row. This settles the baseline discrepancy for DSv4: the 2.30
+  tok/s judge figure and this 3.16 are the same configuration class; the 13.89
+  tok/s row was a smaller quant fully in VRAM.
+- **GLM-5.3-Flash UD-Q4_K_XL**: no complete row yet. It decodes at about 1 to
+  1.7 tok/s in this configuration and two runs were cut short.
+- **Kimi K2.7-Code** (backlog item 2): UD-Q3_K_XL decodes 1.04 tok/s on a
+  1200-token code task against 0.68 for UD-Q4_K_XL, and 2 to 3 tok/s against
+  0.75 to 1.34 on short probes; both answer the two checked tasks correctly.
+  Q3 fits the page cache without a PMem tail.
+- **Kimi K3 UD-IQ2_XXS** (backlog item 3): 0.14 to 0.22 tok/s on the V100
+  pair with 10 of 16 shards on PMem; the word problem is answered correctly.
+  A six-GPU run is in progress separately.
+
+Kimi evidence (raw timings, commands, shard placement):
+fieldintelligence/EDSQ-Volta, `evidence/microbench/kimi_k27_q3_vs_q4_k3_20261008.md`.
+These are probes, not suite rows, and are not ranked.
 
 ## 2026-10-07: cloud providers through the omp CLI
 

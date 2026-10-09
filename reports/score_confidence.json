@@ -2,8 +2,8 @@
   "method": "Wilson 95% per component; composite SE from Agresti-Coull binomial variances; unpaired z-test against the profile leader (conservative, see module docstring)",
   "protocol": "v4-mmlu-fewshot-20260918",
   "source_sha256": {
-    "well_known_suite_20260917.json": "5d8ad38f2537c907487c54dffa8d8d3a5f027c7f6cd1fc97d7624db362087d4d",
-    "specialist_suite_20260922.json": "46eadc9b5435f0ba58b3b7554977463049be33aaa42d8af0756688e44b0880aa"
+    "well_known_suite_20260917.json": "bc81bc393c0efb261b94ae4a24883abe1f0fd7c3b4404c956607433fd5c5cc29",
+    "specialist_suite_20260922.json": "627f8311ce11e2c1f169216df37fe2c7e5c93d992e25f98a8c2da7e66caa7de1"
   },
   "min_items_for_perfect_score_claim": {
     "lower_bound_0.90": 35,
@@ -150,6 +150,52 @@
         "tied_with_leader": true
       },
       {
+        "model": "cloud-claude-claude-opus-4-8",
+        "composite": 0.97,
+        "standard_error": 0.0156,
+        "ci95": [
+          0.9394,
+          1.0
+        ],
+        "components": {
+          "gsm8k": {
+            "accuracy": 0.98,
+            "n": 50,
+            "ci95": [
+              0.895,
+              0.9965
+            ]
+          },
+          "bbh": {
+            "accuracy": 0.9375,
+            "n": 48,
+            "ci95": [
+              0.8316,
+              0.9785
+            ]
+          },
+          "mmlu": {
+            "accuracy": 0.9625,
+            "n": 160,
+            "ci95": [
+              0.9206,
+              0.9827
+            ]
+          },
+          "humaneval": {
+            "accuracy": 1.0,
+            "n": 40,
+            "ci95": [
+              0.9124,
+              1.0
+            ]
+          }
+        },
+        "rank": 4,
+        "z_vs_leader": 0.57,
+        "tied_with_leader": true
+      },
+      {
         "model": "cloud-omp-google-gemini-3.8-flash",
         "composite": 0.9658,
         "standard_error": 0.0161,
@@ -191,7 +237,7 @@
             ]
           }
         },
-        "rank": 4,
+        "rank": 5,
         "z_vs_leader": 0.75,
         "tied_with_leader": true
       },
@@ -237,7 +283,7 @@
             ]
           }
         },
-        "rank": 5,
+        "rank": 6,
         "z_vs_leader": 0.84,
         "tied_with_leader": true
       },
@@ -283,7 +329,7 @@
             ]
           }
         },
-        "rank": 6,
+        "rank": 7,
         "z_vs_leader": 0.9,
         "tied_with_leader": true
       },
@@ -329,7 +375,7 @@
             ]
           }
         },
-        "rank": 7,
+        "rank": 8,
         "z_vs_leader": 1.04,
         "tied_with_leader": true
       },
@@ -375,7 +421,7 @@
             ]
           }
         },
-        "rank": 8,
+        "rank": 9,
         "z_vs_leader": 1.26,
         "tied_with_leader": true
       },
@@ -421,7 +467,7 @@
             ]
           }
         },
-        "rank": 9,
+        "rank": 10,
         "z_vs_leader": 1.39,
         "tied_with_leader": true
       },
@@ -467,7 +513,7 @@
             ]
           }
         },
-        "rank": 10,
+        "rank": 11,
         "z_vs_leader": 1.58,
         "tied_with_leader": true
       },
@@ -513,7 +559,7 @@
             ]
           }
         },
-        "rank": 11,
+        "rank": 12,
         "z_vs_leader": 1.58,
         "tied_with_leader": true
       },
@@ -559,9 +605,55 @@
             ]
           }
         },
-        "rank": 12,
+        "rank": 13,
         "z_vs_leader": 1.69,
         "tied_with_leader": true
+      },
+      {
+        "model": "dsv4-flash-0731",
+        "composite": 0.9362,
+        "standard_error": 0.0176,
+        "ci95": [
+          0.9017,
+          0.9706
+        ],
+        "components": {
+          "gsm8k": {
+            "accuracy": 0.98,
+            "n": 50,
+            "ci95": [
+              0.895,
+              0.9965
+            ]
+          },
+          "bbh": {
+            "accuracy": 0.8958,
+            "n": 48,
+            "ci95": [
+              0.7783,
+              0.9547
+            ]
+          },
+          "mmlu": {
+            "accuracy": 0.8688,
+            "n": 160,
+            "ci95": [
+              0.8077,
+              0.9126
+            ]
+          },
+          "humaneval": {
+            "accuracy": 1.0,
+            "n": 40,
+            "ci95": [
+              0.9124,
+              1.0
+            ]
+          }
+        },
+        "rank": 14,
+        "z_vs_leader": 2.02,
+        "tied_with_leader": false
       },
       {
         "model": "qwen38-flash-next-ap-q4km-six",
@@ -605,7 +697,7 @@
             ]
           }
         },
-        "rank": 13,
+        "rank": 15,
         "z_vs_leader": 2.09,
         "tied_with_leader": false
       },
@@ -651,7 +743,7 @@
             ]
           }
         },
-        "rank": 14,
+        "rank": 16,
         "z_vs_leader": 2.34,
         "tied_with_leader": false
       },
@@ -697,7 +789,7 @@
             ]
           }
         },
-        "rank": 15,
+        "rank": 17,
         "z_vs_leader": 2.36,
         "tied_with_leader": false
       },
@@ -743,7 +835,7 @@
             ]
           }
         },
-        "rank": 16,
+        "rank": 18,
         "z_vs_leader": 2.46,
         "tied_with_leader": false
       },
@@ -789,7 +881,7 @@
             ]
           }
         },
-        "rank": 17,
+        "rank": 19,
         "z_vs_leader": 2.58,
         "tied_with_leader": false
       },
@@ -835,7 +927,7 @@
             ]
           }
         },
-        "rank": 18,
+        "rank": 20,
         "z_vs_leader": 2.65,
         "tied_with_leader": false
       },
@@ -881,7 +973,7 @@
             ]
           }
         },
-        "rank": 19,
+        "rank": 21,
         "z_vs_leader": 2.65,
         "tied_with_leader": false
       },
@@ -927,7 +1019,7 @@
             ]
           }
         },
-        "rank": 20,
+        "rank": 22,
         "z_vs_leader": 2.63,
         "tied_with_leader": false
       },
@@ -973,7 +1065,7 @@
             ]
           }
         },
-        "rank": 21,
+        "rank": 23,
         "z_vs_leader": 2.7,
         "tied_with_leader": false
       },
@@ -1019,7 +1111,7 @@
             ]
           }
         },
-        "rank": 22,
+        "rank": 24,
         "z_vs_leader": 2.7,
         "tied_with_leader": false
       },
@@ -1065,7 +1157,7 @@
             ]
           }
         },
-        "rank": 23,
+        "rank": 25,
         "z_vs_leader": 2.73,
         "tied_with_leader": false
       },
@@ -1111,7 +1203,7 @@
             ]
           }
         },
-        "rank": 24,
+        "rank": 26,
         "z_vs_leader": 2.87,
         "tied_with_leader": false
       },
@@ -1157,7 +1249,7 @@
             ]
           }
         },
-        "rank": 25,
+        "rank": 27,
         "z_vs_leader": 2.87,
         "tied_with_leader": false
       },
@@ -1203,7 +1295,7 @@
             ]
           }
         },
-        "rank": 26,
+        "rank": 28,
         "z_vs_leader": 2.97,
         "tied_with_leader": false
       },
@@ -1249,7 +1341,7 @@
             ]
           }
         },
-        "rank": 27,
+        "rank": 29,
         "z_vs_leader": 3.04,
         "tied_with_leader": false
       },
@@ -1295,7 +1387,7 @@
             ]
           }
         },
-        "rank": 28,
+        "rank": 30,
         "z_vs_leader": 3.3,
         "tied_with_leader": false
       },
@@ -1341,7 +1433,7 @@
             ]
           }
         },
-        "rank": 29,
+        "rank": 31,
         "z_vs_leader": 3.33,
         "tied_with_leader": false
       },
@@ -1387,7 +1479,7 @@
             ]
           }
         },
-        "rank": 30,
+        "rank": 32,
         "z_vs_leader": 3.46,
         "tied_with_leader": false
       },
@@ -1433,7 +1525,7 @@
             ]
           }
         },
-        "rank": 31,
+        "rank": 33,
         "z_vs_leader": 4.02,
         "tied_with_leader": false
       },
@@ -1479,7 +1571,7 @@
             ]
           }
         },
-        "rank": 32,
+        "rank": 34,
         "z_vs_leader": 3.71,
         "tied_with_leader": false
       },
@@ -1525,7 +1617,7 @@
             ]
           }
         },
-        "rank": 33,
+        "rank": 35,
         "z_vs_leader": 3.94,
         "tied_with_leader": false
       },
@@ -1571,7 +1663,7 @@
             ]
           }
         },
-        "rank": 34,
+        "rank": 36,
         "z_vs_leader": 4.2,
         "tied_with_leader": false
       },
@@ -1617,7 +1709,7 @@
             ]
           }
         },
-        "rank": 35,
+        "rank": 37,
         "z_vs_leader": 4.29,
         "tied_with_leader": false
       },
@@ -1663,7 +1755,7 @@
             ]
           }
         },
-        "rank": 36,
+        "rank": 38,
         "z_vs_leader": 4.6,
         "tied_with_leader": false
       },
@@ -1709,7 +1801,7 @@
             ]
           }
         },
-        "rank": 37,
+        "rank": 39,
         "z_vs_leader": 4.86,
         "tied_with_leader": false
       },
@@ -1755,7 +1847,7 @@
             ]
           }
         },
-        "rank": 38,
+        "rank": 40,
         "z_vs_leader": 5.02,
         "tied_with_leader": false
       },
@@ -1801,7 +1893,7 @@
             ]
           }
         },
-        "rank": 39,
+        "rank": 41,
         "z_vs_leader": 5.17,
         "tied_with_leader": false
       },
@@ -1847,7 +1939,7 @@
             ]
           }
         },
-        "rank": 40,
+        "rank": 42,
         "z_vs_leader": 5.19,
         "tied_with_leader": false
       },
@@ -1893,7 +1985,7 @@
             ]
           }
         },
-        "rank": 41,
+        "rank": 43,
         "z_vs_leader": 5.71,
         "tied_with_leader": false
       },
@@ -1939,7 +2031,7 @@
             ]
           }
         },
-        "rank": 42,
+        "rank": 44,
         "z_vs_leader": 6.01,
         "tied_with_leader": false
       },
@@ -1985,7 +2077,7 @@
             ]
           }
         },
-        "rank": 43,
+        "rank": 45,
         "z_vs_leader": 5.89,
         "tied_with_leader": false
       },
@@ -2031,7 +2123,7 @@
             ]
           }
         },
-        "rank": 44,
+        "rank": 46,
         "z_vs_leader": 6.17,
         "tied_with_leader": false
       },
@@ -2077,7 +2169,7 @@
             ]
           }
         },
-        "rank": 45,
+        "rank": 47,
         "z_vs_leader": 7.22,
         "tied_with_leader": false
       },
@@ -2123,7 +2215,7 @@
             ]
           }
         },
-        "rank": 46,
+        "rank": 48,
         "z_vs_leader": 6.53,
         "tied_with_leader": false
       },
@@ -2169,7 +2261,7 @@
             ]
           }
         },
-        "rank": 47,
+        "rank": 49,
         "z_vs_leader": 7.23,
         "tied_with_leader": false
       },
@@ -2215,7 +2307,7 @@
             ]
           }
         },
-        "rank": 48,
+        "rank": 50,
         "z_vs_leader": 7.53,
         "tied_with_leader": false
       },
@@ -2261,7 +2353,7 @@
             ]
           }
         },
-        "rank": 49,
+        "rank": 51,
         "z_vs_leader": 7.24,
         "tied_with_leader": false
       },
@@ -2307,7 +2399,7 @@
             ]
           }
         },
-        "rank": 50,
+        "rank": 52,
         "z_vs_leader": 8.27,
         "tied_with_leader": false
       },
@@ -2353,7 +2445,7 @@
             ]
           }
         },
-        "rank": 51,
+        "rank": 53,
         "z_vs_leader": 9.42,
         "tied_with_leader": false
       },
@@ -2399,7 +2491,7 @@
             ]
           }
         },
-        "rank": 52,
+        "rank": 54,
         "z_vs_leader": 13.18,
         "tied_with_leader": false
       },
@@ -2445,7 +2537,7 @@
             ]
           }
         },
-        "rank": 53,
+        "rank": 55,
         "z_vs_leader": 12.31,
         "tied_with_leader": false
       },
@@ -2491,7 +2583,7 @@
             ]
           }
         },
-        "rank": 54,
+        "rank": 56,
         "z_vs_leader": 13.97,
         "tied_with_leader": false
       },
@@ -2537,7 +2629,7 @@
             ]
           }
         },
-        "rank": 55,
+        "rank": 57,
         "z_vs_leader": 13.63,
         "tied_with_leader": false
       },
@@ -2583,7 +2675,7 @@
             ]
           }
         },
-        "rank": 56,
+        "rank": 58,
         "z_vs_leader": 11.55,
         "tied_with_leader": false
       },
@@ -2629,7 +2721,7 @@
             ]
           }
         },
-        "rank": 57,
+        "rank": 59,
         "z_vs_leader": 11.62,
         "tied_with_leader": false
       },
@@ -2675,7 +2767,7 @@
             ]
           }
         },
-        "rank": 58,
+        "rank": 60,
         "z_vs_leader": 12.52,
         "tied_with_leader": false
       },
@@ -2721,7 +2813,7 @@
             ]
           }
         },
-        "rank": 59,
+        "rank": 61,
         "z_vs_leader": 15.15,
         "tied_with_leader": false
       },
@@ -2767,7 +2859,7 @@
             ]
           }
         },
-        "rank": 60,
+        "rank": 62,
         "z_vs_leader": 15.25,
         "tied_with_leader": false
       },
@@ -2813,7 +2905,7 @@
             ]
           }
         },
-        "rank": 61,
+        "rank": 63,
         "z_vs_leader": 17.82,
         "tied_with_leader": false
       },
@@ -2859,7 +2951,7 @@
             ]
           }
         },
-        "rank": 62,
+        "rank": 64,
         "z_vs_leader": 19.33,
         "tied_with_leader": false
       },
@@ -2905,7 +2997,7 @@
             ]
           }
         },
-        "rank": 63,
+        "rank": 65,
         "z_vs_leader": 19.5,
         "tied_with_leader": false
       }
@@ -2924,6 +3016,15 @@
       },
       {
         "model": "cloud-omp-openai-codex-gpt-6-astra",
+        "leader": "cloud-claude-claude-opus-5",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "cloud-claude-claude-opus-4-8",
         "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 0,
@@ -3005,6 +3106,15 @@
       },
       {
         "model": "cloud-omp-zai-glm-5.3",
+        "leader": "cloud-claude-claude-opus-5",
+        "shared_items": 40,
+        "leader_only_pass": 0,
+        "model_only_pass": 0,
+        "p_value": 1.0,
+        "differs_from_leader": false
+      },
+      {
+        "model": "dsv4-flash-0731",
         "leader": "cloud-claude-claude-opus-5",
         "shared_items": 40,
         "leader_only_pass": 0,
@@ -6463,6 +6573,166 @@
         0.7975,
         0.9926
       ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-4-8",
+      "lane": "chemistry",
+      "accuracy": 0.6667,
+      "n": 6,
+      "ci95": [
+        0.3,
+        0.9032
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-4-8",
+      "lane": "physics",
+      "accuracy": 1.0,
+      "n": 6,
+      "ci95": [
+        0.6097,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-4-8",
+      "lane": "video",
+      "accuracy": 0.3333,
+      "n": 3,
+      "ci95": [
+        0.0615,
+        0.7923
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-4-8",
+      "lane": "iq",
+      "accuracy": 0.6667,
+      "n": 3,
+      "ci95": [
+        0.2077,
+        0.9385
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-4-8",
+      "lane": "eq",
+      "accuracy": 1.0,
+      "n": 3,
+      "ci95": [
+        0.4385,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-4-8",
+      "lane": "fq",
+      "accuracy": 1.0,
+      "n": 2,
+      "ci95": [
+        0.3424,
+        1.0
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-4-8",
+      "lane": "qq",
+      "accuracy": 0.75,
+      "n": 4,
+      "ci95": [
+        0.3006,
+        0.9544
+      ]
+    },
+    {
+      "model": "cloud-claude-claude-opus-4-8",
+      "lane": "finance",
+      "accuracy": 1.0,
+      "n": 24,
+      "ci95": [
+        0.862,
+        1.0
+      ]
+    },
+    {
+      "model": "dsv4-flash-0731",
+      "lane": "chemistry",
+      "accuracy": 0.5,
+      "n": 6,
+      "ci95": [
+        0.1876,
+        0.8124
+      ]
+    },
+    {
+      "model": "dsv4-flash-0731",
+      "lane": "physics",
+      "accuracy": 0.5,
+      "n": 6,
+      "ci95": [
+        0.1876,
+        0.8124
+      ]
+    },
+    {
+      "model": "dsv4-flash-0731",
+      "lane": "video",
+      "accuracy": 0.0,
+      "n": 3,
+      "ci95": [
+        0.0,
+        0.5615
+      ]
+    },
+    {
+      "model": "dsv4-flash-0731",
+      "lane": "iq",
+      "accuracy": 0.6667,
+      "n": 3,
+      "ci95": [
+        0.2077,
+        0.9385
+      ]
+    },
+    {
+      "model": "dsv4-flash-0731",
+      "lane": "eq",
+      "accuracy": 1.0,
+      "n": 3,
+      "ci95": [
+        0.4385,
+        1.0
+      ]
+    },
+    {
+      "model": "dsv4-flash-0731",
+      "lane": "fq",
+      "accuracy": 0.0,
+      "n": 2,
+      "ci95": [
+        0.0,
+        0.6576
+      ]
+    },
+    {
+      "model": "dsv4-flash-0731",
+      "lane": "qq",
+      "accuracy": 0.75,
+      "n": 4,
+      "ci95": [
+        0.3006,
+        0.9544
+      ]
+    },
+    {
+      "model": "dsv4-flash-0731",
+      "lane": "finance",
+      "accuracy": 0.5,
+      "n": 24,
+      "ci95": [
+        0.3143,
+        0.6857
+      ]
     }
   ],
   "resistant_ranking": [
@@ -6703,6 +6973,35 @@
         ]
       },
       "public_minus_resistant": -0.0201
+    },
+    {
+      "model": "cloud-claude-claude-opus-4-8",
+      "public_composite": 0.97,
+      "specialist": {
+        "value": 0.8021,
+        "standard_error": 0.057,
+        "items": 51,
+        "ci95": [
+          0.6904,
+          0.9138
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 0.9546,
+        "standard_error": 0.0625,
+        "items": 26,
+        "ci95": [
+          0.8321,
+          1.0
+        ],
+        "holdout": 0.9091,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.1,
+        "flags": []
+      },
+      "public_minus_resistant": 0.0154
     },
     {
       "model": "cloud-omp-google-gemini-3.8-flash",
@@ -6974,6 +7273,35 @@
         ]
       },
       "public_minus_resistant": 0.0727
+    },
+    {
+      "model": "dsv4-flash-0731",
+      "public_composite": 0.9362,
+      "specialist": {
+        "value": 0.4896,
+        "standard_error": 0.0584,
+        "items": 51,
+        "ci95": [
+          0.3751,
+          0.6041
+        ],
+        "lanes": 8,
+        "complete": true
+      },
+      "resistant": {
+        "value": 0.9091,
+        "standard_error": 0.0671,
+        "items": 26,
+        "ci95": [
+          0.7776,
+          1.0
+        ],
+        "holdout": 0.8182,
+        "paraphrased_mmlu": 1.0,
+        "canary_recall": 0.0,
+        "flags": []
+      },
+      "public_minus_resistant": 0.0271
     },
     {
       "model": "mom-live-glm53",
