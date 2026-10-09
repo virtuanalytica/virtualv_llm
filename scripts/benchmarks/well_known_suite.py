@@ -79,6 +79,9 @@ MMLU_SUBJECT_SAMPLE = [
     "high_school_psychology", "formal_logic", "professional_law", "marketing",
 ]
 GSM8K_LIMIT = 50
+# Requests in flight per model. 1 keeps the historical single-stream protocol; the
+# lm-eval request count and the llama-server --parallel slots must match it.
+LM_EVAL_CONCURRENCY = 1
 # The full "bbh" group task is all 23 subtasks and, with long-CoT subtasks like
 # multistep_arithmetic_two/dyck_languages/tracking_shuffled_objects, took >10
 # minutes for a single model even at --limit 5 -- untenable across the full
@@ -154,7 +157,7 @@ def run_lm_eval_task(
 ) -> dict[str, Any]:
     out_dir = out_root / task
     model_args = (f"model={MODEL_ALIAS},base_url={BASE_URL}{CHAT_COMPLETIONS_PATH},"
-                  f"num_concurrent=1,tokenized_requests=False,tokenizer_backend=None")
+                  f"num_concurrent={LM_EVAL_CONCURRENCY},tokenized_requests=False,tokenizer_backend=None")
     if API_KEY:
         model_args += f",api_key={API_KEY}"
     if REQUEST_TIMEOUT > 300:
@@ -545,7 +548,7 @@ def benchmark_model(name: str, model_path: Path, profile_name: str,
     # answer directly in message.content, matching what every scorer here expects.
     command = [str(SERVER), "--model", str(model_path), "--alias", "x",
                "--host", "127.0.0.1", "--port", str(PORT), "--ctx-size", "8192",
-               "--parallel", "1", "--split-mode", str(profile["split_mode"]),
+               "--parallel", str(LM_EVAL_CONCURRENCY), "--split-mode", str(profile["split_mode"]),
                "--main-gpu", "0", "--flash-attn", "on", "--reasoning", "off",
                "--cache-type-k", "q8_0", "--cache-type-v", "q8_0", "--jinja"]
     # 2026-09-22: --fit needs to cover any model too large to gpu-layers=99
@@ -709,6 +712,9 @@ def main() -> int:
                              "below ~10 tok/s, whose 50-item GSM8K batch alone exceeds the default")
     parser.add_argument("--request-timeout", type=int, metavar="SEC",
                         help="per-request HTTP ceiling for the suite's own calls")
+    parser.add_argument("--concurrency", type=int, default=1, metavar="N",
+                        help="requests in flight per model (default 1 = single-stream protocol); "
+                             "only for quality rows, report tok/s from a concurrency-1 run")
     parser.add_argument("--resume", action="store_true",
                         help="reuse lm-eval task outputs already present for this model (interrupted run)")
     args = parser.parse_args()
@@ -716,6 +722,10 @@ def main() -> int:
         LM_EVAL_TIMEOUT = args.lm_eval_timeout
     if args.request_timeout:
         REQUEST_TIMEOUT = args.request_timeout
+    if args.concurrency < 1:
+        parser.error("--concurrency must be >= 1")
+    global LM_EVAL_CONCURRENCY
+    LM_EVAL_CONCURRENCY = args.concurrency
     # HumanEval runs last. On 2026-10-07 six runs each spent up to two hours on
     # the earlier tasks and then died on this missing file, so check it first.
     if not HUMANEVAL_DATA.is_file():
