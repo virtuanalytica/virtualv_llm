@@ -22,6 +22,10 @@
     "qwen38_tp2_full_status_20261009.json": {
       "sha256": "1306e1f72f02468f204f7203deac21384cd0cf95908b5b646438359d4cc0dd66",
       "bytes": 181
+    },
+    "vision_private_summary_20261009.json": {
+      "sha256": "1c9c9b84c3cced00f8c0b1440de33815a313248ff760f1d4d9030c46cf313c8b",
+      "bytes": 1046
     }
   },
   "private_source_sha256_only": {

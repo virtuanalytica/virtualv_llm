@@ -1,0 +1,36 @@
+{
+  "purpose": "Aggregated vision-benchmark results, private item set, 2026-10-09 (no item content)",
+  "item_count_per_model": 12,
+  "scoring": "exact match on the correct field of answers.jsonl",
+  "models": {
+    "qwen3-vl-4b-instruct": {
+      "n": 12,
+      "correct": 11,
+      "accuracy": 0.9167,
+      "median_latency_s": 0.502,
+      "median_decode_tps": 7.6,
+      "gpu_board_wh_total": 0.163
+    },
+    "qwen3-vl-8b-instruct": {
+      "n": 12,
+      "correct": 12,
+      "accuracy": 1.0,
+      "median_latency_s": 0.337,
+      "median_decode_tps": 6.15,
+      "gpu_board_wh_total": 0.101
+    },
+    "internvl3-8b": {
+      "n": 12,
+      "correct": 12,
+      "accuracy": 1.0,
+      "median_latency_s": 0.354,
+      "median_decode_tps": 2.83,
+      "gpu_board_wh_total": 0.133
+    }
+  },
+  "excluded": [
+    "qwen3-vl-8b-instruct-2gpu-aborted: 0 answers, aborted run"
+  ],
+  "origin": "unknown, to be confirmed by the owner of the night-run sessions",
+  "privacy_note": "Per-item answers, predictions and item ids are not published."
+}
