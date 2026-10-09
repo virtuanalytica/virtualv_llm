@@ -1,0 +1,11 @@
+{
+  "question": "Is Toddler + Teacher + agent on ClaudeClaw better on software tasks?",
+  "answer": "nee, nog niet",
+  "candidate": null,
+  "baseline": null,
+  "protocol": "software-data-private-v1-20261009",
+  "proof": {
+    "better_proven": false,
+    "reason": "no_paired_independently_verified_agent_trial"
+  }
+}

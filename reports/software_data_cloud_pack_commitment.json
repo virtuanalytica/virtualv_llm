@@ -1,0 +1,22 @@
+{
+  "protocol": "software-data-private-v1-20261009",
+  "sha256": "ca7c774057c673498d9ad2d2a59189141490fc4d9c606c4a6a4313ea0af0ba7d",
+  "counts": {
+    "software": {
+      "coder": 2,
+      "reviewer": 2,
+      "architect": 2,
+      "debugger": 2
+    },
+    "data": {
+      "data_engineer": 2,
+      "data_analyst": 2,
+      "data_architect": 2,
+      "data_steward": 2
+    }
+  },
+  "status": "sealed-cloud-safe-pilot",
+  "cloud_allowed": true,
+  "answers_in_repository": false,
+  "purpose": "same-pack local model comparison followed by Haiku 5.5 baseline"
+}

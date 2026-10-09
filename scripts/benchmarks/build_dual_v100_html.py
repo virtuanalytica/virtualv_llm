@@ -790,6 +790,67 @@ openbaar ruw bewijs; de poort weigert alles wat daarvan afwijkt.</div>"""
 {sortable_header("Bewijs")}</tr></thead><tbody>{body}</tbody></table></div>"""
 
 
+def software_data_specialists_section() -> str:
+    """Keep maker and data results separate from the ten-lane content composite."""
+    payload = load("software_data_specialists.json")
+    rows = [r for r in payload.get("results", [])
+            if r.get("protocol") == "software-data-private-v1-20261009"]
+    cloud_hash = load("software_data_cloud_pack_commitment.json").get("sha256")
+    tracks = (
+        ("software", "Specialisten softwareontwikkeling",
+         ("coder", "reviewer", "architect", "debugger")),
+        ("data", "Specialisten data",
+         ("data_engineer", "data_analyst", "data_architect", "data_steward")),
+    )
+    blocks = []
+    for track, heading, roles in tracks:
+        cells = []
+        for result in rows:
+            group = (result.get("tracks") or {}).get(track) or {}
+            role_results = group.get("roles") or {}
+            if any(role not in role_results for role in roles):
+                continue
+            per_role = []
+            for role in roles:
+                score = role_results[role]
+                accuracy = score.get("accuracy")
+                ci = score.get("wilson95") or []
+                per_role.append("<td>" +
+                                (f"{accuracy*100:.1f}% ({score.get('passed',0)}/{score.get('n',0)})"
+                                 + (f"<br><small>95% [{ci[0]*100:.0f}–{ci[1]*100:.0f}%]</small>"
+                                    if len(ci) == 2 else "")
+                                 if isinstance(accuracy, (int, float)) else "—") + "</td>")
+            composite = group.get("composite")
+            label = f"{composite*100:.1f}%" if isinstance(composite, (int, float)) else "—"
+            if result.get("status") != "complete":
+                label += " · partieel"
+            pack_hash = str(result.get("pack_sha256") or "")
+            pack_label = ("cloud-toegestaan" if pack_hash == cloud_hash else "lokaal")
+            runtime = (result.get("runtime") or {}).get("provider") or "onbekend"
+            cells.append("<tr><td>" + html.escape(str(result.get("model", "?"))) + "</td><td>" +
+                         html.escape(pack_label + " · " + pack_hash[:12]) + "</td><td>" +
+                         html.escape(runtime) + "</td><td>" +
+                         html.escape(str(result.get("status", "?"))) + "</td><td>" + label +
+                         "</td>" + "".join(per_role) + "</tr>")
+        header = "".join("<th>" + html.escape(role.replace("_", " ")) + "</th>" for role in roles)
+        table = ("<div class='tablewrap'><table><thead><tr><th>Model</th><th>Pack</th>"
+                 "<th>Runtime</th><th>Status</th>"
+                 "<th>Rolgemiddelde</th>" + header + "</tr></thead><tbody>" +
+                 "".join(cells) + "</tbody></table></div>" if cells else
+                 "<p>Nog geen modelrun op de verzegelde set.</p>")
+        blocks.append(f"<h2>{heading}</h2>" +
+                      "<p>Afzonderlijke private pilot; percentage per model en rol, met teller/noemer. "
+                      "Vergelijk alleen rijen met dezelfde packhash; deze scores tellen niet mee "
+                      "in de tien-lane inhoudscomposiet.</p>" + table)
+    proof = load("software_agent_comparison.json")
+    answer = proof.get("answer") if proof.get("proof", {}).get("better_proven") else "nee, nog niet"
+    blocks.append("<h2>Bewijs op softwaretaken: Toddler + Teacher + agent op ClaudeClaw</h2>"
+                  "<p>Vergelijking met gewone ClaudeClaw-workers op dezelfde afgeschermde taken: <strong>" +
+                  html.escape(answer) + "</strong>. De oude 115 reviewbevindingen zijn een "
+                  "oorzaaktaxonomie, geen gepaarde model- of agentmeting. "
+                  "Een modelscore hierboven bewijst geen verbetering van de volledige agentketen.</p>")
+    return "".join(blocks)
+
 def specialist_section() -> str:
     """One row per known model; pre-protocol cells deliberately remain blank."""
     records = {row.get("model"): row for row in load("specialist_suite_20260922.json").get("results", [])}
@@ -1580,6 +1641,7 @@ tabel erboven bevat de bijbehorende prompt-snelheid, VRAM en GPU-utilisatie.</p>
 {resistant_section()}
 {community_section()}
 {specialist_section()}
+{software_data_specialists_section()}
 {live_mixture_section()}
 {contamination_section()}
 {matrix_gate_section()}
