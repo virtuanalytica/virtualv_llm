@@ -1,0 +1,8 @@
+{
+  "model": "glm53-flash-ud-q4_k_xl-v100pair-20261009",
+  "status": "complete",
+  "exit_code": 0,
+  "recovered_from_raw": true,
+  "at": "2026-10-09T02:26:49.781777+00:00",
+  "report": "reports/private_benchmark_20261009.json"
+}

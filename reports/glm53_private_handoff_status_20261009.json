@@ -1,0 +1,14 @@
+{
+  "at": "2026-10-09T02:37:40.853557+00:00",
+  "state": "day-restored",
+  "models": [
+    "glm53-flash-ud-q4_k_xl-v100pair-20261009",
+    "glm53-flash-ud-q3_k_xl-v100pair-20261009"
+  ],
+  "vision_accuracy": {
+    "qwen3-vl-4b-instruct": 0.9167,
+    "qwen3-vl-8b-instruct": 1.0,
+    "internvl3-8b": 1.0
+  },
+  "haiku_medium_mean": 0.9792
+}
