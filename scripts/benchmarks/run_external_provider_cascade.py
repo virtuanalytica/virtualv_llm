@@ -59,7 +59,8 @@ PROVIDERS = {
         "kind": "cli", "backend": "claude-cli", "engine": "Anthropic Claude Code CLI (claude -p)",
         "models": ["claude-opus-5-5", "claude-sonnet-5-5", "claude-opus-5", "claude-sonnet-5",
                    "claude-opus-4-8", "claude-opus-4-7", "claude-opus-4-6", "claude-sonnet-4-6",
-                   "claude-opus-4-5", "claude-sonnet-4-5", "claude-haiku-4-5-20251001"],
+                   "claude-opus-4-5", "claude-sonnet-4-5", "claude-haiku-4-5-20251001",
+                   "claude-haiku-5-5"],
     },
     "codex": {
         "kind": "cli", "backend": "codex", "engine": "OpenAI Codex CLI",
@@ -178,13 +179,13 @@ def record_cli_usage(name: str) -> None:
         row["output_budget"] = "uncapped: the agent CLI cannot truncate at max_tokens (local rows are capped)"
 
 
-def run_one(row_name: str, provider_key: str, model: str, specialists: str) -> int:
+def run_one(row_name: str, provider_key: str, model: str, specialists: str, contamination: str = "all") -> int:
     provider = PROVIDERS[provider_key]
     name = f"{row_name}-{model}"
     common = ["python3", str(WKS), name, "--out", str(REPORT),
               "--engine", provider["engine"], "--physical-gpus", "9",
               "--topology", f"cloud/agent-CLI provider; no local GPU ({provider_key})",
-              "--specialists", specialists]
+              "--specialists", specialists, "--contamination-audit", contamination]
 
     port = free_port()
     accounted = provider.get("backend") in ("claude-cli", "omp")
@@ -210,6 +211,8 @@ def main() -> int:
     parser.add_argument("--provider", choices=sorted(PROVIDERS), action="append",
                         help="repeatable; default: all configured providers")
     parser.add_argument("--specialists", default="all")
+    parser.add_argument("--contamination-audit", default="all",
+                        help="all (default) or none; none keeps private holdouts off external APIs")
     parser.add_argument("--row-prefix", default="cloud")
     parser.add_argument("--model", action="append",
                         help="repeatable; only run these model slugs of the selected providers")
@@ -223,7 +226,7 @@ def main() -> int:
                 continue
             row_name = f"{args.row_prefix}-{provider_key}"
             print(f"=== {provider_key} / {model} ===", flush=True)
-            rc = run_one(row_name, provider_key, model, args.specialists)
+            rc = run_one(row_name, provider_key, model, args.specialists, args.contamination_audit)
             if rc != 0:
                 failures += 1
                 print(f"FAILED: {provider_key}/{model} (rc={rc})", flush=True)
