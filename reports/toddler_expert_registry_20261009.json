@@ -5,7 +5,9 @@
     "joules_per_1k_tokens = max board power / decode speed (upper bound; telemetry has no mean power)",
     "quality from single small samples (n=40-160); per-domain differences of a few points are noise",
     "rows measured with the local server's output cap; not like-for-like with uncapped cloud rows",
-    "gemma4 row uses the official chat template (see backlog GEMMA4_BBH_CHAT_TEMPLATE_HYPOTHESIS)"
+    "gemma4 row uses the official chat template (see backlog GEMMA4_BBH_CHAT_TEMPLATE_HYPOTHESIS)",
+    "agent domain = mean of the 8-task battery (eval_suite); arithmetic_payout is failed by most local models and is included, so the agent score is conservative",
+    "gemma4-26b-a4b-q4 in the agent domain comes from the 2026-09-17 run, before the official chat template; re-measure before use"
   ],
   "skipped_models": [
     "qwen38-1cat-vllm-target",
@@ -1703,6 +1705,117 @@
       "joules_per_1k_tokens": 1348.5,
       "tokens_per_second": 87.8,
       "evidence": "virtualv_llm reports/well_known_suite_20260917.json row gemma4-26b-a4b-q4-official-template (humaneval, HumanEval, n=40; protocol v4-mmlu-fewshot-20260918)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq2s",
+      "domains": [
+        "agent"
+      ],
+      "quality": 0.875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 4562.4,
+      "tokens_per_second": 42.6,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row qwen38-flash-next-ap-iq2s (8-task battery mean; arithmetic_payout included)"
+    },
+    {
+      "model_id": "qwen38-flash-next-ap-iq4xs",
+      "domains": [
+        "agent"
+      ],
+      "quality": 0.8542,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 6050.9,
+      "tokens_per_second": 38.0,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row qwen38-flash-next-ap-iq4xs (8-task battery mean; arithmetic_payout included)"
+    },
+    {
+      "model_id": "qwen38-27b-q4",
+      "domains": [
+        "agent"
+      ],
+      "quality": 0.8542,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 5120.9,
+      "tokens_per_second": 45.4,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row qwen38-27b-q4 (8-task battery mean; arithmetic_payout included)"
+    },
+    {
+      "model_id": "deepseek-r1-qwen32b-q4",
+      "domains": [
+        "agent"
+      ],
+      "quality": 0.375,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 5971.1,
+      "tokens_per_second": 44.4,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row deepseek-r1-qwen32b-q4 (8-task battery mean; arithmetic_payout included)"
+    },
+    {
+      "model_id": "qwen36-27b-iq3",
+      "domains": [
+        "agent"
+      ],
+      "quality": 0.875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 5393.8,
+      "tokens_per_second": 46.1,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row qwen36-27b-iq3 (8-task battery mean; arithmetic_payout included)"
+    },
+    {
+      "model_id": "qwen35-27b-q4",
+      "domains": [
+        "agent"
+      ],
+      "quality": 0.8542,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 5399.8,
+      "tokens_per_second": 45.4,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row qwen35-27b-q4 (8-task battery mean; arithmetic_payout included)"
+    },
+    {
+      "model_id": "gemma4-26b-a4b-q4",
+      "domains": [
+        "agent"
+      ],
+      "quality": 0.875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 1943.1,
+      "tokens_per_second": 78.4,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row gemma4-26b-a4b-q4 (8-task battery mean; arithmetic_payout included)"
+    },
+    {
+      "model_id": "devstral-small2-24b-q4",
+      "domains": [
+        "agent"
+      ],
+      "quality": 0.875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 5021.2,
+      "tokens_per_second": 45.5,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row devstral-small2-24b-q4 (8-task battery mean; arithmetic_payout included)"
+    },
+    {
+      "model_id": "qwen25-72b-q4",
+      "domains": [
+        "agent"
+      ],
+      "quality": 0.875,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 11953.8,
+      "tokens_per_second": 24.3,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row qwen25-72b-q4 (8-task battery mean; arithmetic_payout included)"
+    },
+    {
+      "model_id": "deepseek-v4-flash-0731-iq3xxs",
+      "domains": [
+        "agent"
+      ],
+      "quality": 1.0,
+      "eur_per_1k_tokens": 0.0,
+      "joules_per_1k_tokens": 13156.6,
+      "tokens_per_second": 12.8,
+      "evidence": "virtualv_llm local_gguf_8bench_dual_v100_20260917.json row deepseek-v4-flash-0731-iq3xxs (8-task battery mean; arithmetic_payout included)"
     }
-  ]
+  ],
+  "agent_domain_note": "8-task battery rows from local_gguf_8bench_dual_v100_20260917 and hardware_scaling_qwen36_20260921 only; cloud and MoM rows excluded (no speed)"
 }
