@@ -1,0 +1,268 @@
+{
+  "suite": "private-aggregates-only",
+  "protocol": "v3-private-specialist-anti-eight-gamedev-gamer-20261009",
+  "results": [
+    {
+      "model": "glm53-flash-ud-q4_k_xl-v100pair-20261009",
+      "protocol": "v3-private-specialist-anti-eight-gamedev-gamer-20261009",
+      "status": "complete",
+      "eight_task_mean": 0.9375,
+      "gpu_board_wh": 109.423,
+      "gpu_board_wh_per_answer": 0.782,
+      "energy_scope": "NVIDIA GPU board power on physical indices [3, 4] only; CPU/DRAM/PMem/SSD/PSU excluded",
+      "energy_method": "linear interpolation of raw board-power samples; <=2s boundary extrapolation",
+      "requests": 140,
+      "specialist": {
+        "value": 0.6917,
+        "ci95": [
+          0.5941,
+          0.7892
+        ],
+        "items": 44,
+        "lanes": 10,
+        "required_lanes": 10,
+        "complete": true
+      },
+      "anti_contamination": {
+        "canary_recall": {
+          "status": "complete",
+          "n_samples": 10,
+          "recall_rate": 0.2
+        },
+        "paraphrase_invariance": {
+          "status": "complete",
+          "n_samples": 15,
+          "original_accuracy": 0.8,
+          "paraphrase_accuracy": 1.0,
+          "accuracy_gap": -0.2
+        },
+        "post_cutoff_holdout": {
+          "status": "complete",
+          "n_samples": 11,
+          "accuracy": 1.0,
+          "private_pack": true,
+          "pack_sha256": "db93f10b2d8f9161e23ead0d3fd23260a0f058ab730d200d5214bf99038c60ae"
+        }
+      },
+      "throughput_probe": {
+        "completion_tokens": 256,
+        "completion_tokens_per_second": 2.7,
+        "timing_source": "llama-server journal exact 256-token eval timing"
+      }
+    },
+    {
+      "model": "glm53-flash-ud-q3_k_xl-v100pair-20261009",
+      "protocol": "v3-private-specialist-anti-eight-gamedev-gamer-20261009",
+      "status": "complete",
+      "eight_task_mean": 1.0,
+      "gpu_board_wh": 82.494,
+      "gpu_board_wh_per_answer": 0.589,
+      "energy_scope": "NVIDIA GPU board power on physical indices [3, 4] only; CPU/DRAM/PMem/SSD/PSU excluded",
+      "energy_method": "linear interpolation of raw board-power samples; <=2s boundary extrapolation",
+      "requests": 140,
+      "specialist": {
+        "value": 0.7,
+        "ci95": [
+          0.603,
+          0.797
+        ],
+        "items": 44,
+        "lanes": 10,
+        "required_lanes": 10,
+        "complete": true
+      },
+      "anti_contamination": {
+        "canary_recall": {
+          "status": "complete",
+          "n_samples": 10,
+          "recall_rate": 0.2
+        },
+        "paraphrase_invariance": {
+          "status": "complete",
+          "n_samples": 15,
+          "original_accuracy": 0.8,
+          "paraphrase_accuracy": 1.0,
+          "accuracy_gap": -0.2
+        },
+        "post_cutoff_holdout": {
+          "status": "complete",
+          "n_samples": 11,
+          "accuracy": 1.0,
+          "private_pack": true,
+          "pack_sha256": "db93f10b2d8f9161e23ead0d3fd23260a0f058ab730d200d5214bf99038c60ae"
+        }
+      },
+      "throughput_probe": {
+        "completion_tokens": 256,
+        "completion_tokens_per_second": 2.52,
+        "timing_source": "llama-server journal exact 256-token eval timing"
+      }
+    },
+    {
+      "model": "qwen38-27b-quasar-nvfp4-1cat-tp2-full-20261009",
+      "protocol": "v3-private-specialist-anti-eight-gamedev-gamer-20261009",
+      "status": "complete",
+      "eight_task_mean": 0.7375,
+      "gpu_board_wh": 72.434,
+      "gpu_board_wh_per_answer": 0.517,
+      "energy_scope": "NVIDIA GPU board power on physical indices [3, 4] only; CPU/DRAM/PMem/SSD/PSU excluded",
+      "energy_method": "interpolated board power",
+      "requests": 140,
+      "promotion_eligible": false,
+      "specialist": {
+        "value": 0.2333,
+        "ci95": [
+          0.1309,
+          0.3357
+        ],
+        "items": 44,
+        "lanes": 10,
+        "required_lanes": 10,
+        "complete": true
+      },
+      "anti_contamination": {
+        "canary_recall": {
+          "status": "complete",
+          "n_samples": 10,
+          "recall_rate": 0.0
+        },
+        "paraphrase_invariance": {
+          "status": "complete",
+          "n_samples": 15,
+          "original_accuracy": 0.5333,
+          "paraphrase_accuracy": 0.4,
+          "accuracy_gap": 0.1333
+        },
+        "post_cutoff_holdout": {
+          "status": "complete",
+          "n_samples": 11,
+          "accuracy": 0.4545,
+          "private_pack": true,
+          "pack_sha256": "db93f10b2d8f9161e23ead0d3fd23260a0f058ab730d200d5214bf99038c60ae"
+        }
+      },
+      "throughput_probe": {
+        "completion_tokens": 256,
+        "completion_tokens_per_second": 47.84007912174436,
+        "timing_source": "wall-clock completion incl. prefill"
+      },
+      "canary": {
+        "status": "failed",
+        "passed": 3,
+        "total": 9,
+        "repetition_loops": 3
+      }
+    },
+    {
+      "model": "qwen38-27b-quasar-nvfp4-1cat-v151-tp2-20261009",
+      "protocol": "v3-private-specialist-anti-eight-gamedev-gamer-20261009",
+      "status": "complete",
+      "eight_task_mean": 0.8542,
+      "gpu_board_wh": 6.259,
+      "gpu_board_wh_per_answer": 0.045,
+      "energy_scope": "NVIDIA GPU board power on physical indices [3, 4] only; CPU/DRAM/PMem/SSD/PSU excluded",
+      "energy_method": "interpolated board power",
+      "requests": 138,
+      "promotion_eligible": true,
+      "specialist": {
+        "value": 0.4417,
+        "ci95": [
+          0.3385,
+          0.5448
+        ],
+        "items": 44,
+        "lanes": 10,
+        "required_lanes": 10,
+        "complete": true
+      },
+      "anti_contamination": {
+        "canary_recall": {
+          "status": "complete",
+          "n_samples": 10,
+          "recall_rate": 0.0
+        },
+        "paraphrase_invariance": {
+          "status": "complete",
+          "n_samples": 15,
+          "original_accuracy": 0.8667,
+          "paraphrase_accuracy": 0.8667,
+          "accuracy_gap": 0.0
+        },
+        "post_cutoff_holdout": {
+          "status": "complete",
+          "n_samples": 11,
+          "accuracy": 0.0909,
+          "private_pack": true,
+          "pack_sha256": "db93f10b2d8f9161e23ead0d3fd23260a0f058ab730d200d5214bf99038c60ae"
+        }
+      },
+      "throughput_probe": {
+        "completion_tokens": 256,
+        "completion_tokens_per_second": 52.71192325537179,
+        "timing_source": "wall-clock completion incl. prefill"
+      },
+      "canary": {
+        "status": "passed",
+        "passed": 9,
+        "total": 9,
+        "repetition_loops": 0
+      }
+    },
+    {
+      "model": "qwen38-27b-quasar-nvfp4-1cat-v151-opt-tp2-20261009",
+      "protocol": "v3-private-specialist-anti-eight-gamedev-gamer-20261009",
+      "status": "complete",
+      "eight_task_mean": 0.8542,
+      "gpu_board_wh": 5.899,
+      "gpu_board_wh_per_answer": 0.043,
+      "energy_scope": "NVIDIA GPU board power on physical indices [3, 4] only; CPU/DRAM/PMem/SSD/PSU excluded",
+      "energy_method": "interpolated board power",
+      "requests": 138,
+      "promotion_eligible": true,
+      "specialist": {
+        "value": 0.4417,
+        "ci95": [
+          0.3385,
+          0.5448
+        ],
+        "items": 44,
+        "lanes": 10,
+        "required_lanes": 10,
+        "complete": true
+      },
+      "anti_contamination": {
+        "canary_recall": {
+          "status": "complete",
+          "n_samples": 10,
+          "recall_rate": 0.0
+        },
+        "paraphrase_invariance": {
+          "status": "complete",
+          "n_samples": 15,
+          "original_accuracy": 0.8667,
+          "paraphrase_accuracy": 0.8667,
+          "accuracy_gap": 0.0
+        },
+        "post_cutoff_holdout": {
+          "status": "complete",
+          "n_samples": 11,
+          "accuracy": 0.0909,
+          "private_pack": true,
+          "pack_sha256": "db93f10b2d8f9161e23ead0d3fd23260a0f058ab730d200d5214bf99038c60ae"
+        }
+      },
+      "throughput_probe": {
+        "completion_tokens": 256,
+        "completion_tokens_per_second": 48.650662700699385,
+        "timing_source": "wall-clock completion incl. prefill"
+      },
+      "canary": {
+        "status": "passed",
+        "passed": 9,
+        "total": 9,
+        "repetition_loops": 0
+      }
+    }
+  ],
+  "redaction": "allowlisted aggregate metrics; no prompts, answers, item IDs or samples"
+}

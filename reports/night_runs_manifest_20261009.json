@@ -1,0 +1,34 @@
+{
+  "purpose": "Safe public aggregates and operational status for 2026-10-09 night runs",
+  "generated_at": "2026-10-09T07:45:37.045071+00:00",
+  "origin": "SHA256-verified against local node2 pub2 reports; GLM and TP2 transient service journals record completion",
+  "published_files": {
+    "private_benchmark_aggregates_20261009.json": {
+      "sha256": "15d6b2062d397b0ae6bd7b133fb784a94fca1e3cd0d57271b162cb0f831479ac",
+      "bytes": 8360
+    },
+    "glm53_private_handoff_status_20261009.json": {
+      "sha256": "888a4470f210d65ef0d153e13f4a4a3e0f075d7a5645da6285ec1bc0036020e2",
+      "bytes": 340
+    },
+    "glm53_private_q3_status_20261009.json": {
+      "sha256": "18345ed8c5caa4bccceb445b1832b8ce29724fb85dd9aeb4f820bbe0d55746f4",
+      "bytes": 229
+    },
+    "glm53_private_q4_status_20261009.json": {
+      "sha256": "23f50efdf323fe25fb3715460cadddac0ff80bec33b9f5c72f6f112daa000e76",
+      "bytes": 229
+    },
+    "qwen38_tp2_full_status_20261009.json": {
+      "sha256": "1306e1f72f02468f204f7203deac21384cd0cf95908b5b646438359d4cc0dd66",
+      "bytes": 181
+    }
+  },
+  "private_source_sha256_only": {
+    "private_benchmark_20261009.json": "f62a299044a7ce82e80ad94746cbdf41c9b995028d7cb6eb98cc3128627e8af5",
+    "private_specialist_suite_20261009.json": "7804424ced880839aaa82cf263d4b06bcdb078fcc4582497476232a5638d8f10",
+    "private_anti_audit_20261009.json": "a3ffc80b2314c2f41e97ed9748bcc850921ed0bcc4dd3cb08b8cc4245c2cdc28"
+  },
+  "privacy_note": "Raw private reports were present in the original PR revision and are excluded from this rewritten branch. Treat their item packs as exposed and rotate before future blind evaluation.",
+  "status_note": "K3 partial and router-oracle partial are excluded; historic full-suite scores are not promotion evidence."
+}
