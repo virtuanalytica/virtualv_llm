@@ -198,9 +198,10 @@ Opus 4.8 scores 0.9700 at 61 tok/s. Opus 4.7, 4.6, 4.5 and Sonnet 4.6 and
 
 - **DeepSeek-V4-Flash-0731 UD-IQ4_XS**, experts in RAM, reasoning off:
   composite 0.9362 at 3.16 tok/s (`dsv4-flash-0731`), above the 0.9103 of the
-  UD-IQ3_XXS row. This settles the baseline discrepancy for DSv4: the 2.30
-  tok/s judge figure and this 3.16 are the same configuration class; the 13.89
-  tok/s row was a smaller quant fully in VRAM.
+  UD-IQ3_XXS row. The baseline discrepancy for DSv4 is narrowed, not settled:
+  this run (V100 pair, reasoning off) and the 2.30 tok/s judge figure (six
+  GPUs, reasoning on) both keep the experts in RAM, while the 13.89 tok/s row
+  was a smaller quant; the September configuration itself was not re-run.
 - **GLM-5.3-Flash UD-Q4_K_XL**: no complete row yet. It decodes at about 1 to
   1.7 tok/s in this configuration and two runs were cut short.
 - **Kimi K2.7-Code** (backlog item 2): UD-Q3_K_XL decodes 1.04 tok/s on a
