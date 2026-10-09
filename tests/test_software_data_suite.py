@@ -120,5 +120,22 @@ def test_haiku_requires_cloud_permission_and_two_local_rows(tmp_path, monkeypatc
     with pytest.raises(ValueError, match="not approved for cloud"):
         suite.main()
     commitment.write_text(json.dumps({"status": "sealed-cloud-safe-pilot", "cloud_allowed": True}))
-    with pytest.raises(ValueError, match="first complete two local models"):
+    with pytest.raises(ValueError, match="two distinct local model aliases"):
+        suite.main()
+    out.write_text(json.dumps({"results": [
+        {"model": model, "pack_sha256": "c" * 64, "status": "complete",
+         "runtime": {"provider": "local", "alias": "same-alias"}}
+        for model in ("local-a", "local-b")]}))
+    with pytest.raises(ValueError, match="two distinct local model aliases"):
+        suite.main()
+    data = json.loads(out.read_text())
+    data["results"][1]["runtime"]["alias"] = "other-alias"
+    out.write_text(json.dumps(data))
+    monkeypatch.setattr(suite, "run_suite", lambda *_args: {"tracks": {}})
+    monkeypatch.setattr(suite, "upsert_result", lambda *_args, **_kwargs: None)
+    assert suite.main() == 0
+    data["results"].append({"pack_sha256": "c" * 64, "status": "complete",
+                            "runtime": {"provider": "haiku55"}})
+    out.write_text(json.dumps(data))
+    with pytest.raises(ValueError, match="closed by its Haiku"):
         suite.main()

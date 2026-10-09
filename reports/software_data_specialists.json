@@ -1,0 +1,1066 @@
+{
+  "suite": "software_data_specialists",
+  "protocol": "software-data-private-v1-20261009",
+  "results": [
+    {
+      "model": "qwen38-flash-next-ap-iq2s-v100pair",
+      "subject_type": "model",
+      "protocol": "software-data-private-v1-20261009",
+      "pack_sha256": "ca7c774057c673498d9ad2d2a59189141490fc4d9c606c4a6a4313ea0af0ba7d",
+      "status": "complete",
+      "at": "2026-10-09T02:40:39.751929+00:00",
+      "access_profile": "sandbox",
+      "results": [
+        {
+          "id": "cloud-software-coder-1",
+          "track": "software",
+          "role": "coder",
+          "passed": true,
+          "reason": "all_hidden_cases_passed",
+          "response_sha256": "dab25fcdd0860c1e0ef79c86165bd1325c81ebe1de3cc2fe2a89f31429edd4b8",
+          "latency_seconds": 12.15
+        },
+        {
+          "id": "cloud-software-coder-2",
+          "track": "software",
+          "role": "coder",
+          "passed": true,
+          "reason": "all_hidden_cases_passed",
+          "response_sha256": "73971701059edcc818804541f6e825daeee0880a8fd1755363cce143b9827638",
+          "latency_seconds": 8.621
+        },
+        {
+          "id": "cloud-software-reviewer-1",
+          "track": "software",
+          "role": "reviewer",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "421934db224479faca2b13c77b3eda7761a242e3447e7877417817e41a4a45dc",
+          "latency_seconds": 2.694
+        },
+        {
+          "id": "cloud-software-reviewer-2",
+          "track": "software",
+          "role": "reviewer",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "89e63f27e06190289390425850738ac3f6f48c557b2ef7010188f02d31b7bfaa",
+          "latency_seconds": 2.541
+        },
+        {
+          "id": "cloud-software-architect-1",
+          "track": "software",
+          "role": "architect",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "cef1b43442b521afc4fcbcb7ed0dbf617e402d1e2bd7421861803df4d4c48eaa",
+          "latency_seconds": 1.674
+        },
+        {
+          "id": "cloud-software-architect-2",
+          "track": "software",
+          "role": "architect",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "2540fa662c5266ae7c466a17f72295ea03d80993e2f1258d280ff3dab1dcc322",
+          "latency_seconds": 3.553
+        },
+        {
+          "id": "cloud-software-debugger-1",
+          "track": "software",
+          "role": "debugger",
+          "passed": true,
+          "reason": "all_hidden_cases_passed",
+          "response_sha256": "127792c46df014b895825c1e3131e411d36abb2b05b7957ff1fcef3e825ec7da",
+          "latency_seconds": 8.92
+        },
+        {
+          "id": "cloud-software-debugger-2",
+          "track": "software",
+          "role": "debugger",
+          "passed": true,
+          "reason": "all_hidden_cases_passed",
+          "response_sha256": "3ef93bd89a1380b4ea9b5606fc69ec6a5a88e7c1806a9462dff15ad8e41cd290",
+          "latency_seconds": 7.971
+        },
+        {
+          "id": "cloud-data-data_engineer-1",
+          "track": "data",
+          "role": "data_engineer",
+          "passed": true,
+          "reason": "all_hidden_fixtures_passed",
+          "response_sha256": "39f9a7f5c98ba92130de433c48c5519ad94949127055c6b93770575d39e48753",
+          "latency_seconds": 3.468
+        },
+        {
+          "id": "cloud-data-data_engineer-2",
+          "track": "data",
+          "role": "data_engineer",
+          "passed": true,
+          "reason": "all_hidden_fixtures_passed",
+          "response_sha256": "d2ddadc34d791a2aece7802c65af5d5eb933c7df26596a0ffb4073cb794f5a2f",
+          "latency_seconds": 3.748
+        },
+        {
+          "id": "cloud-data-data_analyst-1",
+          "track": "data",
+          "role": "data_analyst",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "3015d220887634d8caf1153ea71dcbffb85ca3ee2f2c72ba33c03af3bb846ce5",
+          "latency_seconds": 1.055
+        },
+        {
+          "id": "cloud-data-data_analyst-2",
+          "track": "data",
+          "role": "data_analyst",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "6eecb886a113a0b00f1b9ae28103f4e6f4232a6688b813d12a900636525e77c0",
+          "latency_seconds": 1.82
+        },
+        {
+          "id": "cloud-data-data_architect-1",
+          "track": "data",
+          "role": "data_architect",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "06a5dbb1eba36f9aa028f84efebb6bc64eae8678947f0e611de09611f5788526",
+          "latency_seconds": 2.282
+        },
+        {
+          "id": "cloud-data-data_architect-2",
+          "track": "data",
+          "role": "data_architect",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "205f8fff1408b41e03f0d11890871264e687ede951106a976db1fd6a7d3baee8",
+          "latency_seconds": 2.392
+        },
+        {
+          "id": "cloud-data-data_steward-1",
+          "track": "data",
+          "role": "data_steward",
+          "passed": false,
+          "reason": "rubric_mismatch",
+          "response_sha256": "fd0f61abdd381bde44e198eb956ab845eae1409fafc1bc60547ca2db53ca169e",
+          "latency_seconds": 2.328
+        },
+        {
+          "id": "cloud-data-data_steward-2",
+          "track": "data",
+          "role": "data_steward",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "b11426e31c600c474269db8b33b2f9e6631919ddac72de2853da9ea51a5a782f",
+          "latency_seconds": 0.963
+        }
+      ],
+      "tracks": {
+        "software": {
+          "roles": {
+            "coder": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            },
+            "reviewer": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            },
+            "architect": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            },
+            "debugger": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            }
+          },
+          "passed": 8,
+          "n": 8,
+          "composite": 1.0
+        },
+        "data": {
+          "roles": {
+            "data_engineer": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            },
+            "data_analyst": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            },
+            "data_architect": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            },
+            "data_steward": {
+              "passed": 1,
+              "n": 2,
+              "accuracy": 0.5,
+              "wilson95": [
+                0.0945,
+                0.9055
+              ],
+              "status": "complete"
+            }
+          },
+          "passed": 7,
+          "n": 8,
+          "composite": 0.875
+        }
+      },
+      "promotion_eligible": false,
+      "reason": "small pilot pack; no role has a sufficiently narrow confidence interval",
+      "runtime": {
+        "provider": "local",
+        "alias": "qwen38-flash-next",
+        "endpoint": "http://127.0.0.1:18012",
+        "decode_profile": {
+          "temperature": 0,
+          "max_tokens": 2048,
+          "enable_thinking": false,
+          "reasoning_effort": "low"
+        },
+        "code_image": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4"
+      }
+    },
+    {
+      "model": "glm53-reap50-iq4xs-v100ada",
+      "subject_type": "model",
+      "protocol": "software-data-private-v1-20261009",
+      "pack_sha256": "ca7c774057c673498d9ad2d2a59189141490fc4d9c606c4a6a4313ea0af0ba7d",
+      "status": "complete",
+      "at": "2026-10-09T02:44:44.691571+00:00",
+      "access_profile": "sandbox",
+      "results": [
+        {
+          "id": "cloud-software-coder-1",
+          "track": "software",
+          "role": "coder",
+          "passed": false,
+          "reason": "hidden_case_failed",
+          "response_sha256": "15abe43498a91446ecc442b01bf3191b8b92e7de628a56d13e84a0660c981fda",
+          "latency_seconds": 8.446
+        },
+        {
+          "id": "cloud-software-coder-2",
+          "track": "software",
+          "role": "coder",
+          "passed": false,
+          "reason": "runtime_error",
+          "response_sha256": "fb44d0e87190b9dd5cad26761859a25bd7ec290c5a39161af625b806503fff0d",
+          "latency_seconds": 7.214
+        },
+        {
+          "id": "cloud-software-reviewer-1",
+          "track": "software",
+          "role": "reviewer",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "1ee97977beaf162d50c8a7e188fe211952ef8ce8ff6f76870b843fc83aa1d181",
+          "latency_seconds": 2.143
+        },
+        {
+          "id": "cloud-software-reviewer-2",
+          "track": "software",
+          "role": "reviewer",
+          "passed": false,
+          "reason": "rubric_mismatch",
+          "response_sha256": "7bc2216efd3eb8d8109e661b91a6c177b38106c0579e9a4e80ee58832570f474",
+          "latency_seconds": 4.462
+        },
+        {
+          "id": "cloud-software-architect-1",
+          "track": "software",
+          "role": "architect",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "a6ac63a39603eba459be291f6bf4cdcd664d6456f839b0ec55374fe946f74407",
+          "latency_seconds": 3.219
+        },
+        {
+          "id": "cloud-software-architect-2",
+          "track": "software",
+          "role": "architect",
+          "passed": false,
+          "reason": "rubric_mismatch",
+          "response_sha256": "468c7b79698ef47725e103f7ed07fb76057084d51cb3462aab381760ded5434e",
+          "latency_seconds": 4.634
+        },
+        {
+          "id": "cloud-software-debugger-1",
+          "track": "software",
+          "role": "debugger",
+          "passed": true,
+          "reason": "all_hidden_cases_passed",
+          "response_sha256": "43e4299287ed0397ab0106db76a6d6a73e5ed334dc9b085b41ccea75f140a650",
+          "latency_seconds": 8.322
+        },
+        {
+          "id": "cloud-software-debugger-2",
+          "track": "software",
+          "role": "debugger",
+          "passed": true,
+          "reason": "all_hidden_cases_passed",
+          "response_sha256": "c2f5b42f92fde5814d27a1b295be07871e09c80bf2f6074f9b0633aa70bfd6db",
+          "latency_seconds": 8.675
+        },
+        {
+          "id": "cloud-data-data_engineer-1",
+          "track": "data",
+          "role": "data_engineer",
+          "passed": true,
+          "reason": "all_hidden_fixtures_passed",
+          "response_sha256": "e2baa6b2f564ee617cbbfca23aa672cae9685535410323382ae9846c732ad8ff",
+          "latency_seconds": 2.11
+        },
+        {
+          "id": "cloud-data-data_engineer-2",
+          "track": "data",
+          "role": "data_engineer",
+          "passed": true,
+          "reason": "all_hidden_fixtures_passed",
+          "response_sha256": "09123c02910087a3575b71f9dedbba2e4eec4cb37b02b63ff87e154bf6583d29",
+          "latency_seconds": 3.389
+        },
+        {
+          "id": "cloud-data-data_analyst-1",
+          "track": "data",
+          "role": "data_analyst",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "5a282276ff83fc5b07cd36255e7bfe72e4d32f0f524855c9cdec8e1c1f3622cf",
+          "latency_seconds": 1.074
+        },
+        {
+          "id": "cloud-data-data_analyst-2",
+          "track": "data",
+          "role": "data_analyst",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "c1faa36043ec8ac500819b3e178b63bd743651e430919665b4a87b6a4af03788",
+          "latency_seconds": 3.089
+        },
+        {
+          "id": "cloud-data-data_architect-1",
+          "track": "data",
+          "role": "data_architect",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "b990477b8cd97f53e5c2c77cece75248c8e743d7d8f0c399c96d26ea35cfa25d",
+          "latency_seconds": 2.721
+        },
+        {
+          "id": "cloud-data-data_architect-2",
+          "track": "data",
+          "role": "data_architect",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "63bbe5a4fa7c7062d4ad783a6dbcbf9d1b6357a829fdd9e8bb0ed3628a88da82",
+          "latency_seconds": 5.786
+        },
+        {
+          "id": "cloud-data-data_steward-1",
+          "track": "data",
+          "role": "data_steward",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "5259e74ab670811a220136f8dfd10fcc8648025859b50c78cc80f6e672ded453",
+          "latency_seconds": 2.948
+        },
+        {
+          "id": "cloud-data-data_steward-2",
+          "track": "data",
+          "role": "data_steward",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "b11426e31c600c474269db8b33b2f9e6631919ddac72de2853da9ea51a5a782f",
+          "latency_seconds": 1.733
+        }
+      ],
+      "tracks": {
+        "software": {
+          "roles": {
+            "coder": {
+              "passed": 0,
+              "n": 2,
+              "accuracy": 0.0,
+              "wilson95": [
+                0.0,
+                0.6576
+              ],
+              "status": "complete"
+            },
+            "reviewer": {
+              "passed": 1,
+              "n": 2,
+              "accuracy": 0.5,
+              "wilson95": [
+                0.0945,
+                0.9055
+              ],
+              "status": "complete"
+            },
+            "architect": {
+              "passed": 1,
+              "n": 2,
+              "accuracy": 0.5,
+              "wilson95": [
+                0.0945,
+                0.9055
+              ],
+              "status": "complete"
+            },
+            "debugger": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            }
+          },
+          "passed": 4,
+          "n": 8,
+          "composite": 0.5
+        },
+        "data": {
+          "roles": {
+            "data_engineer": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            },
+            "data_analyst": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            },
+            "data_architect": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            },
+            "data_steward": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            }
+          },
+          "passed": 8,
+          "n": 8,
+          "composite": 1.0
+        }
+      },
+      "promotion_eligible": false,
+      "reason": "small pilot pack; no role has a sufficiently narrow confidence interval",
+      "runtime": {
+        "provider": "local",
+        "alias": "glm53-reap50-iq4xs",
+        "endpoint": "http://127.0.0.1:18017",
+        "decode_profile": {
+          "temperature": 0,
+          "max_tokens": 2048,
+          "enable_thinking": false,
+          "reasoning_effort": "low"
+        },
+        "code_image": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4"
+      }
+    },
+    {
+      "model": "qwen38-27b-quasar-nvfp4-1cat-tp2-full-20261009",
+      "subject_type": "model",
+      "protocol": "software-data-private-v1-20261009",
+      "pack_sha256": "ca7c774057c673498d9ad2d2a59189141490fc4d9c606c4a6a4313ea0af0ba7d",
+      "status": "complete",
+      "at": "2026-10-09T03:06:59.751052+00:00",
+      "access_profile": "sandbox",
+      "results": [
+        {
+          "id": "cloud-software-coder-1",
+          "track": "software",
+          "role": "coder",
+          "passed": false,
+          "reason": "hidden_case_failed",
+          "response_sha256": "fd05ebc41d9fe7da03d757827c2b31e7632787dee4d79ea57d31996b589621a5",
+          "latency_seconds": 3.44
+        },
+        {
+          "id": "cloud-software-coder-2",
+          "track": "software",
+          "role": "coder",
+          "passed": false,
+          "reason": "runtime_error",
+          "response_sha256": "a1403452e8f9fb3a5be08d18155a13780da35ab4d97f3cf4f76c1f51591fd98e",
+          "latency_seconds": 2.684
+        },
+        {
+          "id": "cloud-software-reviewer-1",
+          "track": "software",
+          "role": "reviewer",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "991897f3d3bbccdada4c4eda87aadebb79b6b8ad1790ec17ac9c3e8afea52097",
+          "latency_seconds": 0.263
+        },
+        {
+          "id": "cloud-software-reviewer-2",
+          "track": "software",
+          "role": "reviewer",
+          "passed": false,
+          "reason": "rubric_mismatch",
+          "response_sha256": "98b1649e71aed4b0bcae47f043c38a940d3cd4955081828080f6e80c40378aaa",
+          "latency_seconds": 0.316
+        },
+        {
+          "id": "cloud-software-architect-1",
+          "track": "software",
+          "role": "architect",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "e4d6f1fc46a7021472d536db2ac1fa9ce118b2e7ada0eb89c46a3e5a1f66539d",
+          "latency_seconds": 1.095
+        },
+        {
+          "id": "cloud-software-architect-2",
+          "track": "software",
+          "role": "architect",
+          "passed": false,
+          "reason": "rubric_mismatch",
+          "response_sha256": "48f2985c021a1f0c9be1270904be1175ebe8441be68641bfa7b7df1545726b79",
+          "latency_seconds": 1.281
+        },
+        {
+          "id": "cloud-software-debugger-1",
+          "track": "software",
+          "role": "debugger",
+          "passed": false,
+          "reason": "runtime_error",
+          "response_sha256": "1b400b45925ce3c4ab7ce9bc607b3179daccb144f23d8c33f7fd5145d14328ee",
+          "latency_seconds": 44.87
+        },
+        {
+          "id": "cloud-software-debugger-2",
+          "track": "software",
+          "role": "debugger",
+          "passed": false,
+          "reason": "runtime_error",
+          "response_sha256": "e281e6282e36241902a587409db90747463986d50fc759eda46bc980472e689c",
+          "latency_seconds": 3.464
+        },
+        {
+          "id": "cloud-data-data_engineer-1",
+          "track": "data",
+          "role": "data_engineer",
+          "passed": true,
+          "reason": "all_hidden_fixtures_passed",
+          "response_sha256": "b4975208d65947e83edf39745c80fe82b41b76770f215fd204e62fee5a61a950",
+          "latency_seconds": 0.851
+        },
+        {
+          "id": "cloud-data-data_engineer-2",
+          "track": "data",
+          "role": "data_engineer",
+          "passed": false,
+          "reason": "not_one_read_only_query",
+          "response_sha256": "8e0380103f75d1c209c1c1e6a2e5dc1c5530ef29431cce86d85b3b6b625bfb88",
+          "latency_seconds": 3.281
+        },
+        {
+          "id": "cloud-data-data_analyst-1",
+          "track": "data",
+          "role": "data_analyst",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "bf09581e3eda7aad4219548a65d4ad74e83ee3a4838ab7c283014b157ee47886",
+          "latency_seconds": 0.493
+        },
+        {
+          "id": "cloud-data-data_analyst-2",
+          "track": "data",
+          "role": "data_analyst",
+          "passed": false,
+          "reason": "invalid_response:JSONDecodeError",
+          "response_sha256": "1d93057fdb74fab0c32504ebb0d82300f7c1f3e19664fe2778e793d44f94ab9d",
+          "latency_seconds": 42.066
+        },
+        {
+          "id": "cloud-data-data_architect-1",
+          "track": "data",
+          "role": "data_architect",
+          "passed": false,
+          "reason": "rubric_mismatch",
+          "response_sha256": "dd32e74b03bb5dbf964d9abba5b36607da06e0f64d0857cc5e626ad43a810c40",
+          "latency_seconds": 1.367
+        },
+        {
+          "id": "cloud-data-data_architect-2",
+          "track": "data",
+          "role": "data_architect",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "b8747efd79c99749010bb6dfd23761247a3191491f212c43d69559e936e9d932",
+          "latency_seconds": 1.139
+        },
+        {
+          "id": "cloud-data-data_steward-1",
+          "track": "data",
+          "role": "data_steward",
+          "passed": false,
+          "reason": "rubric_mismatch",
+          "response_sha256": "857819582432e25edbeac55139b5c3e07c34460ee7cad2a6d427d0292be990be",
+          "latency_seconds": 0.722
+        },
+        {
+          "id": "cloud-data-data_steward-2",
+          "track": "data",
+          "role": "data_steward",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "646287b0016982aa22293b18866fa11aee2f57f6904a6dc453d84d0d39c964f6",
+          "latency_seconds": 0.515
+        }
+      ],
+      "tracks": {
+        "software": {
+          "roles": {
+            "coder": {
+              "passed": 0,
+              "n": 2,
+              "accuracy": 0.0,
+              "wilson95": [
+                0.0,
+                0.6576
+              ],
+              "status": "complete"
+            },
+            "reviewer": {
+              "passed": 1,
+              "n": 2,
+              "accuracy": 0.5,
+              "wilson95": [
+                0.0945,
+                0.9055
+              ],
+              "status": "complete"
+            },
+            "architect": {
+              "passed": 1,
+              "n": 2,
+              "accuracy": 0.5,
+              "wilson95": [
+                0.0945,
+                0.9055
+              ],
+              "status": "complete"
+            },
+            "debugger": {
+              "passed": 0,
+              "n": 2,
+              "accuracy": 0.0,
+              "wilson95": [
+                0.0,
+                0.6576
+              ],
+              "status": "complete"
+            }
+          },
+          "passed": 2,
+          "n": 8,
+          "composite": 0.25
+        },
+        "data": {
+          "roles": {
+            "data_engineer": {
+              "passed": 1,
+              "n": 2,
+              "accuracy": 0.5,
+              "wilson95": [
+                0.0945,
+                0.9055
+              ],
+              "status": "complete"
+            },
+            "data_analyst": {
+              "passed": 1,
+              "n": 2,
+              "accuracy": 0.5,
+              "wilson95": [
+                0.0945,
+                0.9055
+              ],
+              "status": "complete"
+            },
+            "data_architect": {
+              "passed": 1,
+              "n": 2,
+              "accuracy": 0.5,
+              "wilson95": [
+                0.0945,
+                0.9055
+              ],
+              "status": "complete"
+            },
+            "data_steward": {
+              "passed": 1,
+              "n": 2,
+              "accuracy": 0.5,
+              "wilson95": [
+                0.0945,
+                0.9055
+              ],
+              "status": "complete"
+            }
+          },
+          "passed": 4,
+          "n": 8,
+          "composite": 0.5
+        }
+      },
+      "promotion_eligible": false,
+      "reason": "small pilot pack; no role has a sufficiently narrow confidence interval",
+      "runtime": {
+        "provider": "local",
+        "alias": "qwen38-27b-quasar-nvfp4-tp2-20261009",
+        "endpoint": "http://127.0.0.1:18018",
+        "decode_profile": {
+          "temperature": 0,
+          "max_tokens": 2048,
+          "enable_thinking": false,
+          "reasoning_effort": "low"
+        },
+        "code_image": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4"
+      }
+    },
+    {
+      "model": "claude-haiku-5-5-medium",
+      "subject_type": "model",
+      "protocol": "software-data-private-v1-20261009",
+      "pack_sha256": "ca7c774057c673498d9ad2d2a59189141490fc4d9c606c4a6a4313ea0af0ba7d",
+      "status": "complete",
+      "at": "2026-10-09T03:09:18.735454+00:00",
+      "access_profile": "sandbox",
+      "results": [
+        {
+          "id": "cloud-software-coder-1",
+          "track": "software",
+          "role": "coder",
+          "passed": true,
+          "reason": "all_hidden_cases_passed",
+          "response_sha256": "8a4a56613a08f92c7450e5bfab735286bd5534ff9e4360f295ca4f4e0ec335b6",
+          "latency_seconds": 9.056
+        },
+        {
+          "id": "cloud-software-coder-2",
+          "track": "software",
+          "role": "coder",
+          "passed": true,
+          "reason": "all_hidden_cases_passed",
+          "response_sha256": "aec6dca239008189298e7fb866d750bf3a019d44f83620ae009d18de4096d2ac",
+          "latency_seconds": 7.859
+        },
+        {
+          "id": "cloud-software-reviewer-1",
+          "track": "software",
+          "role": "reviewer",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "1ee97977beaf162d50c8a7e188fe211952ef8ce8ff6f76870b843fc83aa1d181",
+          "latency_seconds": 2.75
+        },
+        {
+          "id": "cloud-software-reviewer-2",
+          "track": "software",
+          "role": "reviewer",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "89e63f27e06190289390425850738ac3f6f48c557b2ef7010188f02d31b7bfaa",
+          "latency_seconds": 4.245
+        },
+        {
+          "id": "cloud-software-architect-1",
+          "track": "software",
+          "role": "architect",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "fb99f453a354cf6b594faa5d8b7e664a9d9b163c4b12ddaeb0ced5ff84fc95b8",
+          "latency_seconds": 2.09
+        },
+        {
+          "id": "cloud-software-architect-2",
+          "track": "software",
+          "role": "architect",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "c3250cc724475998088f7656da19c005b9b070d149506d30767cb22c665f8b0f",
+          "latency_seconds": 2.338
+        },
+        {
+          "id": "cloud-software-debugger-1",
+          "track": "software",
+          "role": "debugger",
+          "passed": true,
+          "reason": "all_hidden_cases_passed",
+          "response_sha256": "7ab0aedb69f7bb02eb6047c53c650f2716dd1131a83440ab2c3f48c12681bc4c",
+          "latency_seconds": 7.473
+        },
+        {
+          "id": "cloud-software-debugger-2",
+          "track": "software",
+          "role": "debugger",
+          "passed": true,
+          "reason": "all_hidden_cases_passed",
+          "response_sha256": "8ee5c293fba18d0eb14d5586902ca940a008daac9a37001f62c8af331b7b2a75",
+          "latency_seconds": 5.319
+        },
+        {
+          "id": "cloud-data-data_engineer-1",
+          "track": "data",
+          "role": "data_engineer",
+          "passed": true,
+          "reason": "all_hidden_fixtures_passed",
+          "response_sha256": "23104e961d463c527cc41be5df7f8947f174324ef82d3018cfb29c965d1b49ec",
+          "latency_seconds": 3.099
+        },
+        {
+          "id": "cloud-data-data_engineer-2",
+          "track": "data",
+          "role": "data_engineer",
+          "passed": true,
+          "reason": "all_hidden_fixtures_passed",
+          "response_sha256": "921851d11f5e2dd9ca135354f78b501fe842199b840d839a347233752dd1f1b6",
+          "latency_seconds": 3.042
+        },
+        {
+          "id": "cloud-data-data_analyst-1",
+          "track": "data",
+          "role": "data_analyst",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "3af56653a1153a87d9284b545cdc2dd7408dbbceedd168325b107af9d8192ec7",
+          "latency_seconds": 2.539
+        },
+        {
+          "id": "cloud-data-data_analyst-2",
+          "track": "data",
+          "role": "data_analyst",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "c1faa36043ec8ac500819b3e178b63bd743651e430919665b4a87b6a4af03788",
+          "latency_seconds": 2.576
+        },
+        {
+          "id": "cloud-data-data_architect-1",
+          "track": "data",
+          "role": "data_architect",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "302d38a6902cd67b32844ebd5565f4eecd4d4f834e6d222d521a89d397814b6e",
+          "latency_seconds": 2.607
+        },
+        {
+          "id": "cloud-data-data_architect-2",
+          "track": "data",
+          "role": "data_architect",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "ce4f1aed42f335a3b5274d79e543de0d605c0356e3ec9c4d53c2125e0d4afb6a",
+          "latency_seconds": 2.357
+        },
+        {
+          "id": "cloud-data-data_steward-1",
+          "track": "data",
+          "role": "data_steward",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "62268519d36b62403ed3954c1c61d5d3d153c92616259762a9a0344d91c6a175",
+          "latency_seconds": 2.801
+        },
+        {
+          "id": "cloud-data-data_steward-2",
+          "track": "data",
+          "role": "data_steward",
+          "passed": true,
+          "reason": "matched_rubric",
+          "response_sha256": "6667bc813f5a79aa809b544240ec078ad8157c59b8af3e004b0fd24ddc7a6470",
+          "latency_seconds": 2.317
+        }
+      ],
+      "tracks": {
+        "software": {
+          "roles": {
+            "coder": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            },
+            "reviewer": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            },
+            "architect": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            },
+            "debugger": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            }
+          },
+          "passed": 8,
+          "n": 8,
+          "composite": 1.0
+        },
+        "data": {
+          "roles": {
+            "data_engineer": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            },
+            "data_analyst": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            },
+            "data_architect": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            },
+            "data_steward": {
+              "passed": 2,
+              "n": 2,
+              "accuracy": 1.0,
+              "wilson95": [
+                0.3424,
+                1.0
+              ],
+              "status": "complete"
+            }
+          },
+          "passed": 8,
+          "n": 8,
+          "composite": 1.0
+        }
+      },
+      "promotion_eligible": false,
+      "reason": "small pilot pack; no role has a sufficiently narrow confidence interval",
+      "runtime": {
+        "provider": "haiku55",
+        "alias": null,
+        "endpoint": "Anthropic Claude CLI",
+        "decode_profile": {
+          "temperature": "CLI default",
+          "max_tokens": "uncapped",
+          "thinking": "adaptive",
+          "effort": "medium"
+        },
+        "code_image": "python@sha256:1b668429b3511ab407d8e00648891631b0b1a4d7e15e3ca70f38ab5b91ad4ab4"
+      }
+    }
+  ]
+}

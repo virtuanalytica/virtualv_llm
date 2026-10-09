@@ -301,18 +301,26 @@ def main() -> int:
     args = parser.parse_args()
     pack, digest = load_pack(args.pack, args.commitment)
     commitment = json.loads(args.commitment.read_text())
+    prior = json.loads(args.out.read_text()) if args.out.exists() else {"results": []}
+    baseline_finished = any(
+        row.get("pack_sha256") == digest and row.get("status") == "complete"
+        and (row.get("runtime") or {}).get("provider") == "haiku55"
+        for row in prior.get("results", [])
+    )
+    if baseline_finished:
+        raise ValueError("this pack is closed by its Haiku 5.5 baseline; use a new sealed pack")
     if args.provider == "local":
         if not args.base or not args.base.startswith("http://127.0.0.1:") or not args.alias:
             raise ValueError("local provider requires --base on 127.0.0.1 and --alias")
     else:
         if not commitment.get("cloud_allowed") or commitment.get("status") != "sealed-cloud-safe-pilot":
             raise ValueError("this sealed pack is not approved for cloud disclosure")
-        prior = json.loads(args.out.read_text()) if args.out.exists() else {"results": []}
-        locals_done = {r.get("model") for r in prior.get("results", [])
+        locals_done = {(r.get("runtime") or {}).get("alias") for r in prior.get("results", [])
                        if r.get("pack_sha256") == digest and r.get("status") == "complete"
-                       and (r.get("runtime") or {}).get("provider") == "local"}
+                       and (r.get("runtime") or {}).get("provider") == "local"
+                       and (r.get("runtime") or {}).get("alias")}
         if len(locals_done) < 2:
-            raise ValueError("Haiku baseline is last: first complete two local models on this pack")
+            raise ValueError("Haiku baseline is last: first complete two distinct local model aliases on this pack")
     if any(item["rubric"]["type"] == "code" for item in pack["items"]):
         subprocess.run(["docker", "image", "inspect", IMAGE], check=True,
                        stdout=subprocess.DEVNULL)
@@ -321,7 +329,7 @@ def main() -> int:
         def complete(prompt: str, limit: int) -> str:
             body = {"model": args.alias, "messages": [{"role": "user", "content": prompt}],
                     "temperature": 0, "max_tokens": limit,
-                    "chat_template_kwargs": {"enable_thinking": False}}
+                    "chat_template_kwargs": {"enable_thinking": False, "reasoning_effort": "low"}}
             request = Request(args.base.rstrip("/") + "/v1/chat/completions",
                               data=json.dumps(body).encode(), headers={"Content-Type": "application/json"})
             with urlopen(request, timeout=900) as reply:
@@ -347,7 +355,8 @@ def main() -> int:
     report["runtime"] = {"provider": args.provider, "alias": args.alias,
                          "endpoint": args.base if args.provider == "local" else "Anthropic Claude CLI",
                          "decode_profile": ({"temperature": 0, "max_tokens": 2048,
-                                             "enable_thinking": False} if args.provider == "local"
+                                             "enable_thinking": False, "reasoning_effort": "low"}
+                                            if args.provider == "local"
                                             else {"temperature": "CLI default", "max_tokens": "uncapped",
                                                   "thinking": "adaptive", "effort": args.effort}),
                          "code_image": IMAGE}

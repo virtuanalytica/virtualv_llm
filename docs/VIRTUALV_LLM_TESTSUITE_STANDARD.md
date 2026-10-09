@@ -1,18 +1,25 @@
 # VirtualV LLM-testsuite — standaard en proces
 
 Documenteigenaar: VirtualV AI Assurance  
-Versie: 1.2  
-Peildatum: 7 oktober 2026  
+Versie: 1.3
+Peildatum: 9 oktober 2026
 Status: operationele standaard van de huidige implementatie  
 Classificatie: publiek (onderdeel van de virtualv_llm-repository)
 
 ## 1. Doel en reikwijdte
 
 Deze standaard beschrijft hoe VirtualV lokale large-language-models selecteert,
-uitvoert, meet, vergelijkt en archiveert. Het document geldt voor de publieke
-algemene suite, de afgeschermde specialistensuite, hardwareprofielen, individuele
+uitvoert, meet, vergelijkt en archiveert. De publieke algemene suite is alleen
+historisch archief; actieve promotie gebruikt de afgeschermde suite,
+hardwareprofielen, individuele
 modellen, mixtures en hervatbare cascades. Het is zowel een governancekader als
 een reproduceerbaar werkproces.
+
+De private items van de acht taken, specialistensuite en anti-contaminatie-audit
+van 9 oktober 2026 verschenen in een eerdere publieke revisie van PR #44.
+Hun scores blijven historische observaties, maar deze packs zijn geen blinde
+holdout meer en tellen niet mee voor toekomstige promotie. Gebruik nieuwe,
+onafhankelijk beheerde items en een nieuw commitment voor de volgende gate.
 
 De standaard voorkomt drie veelvoorkomende fouten: scores vergelijken die onder
 een ander protocol zijn verkregen, throughput los van runtime en hardware
@@ -254,6 +261,14 @@ Een tweede, afzonderlijk gecommitteerde cloud-toegestane pack dient voor een
 gelijke itemvergelijking van minstens twee lokale modellen en **als laatste**
 Haiku 5.5. De lokale-only pack wordt niet naar de cloud gestuurd. Haiku's
 afwijkende CLI-decodeprofiel blijft zichtbaar in iedere resultaatrij.
+De Qwen3.8 1Cat-vLLM TP2-herproef volgt direct na de GLM REAP50-rij en vóór
+Haiku. Zijn synthetische luscanary is uitsluitend diagnostiek;
+deze publieke prompts tellen nooit in de private composite. Ook bij een
+mislukte canary wordt de volledige private kwaliteits-, snelheid- en
+GPU-board-energiemeting uitgevoerd. De uitkomst mag dan niet voor promotie
+worden gebruikt. De oude 1Cat-score
+0,348 en lege TP2-dashboardrijen zijn historische respectievelijk
+ongemeten gegevens, geen nieuwe baseline.
 
 De vraag of **Toddler + Teacher + agent op ClaudeClaw** beter is op
 softwaretaken, vereist een afzonderlijke gepaarde vergelijking met gewone

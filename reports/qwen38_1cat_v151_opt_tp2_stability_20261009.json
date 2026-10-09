@@ -1,0 +1,90 @@
+{
+  "at": "2026-10-09T03:25:18.518696+00:00",
+  "model_alias": "qwen38-27b-quasar-nvfp4-1cat-v151-opt-tp2",
+  "endpoint": "http://127.0.0.1:18019",
+  "purpose": "stability_preflight_not_benchmark",
+  "status": "passed",
+  "observations": [
+    {
+      "canary": "arithmetic",
+      "repetition": 1,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 4,
+      "latency_seconds": 1.14
+    },
+    {
+      "canary": "arithmetic",
+      "repetition": 2,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 4,
+      "latency_seconds": 0.212
+    },
+    {
+      "canary": "arithmetic",
+      "repetition": 3,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 4,
+      "latency_seconds": 0.201
+    },
+    {
+      "canary": "json",
+      "repetition": 1,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 20,
+      "latency_seconds": 0.524
+    },
+    {
+      "canary": "json",
+      "repetition": 2,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 20,
+      "latency_seconds": 0.522
+    },
+    {
+      "canary": "json",
+      "repetition": 3,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 20,
+      "latency_seconds": 0.529
+    },
+    {
+      "canary": "code",
+      "repetition": 1,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 20,
+      "latency_seconds": 0.525
+    },
+    {
+      "canary": "code",
+      "repetition": 2,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 20,
+      "latency_seconds": 0.528
+    },
+    {
+      "canary": "code",
+      "repetition": 3,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 20,
+      "latency_seconds": 0.522
+    }
+  ]
+}

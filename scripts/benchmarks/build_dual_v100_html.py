@@ -102,6 +102,15 @@ BENCHMARK_LABELS = {
 }
 
 
+def tp2_version_label(model_id: str) -> str:
+    labels = {
+        "qwen38-27b-quasar-nvfp4-1cat-tp2-full-20261009": "Qwen3.8 27B QUASAR · 1Cat 1.5.0 TP2",
+        "qwen38-27b-quasar-nvfp4-1cat-v151-tp2-20261009": "Qwen3.8 27B QUASAR · 1Cat 1.5.1 TP2 matched",
+        "qwen38-27b-quasar-nvfp4-1cat-v151-opt-tp2-20261009": "Qwen3.8 27B QUASAR · 1Cat 1.5.1 TP2 E4M3",
+    }
+    return labels.get(model_id, model_id)
+
+
 def benchmark_score_rows() -> list[dict]:
     rows = []
     for r in load("local_gguf_8bench_dual_v100_20260917.json").get("results", []):
@@ -124,6 +133,11 @@ def benchmark_score_rows() -> list[dict]:
         if "benchmarks" in r:
             rows.append({"model": WELL_KNOWN_LABELS.get(r["model"], r["model"]),
                          "engine": "live endpoint", "benchmarks": r["benchmarks"]})
+    for r in load("qwen38_1cat_tp2_eight_tasks_20261009.json").get("results", []):
+        if "benchmarks" in r:
+            rows.append({"model": tp2_version_label(r["model"]),
+                         "engine": "1Cat-vLLM TP2 · publieke acht taken",
+                         "benchmarks": r["benchmarks"]})
     return rows
 
 
@@ -188,6 +202,43 @@ def onecat_rows() -> list[dict]:
 
 GPU_NAMES = {"0": "RTX 4000 Ada", "1": "RTX 4000 Ada", "2": "RTX 4000 Ada", "5": "RTX 4000 Ada",
              "3": "V100-SXM2-32GB", "4": "V100-SXM2-32GB"}   # PCI order since 2026-10-05
+
+
+def tp2_version_rows() -> list[dict]:
+    """Add versioned, measured TP2 probes to the local hardware table."""
+    public = {row.get("model"): row for row in
+              load("qwen38_1cat_tp2_eight_tasks_20261009.json").get("results", [])}
+    rows = []
+    for source in load("private_benchmark_aggregates_20261009.json").get("results", []):
+        model_id = source.get("model", "")
+        if model_id not in public or "quasar-nvfp4-1cat" not in model_id:
+            continue
+        throughput = (source.get("throughput_probe") or {}).get("completion_tokens_per_second")
+        if not isinstance(throughput, (int, float)):
+            continue
+        riv = public[model_id]["benchmarks"].get("riv_au_lifecycle", {}).get("score")
+        rows.append({"model": tp2_version_label(model_id), "engine": "1Cat-vLLM 1.5.1" if "v151" in model_id else "1Cat-vLLM 1.5.0",
+                     "params": "27B", "quant": "NVFP4",
+                     "profile": "TP2 / 8K / B1 · 256 tok wall incl. prefill",
+                     "tps": throughput, "prompt_tps": None, "speedup": None,
+                     "quality": f"{round(riv * 6)}/6" if isinstance(riv, (int, float)) else "—",
+                     "memory": "—", "util": "—", "scope": "dual",
+                     "gpu_caption": "CUDA 3+4 · 2× Tesla V100-SXM2-32GB · NVLink"})
+    batch = load("qwen38_1cat_v151_opt_batch_20261009.json")
+    for size in (1, 4, 16):
+        item = (batch.get("summaries") or {}).get(str(size)) or {}
+        throughput = item.get("aggregate_completion_tokens_per_wall_second")
+        if not isinstance(throughput, (int, float)):
+            continue
+        rows.append({"model": "Qwen3.8 27B QUASAR · 1Cat 1.5.1 TP2 E4M3",
+                     "engine": "1Cat-vLLM 1.5.1", "params": "27B", "quant": "NVFP4",
+                     "profile": f"TP2 / 8K / B{size} · synthetisch wall incl. prefill",
+                     "tps": throughput, "prompt_tps": None, "speedup": None,
+                     "quality": "—", "memory": "—", "util": "—", "scope": "dual",
+                     "gpu_caption": "CUDA 3+4 · 2× Tesla V100-SXM2-32GB · NVLink"})
+    return rows
+
+
 LIVE_LABELS = {"qwen38-27b-q4": ("Qwen3.8-27B", "27B", "Q4_K_M"),
                "qwen38-1cat-nvfp4-tp2": ("Qwen3.8 target", "27B", "NVFP4"),
                "qwen36-35b-a3b-1cat-nvfp4-tp2": ("Qwen3.6-35B-A3B", "35B / ~3B active", "NVFP4"),
@@ -495,7 +546,11 @@ def well_known_rows() -> list[dict]:
         # completeness is judged on the composite's 4 metrics only.
         is_complete_current = current_protocol and composite is not None
         error = str(r.get("error", ""))
-        if not r and name in PLACEHOLDER_SUPERSEDED_BY:
+        if name in {"qwen38-1cat-vllm-target", "qwen38-27b-quasar-nvfp4-1cat-tp2"}:
+            status = "historisch · NVFP4/TP2-kwaliteitspoort gefaald; telt niet voor promotie"
+        elif name == "qwen38-flash-next-nvfp4-1cat-tp2":
+            status = "niet ondersteund · Flash-Next TP2 laadt niet op dit V100-paar; geen score"
+        elif not r and name in PLACEHOLDER_SUPERSEDED_BY:
             target = PLACEHOLDER_SUPERSEDED_BY[name]
             status = f"achterhaald · zie {WELL_KNOWN_LABELS.get(target, target)}"
         elif not r and name in PLACEHOLDER_RETIRED:
@@ -788,6 +843,108 @@ openbaar ruw bewijs; de poort weigert alles wat daarvan afwijkt.</div>"""
 {sortable_header("GSM8K")}{sortable_header("BBH")}{sortable_header("MMLU")}{sortable_header("HumanEval")}
 {sortable_header("t/s")}{sortable_header("Hardware")}{sortable_header("Inzender")}{sortable_header("Status")}
 {sortable_header("Bewijs")}</tr></thead><tbody>{body}</tbody></table></div>"""
+
+
+def private_aggregate_section() -> str:
+    """Only allowlisted aggregates may enter the public dashboard."""
+    rows = load("private_benchmark_aggregates_20261009.json").get("results", [])
+    if not rows:
+        return ""
+    body = []
+    for row in rows:
+        specialist = (row.get("specialist") or {}).get("value")
+        anti = (row.get("anti_contamination") or {}).get("post_cutoff_holdout") or {}
+        throughput = (row.get("throughput_probe") or {}).get("completion_tokens_per_second")
+        timing_source = (row.get("throughput_probe") or {}).get("timing_source") or "methode onbekend"
+        energy = row.get("gpu_board_wh_per_answer")
+        canary = row.get("canary") or {}
+        def fraction(value):
+            return f"{value * 100:.1f}%" if isinstance(value, (int, float)) else "—"
+        def number(value, unit):
+            return f"{value:.2f} {unit}" if isinstance(value, (int, float)) else "—"
+        body.append("<tr><td>" + html.escape(str(row.get("model", "?"))) + "</td>"
+                    + "<td>" + fraction(row.get("eight_task_mean")) + "</td>"
+                    + "<td>" + fraction(specialist) + "</td>"
+                    + "<td>" + fraction(anti.get("accuracy")) + "</td>"
+                    + "<td>" + (f"{canary['passed']}/{canary['total']}" if canary.get("total") else "—")
+                    + (f"<br><small>{canary['repetition_loops']} herhaallussen</small>"
+                       if canary.get("repetition_loops") else "") + "</td>"
+                    + "<td>" + number(throughput, "t/s") + "<br><small>"
+                    + html.escape(str(timing_source)) + "</small></td>"
+                    + "<td>" + number(energy, "GPU-Wh") + "</td>"
+                    + "<td>" + html.escape("kwaliteitsfilter gefaald" if row.get("promotion_eligible") is False
+                                                 else "test compleet · promotie open" if row.get("promotion_eligible") is True
+                                                 else str(row.get("status", "onbekend"))) + "</td></tr>")
+    return ("<h2>Private benchmark · alleen aggregaten</h2><p>Deze runs gebruikten destijds "
+            "afgeschermde vragen voor acht taken, tien specialistlanes en een anti-contaminatie-audit. "
+            "De oorspronkelijke publieke PR #44-revisie bevatte ruwe items; de gebruikte packs zijn "
+            "daarom historisch en moeten vóór nieuwe blinde vergelijkingen worden vervangen. "
+            "Bronlogs en antwoorden staan niet op dit dashboard. Energie is uitsluitend NVIDIA GPU-board-Wh per antwoord; "
+            "t/s vermeldt in het bronrapport de meetmethode.</p><div class='tablewrap'><table>"
+            "<tr><th>Model</th><th>8 taken</th><th>Specialisten</th><th>Post-cutoff</th><th>Stabiliteitscanary</th>"
+            "<th>256 tokens</th><th>GPU-energie</th><th>Status</th></tr>"
+            + "".join(body) + "</table></div>")
+
+
+def haiku55_cli_throughput_section() -> str:
+    """Show public synthetic CLI capacity separately from local decode rates."""
+    data = load("haiku55_cli_throughput_20261009.json")
+    summaries = data.get("summaries") or {}
+    if not summaries:
+        return ""
+    rows = []
+    for batch in (1, 4, 16):
+        row = summaries.get(str(batch)) or {}
+        if not row:
+            continue
+        def rate(key):
+            value = row.get(key)
+            return f"{value:.1f}" if isinstance(value, (int, float)) else "—"
+        rows.append("<tr><td>B" + str(batch) + "</td>"
+                    + "<td>" + html.escape(str(row.get("requests", 0))) + "/"
+                    + html.escape(str(row.get("expected_requests", 0))) + "</td>"
+                    + "<td>" + rate("aggregate_output_tokens_per_wall_second") + " t/s</td>"
+                    + "<td>" + rate("aggregate_visible_tokens_per_wall_second_estimate") + " t/s</td>"
+                    + "<td>" + rate("median_request_wall_seconds") + " s</td>"
+                    + "<td>" + ("onvolledig · HTTP 429" if row.get("failure_reason")
+                               else html.escape(str(row.get("status", "unknown")))) + "</td></tr>")
+    return ("<h2>Haiku 5.5 CLI-doorvoer · B1/B4/B16</h2>"
+            "<p>Openbare synthetische sorted-merge-join-prompts, effort medium en adaptive thinking. "
+            "B4/B16 zijn gelijktijdige CLI-aanroepen. Output-tokens omvatten denktokens; de zichtbare "
+            "t/s zijn geschat als output minus denktokens. Alle snelheden delen door de volledige "
+            "wandkloktijd inclusief CLI-opstart, prefill en wachttijd. Dit is geen zuivere server-decode "
+            "en geen score op de verzegelde toetsset. B4 en B16 zijn door API-limieten "
+            "onvolledig; voor die batches wordt daarom geen t/s-claim gedaan.</p>"
+            "<div class='tablewrap'><table>"
+            "<thead><tr><th>Batch</th><th>Geldige verzoeken</th><th>Alle output</th>"
+            "<th>Zichtbare output, schatting</th><th>Mediane latency/verzoek</th><th>Status</th>"
+            "</tr></thead><tbody>" + "".join(rows) + "</tbody></table></div>")
+
+
+def qwen38_v151_batch_section() -> str:
+    data = load("qwen38_1cat_v151_opt_batch_20261009.json")
+    summaries = data.get("summaries") or {}
+    if not summaries:
+        return ""
+    rows = []
+    for batch in (1, 4, 16):
+        row = summaries.get(str(batch)) or {}
+        value = row.get("aggregate_completion_tokens_per_wall_second")
+        rate = f"{value:.1f} t/s" if isinstance(value, (int, float)) else "—"
+        rows.append("<tr><td>B" + str(batch) + "</td><td>"
+                    + html.escape(str(row.get("requests", 0))) + "/"
+                    + html.escape(str(row.get("expected_requests", 0))) + "</td><td>"
+                    + rate + "</td><td>"
+                    + html.escape(str(row.get("status", "unknown"))) + "</td></tr>")
+    return ("<h2>Qwen3.8 1Cat-vLLM 1.5.1 TP2 · B1/B4/B16</h2>"
+            "<p>27B QUASAR NVFP4 target-only op twee V100's, E4M3 KV, 8K-context, "
+            "prefillbudget 8192 en maximaal 16 gelijktijdige verzoeken. Openbare synthetische "
+            "prompts met temperature 0 en maximaal 256 outputtokens. t/s is de totale "
+            "voltooide output gedeeld door de volledige golfwandklok inclusief prefill; "
+            "warmup is apart en telt niet mee. Dit is geen pure decodeersnelheid of "
+            "kwaliteitsoordeel.</p><div class='tablewrap'><table><thead><tr><th>Batch</th>"
+            "<th>Geldige verzoeken</th><th>Totale doorvoer</th><th>Status</th>"
+            "</tr></thead><tbody>" + "".join(rows) + "</tbody></table></div>")
 
 
 def software_data_specialists_section() -> str:
@@ -1434,17 +1591,15 @@ def benchmark_section(rows: list[dict]) -> str:
     return f"""
 <h2>Benchmarkscores (8 taken, deterministisch gescoord)</h2>
 <p>Elke taak levert een objectieve, programmatisch gecontroleerde score 0-100% op -- geen LLM-jury.
-Alle 7 lokale modellen zijn hierop getest op de dual-tensor 2xV100-configuratie (GPU 0/3 uitgesloten).</p>
+De acht vaste prompts zijn openbaar. De Qwen3.8 1Cat-versierijen komen uit dezelfde taken op
+fysieke V100's 3 en 4; deze tabel is geen afgeschermde promotietoets.</p>
 <div class="tablewrap"><table><thead><tr><th>Model</th>{header_cells}<th>Gemiddeld</th></tr></thead>
 <tbody>{benchmark_table(rows)}</tbody></table></div>
 <div class="legend">{legend}</div>
-<div class="callout"><strong>Opschoonregel (modellen &lt;30B die slechter scoren dan Qwen3.8-27B worden verwijderd):</strong>
-geen enkel getest model &lt;30B parameters scoort lager dan de Qwen3.8-27B-referentie (85%) -- Qwen3.6-27B,
-Gemma4-26B-A4B en Devstral Small 2 scoren allemaal hoger (88%), Qwen3.5-27B scoort exact gelijk (85%).
-DeepSeek-R1-Qwen (32B) en Qwen2.5-72B (72,7B) vallen buiten de &lt;30B-regel. Er is dus niets verwijderd.
-De <strong>Arith</strong>-kolom staat overal op 0%: de prompt verbiedt zichtbare redenering ("return only
-the final numeric answer") en schakelt thinking-mode uit, wat exacte meerstaps mentale rekenkunde voor elk
-lokaal getest model onmogelijk maakt zonder scratchpad -- een reëel, verwacht model-limiet, geen scoringsbug.</div>
+<div class="callout"><strong>Interpretatie.</strong> De acht openbare taken maken snelle
+runtime-regressies zichtbaar. De rekenprompt eist alleen een getal en schakelt thinking uit;
+een nulscore op die taak is een waargenomen fout onder dat decodeerprofiel. Gebruik de
+afgeschermde specialist- en anti-contaminatietabellen voor een promotiebesluit.</div>
 """
 
 
@@ -1520,7 +1675,7 @@ def main() -> int:
     if os.environ.get("VIRTUALV_SKIP_DASHBOARD") == "1":
         print("dashboard rebuild skipped (VIRTUALV_SKIP_DASHBOARD=1)")
         return 0
-    rows = gguf_rows() + onecat_rows() + live_mixture_rows()
+    rows = gguf_rows() + onecat_rows() + live_mixture_rows() + tp2_version_rows()
     throughput = throughput_rows(rows)
     bench_rows = benchmark_score_rows()
     wk_rows = well_known_rows()
@@ -1604,7 +1759,7 @@ onafhankelijke parallel-servinglaag. Iedere rij bewaart de werkelijk zichtbare f
 <div class="card"><small>Snelste lokale B1</small><div class="metric">{fmt(max((r['tps'] for r in rows if r.get('tps') and r['profile'].endswith('/ B1')), default=None))} t/s</div><small>{html.escape(max((r for r in rows if r.get('tps') and r['profile'].endswith('/ B1')), key=lambda r: r['tps'], default={}).get('model', '—'))} · wall output, 256 tokens</small></div>
 <div class="card"><small>Vrije modelopslag</small><div class="metric">{fmt(free_gb, 1)} GB</div><small>live bij lokale generatie; niet beschikbaar op CI</small></div></section>
 <div class="callout"><strong>Hoofdconclusie.</strong> Layer split vergroot vooral capaciteit. Tensor split gebruikt beide V100’s echt parallel: Qwen3.8 wint {fmt(q_gain,1)}%, terwijl de 72,7B dense Qwen van 14,84 naar 24,29 t/s gaat (+63,7%). Voor Qwen3.8 single-stream latency blijft 1Cat + DFlash2 de snelste route; bij batch 4 wint target-only.</div>
-<h2>Alle lokale resultaten</h2><p>Decode-t/s van llama.cpp en wall-output-t/s van 1Cat zijn apart gemeten; batch-4 is aggregaat. RIV is een brongebonden zesveldentest, geen algemene modelaccuracy. Rijen met profiel
+<h2>Alle lokale resultaten</h2><p>Decode-t/s van llama.cpp en wall-output-t/s van 1Cat zijn apart gemeten; B4 en B16 zijn aggregaat van gelijktijdige verzoeken. RIV is een brongebonden zesveldentest, geen algemene modelaccuracy. Rijen met profiel
 <em>live MoM</em> (2026-10-05) zijn gemeten tijdens de live mixture-of-models-benchmark: generatie- en
 prompt-t/s uit de eigen timings van de server (llama.cpp <code>print_timing</code>, vLLM <code>/metrics</code>)
 onder echte mix-belasting, GPU-utilisatie als gemiddelde over de hele run; RIV en VRAM zijn daar niet gemeten.</p>
@@ -1641,7 +1796,10 @@ tabel erboven bevat de bijbehorende prompt-snelheid, VRAM en GPU-utilisatie.</p>
 {resistant_section()}
 {community_section()}
 {specialist_section()}
+{private_aggregate_section()}
 {software_data_specialists_section()}
+{haiku55_cli_throughput_section()}
+{qwen38_v151_batch_section()}
 {live_mixture_section()}
 {contamination_section()}
 {matrix_gate_section()}

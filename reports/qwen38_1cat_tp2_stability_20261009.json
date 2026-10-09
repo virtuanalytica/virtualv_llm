@@ -1,0 +1,90 @@
+{
+  "at": "2026-10-09T02:50:23.621092+00:00",
+  "model_alias": "qwen38-27b-quasar-nvfp4-tp2-20261009",
+  "endpoint": "http://127.0.0.1:18018",
+  "purpose": "stability_preflight_not_benchmark",
+  "status": "failed",
+  "observations": [
+    {
+      "canary": "arithmetic",
+      "repetition": 1,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 4,
+      "latency_seconds": 1.01
+    },
+    {
+      "canary": "arithmetic",
+      "repetition": 2,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 4,
+      "latency_seconds": 0.177
+    },
+    {
+      "canary": "arithmetic",
+      "repetition": 3,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 4,
+      "latency_seconds": 0.175
+    },
+    {
+      "canary": "json",
+      "repetition": 1,
+      "passed": false,
+      "reason": "incorrect_empty_or_malformed",
+      "finish_reason": "stop",
+      "output_tokens": 25,
+      "latency_seconds": 0.589
+    },
+    {
+      "canary": "json",
+      "repetition": 2,
+      "passed": false,
+      "reason": "incorrect_empty_or_malformed",
+      "finish_reason": "stop",
+      "output_tokens": 25,
+      "latency_seconds": 0.6
+    },
+    {
+      "canary": "json",
+      "repetition": 3,
+      "passed": false,
+      "reason": "incorrect_empty_or_malformed",
+      "finish_reason": "stop",
+      "output_tokens": 25,
+      "latency_seconds": 0.606
+    },
+    {
+      "canary": "code",
+      "repetition": 1,
+      "passed": false,
+      "reason": "repetition_loop",
+      "finish_reason": "length",
+      "output_tokens": 256,
+      "latency_seconds": 5.267
+    },
+    {
+      "canary": "code",
+      "repetition": 2,
+      "passed": false,
+      "reason": "repetition_loop",
+      "finish_reason": "length",
+      "output_tokens": 256,
+      "latency_seconds": 5.251
+    },
+    {
+      "canary": "code",
+      "repetition": 3,
+      "passed": false,
+      "reason": "repetition_loop",
+      "finish_reason": "length",
+      "output_tokens": 256,
+      "latency_seconds": 5.257
+    }
+  ]
+}
