@@ -3,6 +3,15 @@
 Status date: 2026-10-09 (older dated sections remain historical). This document separates measured local evidence from
 upstream reference numbers and from untested hypotheses.
 
+**Integriteitsstatus PR #44:** een eerdere publieke PR-revisie bevatte ruwe
+items uit de private acht-takentoets, specialistensuite en anti-contaminatie-audit.
+De huidige revisie publiceert alleen aggregaten, maar de oude Git-commit kan
+nog bereikbaar zijn. De op 9 oktober gebruikte packs zijn daarom uitsluitend
+historische meetdata en mogen nooit opnieuw als blinde holdout of promotietoets
+worden gebruikt. Roteer vragen, antwoorden en pack-hashes vóór de volgende
+vergelijking. De afzonderlijke software/data-pilotpack is hierdoor niet als
+gecompromitteerd vastgesteld.
+
 ## 2026-10-09 — softwaremakers, dataspecialisten en Haiku 5.5-baseline
 
 De nieuwe private pilot `software-data-private-v1-20261009` heeft aparte
@@ -13,25 +22,54 @@ SHA-256 en rolverdeling zijn gecommit. De kleine pack kalibreert alleen de
 scorer en de meetketen. Er is nog geen modelslagingspercentage en geen
 verbeterbewijs voor Toddler + Teacher + agent op ClaudeClaw.
 
-**Meetvolgorde na de lopende GLM Q4→Q3-keten en de dagdiensthandoff:**
+**Uitvoeringsrij op 9 oktober, na de GLM Q4→Q3-keten en de gevalideerde
+dagdiensthandoff:**
 
-1. Controleer de mislukte Q4-rij en de Q3-eindstatus; onvolledige oude runs
-   worden niet als software/data-baseline hergebruikt. Laat de benchmarkhold
-   pas via de bestaande gevalideerde overdracht los.
-2. Draai de software- en datasuite op minstens twee lokale kandidaatmodellen,
-   waaronder de snelle Qwen3.8 Flash-Next en de snelle GLM REAP50-kandidaat,
-   met dezelfde **cloud-toegestane** nieuwe pack. Bewaar model, quant,
-   decodeerinstellingen, itemuitkomsten, latency en packhash per run.
-3. Draai **als laatste** Claude Haiku 5.5 op precies die cloud-toegestane
-   pack, met adaptive thinking en vastgelegd effort. De Claude CLI kan
-   temperature en het lokale max-tokenbudget niet identiek afdwingen;
-   label de baseline daarom als een afzonderlijk runtimeprofiel. Cloud-GPU-
-   energie is onbekend en wordt nooit als lokale GPU-board-Wh voorgesteld.
-4. Houd een andere, verse lokale pack achter voor latere agentvalidatie.
-   De promptverbeteraar mag alleen oefenitems zien. Voor een positieve claim
-   over de volledige Toddler + Teacher + agent op ClaudeClaw-keten is een
-   onafhankelijke, gepaarde agentproef van minstens 73 taken per softwaremaker
-   vereist, met de poorten in `docs/SOFTWARE_DATA_SPECIALIST_PROTOCOL.md`.
+| Stap | Status | Uitvoer en poort |
+|---|---|---|
+| 0. GLM Q4→Q3 en handoff | **Voltooid 04:37 CEST** | Beide private rapporten zijn complete; de handoff valideerde ze en herstelde de gezonde dagdienst. Q4 mat 2,70 tok/s en 0,782 **GPU-board**-Wh/antwoord. Q3 mat 0,589 GPU-board-Wh/antwoord. Beide energiecijfers zijn uit ruwe samples geïnterpoleerd. |
+| 1. Qwen3.8 Flash-Next AP-IQ2_S | **Voltooid** | De 16-item pilot gaf 8/8 software en 7/8 data op de cloud-toegestane pack. Deze aantallen zijn alleen kalibratie; per rol zijn er twee items. |
+| 2. GLM-5.3-Flash REAP50 IQ4_XS | **Voltooid** | Dezelfde 16-item pack gaf 4/8 software en 8/8 data. De geïsoleerde runtime gebruikte V100 ×2 + Ada ×2, 47/47 lagen op GPU, `reasoning_effort=low`; dit zijn pilotresultaten, geen promotiegrond. |
+| 3. Qwen3.8 1Cat-vLLM TP2 1.5.0 | **Voltooid; promotie uitgesloten** | Target-only 27B QUASAR NVFP4 op V100 ×2 en 8K: canary 3/9 (rekenen 3/3, JSON 0/3, code 0/3 met herhaallussen), private acht taken 0,7375, tien specialistlanes 0,2333, 256-tokenproef 47,84 wall-output-tok/s inclusief prefill en 0,517 GPU-board-Wh/antwoord. De aparte software/data-pilot gaf 2/8 en 4/8. Alle 140 private verzoeken zijn beantwoord; de dagdienst is hersteld. |
+| 4. Claude Haiku 5.5, medium | **Voltooid; cloudpack gesloten** | Haiku gaf 8/8 software en 8/8 data op dezelfde cloud-toegestane 16-item pilotpack. Dit is een kleine kalibratie, geen agentbewijs. De CLI gebruikte adaptive thinking, effort medium, standaardtemperature en geen lokaal afdwingbare max-tokenlimiet. |
+| 5. 1Cat-vLLM 1.5.1, identieke 1.5.0-configuratie | **Voltooid; dagdienst hersteld** | De officiële wheel met gecontroleerde SHA-256 draaide apart op hetzelfde checkpoint en V100-paar. De canary steeg van 3/9 naar 9/9. De private acht taken stegen van 0,7375 naar 0,8542 en de tien specialistlanes van 0,2333 naar 0,4417; de 256-tokenproef steeg van 47,84 naar 52,71 wall-output-tok/s, inclusief prefill. GPU-board-Wh per verzoek daalde van 0,517 naar 0,045, mede doordat herhaallussen wegvielen. Alle tien lanes en audits zijn compleet; twee dynamische specialistverzoeken minder dan bij 1.5.0. De gesloten software/data-pack wordt niet heropend. Dit is nog geen promotiebesluit. |
+| 6. 1Cat-vLLM 1.5.1, verbeterde TP2-capaciteit | **Voltooid; dagdienst hersteld** | Dezelfde 27B-gewichten met E4M3 KV, prefillbudget 8192, block-size 2048, Mamba-block 8192 en maximaal 16 gelijktijdige verzoeken gaven 9/9 canary, 0,8542 op acht taken en 0,4417 op tien specialistlanes. De 256-tokenproef gaf 48,65 wall-output-tok/s en 0,043 GPU-board-Wh/verzoek. De aparte openbare capaciteitstest gaf B1 **48,35**, B4 **176,11** en B16 **577,59** totale output-tok/s, elk met twee volledige meetgolven na warmup. De upstream releaseprofile is op TP4 geijkt; `profile_hardware` blijft op dit TP2-systeem uit, terwijl E4M3- en Q8000-paden wel geladen zijn. Dit is een aparte configuratie, geen extra versie-effect. |
+
+Een afzonderlijke **openbare synthetische Haiku-doorvoerproef** mat bij B1
+drie geldige aanvragen: 157,0 outputtokens/s over de volledige CLI-wandklok,
+inclusief denktokens, en naar schatting 53,6 zichtbare tokens/s. Dit is geen
+server-decode-meting en geen score op de gesloten pilotpack. B4 gaf 6/8 geldige
+aanvragen en B16 6/32; een aparte parallelle controle bevestigde HTTP 429.
+Daarom zijn de B4/B16-doorvoercellen in het dashboard leeg en is er geen
+betrouwbare capaciteitsschatting op die batchgroottes.
+
+De uitvoercommando's en het commitment staan in
+`docs/SOFTWARE_DATA_SPECIALIST_PROTOCOL.md`. De pilot heeft slechts twee items
+per rol; geen van deze scores mag een promotie of bewijs van superioriteit van
+Toddler + Teacher + agent op ClaudeClaw opleveren. De Claude CLI kan
+temperature en het lokale max-tokenbudget niet identiek afdwingen. Label
+Haiku daarom als een afzonderlijk runtimeprofiel; cloud-GPU-energie is
+onbekend en wordt nooit als lokale GPU-board-Wh voorgesteld.
+
+De canary is diagnostiek en mag de volledige TP2-benchmark niet afkappen.
+De 1Cat-proef hergebruikt de historische `qwen38-1cat-vllm-target` score
+0,348 **niet**: de analyse van 18 september wees op reproduceerbare
+temperatuur-0-herhaallussen in NVFP4/TP2, ook met een andere KV-cache-dtype.
+De rij `qwen38-27b-quasar-nvfp4-1cat-tp2` van 8 oktober heeft eveneens een
+onvoldoende 0,3357-composite en is een aparte historische meting. De rijen
+`qwen38-27b-quasar-nvfp4-1cat-tp2` en
+`qwen38-flash-next-nvfp4-1cat-tp2` mogen niet als nieuwe geslaagde TP2-run
+worden gekopieerd. De Flash-Next NVFP4-snapshot staat momenteel niet lokaal;
+de eerdere TP2-load liep vast op geheugen en de upstream Flash-Next-prestatie
+is op **vier** V100's met TP4 gemeten, niet op dit V100-paar. Een nieuwe
+Flash-Next TP2-proef krijgt daarom pas een slot na verifieerbare
+geheugen-/runtimepreflight. De 27B-herproef is de uitvoerbare TP2-kandidaat.
+
+De latere agentproef gebruikt een andere, verse lokale pack. De
+promptverbeteraar mag alleen oefenitems zien. Voor een positieve claim over
+de volledige Toddler + Teacher + agent op ClaudeClaw-keten is een
+onafhankelijke, gepaarde agentproef van minstens 73 taken per softwaremaker
+vereist, met de poorten in `docs/SOFTWARE_DATA_SPECIALIST_PROTOCOL.md`.
 
 De historische 115 reviewbevindingen zijn oorzaaklabels zonder gepaarde
 controlegroep. Ze beantwoorden de vraag “is beter op softwaretaken bewezen?”
@@ -46,8 +84,9 @@ meet acht vaste taken, tien private specialistlanes, drie anti-contaminatiemetho
 geforceerde decode over 256 tokens en GPU-board-Wh per antwoord. Vergelijkbare
 quants gebruiken dezelfde prompts, decodeerinstellingen, meeteenheden en
 fysieke GPU-mapping. Ontbrekende lanes of audits maken een resultaat partieel.
-De specialistpacks, gamedev-cases en post-cutoff-holdout zijn vóór modelrespons
-op SHA-256 vastgelegd; vragen en sleutels blijven lokaal in `data/eval_cache/`.
+De specialistpacks, gamedev-cases en post-cutoff-holdout waren vóór modelrespons
+op SHA-256 vastgelegd. De inhoud van de gebruikte private packs kwam later in
+een publieke PR-revisie terecht; zie de integriteitsstatus hierboven.
 De gamer-v1-lane bevat vier interactieve tekstschermepisodes, geen bewijs van
 visueel spelbegrip of PlayStation-besturing. Vision heeft een afzonderlijke,
 verzegelde 12-beeldenset.

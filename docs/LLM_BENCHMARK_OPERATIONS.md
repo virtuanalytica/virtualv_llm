@@ -4,10 +4,10 @@
 
 | Schedule (Europe/Amsterdam) | Lock | Entry point | Purpose |
 |---|---|---|---|
-| Every 15 minutes | `/tmp/llm_bench_sweep.lock` | `scripts/benchmarks/run_next_benchmark.py` | Selects one locally present model without a current general-suite result, then runs it. It never downloads a model. |
+| Disabled since 2026-10-09 | `/tmp/llm_bench_sweep.lock` | `scripts/benchmarks/run_next_benchmark.py` | Historical public full-suite runner; cron is commented out and the runner refuses future public full-suite starts. |
 | At minute 17, 32, 47 and 57 | `/tmp/llm_bench_html.lock` | `scripts/benchmarks/build_dual_v100_html.py` | Rebuilds `reports/dual_v100_nvlink_benchmark.html` from JSON artifacts. |
 
-Both append to `reports/lm_eval_runs/cron_sweep.log`. The current crontab is the operational source of truth; this document deliberately does not install or alter a schedule.
+The HTML rebuild still appends to `reports/lm_eval_runs/cron_sweep.log`; the public sweep no longer runs. The current crontab is the operational source of truth.
 
 ## Runners and artifacts
 
@@ -47,11 +47,76 @@ toetsset; zonder die gegevens blijft de uitkomst “nee, nog niet”. Zie
 
 De tweede, cloud-toegestane pack heeft een afzonderlijk commitment in
 `reports/software_data_cloud_pack_commitment.json`. Draai eerst minstens twee
-lokale kandidaten op precies die pack; sluit de reeks af met
-`software_data_suite.py --provider haiku55 --effort medium` op dezelfde hash.
-De runner blokkeert Haiku als de twee lokale rijen ontbreken of als een
-lokale-only pack wordt aangeboden. Vergelijk de kwaliteit per item; de CLI
+**verschillende modelaliassen** op precies die pack: Qwen3.8 Flash-Next op de
+gezonde dagdienstendpoint en GLM-5.3-Flash REAP50 IQ4_XS in een apart
+benchmarkslot. Die pilot is afgerond. De aansluitende 1Cat-vLLM 1.5.0
+target-only TP2-run voltooide ook de volledige private suite ondanks een
+3/9-canary; de score mag niet promoveren. Haiku 5.5 medium sloot de
+cloud-toegestane pack met 16/16, waarna de runner nieuwe kandidaten op die
+pack weigert. De oude 0,348- en 0,3357-composites blijven historisch; de
+Flash-Next-NVFP4 TP2-placeholder is geen meting.
+
+Een daaropvolgende **versievergelijking** op het lokale 27B QUASAR NVFP4-
+checkpoint gebruikt de officieel gehashte 1Cat-vLLM 1.5.1-wheel in een
+afzonderlijke omgeving. Met dezelfde 8K/FP16-configuratie slaagde de
+openbare canary 9/9 en voltooide de private 8 taken, tien specialistlanes,
+anti-contaminatie-audit, 256-token-doorvoer en GPU-board-energie. Een
+tweede arm met E4M3 KV, 8192 prefillbudget en maximaal 16 resident verzoeken
+voltooide de volledige private suite en de synthetische B1/B4/B16-proef:
+48,35 / 176,11 / 577,59 totale wall-output-tok/s, inclusief prefill.
+Houd versie- en configuratie-effecten
+gescheiden in de tabel. Geen van deze armen heropent de gesloten
+software/data-pack.
+
+De TP2-canary op de geïsoleerde target-only endpoint (zonder private
+prompts) wordt zo vastgelegd. Een niet-nul exit is een kwaliteitsignaal,
+geen stop voor de volledige meting:
+
+```bash
+python3 scripts/benchmarks/probe_1cat_tp2_stability.py \
+  --base http://127.0.0.1:18018 \
+  --alias qwen38-27b-quasar-nvfp4-tp2-20261009 \
+  --out reports/qwen38_1cat_tp2_stability_20261009.json
+```
+
+De probe herhaalt drie synthetische canaries elk driemaal op temperatuur 0.
+Zijn score is uitsluitend een stabiliteitsbesluit en telt niet mee in een
+composite. Gebruik een nieuw run-ID en nieuw outputbestand bij een herproef.
+Publiceer na de volledige private meting uitsluitend geaggregeerde cijfers:
+
+```bash
+python3 scripts/benchmarks/redact_private_report.py \
+  --source /pad/buiten/git/private_benchmark_20261009.json \
+  --out reports/private_benchmark_aggregates_20261009.json
+python3 scripts/benchmarks/build_dual_v100_html.py
+```
+
+De export gebruikt een vaste veldlijst en laat prompts, antwoorden, item-ID's
+en per-item-auditsamples weg. Het dashboard leest alleen dit aggregaat;
+ruwe logs en de volledige private rapporten blijven buiten de publieke Git.
+Een eerdere revisie van PR #44 bevatte toch ruwe private items. Beschouw alle
+betrokken packs van 9 oktober als blootgesteld: bewaar de aggregaten als
+historisch bewijs, maar roteer de items én het commitment vóór een volgende
+blinde vergelijking of promotie. Een branch-rewrite garandeert niet dat een
+oude Git-commit of cache verdwenen is. De afzonderlijke software/data-pilot
+is niet aantoonbaar door dit incident blootgesteld.
+Bij 1Cat-vLLM geeft de OpenAI-respons geen llama.cpp-decodetiming terug.
+De 256-tokenmeting gebruikt daarom `usage.completion_tokens` en de gemeten
+verzoekduur **inclusief prefill**; het dashboard toont die methode per rij.
+Vergelijk haar t/s niet als identieke decodeermaat met een llama.cpp-rij.
+Voor Haiku is alleen synthetische Claude-CLI-doorvoer gemeten: B1 had drie
+geldige aanvragen, B4 en B16 stuitten bij parallelle oproepen op HTTP 429.
+Rapporteer voor die onvolledige batches geen t/s. Claude-CLI-outputtokens
+omvatten denktokens; zichtbare outputtokens zijn hooguit een schatting door
+de gerapporteerde denktokens af te trekken. CLI-wandklok omvat bovendien
+opstart, prefill en netwerkvertraging.
+De runner blokkeert Haiku als de twee complete lokale rijen ontbreken, als
+beide rijen dezelfde modelalias hebben of als een lokale-only pack wordt
+aangeboden. Na een complete Haiku-run is de pack gesloten voor nieuwe runs;
+gebruik dan een nieuw commitment. Vergelijk de kwaliteit per item; de CLI
 heeft een ander decodeprofiel en geen meetbare lokale GPU-board-energie.
+Dit is een handmatig gecontroleerde vervolgqueue, geen tijdstipcron en geen
+automatische claim van model- of agentverbetering.
 
 ## Specialist suite
 

@@ -1,0 +1,115 @@
+{
+  "suite": "eight-public-fixed-task-scores",
+  "tasks": [
+    "riv_au_lifecycle",
+    "arithmetic_payout",
+    "code_exec_drawdown",
+    "json_schema_facts",
+    "gics_format_following",
+    "needle_in_haystack",
+    "summary_faithfulness",
+    "refusal_calibration"
+  ],
+  "results": [
+    {
+      "model": "qwen38-27b-quasar-nvfp4-1cat-tp2-full-20261009",
+      "engine": "1Cat-vLLM TP2",
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 1.0
+        },
+        "arithmetic_payout": {
+          "score": 0.0
+        },
+        "code_exec_drawdown": {
+          "score": 0.0
+        },
+        "json_schema_facts": {
+          "score": 1.0
+        },
+        "gics_format_following": {
+          "score": 0.9
+        },
+        "needle_in_haystack": {
+          "score": 1.0
+        },
+        "summary_faithfulness": {
+          "score": 1.0
+        },
+        "refusal_calibration": {
+          "score": 1.0
+        },
+        "_mean_score": 0.7375
+      },
+      "source_sha256": "6bb28b33a1fd5c3f34dd8ef5296888b08e6b5388a3d3f5e5cefa73fed4a06148",
+      "source_kind": "numeric scores only; public fixed tasks"
+    },
+    {
+      "model": "qwen38-27b-quasar-nvfp4-1cat-v151-tp2-20261009",
+      "engine": "1Cat-vLLM TP2",
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 0.8333
+        },
+        "arithmetic_payout": {
+          "score": 0.0
+        },
+        "code_exec_drawdown": {
+          "score": 1.0
+        },
+        "json_schema_facts": {
+          "score": 1.0
+        },
+        "gics_format_following": {
+          "score": 1.0
+        },
+        "needle_in_haystack": {
+          "score": 1.0
+        },
+        "summary_faithfulness": {
+          "score": 1.0
+        },
+        "refusal_calibration": {
+          "score": 1.0
+        },
+        "_mean_score": 0.8542
+      },
+      "source_sha256": "5844469d4fdb3ff074fc6034767da26227866402e7c3eebf87f43cff02c2ef10",
+      "source_kind": "numeric scores only; public fixed tasks"
+    },
+    {
+      "model": "qwen38-27b-quasar-nvfp4-1cat-v151-opt-tp2-20261009",
+      "engine": "1Cat-vLLM TP2",
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 0.8333
+        },
+        "arithmetic_payout": {
+          "score": 0.0
+        },
+        "code_exec_drawdown": {
+          "score": 1.0
+        },
+        "json_schema_facts": {
+          "score": 1.0
+        },
+        "gics_format_following": {
+          "score": 1.0
+        },
+        "needle_in_haystack": {
+          "score": 1.0
+        },
+        "summary_faithfulness": {
+          "score": 1.0
+        },
+        "refusal_calibration": {
+          "score": 1.0
+        },
+        "_mean_score": 0.8542
+      },
+      "source_sha256": "c0cf606a33f0e882be9fd35fc9442a3108f23001f241ad30d1f905dc6b4ced93",
+      "source_kind": "numeric scores only; public fixed tasks"
+    }
+  ],
+  "redaction": "scores and source hashes only; no prompts, answers or rubric details"
+}

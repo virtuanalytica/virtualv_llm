@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Serve the pinned Qwen3.8 NVFP4 target on the two V100s with 1Cat-vLLM 1.5.
+# Serve the pinned Qwen3.8 NVFP4 target on the two V100s.
 #
 # 2026-09-18: the low composite score first attributed to a missing
 # --generation-config vllm (server silently falling back to the checkpoint's
@@ -9,13 +9,12 @@
 # ("The user is asking me to implement..." x3, finish_reason=stop) both WITH
 # --generation-config vllm and independently of --kv-cache-dtype (tested
 # fp8_e5m2 and auto/fp16, same failure both ways) -- ruling out KV-cache
-# precision as the cause too. This points to a genuine TP=2 non-determinism
-# / NVFP4-quantization-precision instability in this experimental SM70
-# backend for this specific checkpoint, not a single wrong flag. Keep
-# --generation-config vllm anyway (objectively more correct default
-# regardless), but do not expect it to fix the quality gap -- see
-# reports/well_known_suite_20260917.json's qwen38-1cat-vllm-target row and
-# the corresponding note field for the full writeup.
+# precision as the cause too. The full 1.5.0 comparison reproduced a 3/9
+# stability canary and 0.7375 on the eight public tasks. The separately
+# installed official 1.5.1 wheel passed 9/9 and scored 0.8542 with the same
+# FP16/8K configuration, so the observed fault is version-dependent here.
+# Keep --generation-config vllm in both arms; it did not fix 1.5.0 by itself.
+# ONECAT_ENV_DIR selects a separate wheel without altering the 1.5.0 default.
 set -euo pipefail
 
 MODE=${1:-target}
@@ -23,8 +22,10 @@ PORT=${PORT:-18012}
 MAX_MODEL_LEN=${MAX_MODEL_LEN:-8192}
 MAX_NUM_SEQS=${MAX_NUM_SEQS:-1}
 KV_CACHE_DTYPE=${KV_CACHE_DTYPE:-fp8_e5m2}
+MAX_NUM_BATCHED_TOKENS=${MAX_NUM_BATCHED_TOKENS:-4096}
+GPU_MEMORY_UTILIZATION=${GPU_MEMORY_UTILIZATION:-0.80}
 ROOT=/media/knight2/EDS2
-ENV_DIR="$ROOT/envs/1cat-vllm-1.5.0"
+ENV_DIR=${ONECAT_ENV_DIR:-"$ROOT/envs/1cat-vllm-1.5.0"}
 TARGET="$ROOT/models/1cat-vllm/Qwen3.8-27B-QUASAR-NVFP4"
 DRAFT="$ROOT/models/1cat-vllm/Qwen3.8-27B-DFlash2"
 
@@ -64,9 +65,9 @@ export CUDA_HOME=/usr/local/cuda-12.9
 export PATH="$CUDA_HOME/bin:$ENV_DIR/bin:$PATH"
 export HF_HOME="$ROOT/cache/huggingface-1cat"
 export HUGGINGFACE_HUB_CACHE="$HF_HOME/hub"
-export XDG_CACHE_HOME="$ROOT/cache/xdg-1cat"
-export VLLM_CACHE_ROOT="$ROOT/cache/vllm-1cat"
-export TMPDIR="$ROOT/tmp/vllm-1cat"
+export XDG_CACHE_HOME=${ONECAT_XDG_CACHE_HOME:-"$ROOT/cache/xdg-1cat"}
+export VLLM_CACHE_ROOT=${ONECAT_CACHE_ROOT:-"$ROOT/cache/vllm-1cat"}
+export TMPDIR=${ONECAT_TMPDIR:-"$ROOT/tmp/vllm-1cat"}
 export VLLM_WORKER_MULTIPROC_METHOD=spawn
 mkdir -p "$HF_HOME" "$XDG_CACHE_HOME" "$VLLM_CACHE_ROOT" "$TMPDIR" "$ROOT/logs/vllm-1cat"
 
@@ -79,8 +80,8 @@ ARGS=(
   --attention-backend FLASH_ATTN_V100
   --kv-cache-dtype "$KV_CACHE_DTYPE"
   --max-model-len "$MAX_MODEL_LEN"
-  --gpu-memory-utilization 0.80
-  --max-num-batched-tokens 4096
+  --gpu-memory-utilization "$GPU_MEMORY_UTILIZATION"
+  --max-num-batched-tokens "$MAX_NUM_BATCHED_TOKENS"
   --max-num-seqs "$MAX_NUM_SEQS"
   --enable-prefix-caching
   --mamba-cache-mode align
@@ -90,6 +91,13 @@ ARGS=(
   --host 127.0.0.1
   --port "$PORT"
 )
+
+if [[ -n ${ONECAT_KV_BLOCK_SIZE:-} ]]; then
+  ARGS+=(--block-size "$ONECAT_KV_BLOCK_SIZE")
+fi
+if [[ -n ${ONECAT_MAMBA_BLOCK_SIZE:-} ]]; then
+  ARGS+=(--mamba-block-size "$ONECAT_MAMBA_BLOCK_SIZE")
+fi
 
 if [[ "$MODE" == dflash2 ]]; then
   ARGS+=(--speculative-config "{\"method\":\"dflash\",\"model\":\"$DRAFT\",\"kv_cache_dtype\":\"auto\",\"draft_sample_method\":\"probabilistic\"}")

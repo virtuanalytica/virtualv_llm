@@ -39,6 +39,9 @@ commitment (`reports/software_data_cloud_pack_commitment.json`). Die pack
 wordt eerst door minstens twee lokale modellen beantwoord en daarna als laatste
 door Haiku 5.5. De oorspronkelijke lokale pack wordt nooit aan de cloud
 verstuurd. Scores van verschillende packhashes worden niet gerangschikt.
+De twee lokale rijen moeten complete resultaten van verschillende
+modelaliassen zijn. Een complete Haiku-baseline sluit deze pilotpack af;
+nieuwe kandidaten vereisen een nieuw, vooraf verzegeld commitment.
 
 Dit is **afscherming tegen Git-publicatie en tegen het modelendpoint**, niet
 een harde scheiding van alle processen onder dezelfde Unix-gebruiker. Een
@@ -94,7 +97,15 @@ python3 scripts/benchmarks/software_data_suite.py \
 
 Voor de vergelijkbare Haiku-reeks gebruiken beide lokale kandidaten dezelfde
 cloud-toegestane pack en het eigen commitment. De Haiku-run weigert te starten
-totdat twee complete lokale modelrijen met die hash zijn opgeslagen:
+totdat twee complete lokale modelrijen met verschillende aliassen en die hash
+zijn opgeslagen. De geplande lokale volgorde is Qwen3.8 Flash-Next
+AP-IQ2_S, daarna GLM-5.3-Flash REAP50 IQ4_XS. Gebruik de exacte runtimealias
+en een gezond lokaal endpoint voor elk; start GLM pas na de lopende
+Q4→Q3-handoff. Beide lokale verzoeken zetten temperature 0, maximaal 2048
+tokens en `chat_template_kwargs` op `enable_thinking=false` plus
+`reasoning_effort=low`. De modeltemplates mogen die kwargs verschillend
+interpreteren; sla daarom de werkelijke runtime en alias per rij op. De
+laatste opdracht in deze reeks is de Haiku-baseline:
 
 ```bash
 python3 scripts/benchmarks/software_data_suite.py \
