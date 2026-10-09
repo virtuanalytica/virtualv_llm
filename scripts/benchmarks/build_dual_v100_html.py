@@ -847,7 +847,9 @@ openbaar ruw bewijs; de poort weigert alles wat daarvan afwijkt.</div>"""
 
 def private_aggregate_section() -> str:
     """Only allowlisted aggregates may enter the public dashboard."""
-    rows = load("private_benchmark_aggregates_20261009.json").get("results", [])
+    aggregate = load("private_benchmark_aggregates_20261009.json")
+    rows = aggregate.get("results", [])
+    exposed = aggregate.get("current_promotion_status") == "historical_only_exposed_pack"
     if not rows:
         return ""
     body = []
@@ -872,7 +874,9 @@ def private_aggregate_section() -> str:
                     + "<td>" + number(throughput, "t/s") + "<br><small>"
                     + html.escape(str(timing_source)) + "</small></td>"
                     + "<td>" + number(energy, "GPU-Wh") + "</td>"
-                    + "<td>" + html.escape("kwaliteitsfilter gefaald" if row.get("promotion_eligible") is False
+                    + "<td>" + html.escape("historisch · kwaliteitsfilter gefaald" if exposed and row.get("promotion_eligible") is False
+                                                 else "historisch · pack blootgesteld" if exposed
+                                                 else "kwaliteitsfilter gefaald" if row.get("promotion_eligible") is False
                                                  else "test compleet · promotie open" if row.get("promotion_eligible") is True
                                                  else str(row.get("status", "onbekend"))) + "</td></tr>")
     return ("<h2>Private benchmark · alleen aggregaten</h2><p>Deze runs gebruikten destijds "
@@ -883,6 +887,35 @@ def private_aggregate_section() -> str:
             "t/s vermeldt in het bronrapport de meetmethode.</p><div class='tablewrap'><table>"
             "<tr><th>Model</th><th>8 taken</th><th>Specialisten</th><th>Post-cutoff</th><th>Stabiliteitscanary</th>"
             "<th>256 tokens</th><th>GPU-energie</th><th>Status</th></tr>"
+            + "".join(body) + "</table></div>")
+
+
+def vision_replication_section() -> str:
+    """Publish only aggregate vision evidence, with the repeat as its own row."""
+    data = load("vision_private_summary_20261009.json")
+    if not data.get("models"):
+        return ""
+    entries = [(name, "eerste run", row) for name, row in data["models"].items()]
+    entries.extend((row["model"], "herhaling · GPU " + ",".join(map(str, row["gpu_indices"])), row)
+                   for row in data.get("replications", []))
+    body = []
+    for name, run, row in entries:
+        accuracy = row.get("accuracy")
+        score = f"{accuracy * 100:.1f}%" if isinstance(accuracy, (int, float)) else "—"
+        body.append("<tr><td>" + html.escape(name) + "</td><td>" + html.escape(run) + "</td>"
+                    + f"<td>{row.get('correct', '—')}/{row.get('n', '—')}</td>"
+                    + f"<td>{score}</td><td>{row.get('median_latency_s', '—')} s</td>"
+                    + f"<td>{row.get('median_decode_tps', '—')} t/s</td>"
+                    + f"<td>{row.get('gpu_board_wh_total', '—')} GPU-Wh</td></tr>")
+    return ("<h2>Vision · procedurele 12-beeldenmeting</h2><p>Protocol "
+            "<code>v1-private-procedural-vision-20261009</code>, exacte antwoordletter. "
+            "Qwen3-VL-8B is op dezelfde twaalf items opnieuw gemeten: 12/12, dezelfde "
+            "predicties en pack-hash. Dat toont reproduceerbaarheid op deze set, geen "
+            "generalisatie of promotiewinst. De twee-GPU-split gaf onleesbare uitvoer "
+            "en telt niet als meting. t/s omvat prefill; energie is uitsluitend "
+            "GPU-board-energie over twaalf antwoorden.</p><div class='tablewrap'><table>"
+            "<tr><th>Model</th><th>Run</th><th>Juist</th><th>Score</th>"
+            "<th>Mediane latency</th><th>Mediane t/s</th><th>GPU-energie</th></tr>"
             + "".join(body) + "</table></div>")
 
 
@@ -945,6 +978,41 @@ def qwen38_v151_batch_section() -> str:
             "kwaliteitsoordeel.</p><div class='tablewrap'><table><thead><tr><th>Batch</th>"
             "<th>Geldige verzoeken</th><th>Totale doorvoer</th><th>Status</th>"
             "</tr></thead><tbody>" + "".join(rows) + "</tbody></table></div>")
+
+
+def qwen38_day_batch_section() -> str:
+    data = load("qwen38_flash_next_day_batch_20261009.json")
+    summaries = data.get("summaries") or {}
+    if not summaries:
+        return ""
+    canary = load("qwen38_flash_next_day_canary_20261009.json")
+    observations = canary.get("observations") or []
+    passed = sum(bool(row.get("passed")) for row in observations)
+    energy = load("qwen38_flash_next_day_batch_energy_20261009.json")
+    rows = []
+    for batch in (1, 4, 16):
+        row = summaries.get(str(batch)) or {}
+        value = row.get("aggregate_completion_tokens_per_wall_second")
+        rate = f"{value:.1f} t/s" if isinstance(value, (int, float)) else "—"
+        rows.append("<tr><td>B" + str(batch) + "</td><td>"
+                    + html.escape(str(row.get("requests", 0))) + "/"
+                    + html.escape(str(row.get("expected_requests", 0))) + "</td><td>"
+                    + rate + "</td><td>" + html.escape(str(row.get("status", "unknown")))
+                    + "</td></tr>")
+    board = energy.get("gpu_board_wh_window")
+    board_note = (f" De hele proef inclusief warmup gebruikte {board:.3f} GPU-board-Wh op beide V100's; "
+                  "dit is geen energie per gemeten antwoord."
+                  if isinstance(board, (int, float)) else "")
+    return ("<h2>Qwen3.8 Flash-Next dagdienst · B1/B4/B16</h2><p>"
+            "AP-IQ2_S op twee V100's, llama.cpp met één requestslot, 8K-context en Q8_0 KV. "
+            "De openbare stabiliteitscanary slaagde " + f"{passed}/{len(observations)}" + " keer. "
+            "Deze synthetische batchproef gebruikt dezelfde sorted-merge-join-prompts, "
+            "temperature 0 en maximaal 256 outputtokens als de 1Cat-proef. Er is één "
+            "gemeten golf na warmup per batch; t/s telt alle output over de volledige "
+            "golfwandklok inclusief prefill en wachtrij. Eén slot betekent dat B4/B16 "
+            "niet parallel decoderen." + board_note + "</p><div class='tablewrap'><table>"
+            "<tr><th>Batch</th><th>Geldige verzoeken</th><th>Totale output</th><th>Status</th></tr>"
+            + "".join(rows) + "</table></div>")
 
 
 def software_data_specialists_section() -> str:
@@ -1797,9 +1865,11 @@ tabel erboven bevat de bijbehorende prompt-snelheid, VRAM en GPU-utilisatie.</p>
 {community_section()}
 {specialist_section()}
 {private_aggregate_section()}
+{vision_replication_section()}
 {software_data_specialists_section()}
 {haiku55_cli_throughput_section()}
 {qwen38_v151_batch_section()}
+{qwen38_day_batch_section()}
 {live_mixture_section()}
 {contamination_section()}
 {matrix_gate_section()}

@@ -1,0 +1,90 @@
+{
+  "at": "2026-10-09T09:15:24.111787+00:00",
+  "model_alias": "qwen38-flash-next",
+  "endpoint": "http://127.0.0.1:18012",
+  "purpose": "stability_preflight_not_benchmark",
+  "status": "passed",
+  "observations": [
+    {
+      "canary": "arithmetic",
+      "repetition": 1,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 4,
+      "latency_seconds": 0.576
+    },
+    {
+      "canary": "arithmetic",
+      "repetition": 2,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 4,
+      "latency_seconds": 0.317
+    },
+    {
+      "canary": "arithmetic",
+      "repetition": 3,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 4,
+      "latency_seconds": 0.32
+    },
+    {
+      "canary": "json",
+      "repetition": 1,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 20,
+      "latency_seconds": 1.037
+    },
+    {
+      "canary": "json",
+      "repetition": 2,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 20,
+      "latency_seconds": 0.674
+    },
+    {
+      "canary": "json",
+      "repetition": 3,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 20,
+      "latency_seconds": 0.676
+    },
+    {
+      "canary": "code",
+      "repetition": 1,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 20,
+      "latency_seconds": 1.007
+    },
+    {
+      "canary": "code",
+      "repetition": 2,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 20,
+      "latency_seconds": 0.674
+    },
+    {
+      "canary": "code",
+      "repetition": 3,
+      "passed": true,
+      "reason": "ok",
+      "finish_reason": "stop",
+      "output_tokens": 20,
+      "latency_seconds": 0.676
+    }
+  ]
+}

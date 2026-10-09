@@ -264,5 +264,7 @@
       }
     }
   ],
-  "redaction": "allowlisted aggregate metrics; no prompts, answers, item IDs or samples"
+  "redaction": "allowlisted aggregate metrics; no prompts, answers, item IDs or samples",
+  "current_promotion_status": "historical_only_exposed_pack",
+  "promotion_note": "The raw 2026-10-09 private items were exposed in an earlier public PR #44 revision; these rows are not eligible for future blind promotion even where the in-run quality gate was passed."
 }

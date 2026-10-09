@@ -1,0 +1,17 @@
+{
+  "at": "2026-10-09T09:20:29.922265+00:00",
+  "model": "qwen38-flash-next-ap-iq2s-v100pair-day",
+  "scope": "gross NVIDIA GPU-board energy on physical GPUs 3 and 4 over complete warmup and measured batch waves; excludes CPU, DRAM, SSD and PSU",
+  "gpu_indices": [
+    3,
+    4
+  ],
+  "samples": 461,
+  "sample_interval_target_s": 0.5,
+  "window_seconds": 274.147,
+  "gpu_board_wh_window": 18.188,
+  "measured_requests": 21,
+  "note": "Energy covers all 42 requests (21 warmup, 21 measured), loading excluded; no measured-only or per-answer energy is inferred.",
+  "total_requests_in_window": 42,
+  "warmup_requests": 21
+}

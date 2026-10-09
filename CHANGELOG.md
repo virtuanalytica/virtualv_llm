@@ -1,5 +1,46 @@
 # Changelog
 
+## v1.0.4 — 2026-10-09
+
+Roadmap continuation with measured Qwen3.8 runtime stability, a vision
+replication and a strict boundary around exposed private items.
+
+### Added
+
+- Qwen3.8 27B QUASAR NVFP4 on 1Cat-vLLM 1.5.1 TP2: the matched 8K/FP16
+  profile passed 9/9 public stability canaries and measured 0.8542 on eight
+  tasks, 0.4417 on ten specialist lanes and 52.71 output tok/s over a
+  256-token full-request wall test. The E4M3 capacity profile measured B1
+  48.35, B4 176.11 and B16 577.59 total output tok/s, including prefill.
+- Haiku 5.5 medium closed the cloud-safe software/data pilot at 8/8 on each
+  track. Its synthetic CLI B1 was 157.0 total output tok/s including thinking;
+  B4/B16 remain unreported after HTTP 429 responses.
+- Vision aggregates: Qwen3-VL-4B 11/12, Qwen3-VL-8B 12/12 and InternVL3-8B
+  12/12. A second Qwen3-VL-8B run on one Ada board repeated all twelve
+  predictions. The two-GPU split produced unreadable text and was excluded.
+- The current Flash-Next AP-IQ2_S V100 day lane passed a separate 9/9 public
+  stability probe without a service restart. Its synthetic B1/B4/B16 probe
+  completed at 38.32 / 39.00 / 39.00 total output tok/s with one llama.cpp
+  requestslot. The complete warmup plus measurement window used 18.188
+  GPU-board-Wh; this is not a per-answer energy number.
+
+### Measurement policy
+
+- The original public revision of PR #44 exposed private eight-task,
+  specialist and anti-contamination items. Their published results remain
+  historical; those packs cannot serve as future blind promotion tests.
+- The small software/data and vision pilots are calibration and replication,
+  not evidence that the Toddler, Teacher or agent stack improves real tasks.
+- Public full-suite runs remain disabled. Batch t/s includes prefill and
+  queueing and is not interchangeable with pure decode t/s. GPU-board-Wh
+  excludes host and storage energy.
+
+### Next
+
+- Rotate exposed packs with an independent evaluator, then compute the
+  oracle-router ceiling and evaluate new candidates on identical sealed
+  items. Add the Qwen vision loader guard before further multi-GPU attempts.
+
 ## v1.0.3 — 2026-10-09
 
 A working day lane, the Claude line from 4.5 upward, a complete dashboard

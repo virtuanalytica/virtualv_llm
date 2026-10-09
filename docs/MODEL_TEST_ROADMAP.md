@@ -12,6 +12,31 @@ worden gebruikt. Roteer vragen, antwoorden en pack-hashes vóór de volgende
 vergelijking. De afzonderlijke software/data-pilotpack is hierdoor niet als
 gecompromitteerd vastgesteld.
 
+## v1.0.4 — meetstatus en volgende poorten (9 oktober 2026)
+
+Deze sectie vervangt de oudere uitvoeringsvolgordes verderop; die blijven
+staan om historische keuzes te kunnen reconstrueren.
+
+| Prioriteit | Benchmarkstap | Status en volgende poort |
+|---|---|---|
+| 1 | 1Cat-vLLM 1.5.1 Qwen3.8 27B QUASAR NVFP4 TP2 | **Voltooid** op twee V100's: 9/9 openbare stabiliteitscanary; acht taken 0,8542; tien specialistlanes 0,4417; E4M3 B1/B4/B16 48,35 / 176,11 / 577,59 totale output-tok/s. De private itempack kwam later in PR #44 bloot te liggen: alleen historische vergelijking, geen nieuwe promotie op deze items. |
+| 2 | Flash-Next AP-IQ2_S dagdienst, twee V100's | **Voltooid** zonder herstart van `:18012`: openbare canary 9/9. De synthetische B1/B4/B16-proef gaf **38,32 / 39,00 / 39,00 totale output-tok/s**; alle 1/4/16 gemeten verzoeken slaagden na één warmupgolf. De hele proef (warmup + gemeten golven) kostte 18,188 GPU-board-Wh op beide V100's, geen energie per gemeten antwoord. De llama.cpp-service heeft één requestslot, dus B4/B16 wachten serieel. Geen oude publieke composite opnieuw gedraaid. |
+| 3 | Vision op Ada | De eerste 12-beeldenmeting gaf Qwen3-VL-4B 11/12, Qwen3-VL-8B 12/12 en InternVL3-8B 12/12. Een Qwen3-VL-8B-herhaling op GPU 2 gaf opnieuw 12/12 met identieke predicties. De twee-GPU-split gaf onleesbare uitvoer en is ongeldig. Een loader-guard moet Qwen met meer dan één GPU weigeren vóór nieuwe runs. Deze kleine set geeft geen promotieclaim. |
+| 4 | Nieuwe blinde kwaliteitsvergelijking en routerplafond | **Wacht op verse, onafhankelijk beheerde items.** Roteer de op 9 oktober blootgestelde acht-taken-, specialist- en anti-contaminatiepacks; leg een nieuw SHA-256-commitment vast. Bereken daarna de orakelrouter, beste-losse-model- en willekeurige-router-baselines op identieke per-item-antwoorden. |
+| 5 | Toddler-mixture en agentgate | Alleen na stap 4 met vooraf vastgelegde numerieke promotiegrens. Vergelijk kwaliteit, totale wandtijd en GPU-board-Wh per antwoord. Software/data-pilot en vision-12 zijn te klein om verbetering van Toddler + Teacher + agent op ClaudeClaw te bewijzen. |
+
+De live V100-dagdienst blijft beschikbaar tijdens de synthetische probes. De
+Ada's kunnen afzonderlijk vision-taken draaien; laadt geen nieuw V100-model
+zonder een expliciete handoff. De openbare v1.0.4-tabel toont versie,
+decodeerprofiel, GPU-topologie en meetmethode per rij. Haiku B4/B16 blijven
+onvolledig wegens HTTP 429 en krijgen geen t/s-cijfer.
+
+De Flash-Next-proef gebruikte één gemeten golf per batch en een aparte warmup.
+De 1Cat-1.5.1-proef had twee gemeten golven en zestien resident verzoeken;
+beide rapporteren totale output per volledige golfwandklok inclusief prefill.
+De verschillen in model, quant, runtime, concurrency en aantal herhalingen
+verbieden een conclusie over gelijke antwoordkwaliteit of energie per vraag.
+
 ## 2026-10-09 — softwaremakers, dataspecialisten en Haiku 5.5-baseline
 
 De nieuwe private pilot `software-data-private-v1-20261009` heeft aparte
@@ -91,16 +116,12 @@ De gamer-v1-lane bevat vier interactieve tekstschermepisodes, geen bewijs van
 visueel spelbegrip of PlayStation-besturing. Vision heeft een afzonderlijke,
 verzegelde 12-beeldenset.
 
-**Actieve volgorde:** voltooi GLM-5.3-Flash UD-Q4_K_XL en daarna UD-Q3_K_XL
-op hetzelfde V100-paar en protocol. De Q3-shards op `claude-data` zijn tegen
-het vastgepinde upstream manifest geverifieerd. De Ada-visionruns en de
-Haiku-5.5 acht-takenreferentie zijn voltooid. Valideer alle GLM-, vision- en
-Haiku-resultaten voordat de benchmarkhold wordt vrijgegeven; de handoff
-`scripts/benchmarks/glm53_private_handoff.py` herstelt pas daarna de dagdienst.
-Daarna berekenen we per vergelijkbare set het orakelrouter-plafond, toetsen we
-snelle lokale kandidaten op verse private items en bouwen we pas bij de
-vastgelegde promotiegrens een Toddler-mixture. De numerieke poorten staan in
-`docs/MOM_PROMOTION_PROTOCOL_20261009.md` in de meetwerkboom.
+**Historische uitvoeringsvolgorde, inmiddels afgerond:** GLM-5.3-Flash UD-Q4_K_XL
+en daarna UD-Q3_K_XL draaiden op hetzelfde V100-paar en protocol. De Q3-shards
+op `claude-data` zijn tegen het vastgepinde manifest geverifieerd. De GLM- en
+visionmetingen en de Haiku-referentie zijn afgerond; de GLM-handoff heeft de
+dagdienst hersteld. Een routerplafond op de oude packs is hoogstens historische
+diagnostiek; de nieuwe poort staat in de v1.0.4-sectie hierboven.
 
 **K3 afgesloten als actieve kandidaat:** de zes-GPU UD-IQ2_XXS-run is bewust
 gestopt. Acht taken en een 256-tokenmeting zijn bewaard in
@@ -292,17 +313,6 @@ statistically level on composite; neither beats it on both axes. Variants 1,
 2 cannot run on this hardware either (variant 1 does not load on two V100s),
 and variant 4 is not supported by the runtime. The AP-IQ2_S baseline stands
 and is the day lane since 2026-10-08.
-
-Day-lane quality gate (backlog item 7), measured 2026-10-08 against the live
-server without stopping it: Qwen3.8-27B QUASAR NVFP4 on 1Cat-vLLM TP2
-target-only scores composite 0.3357 (`qwen38-27b-quasar-nvfp4-1cat-tp2`;
-GSM8K 0.32, BBH 0.35, MMLU 0.44, HumanEval 0.225). This reproduces the old
-0.34 row, so that row was not a scoring fault: the answers contain wrong
-arithmetic and loops on the model's own reasoning. The same model as GGUF
-Q4_K_M scores 0.8511 at 33 tok/s. The lane meets its speed goal and fails
-its quality gate; Flash-Next AP-IQ2_S at 40.8 tok/s and 0.915 is the measured
-alternative for the daytime lane. Variant 1 proper (Flash-Next NVFP4) is not
-on disk and stays unmeasured.
 
 Day-lane quality gate (backlog item 7), measured 2026-10-08 against the live
 server without stopping it: Qwen3.8-27B QUASAR NVFP4 on 1Cat-vLLM TP2
