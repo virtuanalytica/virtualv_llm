@@ -1,0 +1,866 @@
+{
+  "model": "qwen3-30b-a3b-2507-q4km",
+  "weights_sha256": "382b4f5a164d200f93790ee0e339fae12852896d23485cfb203ce868fea33a95",
+  "weight_path": "/media/knight2/eds1/models/hf-screen/qwen3-30b-a3b-2507-q4km/Qwen_Qwen3-30B-A3B-Instruct-2507-Q4_K_M.gguf",
+  "access": "local",
+  "energy_scope": "gpu_board",
+  "physical_gpu": 4,
+  "resident_vram_gb": 18.0361328125,
+  "tasks": {
+    "arithmetic": {
+      "n": 30,
+      "item_ids": [
+        "arithmetic-000-0e58af8d94bbd2bb9413e21f",
+        "arithmetic-001-22630e579f87942af52a26f9",
+        "arithmetic-002-755ffe345891038efff7fe07",
+        "arithmetic-003-ca71aa97bc0a1726672b123f",
+        "arithmetic-004-cfa3fff05800b4c33d90bf7e",
+        "arithmetic-005-b0e2920ecb8a93cd7f9752ac",
+        "arithmetic-006-b4f3d0781e2d27a59461cd1f",
+        "arithmetic-007-08547f71511679402f5ddef5",
+        "arithmetic-008-87f6d74d39dcdbc95762a723",
+        "arithmetic-009-d376b5619e944838326e9404",
+        "arithmetic-010-4dec14b63590f98421081db8",
+        "arithmetic-011-c8a8143ae3f90b50b0969f04",
+        "arithmetic-012-81a3473d8aef6d9049c04f4b",
+        "arithmetic-013-b482443e356843abc0493b1e",
+        "arithmetic-014-c9ab9c6510b1694cbf0a09eb",
+        "arithmetic-015-9766727b324c96fa16cb4a61",
+        "arithmetic-016-0293935ed489e045ce4a842b",
+        "arithmetic-017-048662f3c2e50435f1279910",
+        "arithmetic-018-44451172ab143af350a4bc7c",
+        "arithmetic-019-d15ff48ae6f7003bbadd709b",
+        "arithmetic-020-56cb0e4d894c512d30679bb9",
+        "arithmetic-021-c7aac6540d98b4c3f5eb41a5",
+        "arithmetic-022-29471d203d954cc4b000a37a",
+        "arithmetic-023-23ddf660e8cb01d338c1ca9a",
+        "arithmetic-024-0e96024ebd17c1717575aaa3",
+        "arithmetic-025-537dd6560e71ad8ecc5948d7",
+        "arithmetic-026-17ed1340f16b61bb4b4d4f89",
+        "arithmetic-027-86ec79ef38385b06dd529094",
+        "arithmetic-028-d1e48a99e61e695aad1481bb",
+        "arithmetic-029-78386e0124914f32babc3d32"
+      ],
+      "item_ids_sha256": "1d0ca31888c9f8c5546b7802ef831d2f10b2e1de966819bd8779234e487bc649",
+      "item_scores": [
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "evidence": [
+        {
+          "id": "arithmetic-000-0e58af8d94bbd2bb9413e21f",
+          "response": "{\"answer\": 544}",
+          "parsed": "544",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-001-22630e579f87942af52a26f9",
+          "response": "{\"answer\": 3136}",
+          "parsed": "3136",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-002-755ffe345891038efff7fe07",
+          "response": "{\"answer\": 306}",
+          "parsed": "306",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "arithmetic-003-ca71aa97bc0a1726672b123f",
+          "response": "{\"answer\": 1009}",
+          "parsed": "1009",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-004-cfa3fff05800b4c33d90bf7e",
+          "response": "{\"answer\": 1215}",
+          "parsed": "1215",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-005-b0e2920ecb8a93cd7f9752ac",
+          "response": "{\"answer\": 65}",
+          "parsed": "65",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "arithmetic-006-b4f3d0781e2d27a59461cd1f",
+          "response": "{\"answer\": 445}",
+          "parsed": "445",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-007-08547f71511679402f5ddef5",
+          "response": "{\"answer\": 4176}",
+          "parsed": "4176",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-008-87f6d74d39dcdbc95762a723",
+          "response": "{\"answer\": 674}",
+          "parsed": "674",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "arithmetic-009-d376b5619e944838326e9404",
+          "response": "{\"answer\": 1622}",
+          "parsed": "1622",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-010-4dec14b63590f98421081db8",
+          "response": "{\"answer\": 441}",
+          "parsed": "441",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-011-c8a8143ae3f90b50b0969f04",
+          "response": "{\"answer\": 856}",
+          "parsed": "856",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "arithmetic-012-81a3473d8aef6d9049c04f4b",
+          "response": "{\"answer\": 1390}",
+          "parsed": "1390",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-013-b482443e356843abc0493b1e",
+          "response": "{\"answer\": 2772}",
+          "parsed": "2772",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-014-c9ab9c6510b1694cbf0a09eb",
+          "response": "{\"answer\": 886}",
+          "parsed": "886",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "arithmetic-015-9766727b324c96fa16cb4a61",
+          "response": "{\"answer\": 857}",
+          "parsed": "857",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-016-0293935ed489e045ce4a842b",
+          "response": "{\"answer\": 4675}",
+          "parsed": "4675",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-017-048662f3c2e50435f1279910",
+          "response": "{\"answer\": 85}",
+          "parsed": "85",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "arithmetic-018-44451172ab143af350a4bc7c",
+          "response": "{\"answer\": 1193}",
+          "parsed": "1193",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-019-d15ff48ae6f7003bbadd709b",
+          "response": "{\"answer\": 5120}",
+          "parsed": "5120",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-020-56cb0e4d894c512d30679bb9",
+          "response": "{\"answer\": 678}",
+          "parsed": "678",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "arithmetic-021-c7aac6540d98b4c3f5eb41a5",
+          "response": "{\"answer\": 1104}",
+          "parsed": "1104",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-022-29471d203d954cc4b000a37a",
+          "response": "{\"answer\": 3256}",
+          "parsed": "3256",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-023-23ddf660e8cb01d338c1ca9a",
+          "response": "{\"answer\": 857}",
+          "parsed": "857",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "arithmetic-024-0e96024ebd17c1717575aaa3",
+          "response": "{\"answer\": 1847}",
+          "parsed": "1847",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-025-537dd6560e71ad8ecc5948d7",
+          "response": "{\"answer\": 2695}",
+          "parsed": "2695",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-026-17ed1340f16b61bb4b4d4f89",
+          "response": "{\"answer\": 678}",
+          "parsed": "678",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "arithmetic-027-86ec79ef38385b06dd529094",
+          "response": "{\"answer\": 1688}",
+          "parsed": "1688",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-028-d1e48a99e61e695aad1481bb",
+          "response": "{\"answer\": 2475}",
+          "parsed": "2475",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "arithmetic-029-78386e0124914f32babc3d32",
+          "response": "{\"answer\": 343}",
+          "parsed": "343",
+          "finish_reason": "stop",
+          "score": 0.0
+        }
+      ],
+      "quality": 0.6666666666666666,
+      "latency_s": 0.11013550926775982,
+      "decode_tps": 127.87037654566451,
+      "gpu_board_wh_per_answer": 0.004118920964422017
+    },
+    "code_trace": {
+      "n": 30,
+      "item_ids": [
+        "code_trace-000-59a1963e8916712101bdd099",
+        "code_trace-001-fc39e6512153d5715a6481ed",
+        "code_trace-002-41b180473e6386c9414dd717",
+        "code_trace-003-c56949448057950ba4bbfec4",
+        "code_trace-004-89d2ebc1195f57abd98c2da8",
+        "code_trace-005-88d1feb797401e76c7bcbe4f",
+        "code_trace-006-74caa4ea73f71afd294b30a9",
+        "code_trace-007-ecafbbbe6b06af2c93d666f6",
+        "code_trace-008-3ce1fe67a43e128f5cbd2b35",
+        "code_trace-009-9d096b583a3e7c271367b3c4",
+        "code_trace-010-00411c46537a071668dda086",
+        "code_trace-011-f37573ba4e5c548055c811cb",
+        "code_trace-012-cb0e6b792345af4bd3237f72",
+        "code_trace-013-eea5a9f3c1aa7bd3bb6be7fc",
+        "code_trace-014-cffda1bcc44fb9c011e3e1c1",
+        "code_trace-015-c6fc2c9f419ca66440cf3f5f",
+        "code_trace-016-3158254e4a86d39ea802ab34",
+        "code_trace-017-789b08cd0fe1c9d6836ad554",
+        "code_trace-018-e2911098b766a7b66e49acc8",
+        "code_trace-019-9b63d22e6c311d7ea03f90b3",
+        "code_trace-020-25cd8be36b7bdb388a1c58a3",
+        "code_trace-021-f7e64bbfc71ae32d077fd7ce",
+        "code_trace-022-843c2dec27910e3990b19121",
+        "code_trace-023-f3a9f54c65c48ac15a483993",
+        "code_trace-024-e9f227836e34f0c4413e4bbd",
+        "code_trace-025-d0d2738bc847e126e2187fa7",
+        "code_trace-026-fcbcfab0b1ae4c117e69c44d",
+        "code_trace-027-266135d0d8bd41ff3705bf29",
+        "code_trace-028-0b4cd88e39de856cdae7070b",
+        "code_trace-029-e0828bc927185743f8cb845a"
+      ],
+      "item_ids_sha256": "b5543a8a649a418330c69732816c11ea5a41d07a81c92fb4e5255b107e687761",
+      "item_scores": [
+        0.0,
+        0.0,
+        1.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        1.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "evidence": [
+        {
+          "id": "code_trace-000-59a1963e8916712101bdd099",
+          "response": "{\"answer\": 44}",
+          "parsed": "44",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-001-fc39e6512153d5715a6481ed",
+          "response": "{\"answer\": 40}",
+          "parsed": "40",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-002-41b180473e6386c9414dd717",
+          "response": "{\"answer\": 102}",
+          "parsed": "102",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "code_trace-003-c56949448057950ba4bbfec4",
+          "response": "{\"answer\": 112}",
+          "parsed": "112",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "code_trace-004-89d2ebc1195f57abd98c2da8",
+          "response": "{\"answer\": 40}",
+          "parsed": "40",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-005-88d1feb797401e76c7bcbe4f",
+          "response": "{\"answer\": 10}",
+          "parsed": "10",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-006-74caa4ea73f71afd294b30a9",
+          "response": "{\"answer\": 80}",
+          "parsed": "80",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-007-ecafbbbe6b06af2c93d666f6",
+          "response": "{\"answer\": 54}",
+          "parsed": "54",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-008-3ce1fe67a43e128f5cbd2b35",
+          "response": "{\"answer\": 42}",
+          "parsed": "42",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-009-9d096b583a3e7c271367b3c4",
+          "response": "{\"answer\": 20}",
+          "parsed": "20",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "code_trace-010-00411c46537a071668dda086",
+          "response": "{\"answer\": 21}",
+          "parsed": "21",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "code_trace-011-f37573ba4e5c548055c811cb",
+          "response": "{\"answer\": 102}",
+          "parsed": "102",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-012-cb0e6b792345af4bd3237f72",
+          "response": "{\"answer\": 99}",
+          "parsed": "99",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "code_trace-013-eea5a9f3c1aa7bd3bb6be7fc",
+          "response": "{\"answer\": 42}",
+          "parsed": "42",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-014-cffda1bcc44fb9c011e3e1c1",
+          "response": "{\"answer\": 10}",
+          "parsed": "10",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-015-c6fc2c9f419ca66440cf3f5f",
+          "response": "{\"answer\": 153}",
+          "parsed": "153",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-016-3158254e4a86d39ea802ab34",
+          "response": "{\"answer\": 90}",
+          "parsed": "90",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-017-789b08cd0fe1c9d6836ad554",
+          "response": "{\"answer\": 42}",
+          "parsed": "42",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-018-e2911098b766a7b66e49acc8",
+          "response": "{\"answer\": 66}",
+          "parsed": "66",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-019-9b63d22e6c311d7ea03f90b3",
+          "response": "{\"answer\": 175}",
+          "parsed": "175",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-020-25cd8be36b7bdb388a1c58a3",
+          "response": "{\"answer\": 102}",
+          "parsed": "102",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-021-f7e64bbfc71ae32d077fd7ce",
+          "response": "{\"answer\": 75}",
+          "parsed": "75",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "code_trace-022-843c2dec27910e3990b19121",
+          "response": "{\"answer\": 40}",
+          "parsed": "40",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-023-f3a9f54c65c48ac15a483993",
+          "response": "{\"answer\": 42}",
+          "parsed": "42",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-024-e9f227836e34f0c4413e4bbd",
+          "response": "{\"answer\": 40}",
+          "parsed": "40",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "code_trace-025-d0d2738bc847e126e2187fa7",
+          "response": "{\"answer\": 40}",
+          "parsed": "40",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-026-fcbcfab0b1ae4c117e69c44d",
+          "response": "{\"answer\": 66}",
+          "parsed": "66",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-027-266135d0d8bd41ff3705bf29",
+          "response": "{\"answer\": 25}",
+          "parsed": "25",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "code_trace-028-0b4cd88e39de856cdae7070b",
+          "response": "{\"answer\": 39}",
+          "parsed": "39",
+          "finish_reason": "stop",
+          "score": 0.0
+        },
+        {
+          "id": "code_trace-029-e0828bc927185743f8cb845a",
+          "response": "{\"answer\": 12}",
+          "parsed": "12",
+          "finish_reason": "stop",
+          "score": 0.0
+        }
+      ],
+      "quality": 0.26666666666666666,
+      "latency_s": 0.10265171353433591,
+      "decode_tps": 127.87037654566451,
+      "gpu_board_wh_per_answer": 0.0036603234458917264
+    },
+    "structured_extraction": {
+      "n": 30,
+      "item_ids": [
+        "structured_extraction-000-8b6d69120e74996fbeefb511",
+        "structured_extraction-001-b5b1945036f0eaef429365d5",
+        "structured_extraction-002-356c0791ff280dc16d4d8b3a",
+        "structured_extraction-003-1077cb1b196cdfc45dc7ec16",
+        "structured_extraction-004-ed49fea6593f63a8cf02fe97",
+        "structured_extraction-005-1c4aa8dd8c90d53b298e05c8",
+        "structured_extraction-006-fce3952909f9a5c234f3c048",
+        "structured_extraction-007-df87a5985ea18c0ff649d24f",
+        "structured_extraction-008-5a5d5fd68542d1942721afde",
+        "structured_extraction-009-ec258e7fc35d021440091193",
+        "structured_extraction-010-2b64199f11d0cbe802ff8b14",
+        "structured_extraction-011-a5d0065a6d0ecb11c012dfa4",
+        "structured_extraction-012-b14150eb96dc559a800f38de",
+        "structured_extraction-013-777f53d3a6062519853e32ea",
+        "structured_extraction-014-52b875acba6a6a0462392ccb",
+        "structured_extraction-015-c7e28d5f5b78bda515b512cd",
+        "structured_extraction-016-b275ec3b5bc7936de19096c9",
+        "structured_extraction-017-ebbc04fc81fd582488da06cb",
+        "structured_extraction-018-ef0f3b10047bb5cb76b19f1c",
+        "structured_extraction-019-15ea33d62d18e43196a864a3",
+        "structured_extraction-020-7b059e61ecd38c9a9446f8cc",
+        "structured_extraction-021-378e7adb6be6ba869421119b",
+        "structured_extraction-022-4d8c77a7f10450fac7e50f35",
+        "structured_extraction-023-f14c53cddec59a5857785df2",
+        "structured_extraction-024-36de3b519257d4bafba7aea1",
+        "structured_extraction-025-c6b0a6c8cb09177a2cec317f",
+        "structured_extraction-026-81dec2929d516fffcc9d10b3",
+        "structured_extraction-027-4ec3f48ca1d8935ded135269",
+        "structured_extraction-028-9d44f9d72aa2e78ac4a1a1d4",
+        "structured_extraction-029-40dd1209ab038f22268d149b"
+      ],
+      "item_ids_sha256": "050204bd9b9e4d1110c3515aab920ec971dca540a7d0ea7877b17a4392fa7caf",
+      "item_scores": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "evidence": [
+        {
+          "id": "structured_extraction-000-8b6d69120e74996fbeefb511",
+          "response": "{\"answer\": 68024}",
+          "parsed": "68024",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-001-b5b1945036f0eaef429365d5",
+          "response": "{\"answer\": 28598}",
+          "parsed": "28598",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-002-356c0791ff280dc16d4d8b3a",
+          "response": "{\"answer\": 1116}",
+          "parsed": "1116",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-003-1077cb1b196cdfc45dc7ec16",
+          "response": "{\"answer\": 70970}",
+          "parsed": "70970",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-004-ed49fea6593f63a8cf02fe97",
+          "response": "{\"answer\": 53464}",
+          "parsed": "53464",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-005-1c4aa8dd8c90d53b298e05c8",
+          "response": "{\"answer\": 18076}",
+          "parsed": "18076",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-006-fce3952909f9a5c234f3c048",
+          "response": "{\"answer\":16651}",
+          "parsed": "16651",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-007-df87a5985ea18c0ff649d24f",
+          "response": "{\"answer\": 53422}",
+          "parsed": "53422",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-008-5a5d5fd68542d1942721afde",
+          "response": "{\"answer\": 37388}",
+          "parsed": "37388",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-009-ec258e7fc35d021440091193",
+          "response": "{\"answer\": 92778}",
+          "parsed": "92778",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-010-2b64199f11d0cbe802ff8b14",
+          "response": "{\"answer\": 96109}",
+          "parsed": "96109",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-011-a5d0065a6d0ecb11c012dfa4",
+          "response": "{\"answer\": 69438}",
+          "parsed": "69438",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-012-b14150eb96dc559a800f38de",
+          "response": "{\"answer\":15245}",
+          "parsed": "15245",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-013-777f53d3a6062519853e32ea",
+          "response": "{\"answer\": 71902}",
+          "parsed": "71902",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-014-52b875acba6a6a0462392ccb",
+          "response": "{\"answer\": 64354}",
+          "parsed": "64354",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-015-c7e28d5f5b78bda515b512cd",
+          "response": "{\"answer\": 28128}",
+          "parsed": "28128",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-016-b275ec3b5bc7936de19096c9",
+          "response": "{\"answer\": 49699}",
+          "parsed": "49699",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-017-ebbc04fc81fd582488da06cb",
+          "response": "{\"answer\": 72809}",
+          "parsed": "72809",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-018-ef0f3b10047bb5cb76b19f1c",
+          "response": "{\"answer\": 73947}",
+          "parsed": "73947",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-019-15ea33d62d18e43196a864a3",
+          "response": "{\"answer\": 72904}",
+          "parsed": "72904",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-020-7b059e61ecd38c9a9446f8cc",
+          "response": "{\"answer\": 66331}",
+          "parsed": "66331",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-021-378e7adb6be6ba869421119b",
+          "response": "{\"answer\": 96920}",
+          "parsed": "96920",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-022-4d8c77a7f10450fac7e50f35",
+          "response": "{\"answer\": 53627}",
+          "parsed": "53627",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-023-f14c53cddec59a5857785df2",
+          "response": "{\"answer\": 40469}",
+          "parsed": "40469",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-024-36de3b519257d4bafba7aea1",
+          "response": "{\"answer\": 84595}",
+          "parsed": "84595",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-025-c6b0a6c8cb09177a2cec317f",
+          "response": "{\"answer\": 19937}",
+          "parsed": "19937",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-026-81dec2929d516fffcc9d10b3",
+          "response": "{\"answer\": 67315}",
+          "parsed": "67315",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-027-4ec3f48ca1d8935ded135269",
+          "response": "{\"answer\": 34118}",
+          "parsed": "34118",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-028-9d44f9d72aa2e78ac4a1a1d4",
+          "response": "{\"answer\": 68417}",
+          "parsed": "68417",
+          "finish_reason": "stop",
+          "score": 1.0
+        },
+        {
+          "id": "structured_extraction-029-40dd1209ab038f22268d149b",
+          "response": "{\"answer\": 99757}",
+          "parsed": "99757",
+          "finish_reason": "stop",
+          "score": 1.0
+        }
+      ],
+      "quality": 1.0,
+      "latency_s": 0.1292748419335112,
+      "decode_tps": 127.87037654566451,
+      "gpu_board_wh_per_answer": 0.005174108658555617
+    }
+  },
+  "pack_sha256": "f26b64b461ad1bf94e6b13ac9cab753f35bd3d2658b40f40201a050c5059b3d8",
+  "decode_profile_sha256": "8f01c891510201853bdd4c5d341e94dcbbb340a65bd8499477089fa178b3e8b1",
+  "measured_utc": "2026-10-10T05:48:19.982884+00:00"
+}
