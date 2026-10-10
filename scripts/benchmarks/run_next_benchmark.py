@@ -44,7 +44,7 @@ def next_model() -> str | None:
     return None
 
 
-def main() -> int:
+def _historical_main() -> int:
     name = next_model()
     if name is None:
         print("run_next_benchmark: all local models already have a current-protocol result")
@@ -55,6 +55,12 @@ def main() -> int:
         cwd=str(ROOT),
     )
     return proc.returncode
+
+
+def main() -> int:
+    """The unattended public battery is permanently retired."""
+    print("run_next_benchmark: retired; use private specialist and anti-contamination runs")
+    return 2
 
 
 if __name__ == "__main__":
