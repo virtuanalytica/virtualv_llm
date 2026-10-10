@@ -13,8 +13,8 @@ The HTML rebuild still appends to `reports/lm_eval_runs/cron_sweep.log`; the pub
 
 | Script | Role | Result artifact |
 |---|---|---|
-| `well_known_suite.py` | GSM8K, BBH, MMLU sample, TruthfulQA and HumanEval; starts an isolated llama.cpp server or attaches to an external vLLM endpoint | `reports/well_known_suite_20260917.json` |
-| `run_next_benchmark.py` | Cron-safe queue selector for models already on disk | delegates to `well_known_suite.py` |
+| `well_known_suite.py` | Retired public battery; CLI rejects new runs, while its functions remain importable for historical report rendering | `reports/well_known_suite_20260917.json` (archive) |
+| `run_next_benchmark.py` | Retired cron selector; CLI rejects new runs | historical archive only |
 | `specialist_suite.py` | Optional Chemistry, Physics, Vision and Video specialist runner | `reports/specialist_suite_20260922.json` |
 | `run_qwen38_flash_next_vllm_cascade.py` | Resumable Qwen Flash-Next vLLM hardware/quant cascade, with GPU-idleness preflight | `reports/qwen38_flash_next_vllm_cascade_20260921.json` |
 | `run_glm53_reap50_cascade.py`, `run_glm53_hardware_matrix.py` | GLM quant/hardware cascades | GLM cascade/matrix JSON reports |
@@ -124,22 +124,11 @@ The tracked starter packs are `config/benchmark_specialist_holdout_v1.csv` (Chem
 
 Use a new filename when rotating a pack, keep the prior CSV read-only, and do not commit a future private pack to a public repository. Each result stores the selected filename and SHA-256, so changing a pack cannot silently alter a historical score. The checked-in v1 pack is a starter/audit template, not a permanent blind test after it has been published.
 
-```bash
-# Complete specialist suite (default for future general-suite invocations)
-python3 scripts/benchmarks/well_known_suite.py MODEL --specialists all
-
-# Time-saving choices
-python3 scripts/benchmarks/well_known_suite.py MODEL --specialists chemistry,physics,iq,eq,qq
-python3 scripts/benchmarks/well_known_suite.py MODEL --specialists vision,video,fq
-python3 scripts/benchmarks/well_known_suite.py MODEL --specialists none
-```
-
-For a temporal contamination comparison, attach an independently verifiable model-release date to the result:
-
-```bash
-python3 scripts/benchmarks/well_known_suite.py MODEL \
-  --model-release-date YYYY-MM-DD --model-release-source https://primary-release-note.example/
-```
+The public full-suite commands are retired. Run the current private specialist
+and anti-contamination protocol from the active benchmark roadmap, using its
+sealed pack and a shared decode profile. Historical public rows remain readable
+but do not contribute to promotion. An independently verifiable model-release
+date remains necessary when interpreting temporal contamination evidence.
 
 The dashboard does not treat an absent date, a public/private score gap, or a canary result as proof of contamination. It records those as audit evidence that requires review.
 

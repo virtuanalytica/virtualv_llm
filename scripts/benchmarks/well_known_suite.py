@@ -668,7 +668,7 @@ def external_base_url(url: str, completions_path: str) -> str:
     return base
 
 
-def main() -> int:
+def _historical_main() -> int:
     global BASE_URL, MODEL_ALIAS, API_KEY, CHAT_COMPLETIONS_PATH, EXTRA_CHAT_BODY, LM_EVAL_TIMEOUT, REQUEST_TIMEOUT
     parser = argparse.ArgumentParser()
     parser.add_argument("models", nargs="*")
@@ -814,6 +814,12 @@ def main() -> int:
             print(f"FAIL {name}: {type(exc).__name__}: {exc}", flush=True)
         upsert_result(args.out, result, default_report)
     return 1 if failures else 0
+
+
+def main() -> int:
+    """Refuse new public batteries while keeping historical readers importable."""
+    print("well_known_suite: retired historical archive; use private specialist and anti-contamination runners", file=sys.stderr)
+    return 2
 
 
 if __name__ == "__main__":
