@@ -635,6 +635,702 @@
       "benchmark_mean_score": 0.8333,
       "runtime_sec": 946.1,
       "at": "2026-10-06T06:53:54.136476+00:00"
+    },
+    {
+      "model": "qwen38-1cat-dflash2-8task-20261010",
+      "external_base_url": "http://127.0.0.1:18012",
+      "external_model_alias": "qwen38-1cat-dflash2",
+      "topology": "V100 pair TP2, 1Cat-vLLM dflash speculative, qwen38 target QUASAR NVFP4",
+      "extra_body": {},
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 0.8333,
+          "detail": {
+            "extracted": {
+              "event_type": "acquisition",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-04-08",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-08",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": true,
+              "delisted_date": true,
+              "completion_date": false,
+              "successor": true
+            }
+          },
+          "raw": "{\n  \"event_type\": \"acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-04-08\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-08\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}"
+        },
+        "arithmetic_payout": {
+          "score": 0.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 20.0
+          },
+          "raw": "The user is asking me to compute a specific value based on the given parameters. Let me break down the calculation step by step.\n\nFirst, I need to calculate the stake_notional, which is the product of 12000 NMR and the price of $18.40 per NMR. So, stake_notional = 12000 * 18.40 USD.\n\nNext, I need to calculate the payout_usd, which is the product of stake_notional and the payout factor of 0.023 and the payout multiplier of 1.05x.\n\nLet me compute the payout_usd::\n\npayout_usd = stake_notional * 0.023 * 1.05.\n\nFirst, let me calculate the stake_notional:\n\nstake_notional = 12000 * 18.40 = 219,20"
+        },
+        "code_exec_drawdown": {
+          "score": 0.0,
+          "detail": {
+            "model_result": 0.77868,
+            "reference": -0.2584
+          },
+          "raw": "```python\ndef max_drawdown(returns):\n    cumulative = [1.0]\n    for r in returns:\n        cumulative.append(cumulative[-1] * (1 + r))\n    max_dd = min(cumulative)\n    return max_dd\n```"
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "```json\n{\n  \"ticker\": \"AAPL\",\n  \"country_iso2\": \"US\",\n  \"is_delisted\": false\n}\n```"
+        },
+        "gics_format_following": {
+          "score": 0.9,
+          "detail": {
+            "lines": [
+              "Energy",
+              "Financials",
+              "Health Care",
+              "Industrials",
+              "Materials",
+              "Technology",
+              "Utilities",
+              "Consumer Discretionary",
+              "Capital Goods",
+              "Basic Materials",
+              "Communication Services",
+              "Consumer Staples",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials"
+            ],
+            "line_count_ok": false,
+            "distinct_valid_sectors": 9
+          },
+          "raw": "Energy\nFinancials\nHealth Care\nIndustrials\nMaterials\nTechnology\nUtilities\nConsumer Discretionary\nCapital Goods\nBasic Materials\nCommunication Services\nConsumer Staples\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "2011-04-08"
+        },
+        "summary_faithfulness": {
+          "score": 1.0,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": true
+          },
+          "raw": "The historical-price recovery audit found that 13,350 of 21,535 train and validation tickers, or 62%, had left the current investable universe. Tiingo retains historical observations for many delisted securities, so the recovery job queries dated identifiers and preserves the provider response timestamp. Missing records remain explicit and are never replaced by present-day ticker matches without point-in-time evidence."
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "INSUFFICIENT_INFORMATION."
+        },
+        "_mean_score": 0.7167
+      },
+      "benchmark_mean_score": 0.7167,
+      "runtime_sec": 13.4,
+      "at": "2026-10-10T07:10:14.219303+00:00"
+    },
+    {
+      "model": "qwen38-1cat-target-8task-20261010",
+      "external_base_url": "http://127.0.0.1:18012",
+      "external_model_alias": "qwen38-1cat-target",
+      "topology": "V100 pair TP2, 1Cat-vLLM target QUASAR NVFP4, no speculation",
+      "extra_body": {},
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 0.8333,
+          "detail": {
+            "extracted": {
+              "event_type": "acquisition",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-04-08",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-08",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": true,
+              "delisted_date": true,
+              "completion_date": false,
+              "successor": true
+            }
+          },
+          "raw": "{\n  \"event_type\": \"acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-04-08\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-08\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}"
+        },
+        "arithmetic_payout": {
+          "score": 0.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 20.0
+          },
+          "raw": "The user is asking me to compute a specific value based on the given parameters. Let me break down the calculation step by step.\n\nFirst, I need to calculate the stake_notional, which is the product of 12000 NMR and the price of $18.40 per NMR. So, stake_notional = 12000 * 18.40 USD.\n\nNext, I need to calculate the payout_usd, which is the product of stake_notional and the payout factor of 0.023 and the payout multiplier of 1.05x.\n\nLet me compute the payout_usd::\n\npayout_usd = stake_notional * 0.023 * 1.05.\n\nFirst, let me calculate the stake_notional:\n\nstake_notional = 12000 * 18.40 = 219,20"
+        },
+        "code_exec_drawdown": {
+          "score": 0.0,
+          "detail": {
+            "model_result": 0.77868,
+            "reference": -0.2584
+          },
+          "raw": "```python\ndef max_drawdown(returns):\n    cumulative = [1.0]\n    for r in returns:\n        cumulative.append(cumulative[-1] * (1 + r))\n    max_dd = min(cumulative)\n    return max_dd\n```"
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "```json\n{\n  \"ticker\": \"AAPL\",\n  \"country_iso2\": \"US\",\n  \"is_delisted\": false\n}\n```"
+        },
+        "gics_format_following": {
+          "score": 0.9,
+          "detail": {
+            "lines": [
+              "Energy",
+              "Financials",
+              "Health Care",
+              "Industrials",
+              "Materials",
+              "Technology",
+              "Utilities",
+              "Consumer Discretionary",
+              "Capital Goods",
+              "Basic Materials",
+              "Communication Services",
+              "Consumer Staples",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials",
+              "Industrials"
+            ],
+            "line_count_ok": false,
+            "distinct_valid_sectors": 9
+          },
+          "raw": "Energy\nFinancials\nHealth Care\nIndustrials\nMaterials\nTechnology\nUtilities\nConsumer Discretionary\nCapital Goods\nBasic Materials\nCommunication Services\nConsumer Staples\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials\nIndustrials"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "2011-04-08"
+        },
+        "summary_faithfulness": {
+          "score": 1.0,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": true
+          },
+          "raw": "The historical-price recovery audit found that 13,350 of 21,535 train and validation tickers, or 62%, had left the current investable universe. Tiingo retains historical observations for many delisted securities, so the recovery job queries dated identifiers and preserves the provider response timestamp. Missing records remain explicit and are never replaced by present-day ticker matches without point-in-time evidence."
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "INSUFFICIENT_INFORMATION."
+        },
+        "_mean_score": 0.7167
+      },
+      "benchmark_mean_score": 0.7167,
+      "runtime_sec": 14.0,
+      "at": "2026-10-10T07:14:34.869692+00:00"
+    },
+    {
+      "model": "coder-8task-20261010",
+      "external_base_url": "http://127.0.0.1:18062",
+      "external_model_alias": "x",
+      "topology": "llama.cpp single or pair, 8k ctx, parallel 1, Haiku-replacement candidate run",
+      "extra_body": {},
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 0.6667,
+          "detail": {
+            "extracted": {
+              "event_type": "takeover",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-08-01",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-31",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": false,
+              "delisted_date": true,
+              "completion_date": false,
+              "successor": true
+            }
+          },
+          "raw": "{\n  \"event_type\": \"takeover\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-08-01\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-31\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}"
+        },
+        "arithmetic_payout": {
+          "score": 0.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 643.68
+          },
+          "raw": "643.68"
+        },
+        "code_exec_drawdown": {
+          "score": 1.0,
+          "detail": {
+            "model_result": -0.2584,
+            "reference": -0.2584
+          },
+          "raw": "```python\ndef max_drawdown(returns):\n    if not returns:\n        return 0.0\n    \n    cumulative = 1.0\n    peak = 1.0\n    max_dd = 0.0\n    \n    for r in returns:\n        cumulative *= (1 + r)\n        peak = max(peak, cumulative)\n        dd = (cumulative - peak) / peak\n        max_dd = min(max_dd, dd)\n    \n    return max_dd\n```"
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "{\"ticker\":\"AAPL\",\"country_iso2\":\"US\",\"is_delisted\":false}"
+        },
+        "gics_format_following": {
+          "score": 1.0,
+          "detail": {
+            "lines": [
+              "Energy",
+              "Financials",
+              "Health Care",
+              "Information Technology",
+              "Materials"
+            ],
+            "line_count_ok": true,
+            "distinct_valid_sectors": 5
+          },
+          "raw": "Energy\nFinancials\nHealth Care\nInformation Technology\nMaterials"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "2011-04-08"
+        },
+        "summary_faithfulness": {
+          "score": 1.0,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": true
+          },
+          "raw": "A historical-price recovery audit examined 21,535 train and validation tickers, finding that 13,350, or 62%, had exited the current investable universe. Tiingo maintains historical observations for many delisted securities, allowing the recovery process to query dated identifiers while preserving provider response timestamps. The audit ensures missing records remain explicit and are never replaced by current ticker matches without point-in-time evidence."
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "INSUFFICIENT_INFORMATION"
+        },
+        "_mean_score": 0.8333
+      },
+      "benchmark_mean_score": 0.8333,
+      "runtime_sec": 4.0,
+      "at": "2026-10-10T09:31:52.332476+00:00"
+    },
+    {
+      "model": "kat-coder-8task-20261010",
+      "external_base_url": "http://127.0.0.1:18061",
+      "external_model_alias": "kat-coder",
+      "topology": "llama.cpp single or pair, 8k ctx, parallel 1, Haiku-replacement candidate run",
+      "extra_body": {},
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 0.8333,
+          "detail": {
+            "extracted": {
+              "event_type": "Takeover",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-08-01",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-01",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": false,
+              "delisted_date": true,
+              "completion_date": true,
+              "successor": true
+            }
+          },
+          "raw": "```json\n{\n  \"event_type\": \"Takeover\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-08-01\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}\n```"
+        },
+        "arithmetic_payout": {
+          "score": 0.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 2894.4
+          },
+          "raw": "2894.40"
+        },
+        "code_exec_drawdown": {
+          "score": 0.0,
+          "detail": {
+            "model_result": -0.19999999999999993,
+            "reference": -0.2584
+          },
+          "raw": "```python\ndef max_drawdown(returns):\n    peak = 1.0\n    max_dd = 0.0\n    for r in returns:\n        peak = max(peak, peak * (1 + r))\n        dd = (peak * (1 + r) - peak) / peak\n        max_dd = min(max_dd, dd)\n    return max_dd\n```"
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "{\"ticker\": \"AAPL\", \"country_iso2\": \"US\", \"is_delisted\": false}"
+        },
+        "gics_format_following": {
+          "score": 1.0,
+          "detail": {
+            "lines": [
+              "Energy",
+              "Materials",
+              "Industrials",
+              "Consumer Discretionary",
+              "Consumer Staples"
+            ],
+            "line_count_ok": true,
+            "distinct_valid_sectors": 5
+          },
+          "raw": "Energy\nMaterials\nIndustrials\nConsumer Discretionary\nConsumer Staples"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "2011-04-08"
+        },
+        "summary_faithfulness": {
+          "score": 1.0,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": true
+          },
+          "raw": "A historical-price recovery audit revealed that 13,350 of 21,535 train and validation tickers (62%) had left the current investable universe. To address this, Tiingo retains historical observations for delisted securities by querying dated identifiers and preserving provider response timestamps. Missing records are kept explicit and are never replaced by present-day ticker matches without point-in-time evidence."
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "INSUFFICIENT_INFORMATION"
+        },
+        "_mean_score": 0.7292
+      },
+      "benchmark_mean_score": 0.7292,
+      "runtime_sec": 5.8,
+      "at": "2026-10-10T09:31:54.401910+00:00"
+    },
+    {
+      "model": "ornith-8task-20261010",
+      "external_base_url": "http://127.0.0.1:18063",
+      "external_model_alias": "x",
+      "topology": "llama.cpp single or pair, 8k ctx, parallel 1, Haiku-replacement candidate run",
+      "extra_body": {},
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 0.6667,
+          "detail": {
+            "extracted": {
+              "event_type": "Acquisition",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-08-01",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-31",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": false,
+              "delisted_date": true,
+              "completion_date": false,
+              "successor": true
+            }
+          },
+          "raw": "```json\n{\n  \"event_type\": \"Acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-08-01\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-31\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}\n```"
+        },
+        "arithmetic_payout": {
+          "score": 0.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 2903.52
+          },
+          "raw": "2903.52"
+        },
+        "code_exec_drawdown": {
+          "score": 0.0,
+          "detail": {
+            "model_result": -0.1499999999999999,
+            "reference": -0.2584
+          },
+          "raw": "```python\ndef max_drawdown(returns):\n    peak = 1.0\n    max_dd = 0.0\n    for r in returns:\n        peak = max(peak, peak * (1.0 + r))\n        dd = (peak - peak * (1.0 + r)) / peak\n        max_dd = min(max_dd, dd)\n    return max_dd\n```"
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "{\"ticker\": \"AAPL\", \"country_iso2\": \"US\", \"is_delisted\": false}"
+        },
+        "gics_format_following": {
+          "score": 0.9,
+          "detail": {
+            "lines": [
+              "Energy",
+              "Financials",
+              "Industrials",
+              "Technology",
+              "Health Care"
+            ],
+            "line_count_ok": true,
+            "distinct_valid_sectors": 4
+          },
+          "raw": "Energy\nFinancials\nIndustrials\nTechnology\nHealth Care"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "2011-04-08"
+        },
+        "summary_faithfulness": {
+          "score": 1.0,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": true
+          },
+          "raw": "A historical-price recovery audit found that 62% (13,350 of 21,535) of train and validation tickers had left the current investable universe. To address this, Tiingo queries dated identifiers and preserves provider response timestamps, since it retains historical observations for many delisted securities. Missing records are kept explicit and are never replaced by present-day ticker matches without point-in-time evidence."
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "INSUFFICIENT_INFORMATION"
+        },
+        "_mean_score": 0.6958
+      },
+      "benchmark_mean_score": 0.6958,
+      "runtime_sec": 7.6,
+      "at": "2026-10-10T09:31:56.152125+00:00"
+    },
+    {
+      "model": "qwen36-8task-20261010",
+      "external_base_url": "http://127.0.0.1:18012",
+      "external_model_alias": "qwen36-35b-a3b-1cat",
+      "topology": "V100 3 vLLM TP1, 1Cat NVFP4",
+      "extra_body": {},
+      "benchmarks": {
+        "riv_au_lifecycle": {
+          "score": 0.8333,
+          "detail": {
+            "extracted": {
+              "event_type": "acquisition",
+              "acquirer": "Rio Tinto",
+              "control_date": "2011-08-01",
+              "delisted_date": "2011-07-07",
+              "completion_date": "2011-08-01",
+              "successor": "Rio Tinto Coal Mozambique"
+            },
+            "checks": {
+              "event_type": true,
+              "acquirer": true,
+              "control_date": false,
+              "delisted_date": true,
+              "completion_date": true,
+              "successor": true
+            }
+          },
+          "raw": "{\n  \"event_type\": \"acquisition\",\n  \"acquirer\": \"Rio Tinto\",\n  \"control_date\": \"2011-08-01\",\n  \"delisted_date\": \"2011-07-07\",\n  \"completion_date\": \"2011-08-01\",\n  \"successor\": \"Rio Tinto Coal Mozambique\"\n}"
+        },
+        "arithmetic_payout": {
+          "score": 0.0,
+          "detail": {
+            "expected": 5332.32,
+            "candidate": 2894.4
+          },
+          "raw": "2894.40"
+        },
+        "code_exec_drawdown": {
+          "score": 1.0,
+          "detail": {
+            "model_result": -0.2584,
+            "reference": -0.2584
+          },
+          "raw": "```python\ndef max_drawdown(returns):\n    \"\"\"\n    Calculate the maximum drawdown from a list of daily simple returns.\n    \n    Args:\n        returns: A list of floats representing daily simple returns (e.g., 0.01 for +1%).\n        \n    Returns:\n        The maximum drawdown as a negative float (e.g., -0.25 for -25%).\n    \"\"\"\n    if not returns:\n        return 0.0\n    \n    # Start with a wealth index of 1.0\n    wealth_index = 1.0\n    peak = 1.0\n    max_dd = 0.0\n    \n    for r in returns:\n        wealth_index *= (1 + r)\n        if wealth_index > peak:\n            peak = wealth_index\n        # Drawdown is (current - peak) / peak\n        dd = (wealth_index - peak) / peak\n        if dd < max_dd:\n            max_dd = dd\n            \n    return max_dd\n```"
+        },
+        "json_schema_facts": {
+          "score": 1.0,
+          "detail": {
+            "extracted": {
+              "ticker": "AAPL",
+              "country_iso2": "US",
+              "is_delisted": false
+            },
+            "checks": {
+              "ticker": true,
+              "country_iso2": true,
+              "is_delisted": true
+            }
+          },
+          "raw": "{\"ticker\": \"AAPL\", \"country_iso2\": \"US\", \"is_delisted\": false}"
+        },
+        "gics_format_following": {
+          "score": 1.0,
+          "detail": {
+            "lines": [
+              "Energy",
+              "Materials",
+              "Industrials",
+              "Consumer Discretionary",
+              "Consumer Staples"
+            ],
+            "line_count_ok": true,
+            "distinct_valid_sectors": 5
+          },
+          "raw": "Energy\nMaterials\nIndustrials\nConsumer Discretionary\nConsumer Staples"
+        },
+        "needle_in_haystack": {
+          "score": 1.0,
+          "detail": {
+            "found": true
+          },
+          "raw": "2011-04-08"
+        },
+        "summary_faithfulness": {
+          "score": 1.0,
+          "detail": {
+            "retains_key_figure": true,
+            "mentions_tiingo": true,
+            "reasonable_length": true
+          },
+          "raw": "A historical-price recovery audit revealed that 62% of the 21,535 train and validation tickers, totaling 13,350 securities, had left the current investable universe. To address this, Tiingo queries dated identifiers and preserves provider response timestamps for delisted securities while ensuring missing records remain explicit and are never replaced by present-day matches without point-in-time evidence."
+        },
+        "refusal_calibration": {
+          "score": 1.0,
+          "detail": {
+            "abstained": true,
+            "fabricated_date_found": false
+          },
+          "raw": "INSUFFICIENT_INFORMATION"
+        },
+        "_mean_score": 0.8542
+      },
+      "benchmark_mean_score": 0.8542,
+      "runtime_sec": 5.2,
+      "at": "2026-10-10T09:35:05.620702+00:00"
     }
   ]
 }
