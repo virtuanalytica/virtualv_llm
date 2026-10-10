@@ -25,6 +25,15 @@ staan om historische keuzes te kunnen reconstrueren.
 | 4 | Nieuwe blinde kwaliteitsvergelijking en routerplafond | **Wacht op verse, onafhankelijk beheerde items.** Roteer de op 9 oktober blootgestelde acht-taken-, specialist- en anti-contaminatiepacks; leg een nieuw SHA-256-commitment vast. Bereken daarna de orakelrouter, beste-losse-model- en willekeurige-router-baselines op identieke per-item-antwoorden. |
 | 5 | Toddler-mixture en agentgate | Alleen na stap 4 met vooraf vastgelegde numerieke promotiegrens. Vergelijk kwaliteit, totale wandtijd en GPU-board-Wh per antwoord. Software/data-pilot en vision-12 zijn te klein om verbetering van Toddler + Teacher + agent op ClaudeClaw te bewijzen. |
 
+Op 10 oktober kwam een afzonderlijke **openbare ontwikkelproef** voor de
+Toddler-modelmix gereed: 90 nieuw gegenereerde, gepaarde vragen voor drie
+bevroren lokale modellen, met ruwe antwoordevidence, 256-token-t/s en
+GPU-board-Wh. Het haalbare orakelplafond is 0,6889 tegenover 0,6444 voor het
+beste losse model; een vaste taakroute verbetert de kwaliteit niet. Zie
+[de meetnotitie](TODDLER_MOM_PUBLIC_DEVELOPMENT_20261010.md). Dit vult de
+onderzoeksinvoer voor Teacher, **niet** de blinde kwaliteitsvergelijking in
+stap 4. Voor promotie blijft een nieuw, onafhankelijk beheerd pack nodig.
+
 De live V100-dagdienst blijft beschikbaar tijdens de synthetische probes. De
 Ada's kunnen afzonderlijk vision-taken draaien; laadt geen nieuw V100-model
 zonder een expliciete handoff. De openbare v1.0.4-tabel toont versie,

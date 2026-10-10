@@ -1,0 +1,553 @@
+{
+  "schema": "toddler-mom-public-pack/v1",
+  "created_utc": "2026-10-10T05:39:34.572207+00:00",
+  "generation": "Python random.Random with a newly sampled 128-bit seed; no model generated the pack",
+  "seed": 105412455758458846051182176563652924498,
+  "tasks": [
+    "arithmetic",
+    "code_trace",
+    "structured_extraction"
+  ],
+  "items": [
+    {
+      "id": "arithmetic-000-0e58af8d94bbd2bb9413e21f",
+      "task": "arithmetic",
+      "prompt": "Research item 0e58af8d94bbd2bb9413e21f. Compute 383 + 161. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "544"
+    },
+    {
+      "id": "arithmetic-001-22630e579f87942af52a26f9",
+      "task": "arithmetic",
+      "prompt": "Research item 22630e579f87942af52a26f9. Compute 64 * 49. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "3136"
+    },
+    {
+      "id": "arithmetic-002-755ffe345891038efff7fe07",
+      "task": "arithmetic",
+      "prompt": "Research item 755ffe345891038efff7fe07. Compute ((421 * 9) + 99) mod 997. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "897"
+    },
+    {
+      "id": "arithmetic-003-ca71aa97bc0a1726672b123f",
+      "task": "arithmetic",
+      "prompt": "Research item ca71aa97bc0a1726672b123f. Compute 741 + 268. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "1009"
+    },
+    {
+      "id": "arithmetic-004-cfa3fff05800b4c33d90bf7e",
+      "task": "arithmetic",
+      "prompt": "Research item cfa3fff05800b4c33d90bf7e. Compute 81 * 15. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "1215"
+    },
+    {
+      "id": "arithmetic-005-b0e2920ecb8a93cd7f9752ac",
+      "task": "arithmetic",
+      "prompt": "Research item b0e2920ecb8a93cd7f9752ac. Compute ((159 * 4) + 70) mod 997. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "706"
+    },
+    {
+      "id": "arithmetic-006-b4f3d0781e2d27a59461cd1f",
+      "task": "arithmetic",
+      "prompt": "Research item b4f3d0781e2d27a59461cd1f. Compute 317 + 128. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "445"
+    },
+    {
+      "id": "arithmetic-007-08547f71511679402f5ddef5",
+      "task": "arithmetic",
+      "prompt": "Research item 08547f71511679402f5ddef5. Compute 72 * 58. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "4176"
+    },
+    {
+      "id": "arithmetic-008-87f6d74d39dcdbc95762a723",
+      "task": "arithmetic",
+      "prompt": "Research item 87f6d74d39dcdbc95762a723. Compute ((582 * 16) + 48) mod 997. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "387"
+    },
+    {
+      "id": "arithmetic-009-d376b5619e944838326e9404",
+      "task": "arithmetic",
+      "prompt": "Research item d376b5619e944838326e9404. Compute 819 + 803. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "1622"
+    },
+    {
+      "id": "arithmetic-010-4dec14b63590f98421081db8",
+      "task": "arithmetic",
+      "prompt": "Research item 4dec14b63590f98421081db8. Compute 21 * 21. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "441"
+    },
+    {
+      "id": "arithmetic-011-c8a8143ae3f90b50b0969f04",
+      "task": "arithmetic",
+      "prompt": "Research item c8a8143ae3f90b50b0969f04. Compute ((620 * 12) + 64) mod 997. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "525"
+    },
+    {
+      "id": "arithmetic-012-81a3473d8aef6d9049c04f4b",
+      "task": "arithmetic",
+      "prompt": "Research item 81a3473d8aef6d9049c04f4b. Compute 949 + 441. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "1390"
+    },
+    {
+      "id": "arithmetic-013-b482443e356843abc0493b1e",
+      "task": "arithmetic",
+      "prompt": "Research item b482443e356843abc0493b1e. Compute 66 * 42. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "2772"
+    },
+    {
+      "id": "arithmetic-014-c9ab9c6510b1694cbf0a09eb",
+      "task": "arithmetic",
+      "prompt": "Research item c9ab9c6510b1694cbf0a09eb. Compute ((613 * 18) + 63) mod 997. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "130"
+    },
+    {
+      "id": "arithmetic-015-9766727b324c96fa16cb4a61",
+      "task": "arithmetic",
+      "prompt": "Research item 9766727b324c96fa16cb4a61. Compute 537 + 320. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "857"
+    },
+    {
+      "id": "arithmetic-016-0293935ed489e045ce4a842b",
+      "task": "arithmetic",
+      "prompt": "Research item 0293935ed489e045ce4a842b. Compute 85 * 55. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "4675"
+    },
+    {
+      "id": "arithmetic-017-048662f3c2e50435f1279910",
+      "task": "arithmetic",
+      "prompt": "Research item 048662f3c2e50435f1279910. Compute ((863 * 8) + 33) mod 997. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "955"
+    },
+    {
+      "id": "arithmetic-018-44451172ab143af350a4bc7c",
+      "task": "arithmetic",
+      "prompt": "Research item 44451172ab143af350a4bc7c. Compute 671 + 522. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "1193"
+    },
+    {
+      "id": "arithmetic-019-d15ff48ae6f7003bbadd709b",
+      "task": "arithmetic",
+      "prompt": "Research item d15ff48ae6f7003bbadd709b. Compute 80 * 64. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "5120"
+    },
+    {
+      "id": "arithmetic-020-56cb0e4d894c512d30679bb9",
+      "task": "arithmetic",
+      "prompt": "Research item 56cb0e4d894c512d30679bb9. Compute ((425 * 7) + 89) mod 997. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "73"
+    },
+    {
+      "id": "arithmetic-021-c7aac6540d98b4c3f5eb41a5",
+      "task": "arithmetic",
+      "prompt": "Research item c7aac6540d98b4c3f5eb41a5. Compute 894 + 210. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "1104"
+    },
+    {
+      "id": "arithmetic-022-29471d203d954cc4b000a37a",
+      "task": "arithmetic",
+      "prompt": "Research item 29471d203d954cc4b000a37a. Compute 88 * 37. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "3256"
+    },
+    {
+      "id": "arithmetic-023-23ddf660e8cb01d338c1ca9a",
+      "task": "arithmetic",
+      "prompt": "Research item 23ddf660e8cb01d338c1ca9a. Compute ((542 * 16) + 61) mod 997. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "757"
+    },
+    {
+      "id": "arithmetic-024-0e96024ebd17c1717575aaa3",
+      "task": "arithmetic",
+      "prompt": "Research item 0e96024ebd17c1717575aaa3. Compute 858 + 989. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "1847"
+    },
+    {
+      "id": "arithmetic-025-537dd6560e71ad8ecc5948d7",
+      "task": "arithmetic",
+      "prompt": "Research item 537dd6560e71ad8ecc5948d7. Compute 35 * 77. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "2695"
+    },
+    {
+      "id": "arithmetic-026-17ed1340f16b61bb4b4d4f89",
+      "task": "arithmetic",
+      "prompt": "Research item 17ed1340f16b61bb4b4d4f89. Compute ((441 * 13) + 95) mod 997. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "843"
+    },
+    {
+      "id": "arithmetic-027-86ec79ef38385b06dd529094",
+      "task": "arithmetic",
+      "prompt": "Research item 86ec79ef38385b06dd529094. Compute 849 + 839. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "1688"
+    },
+    {
+      "id": "arithmetic-028-d1e48a99e61e695aad1481bb",
+      "task": "arithmetic",
+      "prompt": "Research item d1e48a99e61e695aad1481bb. Compute 75 * 33. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "2475"
+    },
+    {
+      "id": "arithmetic-029-78386e0124914f32babc3d32",
+      "task": "arithmetic",
+      "prompt": "Research item 78386e0124914f32babc3d32. Compute ((180 * 12) + 43) mod 997. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "209"
+    },
+    {
+      "id": "code_trace-000-59a1963e8916712101bdd099",
+      "task": "code_trace",
+      "prompt": "Research item 59a1963e8916712101bdd099. Evaluate this Python expression: sum(range(9, 13)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "42"
+    },
+    {
+      "id": "code_trace-001-fc39e6512153d5715a6481ed",
+      "task": "code_trace",
+      "prompt": "Research item fc39e6512153d5715a6481ed. Evaluate this Python expression: sum(2 + 5*k for k in range(5)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "60"
+    },
+    {
+      "id": "code_trace-002-41b180473e6386c9414dd717",
+      "task": "code_trace",
+      "prompt": "Research item 41b180473e6386c9414dd717. Evaluate this Python expression: sum((16 + 10*k + 14) % 17 for k in range(12)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "102"
+    },
+    {
+      "id": "code_trace-003-c56949448057950ba4bbfec4",
+      "task": "code_trace",
+      "prompt": "Research item c56949448057950ba4bbfec4. Evaluate this Python expression: sum(range(13, 20)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "112"
+    },
+    {
+      "id": "code_trace-004-89d2ebc1195f57abd98c2da8",
+      "task": "code_trace",
+      "prompt": "Research item 89d2ebc1195f57abd98c2da8. Evaluate this Python expression: sum(5 + 4*k for k in range(4)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "44"
+    },
+    {
+      "id": "code_trace-005-88d1feb797401e76c7bcbe4f",
+      "task": "code_trace",
+      "prompt": "Research item 88d1feb797401e76c7bcbe4f. Evaluate this Python expression: sum((54 + 6*k + 20) % 17 for k in range(10)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "75"
+    },
+    {
+      "id": "code_trace-006-74caa4ea73f71afd294b30a9",
+      "task": "code_trace",
+      "prompt": "Research item 74caa4ea73f71afd294b30a9. Evaluate this Python expression: sum(range(6, 14)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "76"
+    },
+    {
+      "id": "code_trace-007-ecafbbbe6b06af2c93d666f6",
+      "task": "code_trace",
+      "prompt": "Research item ecafbbbe6b06af2c93d666f6. Evaluate this Python expression: sum(10 + 3*k for k in range(3)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "39"
+    },
+    {
+      "id": "code_trace-008-3ce1fe67a43e128f5cbd2b35",
+      "task": "code_trace",
+      "prompt": "Research item 3ce1fe67a43e128f5cbd2b35. Evaluate this Python expression: sum((12 + 5*k + 9) % 17 for k in range(7)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "48"
+    },
+    {
+      "id": "code_trace-009-9d096b583a3e7c271367b3c4",
+      "task": "code_trace",
+      "prompt": "Research item 9d096b583a3e7c271367b3c4. Evaluate this Python expression: sum(range(2, 7)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "20"
+    },
+    {
+      "id": "code_trace-010-00411c46537a071668dda086",
+      "task": "code_trace",
+      "prompt": "Research item 00411c46537a071668dda086. Evaluate this Python expression: sum(4 + 3*k for k in range(3)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "21"
+    },
+    {
+      "id": "code_trace-011-f37573ba4e5c548055c811cb",
+      "task": "code_trace",
+      "prompt": "Research item f37573ba4e5c548055c811cb. Evaluate this Python expression: sum((52 + 4*k + 20) % 17 for k in range(10)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "84"
+    },
+    {
+      "id": "code_trace-012-cb0e6b792345af4bd3237f72",
+      "task": "code_trace",
+      "prompt": "Research item cb0e6b792345af4bd3237f72. Evaluate this Python expression: sum(range(7, 16)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "99"
+    },
+    {
+      "id": "code_trace-013-eea5a9f3c1aa7bd3bb6be7fc",
+      "task": "code_trace",
+      "prompt": "Research item eea5a9f3c1aa7bd3bb6be7fc. Evaluate this Python expression: sum(4 + 6*k for k in range(3)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "30"
+    },
+    {
+      "id": "code_trace-014-cffda1bcc44fb9c011e3e1c1",
+      "task": "code_trace",
+      "prompt": "Research item cffda1bcc44fb9c011e3e1c1. Evaluate this Python expression: sum((98 + 11*k + 17) % 17 for k in range(10)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "81"
+    },
+    {
+      "id": "code_trace-015-c6fc2c9f419ca66440cf3f5f",
+      "task": "code_trace",
+      "prompt": "Research item c6fc2c9f419ca66440cf3f5f. Evaluate this Python expression: sum(range(12, 21)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "144"
+    },
+    {
+      "id": "code_trace-016-3158254e4a86d39ea802ab34",
+      "task": "code_trace",
+      "prompt": "Research item 3158254e4a86d39ea802ab34. Evaluate this Python expression: sum(10 + 5*k for k in range(4)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "70"
+    },
+    {
+      "id": "code_trace-017-789b08cd0fe1c9d6836ad554",
+      "task": "code_trace",
+      "prompt": "Research item 789b08cd0fe1c9d6836ad554. Evaluate this Python expression: sum((24 + 8*k + 28) % 17 for k in range(7)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "56"
+    },
+    {
+      "id": "code_trace-018-e2911098b766a7b66e49acc8",
+      "task": "code_trace",
+      "prompt": "Research item e2911098b766a7b66e49acc8. Evaluate this Python expression: sum(range(14, 18)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "62"
+    },
+    {
+      "id": "code_trace-019-9b63d22e6c311d7ea03f90b3",
+      "task": "code_trace",
+      "prompt": "Research item 9b63d22e6c311d7ea03f90b3. Evaluate this Python expression: sum(10 + 7*k for k in range(5)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "120"
+    },
+    {
+      "id": "code_trace-020-25cd8be36b7bdb388a1c58a3",
+      "task": "code_trace",
+      "prompt": "Research item 25cd8be36b7bdb388a1c58a3. Evaluate this Python expression: sum((80 + 4*k + 29) % 17 for k in range(10)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "80"
+    },
+    {
+      "id": "code_trace-021-f7e64bbfc71ae32d077fd7ce",
+      "task": "code_trace",
+      "prompt": "Research item f7e64bbfc71ae32d077fd7ce. Evaluate this Python expression: sum(range(13, 18)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "75"
+    },
+    {
+      "id": "code_trace-022-843c2dec27910e3990b19121",
+      "task": "code_trace",
+      "prompt": "Research item 843c2dec27910e3990b19121. Evaluate this Python expression: sum(7 + 3*k for k in range(4)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "46"
+    },
+    {
+      "id": "code_trace-023-f3a9f54c65c48ac15a483993",
+      "task": "code_trace",
+      "prompt": "Research item f3a9f54c65c48ac15a483993. Evaluate this Python expression: sum((42 + 6*k + 9) % 17 for k in range(7)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "41"
+    },
+    {
+      "id": "code_trace-024-e9f227836e34f0c4413e4bbd",
+      "task": "code_trace",
+      "prompt": "Research item e9f227836e34f0c4413e4bbd. Evaluate this Python expression: sum(range(6, 11)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "40"
+    },
+    {
+      "id": "code_trace-025-d0d2738bc847e126e2187fa7",
+      "task": "code_trace",
+      "prompt": "Research item d0d2738bc847e126e2187fa7. Evaluate this Python expression: sum(2 + 5*k for k in range(5)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "60"
+    },
+    {
+      "id": "code_trace-026-fcbcfab0b1ae4c117e69c44d",
+      "task": "code_trace",
+      "prompt": "Research item fcbcfab0b1ae4c117e69c44d. Evaluate this Python expression: sum((48 + 9*k + 9) % 17 for k in range(11)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "85"
+    },
+    {
+      "id": "code_trace-027-266135d0d8bd41ff3705bf29",
+      "task": "code_trace",
+      "prompt": "Research item 266135d0d8bd41ff3705bf29. Evaluate this Python expression: sum(range(3, 8)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "25"
+    },
+    {
+      "id": "code_trace-028-0b4cd88e39de856cdae7070b",
+      "task": "code_trace",
+      "prompt": "Research item 0b4cd88e39de856cdae7070b. Evaluate this Python expression: sum(8 + 3*k for k in range(3)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "33"
+    },
+    {
+      "id": "code_trace-029-e0828bc927185743f8cb845a",
+      "task": "code_trace",
+      "prompt": "Research item e0828bc927185743f8cb845a. Evaluate this Python expression: sum((53 + 4*k + 16) % 17 for k in range(5)). Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "28"
+    },
+    {
+      "id": "structured_extraction-000-8b6d69120e74996fbeefb511",
+      "task": "structured_extraction",
+      "prompt": "Research item 8b6d69120e74996fbeefb511. Record: invoice=IV174694; account=AC251985; amount_eur_cents=68024; status=approved. Give only amount_eur_cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "68024"
+    },
+    {
+      "id": "structured_extraction-001-b5b1945036f0eaef429365d5",
+      "task": "structured_extraction",
+      "prompt": "Research item b5b1945036f0eaef429365d5. Draft amount_eur_cents=91323 was superseded. Approved invoice=IV391612, account=AC873490, final amount_eur_cents=28598. Give the final cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "28598"
+    },
+    {
+      "id": "structured_extraction-002-356c0791ff280dc16d4d8b3a",
+      "task": "structured_extraction",
+      "prompt": "Research item 356c0791ff280dc16d4d8b3a. Invoice IV615216 has account AC990657. The approved cents amount is 1116; the account and invoice numbers are identifiers, not money. Give approved cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "1116"
+    },
+    {
+      "id": "structured_extraction-003-1077cb1b196cdfc45dc7ec16",
+      "task": "structured_extraction",
+      "prompt": "Research item 1077cb1b196cdfc45dc7ec16. Record: invoice=IV491257; account=AC937297; amount_eur_cents=70970; status=approved. Give only amount_eur_cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "70970"
+    },
+    {
+      "id": "structured_extraction-004-ed49fea6593f63a8cf02fe97",
+      "task": "structured_extraction",
+      "prompt": "Research item ed49fea6593f63a8cf02fe97. Draft amount_eur_cents=57242 was superseded. Approved invoice=IV588534, account=AC572834, final amount_eur_cents=53464. Give the final cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "53464"
+    },
+    {
+      "id": "structured_extraction-005-1c4aa8dd8c90d53b298e05c8",
+      "task": "structured_extraction",
+      "prompt": "Research item 1c4aa8dd8c90d53b298e05c8. Invoice IV144097 has account AC108405. The approved cents amount is 18076; the account and invoice numbers are identifiers, not money. Give approved cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "18076"
+    },
+    {
+      "id": "structured_extraction-006-fce3952909f9a5c234f3c048",
+      "task": "structured_extraction",
+      "prompt": "Research item fce3952909f9a5c234f3c048. Record: invoice=IV362475; account=AC374192; amount_eur_cents=16651; status=approved. Give only amount_eur_cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "16651"
+    },
+    {
+      "id": "structured_extraction-007-df87a5985ea18c0ff649d24f",
+      "task": "structured_extraction",
+      "prompt": "Research item df87a5985ea18c0ff649d24f. Draft amount_eur_cents=65177 was superseded. Approved invoice=IV870402, account=AC902253, final amount_eur_cents=53422. Give the final cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "53422"
+    },
+    {
+      "id": "structured_extraction-008-5a5d5fd68542d1942721afde",
+      "task": "structured_extraction",
+      "prompt": "Research item 5a5d5fd68542d1942721afde. Invoice IV579980 has account AC682033. The approved cents amount is 37388; the account and invoice numbers are identifiers, not money. Give approved cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "37388"
+    },
+    {
+      "id": "structured_extraction-009-ec258e7fc35d021440091193",
+      "task": "structured_extraction",
+      "prompt": "Research item ec258e7fc35d021440091193. Record: invoice=IV787503; account=AC548110; amount_eur_cents=92778; status=approved. Give only amount_eur_cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "92778"
+    },
+    {
+      "id": "structured_extraction-010-2b64199f11d0cbe802ff8b14",
+      "task": "structured_extraction",
+      "prompt": "Research item 2b64199f11d0cbe802ff8b14. Draft amount_eur_cents=54466 was superseded. Approved invoice=IV980489, account=AC205418, final amount_eur_cents=96109. Give the final cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "96109"
+    },
+    {
+      "id": "structured_extraction-011-a5d0065a6d0ecb11c012dfa4",
+      "task": "structured_extraction",
+      "prompt": "Research item a5d0065a6d0ecb11c012dfa4. Invoice IV249085 has account AC977722. The approved cents amount is 69438; the account and invoice numbers are identifiers, not money. Give approved cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "69438"
+    },
+    {
+      "id": "structured_extraction-012-b14150eb96dc559a800f38de",
+      "task": "structured_extraction",
+      "prompt": "Research item b14150eb96dc559a800f38de. Record: invoice=IV852051; account=AC669980; amount_eur_cents=15245; status=approved. Give only amount_eur_cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "15245"
+    },
+    {
+      "id": "structured_extraction-013-777f53d3a6062519853e32ea",
+      "task": "structured_extraction",
+      "prompt": "Research item 777f53d3a6062519853e32ea. Draft amount_eur_cents=15566 was superseded. Approved invoice=IV675634, account=AC561126, final amount_eur_cents=71902. Give the final cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "71902"
+    },
+    {
+      "id": "structured_extraction-014-52b875acba6a6a0462392ccb",
+      "task": "structured_extraction",
+      "prompt": "Research item 52b875acba6a6a0462392ccb. Invoice IV116339 has account AC371345. The approved cents amount is 64354; the account and invoice numbers are identifiers, not money. Give approved cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "64354"
+    },
+    {
+      "id": "structured_extraction-015-c7e28d5f5b78bda515b512cd",
+      "task": "structured_extraction",
+      "prompt": "Research item c7e28d5f5b78bda515b512cd. Record: invoice=IV591252; account=AC738533; amount_eur_cents=28128; status=approved. Give only amount_eur_cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "28128"
+    },
+    {
+      "id": "structured_extraction-016-b275ec3b5bc7936de19096c9",
+      "task": "structured_extraction",
+      "prompt": "Research item b275ec3b5bc7936de19096c9. Draft amount_eur_cents=61627 was superseded. Approved invoice=IV365822, account=AC774609, final amount_eur_cents=49699. Give the final cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "49699"
+    },
+    {
+      "id": "structured_extraction-017-ebbc04fc81fd582488da06cb",
+      "task": "structured_extraction",
+      "prompt": "Research item ebbc04fc81fd582488da06cb. Invoice IV985994 has account AC295447. The approved cents amount is 72809; the account and invoice numbers are identifiers, not money. Give approved cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "72809"
+    },
+    {
+      "id": "structured_extraction-018-ef0f3b10047bb5cb76b19f1c",
+      "task": "structured_extraction",
+      "prompt": "Research item ef0f3b10047bb5cb76b19f1c. Record: invoice=IV146148; account=AC174161; amount_eur_cents=73947; status=approved. Give only amount_eur_cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "73947"
+    },
+    {
+      "id": "structured_extraction-019-15ea33d62d18e43196a864a3",
+      "task": "structured_extraction",
+      "prompt": "Research item 15ea33d62d18e43196a864a3. Draft amount_eur_cents=35188 was superseded. Approved invoice=IV179661, account=AC614367, final amount_eur_cents=72904. Give the final cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "72904"
+    },
+    {
+      "id": "structured_extraction-020-7b059e61ecd38c9a9446f8cc",
+      "task": "structured_extraction",
+      "prompt": "Research item 7b059e61ecd38c9a9446f8cc. Invoice IV657421 has account AC700127. The approved cents amount is 66331; the account and invoice numbers are identifiers, not money. Give approved cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "66331"
+    },
+    {
+      "id": "structured_extraction-021-378e7adb6be6ba869421119b",
+      "task": "structured_extraction",
+      "prompt": "Research item 378e7adb6be6ba869421119b. Record: invoice=IV439319; account=AC240115; amount_eur_cents=96920; status=approved. Give only amount_eur_cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "96920"
+    },
+    {
+      "id": "structured_extraction-022-4d8c77a7f10450fac7e50f35",
+      "task": "structured_extraction",
+      "prompt": "Research item 4d8c77a7f10450fac7e50f35. Draft amount_eur_cents=18325 was superseded. Approved invoice=IV186032, account=AC416005, final amount_eur_cents=53627. Give the final cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "53627"
+    },
+    {
+      "id": "structured_extraction-023-f14c53cddec59a5857785df2",
+      "task": "structured_extraction",
+      "prompt": "Research item f14c53cddec59a5857785df2. Invoice IV332330 has account AC113071. The approved cents amount is 40469; the account and invoice numbers are identifiers, not money. Give approved cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "40469"
+    },
+    {
+      "id": "structured_extraction-024-36de3b519257d4bafba7aea1",
+      "task": "structured_extraction",
+      "prompt": "Research item 36de3b519257d4bafba7aea1. Record: invoice=IV262776; account=AC729919; amount_eur_cents=84595; status=approved. Give only amount_eur_cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "84595"
+    },
+    {
+      "id": "structured_extraction-025-c6b0a6c8cb09177a2cec317f",
+      "task": "structured_extraction",
+      "prompt": "Research item c6b0a6c8cb09177a2cec317f. Draft amount_eur_cents=99218 was superseded. Approved invoice=IV882036, account=AC204132, final amount_eur_cents=19937. Give the final cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "19937"
+    },
+    {
+      "id": "structured_extraction-026-81dec2929d516fffcc9d10b3",
+      "task": "structured_extraction",
+      "prompt": "Research item 81dec2929d516fffcc9d10b3. Invoice IV669378 has account AC732355. The approved cents amount is 67315; the account and invoice numbers are identifiers, not money. Give approved cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "67315"
+    },
+    {
+      "id": "structured_extraction-027-4ec3f48ca1d8935ded135269",
+      "task": "structured_extraction",
+      "prompt": "Research item 4ec3f48ca1d8935ded135269. Record: invoice=IV154806; account=AC726684; amount_eur_cents=34118; status=approved. Give only amount_eur_cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "34118"
+    },
+    {
+      "id": "structured_extraction-028-9d44f9d72aa2e78ac4a1a1d4",
+      "task": "structured_extraction",
+      "prompt": "Research item 9d44f9d72aa2e78ac4a1a1d4. Draft amount_eur_cents=22278 was superseded. Approved invoice=IV347644, account=AC619923, final amount_eur_cents=68417. Give the final cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "68417"
+    },
+    {
+      "id": "structured_extraction-029-40dd1209ab038f22268d149b",
+      "task": "structured_extraction",
+      "prompt": "Research item 40dd1209ab038f22268d149b. Invoice IV181062 has account AC208654. The approved cents amount is 99757; the account and invoice numbers are identifiers, not money. Give approved cents. Return only JSON with one integer field named answer. No explanation. /no_think",
+      "answer": "99757"
+    }
+  ]
+}
