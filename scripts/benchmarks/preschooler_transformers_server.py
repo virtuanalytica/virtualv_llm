@@ -30,6 +30,20 @@ def wall_timings(tokens: int, elapsed: float) -> dict:
             "method": "wall time including prefill"}
 
 
+def encode_chat(tokenizer, messages: list[dict], body: dict):
+    """Apply the request's thinking profile instead of a model-card default."""
+    options = body.get("chat_template_kwargs") or {}
+    if not isinstance(options, dict):
+        raise ValueError("chat_template_kwargs must be an object")
+    enable_thinking = options.get("enable_thinking", False)
+    if not isinstance(enable_thinking, bool):
+        raise ValueError("enable_thinking must be a boolean")
+    return tokenizer.apply_chat_template(messages, tokenize=True,
+                                         add_generation_prompt=True,
+                                         return_tensors="pt",
+                                         enable_thinking=enable_thinking)
+
+
 def serve(model_path: Path, alias: str, host: str, port: int) -> None:
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -93,9 +107,7 @@ def serve(model_path: Path, alias: str, host: str, port: int) -> None:
                     messages = body.get("messages")
                     if not isinstance(messages, list) or not messages:
                         raise ValueError("messages required")
-                    encoding = tokenizer.apply_chat_template(messages, tokenize=True,
-                                                             add_generation_prompt=True,
-                                                             return_tensors="pt")
+                    encoding = encode_chat(tokenizer, messages, body)
                     input_ids = encoding["input_ids"] if isinstance(encoding, Mapping) else encoding
                 else:
                     prompt = body.get("prompt")
