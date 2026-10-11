@@ -219,16 +219,29 @@ class Handler(BaseHTTPRequestHandler):
                     status.append(f"{name}:ok")
                 except Exception as exc:  # a failing member is dropped for this turn, reported in the header
                     status.append(f"{name}:error:{type(exc).__name__}")
-        upstream = with_drafts(payload, drafts)
+        upstream = dict(with_drafts(payload, drafts))  # a copy: the router edits it, payload stays the client's
         upstream["model"] = self.aggregator.model or upstream.get("model", "")
         thinking = self._route_thinking(upstream, messages)
-        req = Request(f"{self.aggregator.next_url()}/chat/completions", data=json.dumps(upstream).encode(),
-                      headers={"Content-Type": "application/json"})
         try:
-            resp = urlopen(req, timeout=900)
+            resp = self._open_upstream(upstream)
         except HTTPError as exc:
-            self._send_raw(exc.code, exc.read(), "application/json", status)
-            return
+            if exc.code == 400 and self._raised_budget(upstream, payload):
+                # A long conversation plus the raised thinking budget can exceed the model context;
+                # retry once with the client's own budget rather than failing the turn.
+                exc.close()
+                for key in ("max_tokens", "max_completion_tokens"):
+                    upstream.pop(key, None)
+                    if key in payload:
+                        upstream[key] = payload[key]
+                thinking += ":budget-reset"
+                try:
+                    resp = self._open_upstream(upstream)
+                except HTTPError as exc2:
+                    self._send_raw(exc2.code, exc2.read(), "application/json", status, thinking)
+                    return
+            else:
+                self._send_raw(exc.code, exc.read(), "application/json", status, thinking)
+                return
         except URLError as exc:
             self._send_json(502, {"error": f"aggregator {self.aggregator.name} unreachable: {exc.reason}"}, status)
             return
@@ -252,6 +265,15 @@ class Handler(BaseHTTPRequestHandler):
                 if thinking:
                     body["mom"]["thinking"] = thinking
                 self._send_raw(resp.status, json.dumps(body).encode(), "application/json", status, thinking)
+
+    def _open_upstream(self, upstream: dict):
+        req = Request(f"{self.aggregator.next_url()}/chat/completions", data=json.dumps(upstream).encode(),
+                      headers={"Content-Type": "application/json"})
+        return urlopen(req, timeout=900)
+
+    @staticmethod
+    def _raised_budget(upstream: dict, payload: dict) -> bool:
+        return any(upstream.get(k) != payload.get(k) for k in ("max_tokens", "max_completion_tokens") if k in upstream)
 
     def _route_thinking(self, upstream: dict, messages: list[dict]) -> str:
         """Set enable_thinking on the upstream request; returns 'category:on|off', or '' when not routed."""
