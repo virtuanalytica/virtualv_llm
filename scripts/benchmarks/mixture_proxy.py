@@ -23,6 +23,15 @@ the chat uses.
         --aggregator qwen38=http://127.0.0.1:8021/v1 \
         --proposer devstral=http://127.0.0.1:8022/v1 --proposer qwen35=http://127.0.0.1:8023/v1 \
         --proposer gemma4=http://127.0.0.1:8024/v1
+
+Thinking router (`--thinking-router`, off by default). Reasoning ("thinking") makes the aggregator far
+more accurate on calculation and code-reasoning requests, and many times slower on every request. With
+the router on, a new user question is first classified by the aggregator itself (one short call, thinking
+off) into calculation / code / lookup / other, and `chat_template_kwargs.enable_thinking` is set to true
+only for the categories in `--thinking-for`. A request that already sets `enable_thinking` is left alone,
+and a failed classification falls back to thinking off. The decision is reported in the response header
+`X-MoM-Thinking` and in `mom.thinking`. Because a thinking answer spends its budget on reasoning first,
+`max_tokens` is raised to at least `--thinking-tokens` when thinking is switched on.
 """
 from __future__ import annotations
 
@@ -119,6 +128,35 @@ def with_drafts(payload: dict, drafts: dict[str, str]) -> dict:
     return {**payload, "messages": msgs}
 
 
+CATEGORIES = ("calculation", "code", "lookup", "other")
+CLASSIFY_PROMPT = (
+    "Classify the request below into exactly one category. Reply with one word only.\n"
+    "calculation = working out a number (arithmetic, units, percentages, word problems)\n"
+    "code = tracing, evaluating, debugging or reasoning about program code\n"
+    "lookup = reading a value out of a given text or record, or reformatting it\n"
+    "other = anything else\n\nRequest:\n"
+)
+
+
+def last_user_text(messages: list[dict]) -> str:
+    content = messages[-1].get("content") if messages else ""
+    if isinstance(content, list):  # OpenAI content parts: keep the text parts
+        content = "\n".join(part.get("text", "") for part in content if isinstance(part, dict))
+    return content or ""
+
+
+def classify(member: Member, messages: list[dict], timeout: float) -> str:
+    """Category of the latest user message, judged by the member itself with thinking off."""
+    payload = {"messages": [{"role": "user", "content": CLASSIFY_PROMPT + last_user_text(messages)}],
+               "max_tokens": 6, "temperature": 0, "stream": False,
+               "chat_template_kwargs": {"enable_thinking": False}}
+    if member.model:
+        payload["model"] = member.model
+    data = json.loads(_post(f"{member.next_url()}/chat/completions", payload, timeout))
+    word = (data["choices"][0]["message"].get("content") or "").strip().lower()
+    return next((c for c in CATEGORIES if word.startswith(c[:4])), "other")
+
+
 def _post(url: str, payload: dict, timeout: float) -> bytes:
     req = Request(url, data=json.dumps(payload).encode(), headers={"Content-Type": "application/json"})
     with urlopen(req, timeout=timeout) as resp:
@@ -141,6 +179,10 @@ class Handler(BaseHTTPRequestHandler):
     draft_tokens: int = 768
     proposer_timeout: float = 180.0
     pool: ThreadPoolExecutor
+    thinking_router: bool = False
+    thinking_for: frozenset[str] = frozenset({"calculation", "code"})
+    thinking_tokens: int = 6000
+    classify_timeout: float = 30.0
 
     def log_message(self, fmt: str, *args: Any) -> None:
         pass
@@ -179,6 +221,7 @@ class Handler(BaseHTTPRequestHandler):
                     status.append(f"{name}:error:{type(exc).__name__}")
         upstream = with_drafts(payload, drafts)
         upstream["model"] = self.aggregator.model or upstream.get("model", "")
+        thinking = self._route_thinking(upstream, messages)
         req = Request(f"{self.aggregator.next_url()}/chat/completions", data=json.dumps(upstream).encode(),
                       headers={"Content-Type": "application/json"})
         try:
@@ -196,6 +239,8 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_header("Content-Type", ctype)
                 self.send_header("Cache-Control", "no-cache")
                 self.send_header("X-MoM-Proposers", ",".join(status) or "none")
+                if thinking:
+                    self.send_header("X-MoM-Thinking", thinking)
                 self.end_headers()
                 while chunk := resp.read1(65536):
                     self.wfile.write(chunk)
@@ -204,17 +249,42 @@ class Handler(BaseHTTPRequestHandler):
                 body = json.loads(resp.read())
                 body["model"] = self.name
                 body.setdefault("mom", {})["proposers"] = status
-                self._send_raw(resp.status, json.dumps(body).encode(), "application/json", status)
+                if thinking:
+                    body["mom"]["thinking"] = thinking
+                self._send_raw(resp.status, json.dumps(body).encode(), "application/json", status, thinking)
+
+    def _route_thinking(self, upstream: dict, messages: list[dict]) -> str:
+        """Set enable_thinking on the upstream request; returns 'category:on|off', or '' when not routed."""
+        if not self.thinking_router or not needs_proposals(messages):
+            return ""
+        kwargs = dict(upstream.get("chat_template_kwargs") or {})
+        if "enable_thinking" in kwargs:
+            return "client:" + ("on" if kwargs["enable_thinking"] else "off")
+        try:
+            category = classify(self.aggregator, messages, self.classify_timeout)
+        except Exception as exc:  # the answer must not depend on the classifier being up
+            kwargs["enable_thinking"] = False
+            upstream["chat_template_kwargs"] = kwargs
+            return f"error:{type(exc).__name__}:off"
+        on = category in self.thinking_for
+        kwargs["enable_thinking"] = on
+        upstream["chat_template_kwargs"] = kwargs
+        if on:
+            limit_key = "max_completion_tokens" if "max_completion_tokens" in upstream else "max_tokens"
+            upstream[limit_key] = max(int(upstream.get(limit_key) or 0), self.thinking_tokens)
+        return f"{category}:{'on' if on else 'off'}"
 
     def _send_json(self, code: int, payload: dict, status: list[str] | None = None) -> None:
         self._send_raw(code, json.dumps(payload).encode(), "application/json", status or [])
 
-    def _send_raw(self, code: int, body: bytes, ctype: str, status: list[str]) -> None:
+    def _send_raw(self, code: int, body: bytes, ctype: str, status: list[str], thinking: str = "") -> None:
         self.send_response(code)
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(body)))
         if status:
             self.send_header("X-MoM-Proposers", ",".join(status))
+        if thinking:
+            self.send_header("X-MoM-Thinking", thinking)
         self.end_headers()
         self.wfile.write(body)
 
@@ -228,8 +298,18 @@ def main() -> int:
     ap.add_argument("--proposer", type=parse_member, action="append", default=[])
     ap.add_argument("--draft-tokens", type=int, default=768)
     ap.add_argument("--proposer-timeout", type=float, default=180.0)
+    ap.add_argument("--thinking-router", action="store_true",
+                    help="classify each new question and switch aggregator thinking on per category")
+    ap.add_argument("--thinking-for", default="calculation,code",
+                    help=f"comma-separated categories that get thinking, from {','.join(CATEGORIES)}")
+    ap.add_argument("--thinking-tokens", type=int, default=6000,
+                    help="minimum max_tokens for a request that gets thinking")
     a = ap.parse_args()
+    thinking_for = frozenset(c.strip() for c in a.thinking_for.split(",") if c.strip())
+    if unknown := thinking_for - set(CATEGORIES):
+        ap.error(f"unknown --thinking-for categories: {sorted(unknown)}")
     handler = type("BoundHandler", (Handler,), {
+        "thinking_router": a.thinking_router, "thinking_for": thinking_for, "thinking_tokens": a.thinking_tokens,
         "name": a.name, "aggregator": a.aggregator, "proposers": tuple(a.proposer), "draft_tokens": a.draft_tokens,
         "proposer_timeout": a.proposer_timeout, "pool": ThreadPoolExecutor(max_workers=max(1, 4 * len(a.proposer)))})
     server = ThreadingHTTPServer((a.host, a.port), handler)
