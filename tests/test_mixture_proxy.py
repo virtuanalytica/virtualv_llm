@@ -201,7 +201,7 @@ def test_thinking_router_is_off_by_default_and_skips_tool_result_turns(mom):
         s.shutdown()
 
 
-def test_thinking_router_retries_with_the_client_budget_when_the_raised_budget_is_rejected():
+def _overflow_router(error_body, prompt_tokens):
     seen = []
 
     class H(BaseHTTPRequestHandler):
@@ -210,11 +210,18 @@ def test_thinking_router_retries_with_the_client_budget_when_the_raised_budget_i
 
         def do_POST(self):
             body = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
+            if self.path == "/tokenize":
+                out = json.dumps({"count": prompt_tokens}).encode()
+                self.send_response(200 if prompt_tokens else 404)
+                self.send_header("Content-Length", str(len(out)))
+                self.end_headers()
+                self.wfile.write(out)
+                return
             seen.append(body)
             if len(seen) == 1:
                 reply = "code"
-            elif body.get("max_tokens", 0) > 1000:  # context overflow, as vLLM reports it
-                out = b'{"error": "maximum context length exceeded"}'
+            elif body.get("max_tokens", 0) > 5000:  # context overflow, as vLLM reports it
+                out = error_body.encode()
                 self.send_response(400)
                 self.send_header("Content-Length", str(len(out)))
                 self.end_headers()
@@ -232,10 +239,36 @@ def test_thinking_router_retries_with_the_client_budget_when_the_raised_budget_i
     handler = type("H", (mp.Handler,), {"name": "mom-test", "aggregator": mp.Member("agg", agg_url),
                                         "pool": mp.ThreadPoolExecutor(1), "thinking_router": True})
     proxy, url = _serve(handler)
+    return url, seen, (agg, proxy)
+
+
+VLLM_OVERFLOW = ('{"error":{"message":"This model\'s maximum context length is 8192 tokens. However, you requested '
+                 '6000 output tokens and your prompt contains at least %d input tokens, for a total of at least 8193 tokens."}}')
+
+
+def test_thinking_router_shrinks_the_budget_to_the_room_left_in_the_context():
+    url, seen, servers = _overflow_router(VLLM_OVERFLOW % 2193, 4098)
     headers, raw = _post(url, {"messages": [{"role": "user", "content": "trace this"}], "max_tokens": 300})
     assert json.loads(raw)["choices"][0]["message"]["content"] == "ok"
-    assert headers["X-MoM-Thinking"] == "code:on:budget-reset"
-    assert [b.get("max_tokens") for b in seen] == [6, 6000, 300]
+    assert headers["X-MoM-Thinking"] == "code:on:budget-4078"
+    assert [b.get("max_tokens") for b in seen] == [6, 6000, 4078]
     assert seen[2]["chat_template_kwargs"] == {"enable_thinking": True}
-    for s in (agg, proxy):
+    for s in servers:
+        s.shutdown()
+
+
+def test_thinking_router_turns_thinking_off_when_no_room_is_left():
+    url, seen, servers = _overflow_router(VLLM_OVERFLOW % 2193, 7800)
+    headers, raw = _post(url, {"messages": [{"role": "user", "content": "trace this"}], "max_tokens": 300})
+    assert headers["X-MoM-Thinking"] == "code:on:no-room-off"
+    assert seen[2]["max_tokens"] == 300 and seen[2]["chat_template_kwargs"] == {"enable_thinking": False}
+    for s in servers:
+        s.shutdown()
+
+
+def test_thinking_router_turns_thinking_off_when_the_prompt_cannot_be_counted():
+    url, seen, servers = _overflow_router(VLLM_OVERFLOW % 2193, None)
+    headers, _ = _post(url, {"messages": [{"role": "user", "content": "trace this"}], "max_tokens": 300})
+    assert headers["X-MoM-Thinking"] == "code:on:no-room-off" and seen[2]["chat_template_kwargs"] == {"enable_thinking": False}
+    for s in servers:
         s.shutdown()
