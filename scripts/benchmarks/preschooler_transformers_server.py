@@ -44,6 +44,16 @@ def encode_chat(tokenizer, messages: list[dict], body: dict):
                                          enable_thinking=enable_thinking)
 
 
+def validate_no_think_template(tokenizer) -> None:
+    """Fail before loading weights when the fixed no-thinking profile is impossible."""
+    rendered = tokenizer.apply_chat_template(
+        [{"role": "user", "content": "Protocol check."}], tokenize=False,
+        add_generation_prompt=True, enable_thinking=False)
+    if rendered.rstrip().endswith("<think>"):
+        raise ValueError("model chat template still opens <think> with enable_thinking=false; "
+                         "use a separate thinking-on protocol")
+
+
 def serve(model_path: Path, alias: str, host: str, port: int) -> None:
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -51,6 +61,7 @@ def serve(model_path: Path, alias: str, host: str, port: int) -> None:
     if torch.cuda.device_count() != 1:
         raise RuntimeError("one explicitly visible GPU is required")
     tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=False)
+    validate_no_think_template(tokenizer)
     model = AutoModelForCausalLM.from_pretrained(model_path, dtype=torch.bfloat16,
                                                 attn_implementation="sdpa",
                                                 trust_remote_code=False, device_map="cuda:0")

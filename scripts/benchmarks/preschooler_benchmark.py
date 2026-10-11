@@ -111,6 +111,9 @@ def main() -> int:
     model = next((m for m in roster["models"] if m["alias"] == args.alias), None)
     if model is None:
         parser.error("unknown model alias")
+    if model.get("chat_mode") == "thinking_only":
+        parser.error("thinking-only checkpoint requires a separate thinking-on protocol; "
+                     "the fixed reasoning-off profile is invalid")
     snapshot = args.store / args.alias
     manifest_file = snapshot / "snapshot-manifest.json"
     if not manifest_file.is_file():
