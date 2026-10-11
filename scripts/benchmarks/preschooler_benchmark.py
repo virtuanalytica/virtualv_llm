@@ -23,6 +23,9 @@ ROOT = Path(__file__).resolve().parents[2]
 ROSTER = ROOT / "config/preschooler_teacher_roster.json"
 STORE = Path("/media/knight2/claude-data/knight1/models/preschooler-teachers")
 VLLM = Path("/media/knight2/claude-data/knight1/1cat-vllm-v1.5.1/env/bin/vllm")
+MINISTRAL_PYTHON = Path("/media/knight2/claude-data/knight1/1cat-vllm-v1.5.1/env/bin/python")
+MINISTRAL_TRANSFORMERS_COMPAT = Path(
+    "/media/knight2/claude-data/knight1/1cat-vllm-v1.5.1/compat-transformers-5.16.1")
 CANARY = (("What is 17 plus 25? Reply with only the number.", "42"),
           ("Translate 'good morning' to Dutch. Reply with only the translation.", "goedemorgen"),
           ("What is the capital of France? Reply with only the city.", "paris"))
@@ -131,10 +134,15 @@ def main() -> int:
     args.out.chmod(0o700)
     base = f"http://127.0.0.1:{args.port}"
     env = dict(os.environ, CUDA_VISIBLE_DEVICES=str(args.gpu_index), CUDA_DEVICE_ORDER="PCI_BUS_ID")
+    if model["family"] == "ministral3":
+        if not (MINISTRAL_TRANSFORMERS_COMPAT / "transformers/__init__.py").is_file():
+            parser.error("Ministral3 requires the isolated Transformers 5.16.1 compatibility overlay")
+        if not MINISTRAL_PYTHON.is_file():
+            parser.error("Ministral3 compatibility Python is missing")
+        env["PYTHONPATH"] = str(MINISTRAL_TRANSFORMERS_COMPAT) + os.pathsep + env.get("PYTHONPATH", "")
     if args.engine == "transformers":
-        if model["family"] == "ministral3":
-            parser.error("multimodal Ministral needs a reviewed text-only runtime adapter")
-        command = [sys.executable, str(ROOT / "scripts/benchmarks/preschooler_transformers_server.py"),
+        python = MINISTRAL_PYTHON if model["family"] == "ministral3" else Path(sys.executable)
+        command = [str(python), str(ROOT / "scripts/benchmarks/preschooler_transformers_server.py"),
                    "--model-path", str(snapshot), "--alias", args.alias,
                    "--port", str(args.port)]
     else:
@@ -152,6 +160,11 @@ def main() -> int:
               "engine": args.engine,
               "serve_command": command, "snapshot_manifest": str(manifest_file),
               "monitor": "llmwatch" if args.monitor else "none"}
+    if model["family"] == "ministral3":
+        result["runtime_compat"] = {"transformers": "5.16.1", "accelerate": "1.12.0",
+                                    "overlay": str(MINISTRAL_TRANSFORMERS_COMPAT),
+                                    "mode": "BF16 dequantized text-only" if args.engine == "transformers"
+                                    else "1Cat FP8 experimental"}
     status_file = args.out / "status.json"
     status_file.write_text(json.dumps(result, indent=2) + "\n")
     process = None
