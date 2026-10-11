@@ -18,6 +18,18 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
 
+def wall_timings(tokens: int, elapsed: float) -> dict:
+    """Expose total request time without claiming an isolated decode rate.
+
+    ``predicted_per_second`` is reserved by the private runner for genuine
+    server decode timing. Model.generate here includes prefill in ``elapsed``.
+    """
+    return {"predicted_n": tokens,
+            "wall_seconds_including_prefill": elapsed,
+            "wall_tokens_per_second_including_prefill": tokens / elapsed,
+            "method": "wall time including prefill"}
+
+
 def serve(model_path: Path, alias: str, host: str, port: int) -> None:
     import torch
     from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -115,9 +127,7 @@ def serve(model_path: Path, alias: str, host: str, port: int) -> None:
                         counters["running"] -= 1
                 result = {"model": alias, "usage": {"prompt_tokens": int(prompt_tokens),
                                                     "completion_tokens": tokens},
-                          "timings": {"predicted_n": tokens,
-                                      "predicted_per_second": tokens / elapsed,
-                                      "method": "wall time including prefill"},
+                          "timings": wall_timings(tokens, elapsed),
                           "choices": [{"message": {"role": "assistant", "content": text},
                                        "text": text, "finish_reason": "length" if tokens == limit else "stop"}]}
                 self.reply(200, result)
