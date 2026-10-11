@@ -38,6 +38,7 @@ from __future__ import annotations
 import argparse
 import itertools
 import json
+import re
 import threading
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
@@ -183,6 +184,7 @@ class Handler(BaseHTTPRequestHandler):
     thinking_for: frozenset[str] = frozenset({"calculation", "code"})
     thinking_tokens: int = 6000
     classify_timeout: float = 30.0
+    min_thinking_room: int = 1024
 
     def log_message(self, fmt: str, *args: Any) -> None:
         pass
@@ -226,14 +228,9 @@ class Handler(BaseHTTPRequestHandler):
             resp = self._open_upstream(upstream)
         except HTTPError as exc:
             if exc.code == 400 and self._raised_budget(upstream, payload):
-                # A long conversation plus the raised thinking budget can exceed the model context;
-                # retry once with the client's own budget rather than failing the turn.
-                exc.close()
-                for key in ("max_tokens", "max_completion_tokens"):
-                    upstream.pop(key, None)
-                    if key in payload:
-                        upstream[key] = payload[key]
-                thinking += ":budget-reset"
+                # A long conversation plus the raised thinking budget can exceed the model context.
+                # Retry once: keep thinking with whatever room is left, or answer without thinking.
+                thinking += self._fit_budget(upstream, payload, exc.read().decode("utf-8", "replace"))
                 try:
                     resp = self._open_upstream(upstream)
                 except HTTPError as exc2:
@@ -270,6 +267,35 @@ class Handler(BaseHTTPRequestHandler):
         req = Request(f"{self.aggregator.next_url()}/chat/completions", data=json.dumps(upstream).encode(),
                       headers={"Content-Type": "application/json"})
         return urlopen(req, timeout=900)
+
+    def _fit_budget(self, upstream: dict, payload: dict, error: str) -> str:
+        """Shrink the thinking budget to the room the context leaves; below min_thinking_room, turn thinking off."""
+        key = "max_completion_tokens" if "max_completion_tokens" in upstream else "max_tokens"
+        # vLLM's "at least N input tokens" is only a lower bound derived from the request, so the
+        # prompt is counted with the server's own /tokenize; without a count, thinking goes off.
+        ctx = re.search(r"maximum context length is (\d+)", error)
+        used = self._prompt_tokens(upstream) if ctx else None
+        room = int(ctx.group(1)) - used - 16 if ctx and used else 0
+        if room >= self.min_thinking_room:
+            upstream[key] = room
+            return f":budget-{room}"
+        upstream.pop(key, None)
+        if key in payload:
+            upstream[key] = payload[key]
+        upstream["chat_template_kwargs"] = {**(upstream.get("chat_template_kwargs") or {}), "enable_thinking": False}
+        return ":no-room-off"
+
+    def _prompt_tokens(self, upstream: dict) -> int | None:
+        root = self.aggregator.next_url().rstrip("/").removesuffix("/v1")
+        body = {"model": upstream.get("model", ""), "messages": upstream.get("messages", [])}
+        if upstream.get("tools"):
+            body["tools"] = upstream["tools"]
+        if upstream.get("chat_template_kwargs"):
+            body["chat_template_kwargs"] = upstream["chat_template_kwargs"]
+        try:
+            return int(json.loads(_post(f"{root}/tokenize", body, self.classify_timeout))["count"])
+        except Exception:
+            return None
 
     @staticmethod
     def _raised_budget(upstream: dict, payload: dict) -> bool:
