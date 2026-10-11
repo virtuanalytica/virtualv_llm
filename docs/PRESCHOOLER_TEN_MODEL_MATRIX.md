@@ -39,10 +39,12 @@ The isolated Transformers BF16 endpoint on physical Ada GPU 0 completed the acti
 | --- | ---: | --- |
 | Eight fixed tasks | 0.9792 mean | Eight scored tasks, not the specialist composite |
 | Private specialist composite | 0.25; 95% interval 0.1485–0.3515 | 44 scored items across ten text-output lanes; image vision was unsupported and excluded |
-| 256-token throughput probe | 25.722 output tokens/s | Server decode timing in the full run; separate canary wall rate 25.581 tokens/s |
+| 256-token throughput probe | 25.722 output tokens/s | Transformers wall time including prefill; separate canary wall rate 25.581 tokens/s |
 | GPU board energy | 0.091 Wh/answer; 12.737 Wh in 140 requests | Physical GPU 0 only; excludes CPU, DRAM, PMem, SSD and PSU |
 | Verbatim canary recall | 0/10 | Small historical recall probe, not proof of no contamination |
 | Reordered-option robustness | 0.8667 original → 0.6000 reordered | 15 questions; 26.67 percentage-point drop needs investigation |
 | Fresh post-cutoff arithmetic | 8/11 = 0.7273 | Private local holdout, small sample |
+
+The raw report's `timing_source: server decode` label is incorrect for this Transformers adapter: its `predicted_per_second` value was calculated around the entire `model.generate` call, including prefill. The numeric 25.722 t/s remains a valid request-wall rate. The adapter now exports an explicitly named wall rate and lets the private runner use its wall-clock fallback. This correction does not re-score quality or rewrite private evidence.
 
 The full result is marked `promotion_eligible: false`. Its strong eight-task mean and weak specialist performance measure different work; neither predicts a trained Preschooler or establishes superiority over another candidate. The other nine models still need matched profiles, and the post-cutoff and option-order samples are too small for a robust generalization claim. The video lane in this protocol asks for an FFmpeg filtergraph from text and scores the rendered artifact; it is not a native visual-generation test.
