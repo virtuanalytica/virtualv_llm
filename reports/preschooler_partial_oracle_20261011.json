@@ -4,9 +4,10 @@
   "status": "offline_oracle_not_live_mixture",
   "models": [
     "qwen3-4b-instruct",
+    "ministral3-3b-instruct",
     "phi4-mini-instruct",
-    "smollm3-3b",
-    "phi35-mini-instruct"
+    "phi35-mini-instruct",
+    "smollm3-3b"
   ],
   "shared_private_items": 36,
   "shared_lanes": [
@@ -24,16 +25,85 @@
   },
   "solo_accuracy": {
     "qwen3-4b-instruct": 0.277778,
+    "ministral3-3b-instruct": 0.444444,
     "phi4-mini-instruct": 0.416667,
-    "smollm3-3b": 0.555556,
-    "phi35-mini-instruct": 0.277778
+    "phi35-mini-instruct": 0.277778,
+    "smollm3-3b": 0.555556
   },
-  "subset_count": 11,
+  "subset_count": 26,
   "subsets": [
     {
       "models": [
-        "smollm3-3b",
-        "phi35-mini-instruct"
+        "ministral3-3b-instruct",
+        "phi35-mini-instruct",
+        "smollm3-3b"
+      ],
+      "size": 3,
+      "families": 3,
+      "oracle_upper_bound": 0.666667,
+      "oracle_gain_over_global_best": 0.111111,
+      "best_member_accuracy": 0.555556,
+      "random_router_expected_accuracy": 0.425926
+    },
+    {
+      "models": [
+        "ministral3-3b-instruct",
+        "phi4-mini-instruct",
+        "phi35-mini-instruct",
+        "smollm3-3b"
+      ],
+      "size": 4,
+      "families": 4,
+      "oracle_upper_bound": 0.666667,
+      "oracle_gain_over_global_best": 0.111111,
+      "best_member_accuracy": 0.555556,
+      "random_router_expected_accuracy": 0.423611
+    },
+    {
+      "models": [
+        "qwen3-4b-instruct",
+        "ministral3-3b-instruct",
+        "phi35-mini-instruct",
+        "smollm3-3b"
+      ],
+      "size": 4,
+      "families": 4,
+      "oracle_upper_bound": 0.666667,
+      "oracle_gain_over_global_best": 0.111111,
+      "best_member_accuracy": 0.555556,
+      "random_router_expected_accuracy": 0.388889
+    },
+    {
+      "models": [
+        "qwen3-4b-instruct",
+        "ministral3-3b-instruct",
+        "phi4-mini-instruct",
+        "phi35-mini-instruct",
+        "smollm3-3b"
+      ],
+      "size": 5,
+      "families": 5,
+      "oracle_upper_bound": 0.666667,
+      "oracle_gain_over_global_best": 0.111111,
+      "best_member_accuracy": 0.555556,
+      "random_router_expected_accuracy": 0.394444
+    },
+    {
+      "models": [
+        "ministral3-3b-instruct",
+        "smollm3-3b"
+      ],
+      "size": 2,
+      "families": 2,
+      "oracle_upper_bound": 0.611111,
+      "oracle_gain_over_global_best": 0.055556,
+      "best_member_accuracy": 0.555556,
+      "random_router_expected_accuracy": 0.5
+    },
+    {
+      "models": [
+        "phi35-mini-instruct",
+        "smollm3-3b"
       ],
       "size": 2,
       "families": 2,
@@ -44,9 +114,22 @@
     },
     {
       "models": [
+        "ministral3-3b-instruct",
         "phi4-mini-instruct",
-        "smollm3-3b",
-        "phi35-mini-instruct"
+        "smollm3-3b"
+      ],
+      "size": 3,
+      "families": 3,
+      "oracle_upper_bound": 0.611111,
+      "oracle_gain_over_global_best": 0.055556,
+      "best_member_accuracy": 0.555556,
+      "random_router_expected_accuracy": 0.472222
+    },
+    {
+      "models": [
+        "phi4-mini-instruct",
+        "phi35-mini-instruct",
+        "smollm3-3b"
       ],
       "size": 3,
       "families": 3,
@@ -58,8 +141,21 @@
     {
       "models": [
         "qwen3-4b-instruct",
-        "smollm3-3b",
-        "phi35-mini-instruct"
+        "ministral3-3b-instruct",
+        "smollm3-3b"
+      ],
+      "size": 3,
+      "families": 3,
+      "oracle_upper_bound": 0.611111,
+      "oracle_gain_over_global_best": 0.055556,
+      "best_member_accuracy": 0.555556,
+      "random_router_expected_accuracy": 0.425926
+    },
+    {
+      "models": [
+        "qwen3-4b-instruct",
+        "phi35-mini-instruct",
+        "smollm3-3b"
       ],
       "size": 3,
       "families": 3,
@@ -71,9 +167,23 @@
     {
       "models": [
         "qwen3-4b-instruct",
+        "ministral3-3b-instruct",
         "phi4-mini-instruct",
-        "smollm3-3b",
-        "phi35-mini-instruct"
+        "smollm3-3b"
+      ],
+      "size": 4,
+      "families": 4,
+      "oracle_upper_bound": 0.611111,
+      "oracle_gain_over_global_best": 0.055556,
+      "best_member_accuracy": 0.555556,
+      "random_router_expected_accuracy": 0.423611
+    },
+    {
+      "models": [
+        "qwen3-4b-instruct",
+        "phi4-mini-instruct",
+        "phi35-mini-instruct",
+        "smollm3-3b"
       ],
       "size": 4,
       "families": 4,
@@ -108,6 +218,19 @@
     },
     {
       "models": [
+        "ministral3-3b-instruct",
+        "phi4-mini-instruct",
+        "phi35-mini-instruct"
+      ],
+      "size": 3,
+      "families": 3,
+      "oracle_upper_bound": 0.555556,
+      "oracle_gain_over_global_best": 0.0,
+      "best_member_accuracy": 0.444444,
+      "random_router_expected_accuracy": 0.37963
+    },
+    {
+      "models": [
         "qwen3-4b-instruct",
         "phi4-mini-instruct",
         "smollm3-3b"
@@ -118,6 +241,45 @@
       "oracle_gain_over_global_best": 0.0,
       "best_member_accuracy": 0.555556,
       "random_router_expected_accuracy": 0.416667
+    },
+    {
+      "models": [
+        "qwen3-4b-instruct",
+        "ministral3-3b-instruct",
+        "phi4-mini-instruct",
+        "phi35-mini-instruct"
+      ],
+      "size": 4,
+      "families": 4,
+      "oracle_upper_bound": 0.555556,
+      "oracle_gain_over_global_best": 0.0,
+      "best_member_accuracy": 0.444444,
+      "random_router_expected_accuracy": 0.354167
+    },
+    {
+      "models": [
+        "ministral3-3b-instruct",
+        "phi35-mini-instruct"
+      ],
+      "size": 2,
+      "families": 2,
+      "oracle_upper_bound": 0.527778,
+      "oracle_gain_over_global_best": -0.027778,
+      "best_member_accuracy": 0.444444,
+      "random_router_expected_accuracy": 0.361111
+    },
+    {
+      "models": [
+        "qwen3-4b-instruct",
+        "ministral3-3b-instruct",
+        "phi35-mini-instruct"
+      ],
+      "size": 3,
+      "families": 3,
+      "oracle_upper_bound": 0.527778,
+      "oracle_gain_over_global_best": -0.027778,
+      "best_member_accuracy": 0.444444,
+      "random_router_expected_accuracy": 0.333333
     },
     {
       "models": [
@@ -143,6 +305,43 @@
       "oracle_gain_over_global_best": -0.055556,
       "best_member_accuracy": 0.416667,
       "random_router_expected_accuracy": 0.324074
+    },
+    {
+      "models": [
+        "ministral3-3b-instruct",
+        "phi4-mini-instruct"
+      ],
+      "size": 2,
+      "families": 2,
+      "oracle_upper_bound": 0.472222,
+      "oracle_gain_over_global_best": -0.083333,
+      "best_member_accuracy": 0.444444,
+      "random_router_expected_accuracy": 0.430556
+    },
+    {
+      "models": [
+        "qwen3-4b-instruct",
+        "ministral3-3b-instruct",
+        "phi4-mini-instruct"
+      ],
+      "size": 3,
+      "families": 3,
+      "oracle_upper_bound": 0.472222,
+      "oracle_gain_over_global_best": -0.083333,
+      "best_member_accuracy": 0.444444,
+      "random_router_expected_accuracy": 0.37963
+    },
+    {
+      "models": [
+        "qwen3-4b-instruct",
+        "ministral3-3b-instruct"
+      ],
+      "size": 2,
+      "families": 2,
+      "oracle_upper_bound": 0.444444,
+      "oracle_gain_over_global_best": -0.111111,
+      "best_member_accuracy": 0.444444,
+      "random_router_expected_accuracy": 0.361111
     },
     {
       "models": [
