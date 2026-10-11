@@ -15,12 +15,10 @@ import shutil
 from datetime import datetime, timezone
 from pathlib import Path
 
-from huggingface_hub import HfApi, snapshot_download
-
 ROOT = Path(__file__).resolve().parents[2]
 ROSTER = ROOT / "config/preschooler_teacher_roster.json"
 DEFAULT_STORE = Path("/media/knight2/claude-data/knight1/models/preschooler-teachers")
-SMALL_FILES = {"config.json", "generation_config.json", "tokenizer.json", "tokenizer_config.json",
+SMALL_FILES = {"config.json", "generation_config.json", "tokenizer.json", "tekken.json", "tokenizer_config.json",
                "special_tokens_map.json", "chat_template.jinja", "vocab.json", "merges.txt",
                "README.md", "LICENSE", "LICENSE.md"}
 MIN_HEADROOM = 200_000_000_000
@@ -50,6 +48,13 @@ def sha256(path: Path) -> str:
     return h.hexdigest()
 
 
+def missing_bytes(destination: Path, files: list) -> int:
+    return sum((entry.size or 0) for entry in files
+               if not (destination / entry.rfilename).is_file()
+               or (entry.size is not None
+                   and (destination / entry.rfilename).stat().st_size != entry.size))
+
+
 def plan(model: dict, api: HfApi) -> tuple[object, list, int]:
     info = api.model_info(model["repo"], revision=model["revision"], files_metadata=True)
     license_id = (info.cardData or {}).get("license")
@@ -63,9 +68,11 @@ def plan(model: dict, api: HfApi) -> tuple[object, list, int]:
 
 
 def fetch(model: dict, info: object, files: list, store: Path) -> dict:
+    from huggingface_hub import snapshot_download
+
     alias = model["alias"]
     destination = store / alias
-    missing = sum((f.size or 0) for f in files if not (destination / f.rfilename).exists())
+    missing = missing_bytes(destination, files)
     if shutil.disk_usage(store).free < missing + MIN_HEADROOM:
         raise RuntimeError(f"{alias}: less than 200 GB will remain on model SSD")
     snapshot_download(repo_id=model["repo"], revision=model["revision"],
@@ -91,6 +98,8 @@ def fetch(model: dict, info: object, files: list, store: Path) -> dict:
 
 
 def main() -> None:
+    from huggingface_hub import HfApi
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--roster", type=Path, default=ROSTER)
     parser.add_argument("--store", type=Path, default=DEFAULT_STORE)
@@ -112,8 +121,8 @@ def main() -> None:
         print(json.dumps({"alias": model["alias"], "revision": info.sha,
                           "license": model["license_id"], "files": len(files),
                           "download_gb": round(size / 1e9, 3)}), flush=True)
-    needed = sum(size for model, _, _, size in planned
-                 if not (args.store / model["alias"] / "snapshot-manifest.json").is_file())
+    needed = sum(missing_bytes(args.store / model["alias"], files)
+                 for model, _, files, _ in planned)
     if shutil.disk_usage(args.store).free < needed + MIN_HEADROOM:
         raise RuntimeError("roster exceeds available SSD headroom")
     print(json.dumps({"models": len(planned), "estimated_missing_gb": round(needed / 1e9, 3),

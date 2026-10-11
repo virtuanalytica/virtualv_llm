@@ -60,11 +60,26 @@ def serve(model_path: Path, alias: str, host: str, port: int) -> None:
 
     if torch.cuda.device_count() != 1:
         raise RuntimeError("one explicitly visible GPU is required")
-    tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=False)
-    validate_no_think_template(tokenizer)
-    model = AutoModelForCausalLM.from_pretrained(model_path, dtype=torch.bfloat16,
-                                                attn_implementation="sdpa",
-                                                trust_remote_code=False, device_map="cuda:0")
+    configuration = json.loads((model_path / "config.json").read_text())
+    is_mistral3 = configuration.get("model_type") == "mistral3"
+    if is_mistral3:
+        from transformers import FineGrainedFP8Config, Mistral3ForConditionalGeneration, MistralCommonBackend
+
+        # The pinned checkpoint is FP8. Use the model card's BF16 dequant path
+        # and its Tekken tokenizer so text-only requests are comparable to the
+        # other BF16 reference endpoints. No image input is accepted here.
+        tokenizer = MistralCommonBackend.from_pretrained(model_path, local_files_only=True)
+        validate_no_think_template(tokenizer)
+        model = Mistral3ForConditionalGeneration.from_pretrained(
+            model_path, device_map="cuda:0", local_files_only=True,
+            quantization_config=FineGrainedFP8Config(dequantize=True),
+            attn_implementation="sdpa")
+    else:
+        tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=False)
+        validate_no_think_template(tokenizer)
+        model = AutoModelForCausalLM.from_pretrained(model_path, dtype=torch.bfloat16,
+                                                    attn_implementation="sdpa",
+                                                    trust_remote_code=False, device_map="cuda:0")
     model.eval()
     if tokenizer.pad_token_id is None:
         tokenizer.pad_token = tokenizer.eos_token
