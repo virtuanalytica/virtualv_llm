@@ -23,8 +23,9 @@
       "license_id": "apache-2.0",
       "weight_pattern": "model-*.safetensors",
       "role": "reasoning",
+      "chat_mode": "thinking_only",
       "output_training_rights": "pending_per_model_review",
-      "runtime_status": "pending_loader_canary"
+      "runtime_status": "invalid_reasoning_off_protocol_requires_separate_profile"
     },
     {
       "alias": "ministral3-3b-instruct",

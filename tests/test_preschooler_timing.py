@@ -1,6 +1,8 @@
 import pytest
 
-from scripts.benchmarks.preschooler_transformers_server import encode_chat, wall_timings
+from scripts.benchmarks.preschooler_transformers_server import (encode_chat,
+                                                               validate_no_think_template,
+                                                               wall_timings)
 
 
 def test_transformers_wall_time_cannot_masquerade_as_decode_time():
@@ -25,3 +27,17 @@ def test_private_no_thinking_profile_reaches_chat_template():
     with pytest.raises(ValueError, match="boolean"):
         encode_chat(Tokenizer(), messages,
                     {"chat_template_kwargs": {"enable_thinking": "false"}})
+
+
+def test_thinking_only_template_rejected_before_weights_load():
+    class Tokenizer:
+        def __init__(self, suffix):
+            self.suffix = suffix
+
+        def apply_chat_template(self, messages, **kwargs):
+            assert kwargs["enable_thinking"] is False
+            return "<|im_start|>assistant\n" + self.suffix
+
+    with pytest.raises(ValueError, match="thinking-on protocol"):
+        validate_no_think_template(Tokenizer("<think>\n"))
+    validate_no_think_template(Tokenizer("/no_think\n"))
