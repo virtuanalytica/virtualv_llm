@@ -1,6 +1,6 @@
 # Preschooler 3–4B teacher matrix
 
-Status 2026-10-11: **candidate acquisition and loader canaries**, not a completed quality comparison. The ten pinned candidates are in [`config/preschooler_teacher_roster.json`](../config/preschooler_teacher_roster.json). The associated Preschooler business concept lives in Toddler. New model releases enter by a new roster revision and repeat this protocol; no existing result row is silently replaced.
+Status 2026-10-11: **one of ten private text profiles complete**, not a ten-model quality comparison. All ten pinned snapshots were downloaded and hash-verified on `claude-data`. The candidates are in [`config/preschooler_teacher_roster.json`](../config/preschooler_teacher_roster.json). The associated Preschooler business concept lives in Toddler. New model releases enter by a new roster revision and repeat this protocol; no existing result row is silently replaced.
 
 ## Measurement order
 
@@ -29,4 +29,20 @@ The full private option additionally requires `--full --private-runner <active-w
 
 ## Current runtime finding
 
-The initial Qwen3-4B-Instruct loader canary on physical GPU 0 failed during CUDA initialization in 1Cat-vLLM 1.5.0. Repeating on 1.5.1 with Triton attention and eager execution also failed with `cudaErrorNoKernelImageForDevice`. The BF16 snapshot itself passed hash verification; **no vLLM answer or throughput score** was produced in those two attempts. The separate Transformers BF16 reference endpoint passed output-integrity canary and forced 256-token decode on GPU 0 at **20.969 wall tokens/s including prefill**; it answered 2/3 diagnostic prompts exactly (the Dutch variant “Goede morgen” differs from the expected “goedemorgen”). This is no private composite. llmwatch captured the compatible `/metrics` endpoint and GPU panel; machine-readable system samples were retained. Neither failed 1Cat attempt affects the active V100 day service.
+The initial Qwen3-4B-Instruct loader canary on physical GPU 0 failed during CUDA initialization in 1Cat-vLLM 1.5.0. Repeating on 1.5.1 with Triton attention and eager execution also failed with `cudaErrorNoKernelImageForDevice`. The BF16 snapshot itself passed hash verification; **no vLLM answer or throughput score** was produced in those two attempts. The separate Transformers BF16 reference endpoint passed output-integrity canary and forced 256-token decode on GPU 0 at **20.969 wall tokens/s including prefill**; it answered 2/3 diagnostic prompts exactly (the Dutch variant “Goede morgen” differs from the expected “goedemorgen”). llmwatch captured the compatible `/metrics` endpoint and GPU panel; machine-readable system samples were retained. Neither failed 1Cat attempt affects the active V100 day service.
+
+## First complete private profile: Qwen3-4B-Instruct
+
+The isolated Transformers BF16 endpoint on physical Ada GPU 0 completed the active `v3-private-specialist-anti-eight-gamedev-gamer-20261009` protocol on 11 October 2026. Model weights are pinned at `cdbee75f17c01a7cc42f958dc650907174af0554`; decoding used temperature 0, reasoning off and low effort. The raw private report remains outside Git, SHA-256 `8efe7b42cbcbe6f20084a5de1ec2b3ec286187c901285407e40a13b9e08d1cac`. It recorded:
+
+| Measure | Result | Scope |
+| --- | ---: | --- |
+| Eight fixed tasks | 0.9792 mean | Eight scored tasks, not the specialist composite |
+| Private specialist composite | 0.25; 95% interval 0.1485–0.3515 | 44 scored items across ten text-output lanes; image vision was unsupported and excluded |
+| 256-token throughput probe | 25.722 output tokens/s | Server decode timing in the full run; separate canary wall rate 25.581 tokens/s |
+| GPU board energy | 0.091 Wh/answer; 12.737 Wh in 140 requests | Physical GPU 0 only; excludes CPU, DRAM, PMem, SSD and PSU |
+| Verbatim canary recall | 0/10 | Small historical recall probe, not proof of no contamination |
+| Reordered-option robustness | 0.8667 original → 0.6000 reordered | 15 questions; 26.67 percentage-point drop needs investigation |
+| Fresh post-cutoff arithmetic | 8/11 = 0.7273 | Private local holdout, small sample |
+
+The full result is marked `promotion_eligible: false`. Its strong eight-task mean and weak specialist performance measure different work; neither predicts a trained Preschooler or establishes superiority over another candidate. The other nine models still need matched profiles, and the post-cutoff and option-order samples are too small for a robust generalization claim. The video lane in this protocol asks for an FFmpeg filtergraph from text and scores the rendered artifact; it is not a native visual-generation test.
