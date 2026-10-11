@@ -6,6 +6,11 @@
 #   serve_mom.sh down    stop it
 #   serve_mom.sh status  show what answers on the port and which GPUs it uses
 #
+# `up` also starts the thinking router (scripts/benchmarks/mixture_proxy.py --thinking-router) on
+# :8031 as model mom-router, in front of mom-live. It switches reasoning on only for calculation and
+# code questions: measured on a fresh procedural pack 0.60 -> 0.98 at 28.6x the average latency
+# (PR #65). MOM_ROUTER=0 skips it; mom-live on :8030 stays reachable directly.
+#
 # The default is chosen from measured rows (see docs/MOM_SERVE_DEFAULT.md). It is a single model,
 # not an ensemble: on this box every measured ensemble either scored below its best member or
 # dropped below the 50 tokens/s floor. Change MOM_DEFAULT to switch.
@@ -20,9 +25,25 @@ MOM_DEFAULT=${MOM_DEFAULT:-qwen36}
 VLLM_ENV=/media/knight2/EDS2/envs/1cat-vllm-1.5.0
 VLLM_MODEL=/media/knight2/EDS2/models/1cat-vllm/Qwen3.6-35B-A3B-NVFP4
 V100_LOCK=/tmp/v100_exclusive.lock
+ROUTER_PORT=${MOM_ROUTER_PORT:-8031}
+ROUTER_PIDFILE=${MOM_ROUTER_PIDFILE:-$HOME/.cache/mom-router.pid}
+ROUTER_LOG=${MOM_ROUTER_LOG:-$HOME/.cache/mom-router.log}
+REPO_ROOT=$(cd "$(dirname "$0")/../.." && pwd)
 
-answers() { curl -s -m 3 "http://127.0.0.1:$PORT/health" | grep -q '"ok"'; }
+# vLLM answers /health with an empty 200, llama.cpp with {"status":"ok"}: check the status code only
+answers() { [ "$(curl -s -m 3 -o /dev/null -w '%{http_code}' "http://127.0.0.1:$PORT/health")" = 200 ]; }
 served() { curl -s -m 3 "http://127.0.0.1:$PORT/v1/models" | grep -q "\"$ALIAS\""; }
+router_up() { curl -s -m 3 "http://127.0.0.1:$ROUTER_PORT/v1/models" | grep -q '"mom-router"'; }
+
+start_router() {
+  [ "${MOM_ROUTER:-1}" = "0" ] && return 0
+  router_up && { echo "mom-router already answers on :$ROUTER_PORT"; return 0; }
+  nohup python3 "$REPO_ROOT/scripts/benchmarks/mixture_proxy.py" --port "$ROUTER_PORT" --name mom-router \
+    --aggregator "mom=http://127.0.0.1:$PORT/v1#$ALIAS" --thinking-router > "$ROUTER_LOG" 2>&1 &
+  echo $! > "$ROUTER_PIDFILE"
+  for _ in $(seq 1 20); do router_up && { echo "mom-router up on :$ROUTER_PORT (thinking for calculation, code)"; return 0; }; sleep 0.5; done
+  echo "mom-router did not start; see $ROUTER_LOG" >&2; return 1
+}
 
 # Default: Qwen3.6-35B-A3B NVFP4 on one V100 (TP1), vLLM 1Cat. Measured 2026-10-10: 4-task composite 0.880,
 # single-stream 103.7 t/s, 8-task battery 0.854. Same flags as the measured run (see infra/mom_serve/README.md).
@@ -46,13 +67,13 @@ start_qwen36() {
 
 case "${1:-status}" in
   up)
-    if answers && served; then echo "mom-live already answers on :$PORT"; exit 0; fi
+    if answers && served; then echo "mom-live already answers on :$PORT"; start_router; exit 0; fi
     mkdir -p "$(dirname "$PIDFILE")"
     case "$MOM_DEFAULT" in
       qwen36)
         ( start_qwen36 ) > "$LOG" 2>&1 &
         echo $! > "$PIDFILE"
-        for _ in $(seq 1 240); do served && { echo "mom-live up on :$PORT (qwen36 NVFP4, V100 3)"; exit 0; }; sleep 3; done
+        for _ in $(seq 1 240); do served && { echo "mom-live up on :$PORT (qwen36 NVFP4, V100 3)"; start_router; exit 0; }; sleep 3; done
         echo "mom-live did not become ready; see $LOG" >&2; exit 1 ;;
       kat-coder)
         CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=1,2 nohup "$SERVER" \
@@ -61,11 +82,12 @@ case "${1:-status}" in
           --n-gpu-layers 99 --flash-attn on --jinja --reasoning off --split-mode layer --tensor-split 1,1 \
           > "$LOG" 2>&1 &
         echo $! > "$PIDFILE"
-        for _ in $(seq 1 90); do answers && { echo "mom-live up on :$PORT (kat-coder, GPUs 1,2)"; exit 0; }; sleep 2; done
+        for _ in $(seq 1 90); do answers && { echo "mom-live up on :$PORT (kat-coder, GPUs 1,2)"; start_router; exit 0; }; sleep 2; done
         echo "mom-live did not become healthy; see $LOG" >&2; exit 1 ;;
       *) echo "unknown MOM_DEFAULT=$MOM_DEFAULT (qwen36|kat-coder)" >&2; exit 2 ;;
     esac ;;
   down)
+    if [ -f "$ROUTER_PIDFILE" ]; then kill "$(cat "$ROUTER_PIDFILE")" 2>/dev/null || true; rm -f "$ROUTER_PIDFILE"; fi
     if [ -f "$PIDFILE" ]; then kill "$(cat "$PIDFILE")" 2>/dev/null || true; rm -f "$PIDFILE"; fi
     # vLLM runs workers as children; stop anything still serving the alias on this port
     for p in $(ps -eo pid,args | grep "[v]llm serve" | grep -- "--port $PORT" | awk '{print $1}'); do kill "$p" 2>/dev/null || true; done
@@ -73,6 +95,7 @@ case "${1:-status}" in
     echo "mom-live stopped" ;;
   status)
     if answers; then echo "mom-live answers on :$PORT"; else echo "mom-live is down on :$PORT"; fi
+    if router_up; then echo "mom-router answers on :$ROUTER_PORT"; else echo "mom-router is down on :$ROUTER_PORT"; fi
     nvidia-smi --query-gpu=index,memory.used --format=csv,noheader ;;
   *) echo "usage: $0 up|down|status" >&2; exit 2 ;;
 esac
