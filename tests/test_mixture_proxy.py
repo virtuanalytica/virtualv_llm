@@ -199,3 +199,43 @@ def test_thinking_router_is_off_by_default_and_skips_tool_result_turns(mom):
     assert headers.get("X-MoM-Thinking") is None and len(seen2) == 1
     for s in servers:
         s.shutdown()
+
+
+def test_thinking_router_retries_with_the_client_budget_when_the_raised_budget_is_rejected():
+    seen = []
+
+    class H(BaseHTTPRequestHandler):
+        def log_message(self, *a):
+            pass
+
+        def do_POST(self):
+            body = json.loads(self.rfile.read(int(self.headers["Content-Length"])))
+            seen.append(body)
+            if len(seen) == 1:
+                reply = "code"
+            elif body.get("max_tokens", 0) > 1000:  # context overflow, as vLLM reports it
+                out = b'{"error": "maximum context length exceeded"}'
+                self.send_response(400)
+                self.send_header("Content-Length", str(len(out)))
+                self.end_headers()
+                self.wfile.write(out)
+                return
+            else:
+                reply = "ok"
+            out = json.dumps({"choices": [{"message": {"role": "assistant", "content": reply}}]}).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(out)))
+            self.end_headers()
+            self.wfile.write(out)
+    agg, agg_url = _serve(H)
+    handler = type("H", (mp.Handler,), {"name": "mom-test", "aggregator": mp.Member("agg", agg_url),
+                                        "pool": mp.ThreadPoolExecutor(1), "thinking_router": True})
+    proxy, url = _serve(handler)
+    headers, raw = _post(url, {"messages": [{"role": "user", "content": "trace this"}], "max_tokens": 300})
+    assert json.loads(raw)["choices"][0]["message"]["content"] == "ok"
+    assert headers["X-MoM-Thinking"] == "code:on:budget-reset"
+    assert [b.get("max_tokens") for b in seen] == [6, 6000, 300]
+    assert seen[2]["chat_template_kwargs"] == {"enable_thinking": True}
+    for s in (agg, proxy):
+        s.shutdown()
