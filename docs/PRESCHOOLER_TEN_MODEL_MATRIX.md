@@ -1,6 +1,6 @@
 # Preschooler 3–4B teacher matrix
 
-Status 2026-10-11: **two of ten private text profiles complete**, not a ten-model quality comparison. All ten pinned snapshots were downloaded and hash-verified on `claude-data`. The candidates are in [`config/preschooler_teacher_roster.json`](../config/preschooler_teacher_roster.json). The associated Preschooler business concept lives in Toddler. New model releases enter by a new roster revision and repeat this protocol; no existing result row is silently replaced.
+Status 2026-10-11: **three of ten private text profiles complete**, not a ten-model quality comparison. All ten pinned snapshots were downloaded and hash-verified on `claude-data`. The candidates are in [`config/preschooler_teacher_roster.json`](../config/preschooler_teacher_roster.json). The [scalar public summary](../reports/preschooler_public_profiles_20261011.json) and [partial offline oracle](../reports/preschooler_partial_oracle_20261011.json) omit raw private items. The associated Preschooler business concept lives in Toddler. New model releases enter by a new roster revision and repeat this protocol; no existing result row is silently replaced.
 
 ## Measurement order
 
@@ -31,7 +31,7 @@ The full private option additionally requires `--full --private-runner <active-w
 
 The initial Qwen3-4B-Instruct loader canary on physical GPU 0 failed during CUDA initialization in 1Cat-vLLM 1.5.0. Repeating on 1.5.1 with Triton attention and eager execution also failed with `cudaErrorNoKernelImageForDevice`. The BF16 snapshot itself passed hash verification; **no vLLM answer or throughput score** was produced in those two attempts. The separate Transformers BF16 reference endpoint passed output-integrity canary and forced 256-token decode on GPU 0 at **20.969 wall tokens/s including prefill**; it answered 2/3 diagnostic prompts exactly (the Dutch variant “Goede morgen” differs from the expected “goedemorgen”). llmwatch captured the compatible `/metrics` endpoint and GPU panel; machine-readable system samples were retained. Neither failed 1Cat attempt affects the active V100 day service.
 
-## First two complete private text profiles
+## First three complete private text profiles
 
 The isolated Transformers BF16 endpoint on physical Ada GPU 0 completed the active `v3-private-specialist-anti-eight-gamedev-gamer-20261009` protocol on 11 October 2026. Model weights are pinned at `cdbee75f17c01a7cc42f958dc650907174af0554`; decoding used temperature 0, reasoning off and low effort. The raw private report remains outside Git, SHA-256 `8efe7b42cbcbe6f20084a5de1ec2b3ec286187c901285407e40a13b9e08d1cac`. It recorded:
 
@@ -61,4 +61,17 @@ Phi-4-mini-Instruct then completed the **same** private protocol on one physical
 | Reordered-option robustness | 0.8667 → 0.6000 | 0.8667 → 0.6000 | 15 items; option-order sensitivity remains |
 | Fresh arithmetic holdout | 8/11 | 10/11 | Small sealed sample; not a general quality ranking |
 
-Both raw reports have `promotion_eligible: false`. Phi's stronger specialist point estimate and lower GPU-board Wh are worth follow-up, while Qwen's eight-task score is higher. The specialist intervals overlap, the models have different architectures and tokenizer behavior, and the one-GPU BF16 profile alone cannot establish which base is better for a trained student. The remaining eight profiles and fresh paired holdouts are still required before mixture or training decisions.
+The Qwen and Phi raw reports have `promotion_eligible: false`. Phi's stronger specialist point estimate and lower GPU-board Wh are worth follow-up, while Qwen's eight-task score is higher. The specialist intervals overlap, and the one-GPU BF16 profile alone cannot establish which base is better for a trained student.
+
+SmolLM3-3B then completed the same private text protocol on GPU 0, pinned revision `a07cc9a04f16550a088caea529712d1d335b0ac1`. Its model card defaults to extended thinking; the first partial run was invalidated because the reference endpoint ignored `enable_thinking=false`. The adapter now passes that setting to the chat template, and the complete replacement run used `/no_think`. The invalid partial run is retained outside Git and excluded from this matrix. The replacement raw report is owner-only, SHA-256 `261cc1a0ce45cb13fd8a169ab35cae48002538be6c2230e966bf52adec7793bf`.
+
+| Measure | Qwen3-4B-Instruct | Phi-4-mini-Instruct | SmolLM3-3B | Scope |
+| --- | ---: | ---: | ---: | --- |
+| Eight fixed tasks | 0.9792 | 0.7292 | 0.6250 | Same eight tasks |
+| Private specialist composite | 0.2500 | 0.3583 | 0.4667 | 44 items, ten lanes; SmolLM3 95% interval 0.3649–0.5684 |
+| 256-token output | 25.722 | 26.337 | 33.282 | Tokens/s over wall time including prefill |
+| GPU-board energy per answer | 0.091 | 0.062 | 0.076 | Wh on GPU 0; 140 requests each; host energy excluded |
+| Reordered-option robustness | 0.8667 → 0.6000 | 0.8667 → 0.6000 | 0.8000 → 0.8000 | 15 small-sample questions |
+| Fresh arithmetic holdout | 8/11 | 10/11 | 9/11 | Small sealed sample, not a general ranking |
+
+All three reports are `promotion_eligible: false`. The common item-level export currently shares **36 identical items across seven specialist lanes**. On precisely those items, the best fixed model is SmolLM3 at 20/36; the unattainable oracle over all three is also 20/36. Qwen and Phi add zero correct items beyond SmolLM3 on this observed intersection. Four FQ/video items lack the hash-bearing item keys expected by the oracle tool, and four gamer episodes use a separate trace schema; they are not included in that oracle claim. This is exploratory reuse of one private pack, not a fresh router evaluation; new sealed items are needed before ruling out complementary routes. Seven model profiles remain, and equal-budget student training has not begun.

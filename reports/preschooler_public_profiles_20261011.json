@@ -1,0 +1,108 @@
+{
+  "schema": "preschooler-public-profile-summary/v1",
+  "generated_at": "2026-10-11T13:48:01.311008+00:00",
+  "roster_count": 10,
+  "complete_profiles": 3,
+  "pack_commitments": {
+    "specialist_pack_sha256": {
+      "chemistry": "935f7cb99a2aa47c9d25b325b3fdc8898ef1f976301cf58e6762c7c4003ea518",
+      "physics": "fe18c069ac5cfa73a7488325a8bf73b8f2b74d9448e27264bb102a7c9b7b7197",
+      "iq": "d246e1f5c88c3a4379bea11b94aed259eefcac3b23c44906a94f2c235cd04916",
+      "eq": "85c8e330008e448e0a09be116c47daf01af208f1cec60dd2eec873d25aa59199",
+      "fq": "71e069db008fabcab9f837e4ee1dd6dd18cd599eb0954048dfd09b3ee7c16bb4",
+      "qq": "d7cbd832b6096f0e9929c1b5ab1162c786376cbc07deb4662b8a5a4e854013e5",
+      "finance": "e98581b98cd33d98aa373b89fcd72125e4f9540143f8290f64357b0e5bc138bc",
+      "video": "c746e54cdd2ce5da75a2bcd4300cc956c7ccf3e3df1afae942f5c47ee3d2f080",
+      "gamedev": "b02bd11d8f24dd7cbc737db427cd339a795a612950c4569203ea9eea4adb152e",
+      "gamer": "1c7f56ea2fa0d7557e32147734853ff09ae1baeb3f3d3310fbacc6402b8ab7a1"
+    },
+    "holdout_pack_sha256": "db93f10b2d8f9161e23ead0d3fd23260a0f058ab730d200d5214bf99038c60ae"
+  },
+  "rows": [
+    {
+      "model": "qwen3-4b-instruct",
+      "family": "qwen3",
+      "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+      "engine": "transformers",
+      "physical_gpu_index": 0,
+      "protocol": "v3-private-specialist-anti-eight-gamedev-gamer-20261009",
+      "finished_at": "2026-10-11T11:08:56.249359+00:00",
+      "private_report_sha256": "8efe7b42cbcbe6f20084a5de1ec2b3ec286187c901285407e40a13b9e08d1cac",
+      "eight_task_mean": 0.9792,
+      "specialist_composite": 0.25,
+      "specialist_ci95": [
+        0.1485,
+        0.3515
+      ],
+      "specialist_items": 44,
+      "specialist_lanes": 10,
+      "output_tokens_per_second_256": 25.722,
+      "throughput_scope": "request wall time including prefill",
+      "gpu_board_wh_per_answer": 0.091,
+      "gpu_board_wh_total": 12.737,
+      "requests": 140,
+      "canary_recall_rate": 0.0,
+      "reordered_option_original_accuracy": 0.8667,
+      "reordered_option_accuracy": 0.6,
+      "fresh_arithmetic_holdout_accuracy": 0.7273,
+      "promotion_eligible": false
+    },
+    {
+      "model": "phi4-mini-instruct",
+      "family": "phi4",
+      "revision": "cfbefacb99257ffa30c83adab238a50856ac3083",
+      "engine": "transformers",
+      "physical_gpu_index": 0,
+      "protocol": "v3-private-specialist-anti-eight-gamedev-gamer-20261009",
+      "finished_at": "2026-10-11T11:21:34.865864+00:00",
+      "private_report_sha256": "e8801d1b815099a7c5b3ee361978b4148d7994b6c3727a8b653333a19061baa1",
+      "eight_task_mean": 0.7292,
+      "specialist_composite": 0.3583,
+      "specialist_ci95": [
+        0.2585,
+        0.4581
+      ],
+      "specialist_items": 44,
+      "specialist_lanes": 10,
+      "output_tokens_per_second_256": 26.337,
+      "throughput_scope": "request wall time including prefill",
+      "gpu_board_wh_per_answer": 0.062,
+      "gpu_board_wh_total": 8.677,
+      "requests": 140,
+      "canary_recall_rate": 0.0,
+      "reordered_option_original_accuracy": 0.8667,
+      "reordered_option_accuracy": 0.6,
+      "fresh_arithmetic_holdout_accuracy": 0.9091,
+      "promotion_eligible": false
+    },
+    {
+      "model": "smollm3-3b",
+      "family": "smollm3",
+      "revision": "a07cc9a04f16550a088caea529712d1d335b0ac1",
+      "engine": "transformers",
+      "physical_gpu_index": 0,
+      "protocol": "v3-private-specialist-anti-eight-gamedev-gamer-20261009",
+      "finished_at": "2026-10-11T11:41:21.219529+00:00",
+      "private_report_sha256": "261cc1a0ce45cb13fd8a169ab35cae48002538be6c2230e966bf52adec7793bf",
+      "eight_task_mean": 0.625,
+      "specialist_composite": 0.4667,
+      "specialist_ci95": [
+        0.3649,
+        0.5684
+      ],
+      "specialist_items": 44,
+      "specialist_lanes": 10,
+      "output_tokens_per_second_256": 33.282,
+      "throughput_scope": "request wall time including prefill",
+      "gpu_board_wh_per_answer": 0.076,
+      "gpu_board_wh_total": 10.684,
+      "requests": 140,
+      "canary_recall_rate": 0.0,
+      "reordered_option_original_accuracy": 0.8,
+      "reordered_option_accuracy": 0.8,
+      "fresh_arithmetic_holdout_accuracy": 0.8182,
+      "promotion_eligible": false
+    }
+  ],
+  "interpretation": "Untrained checkpoint comparisons only; no model or mixture promotion. GPU-board Wh excludes CPU, memory, storage and PSU. Raw private items stay outside Git."
+}
