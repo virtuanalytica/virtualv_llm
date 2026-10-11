@@ -1,0 +1,83 @@
+{
+  "schema": "preschooler-mixture-frontier/v1",
+  "protocol": "v5-private-specialist-packs-gamedev-gamer-20261009",
+  "status": "offline_oracle_not_live_mixture",
+  "models": [
+    "qwen3-4b-instruct",
+    "phi4-mini-instruct",
+    "smollm3-3b"
+  ],
+  "shared_private_items": 36,
+  "shared_lanes": [
+    "chemistry",
+    "eq",
+    "finance",
+    "gamedev",
+    "iq",
+    "physics",
+    "qq"
+  ],
+  "best_fixed": {
+    "model": "smollm3-3b",
+    "accuracy": 0.555556
+  },
+  "solo_accuracy": {
+    "qwen3-4b-instruct": 0.277778,
+    "phi4-mini-instruct": 0.416667,
+    "smollm3-3b": 0.555556
+  },
+  "subset_count": 4,
+  "subsets": [
+    {
+      "models": [
+        "phi4-mini-instruct",
+        "smollm3-3b"
+      ],
+      "size": 2,
+      "families": 2,
+      "oracle_upper_bound": 0.555556,
+      "oracle_gain_over_global_best": 0.0,
+      "best_member_accuracy": 0.555556,
+      "random_router_expected_accuracy": 0.486111
+    },
+    {
+      "models": [
+        "qwen3-4b-instruct",
+        "smollm3-3b"
+      ],
+      "size": 2,
+      "families": 2,
+      "oracle_upper_bound": 0.555556,
+      "oracle_gain_over_global_best": 0.0,
+      "best_member_accuracy": 0.555556,
+      "random_router_expected_accuracy": 0.416667
+    },
+    {
+      "models": [
+        "qwen3-4b-instruct",
+        "phi4-mini-instruct",
+        "smollm3-3b"
+      ],
+      "size": 3,
+      "families": 3,
+      "oracle_upper_bound": 0.555556,
+      "oracle_gain_over_global_best": 0.0,
+      "best_member_accuracy": 0.555556,
+      "random_router_expected_accuracy": 0.416667
+    },
+    {
+      "models": [
+        "qwen3-4b-instruct",
+        "phi4-mini-instruct"
+      ],
+      "size": 2,
+      "families": 2,
+      "oracle_upper_bound": 0.416667,
+      "oracle_gain_over_global_best": -0.138889,
+      "best_member_accuracy": 0.416667,
+      "random_router_expected_accuracy": 0.347222
+    }
+  ],
+  "next_gate": "Measure top complementary 2–4-model routes/cascades live on a fresh sealed pack, including latency and GPU-board Wh.",
+  "snapshot_note": "Exploratory subset of the first three of ten models. 36 hash-matched item outcomes across seven lanes only; no live router score. Four FQ/video items and four gamer episodes lack the matching item schema. Rerun after all ten models, then test live on a new sealed pack."
+}
