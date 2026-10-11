@@ -1,6 +1,6 @@
 # Preschooler 3–4B teacher matrix
 
-Status 2026-10-11: **one of ten private text profiles complete**, not a ten-model quality comparison. All ten pinned snapshots were downloaded and hash-verified on `claude-data`. The candidates are in [`config/preschooler_teacher_roster.json`](../config/preschooler_teacher_roster.json). The associated Preschooler business concept lives in Toddler. New model releases enter by a new roster revision and repeat this protocol; no existing result row is silently replaced.
+Status 2026-10-11: **two of ten private text profiles complete**, not a ten-model quality comparison. All ten pinned snapshots were downloaded and hash-verified on `claude-data`. The candidates are in [`config/preschooler_teacher_roster.json`](../config/preschooler_teacher_roster.json). The associated Preschooler business concept lives in Toddler. New model releases enter by a new roster revision and repeat this protocol; no existing result row is silently replaced.
 
 ## Measurement order
 
@@ -31,7 +31,7 @@ The full private option additionally requires `--full --private-runner <active-w
 
 The initial Qwen3-4B-Instruct loader canary on physical GPU 0 failed during CUDA initialization in 1Cat-vLLM 1.5.0. Repeating on 1.5.1 with Triton attention and eager execution also failed with `cudaErrorNoKernelImageForDevice`. The BF16 snapshot itself passed hash verification; **no vLLM answer or throughput score** was produced in those two attempts. The separate Transformers BF16 reference endpoint passed output-integrity canary and forced 256-token decode on GPU 0 at **20.969 wall tokens/s including prefill**; it answered 2/3 diagnostic prompts exactly (the Dutch variant “Goede morgen” differs from the expected “goedemorgen”). llmwatch captured the compatible `/metrics` endpoint and GPU panel; machine-readable system samples were retained. Neither failed 1Cat attempt affects the active V100 day service.
 
-## First complete private profile: Qwen3-4B-Instruct
+## First two complete private text profiles
 
 The isolated Transformers BF16 endpoint on physical Ada GPU 0 completed the active `v3-private-specialist-anti-eight-gamedev-gamer-20261009` protocol on 11 October 2026. Model weights are pinned at `cdbee75f17c01a7cc42f958dc650907174af0554`; decoding used temperature 0, reasoning off and low effort. The raw private report remains outside Git, SHA-256 `8efe7b42cbcbe6f20084a5de1ec2b3ec286187c901285407e40a13b9e08d1cac`. It recorded:
 
@@ -47,4 +47,18 @@ The isolated Transformers BF16 endpoint on physical Ada GPU 0 completed the acti
 
 The raw report's `timing_source: server decode` label is incorrect for this Transformers adapter: its `predicted_per_second` value was calculated around the entire `model.generate` call, including prefill. The numeric 25.722 t/s remains a valid request-wall rate. The adapter now exports an explicitly named wall rate and lets the private runner use its wall-clock fallback. This correction does not re-score quality or rewrite private evidence.
 
-The full result is marked `promotion_eligible: false`. Its strong eight-task mean and weak specialist performance measure different work; neither predicts a trained Preschooler or establishes superiority over another candidate. The other nine models still need matched profiles, and the post-cutoff and option-order samples are too small for a robust generalization claim. The video lane in this protocol asks for an FFmpeg filtergraph from text and scores the rendered artifact; it is not a native visual-generation test.
+The Qwen result is marked `promotion_eligible: false`. Its strong eight-task mean and weak specialist performance measure different work; neither predicts a trained Preschooler or establishes superiority over another candidate. The post-cutoff and option-order samples are too small for a robust generalization claim. The video lane in this protocol asks for an FFmpeg filtergraph from text and scores the rendered artifact; it is not a native visual-generation test.
+
+Phi-4-mini-Instruct then completed the **same** private protocol on one physical Ada GPU 0 with a Transformers BF16 endpoint, pinned revision `cfbefacb99257ffa30c83adab238a50856ac3083`, temperature 0, reasoning off and low effort. The specialist and holdout pack SHA-256 values match the Qwen run; its private raw report remains outside Git, SHA-256 `e8801d1b815099a7c5b3ee361978b4148d7994b6c3727a8b653333a19061baa1`.
+
+| Measure | Qwen3-4B-Instruct | Phi-4-mini-Instruct | Scope |
+| --- | ---: | ---: | --- |
+| Eight fixed tasks | 0.9792 | 0.7292 | Same eight-task battery; this is a mean across heterogeneous tasks |
+| Private specialist composite | 0.25 | 0.3583 | Same 44 text items and ten lanes; respective 95% intervals 0.1485–0.3515 and 0.2585–0.4581 overlap |
+| 256-token throughput | 25.722 | 26.337 | Output tokens/s over request wall time including prefill |
+| GPU-board energy per answer | 0.091 Wh | 0.062 Wh | 140 requests each on GPU 0; host power excluded |
+| Verbatim canary recall | 0/10 | 0/10 | Small historical probe, no proof of general non-contamination |
+| Reordered-option robustness | 0.8667 → 0.6000 | 0.8667 → 0.6000 | 15 items; option-order sensitivity remains |
+| Fresh arithmetic holdout | 8/11 | 10/11 | Small sealed sample; not a general quality ranking |
+
+Both raw reports have `promotion_eligible: false`. Phi's stronger specialist point estimate and lower GPU-board Wh are worth follow-up, while Qwen's eight-task score is higher. The specialist intervals overlap, the models have different architectures and tokenizer behavior, and the one-GPU BF16 profile alone cannot establish which base is better for a trained student. The remaining eight profiles and fresh paired holdouts are still required before mixture or training decisions.
