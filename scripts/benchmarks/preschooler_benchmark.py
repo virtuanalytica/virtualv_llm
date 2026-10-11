@@ -94,6 +94,8 @@ def canary(base: str, alias: str) -> dict:
 
 
 def main() -> int:
+    # Private scorer output can contain sealed prompts and answer keys.
+    os.umask(0o077)
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--alias", required=True)
     parser.add_argument("--gpu-index", type=int, required=True)
@@ -122,7 +124,8 @@ def main() -> int:
         parser.error("remote/custom model code requires a separately reviewed runtime adapter")
     if args.full and (not args.private_runner or not args.private_runner.is_file()):
         parser.error("--full requires an existing --private-runner")
-    args.out.mkdir(parents=True, exist_ok=True)
+    args.out.mkdir(parents=True, exist_ok=True, mode=0o700)
+    args.out.chmod(0o700)
     base = f"http://127.0.0.1:{args.port}"
     env = dict(os.environ, CUDA_VISIBLE_DEVICES=str(args.gpu_index), CUDA_DEVICE_ORDER="PCI_BUS_ID")
     if args.engine == "transformers":
@@ -167,7 +170,8 @@ def main() -> int:
                 raise RuntimeError("diagnostic canary failed; full battery blocked")
             if args.full:
                 private_dir = args.out / "private"
-                private_dir.mkdir(exist_ok=True)
+                private_dir.mkdir(exist_ok=True, mode=0o700)
+                private_dir.chmod(0o700)
                 private_command = [sys.executable, str(ROOT / "scripts/benchmarks/preschooler_private_bridge.py"),
                                    "--suite-path", str(args.private_runner), "--base", base,
                                    "--alias", args.alias, "--model-id", args.alias,
@@ -182,6 +186,10 @@ def main() -> int:
     except Exception as exc:
         result["status"] = "failed"
         result["error"] = str(exc)
+        raise
+    except KeyboardInterrupt:
+        result["status"] = "interrupted"
+        result["error"] = "operator_interrupted"
         raise
     finally:
         if monitor is not None:

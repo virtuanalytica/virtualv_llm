@@ -52,13 +52,15 @@ def board_energy(samples: list[dict], start: float, end: float,
 
 
 def main() -> int:
+    os.umask(0o077)
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument("--suite-path", type=Path, required=True)
     parser.add_argument("--log-dir", type=Path, required=True)
     args, remaining = parser.parse_known_args()
     if not args.suite_path.is_file():
         parser.error("active private endpoint suite not found")
-    args.log_dir.mkdir(parents=True, exist_ok=True)
+    args.log_dir.mkdir(parents=True, exist_ok=True, mode=0o700)
+    args.log_dir.chmod(0o700)
     sys.path.insert(0, str(args.suite_path.parent))
     spec = importlib.util.spec_from_file_location("active_private_endpoint_suite", args.suite_path)
     suite = importlib.util.module_from_spec(spec)
