@@ -72,13 +72,20 @@ def _read_profile(folder: Path, model: dict) -> tuple[dict, dict]:
         "fresh_arithmetic_holdout_accuracy": anti["post_cutoff_holdout"]["accuracy"],
         "promotion_eligible": False,
     }
+    if status.get("runtime_compat"):
+        compat = status["runtime_compat"]
+        public["runtime_compat"] = {key: compat[key] for key in ("transformers", "accelerate", "mode")
+                                    if key in compat}
     return public, commitments
 
 
 def build(root: Path, roster: dict) -> dict:
     rows, frozen = [], None
     for model in roster["models"]:
-        folder = root / f"{model['alias']}-private"
+        folder_name = model.get("private_run_folder", f"{model['alias']}-private")
+        if Path(folder_name).name != folder_name:
+            raise ValueError("private run folder must be a basename inside runs root")
+        folder = root / folder_name
         if not folder.exists():
             continue
         status = json.loads((folder / "status.json").read_text())

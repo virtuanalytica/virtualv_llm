@@ -52,3 +52,25 @@ def test_public_summary_exports_only_scalars_and_checks_pack_match(tmp_path):
     _profile_dir.write_text(json.dumps(raw))
     with pytest.raises(ValueError, match="different specialist"):
         build(tmp_path, roster)
+
+
+def test_explicit_runtime_folder_exports_only_safe_compatibility_fields(tmp_path):
+    _profile(tmp_path, "ministral", "sha-m")
+    source = tmp_path / "ministral-private"
+    target = tmp_path / "ministral-bf16-private"
+    source.rename(target)
+    path = target / "status.json"
+    status = json.loads(path.read_text())
+    status["runtime_compat"] = {"transformers": "5.16.1", "accelerate": "1.12.0",
+                                "mode": "BF16 dequantized text-only",
+                                "overlay": "/private/PRIVATE_SENTINEL"}
+    path.write_text(json.dumps(status))
+    model = {"alias": "ministral", "revision": "sha-m", "family": "mistral",
+             "private_run_folder": "ministral-bf16-private"}
+    report = build(tmp_path, {"models": [model]})
+    assert report["complete_profiles"] == 1
+    assert report["rows"][0]["runtime_compat"]["transformers"] == "5.16.1"
+    assert "PRIVATE_SENTINEL" not in json.dumps(report)
+    model["private_run_folder"] = "../elsewhere"
+    with pytest.raises(ValueError, match="basename"):
+        build(tmp_path, {"models": [model]})
