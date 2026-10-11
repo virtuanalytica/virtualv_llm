@@ -1,0 +1,118 @@
+{
+  "schema": "preschooler-teacher-roster/v1",
+  "as_of": "2026-10-11",
+  "status": "candidate_not_benchmarked",
+  "selection": "Ten distinct 3-4B checkpoints from six architecture families; correlated variants do not count as independent evidence.",
+  "models": [
+    {
+      "alias": "qwen3-4b-instruct",
+      "repo": "Qwen/Qwen3-4B-Instruct-2507",
+      "revision": "cdbee75f17c01a7cc42f958dc650907174af0554",
+      "family": "qwen3",
+      "license_id": "apache-2.0",
+      "weight_pattern": "model-*.safetensors",
+      "role": "general",
+      "output_training_rights": "pending_per_model_review",
+      "runtime_status": "pending_loader_canary"
+    },
+    {
+      "alias": "qwen3-4b-thinking",
+      "repo": "Qwen/Qwen3-4B-Thinking-2507",
+      "revision": "768f209d9ea81521153ed38c47d515654e938aea",
+      "family": "qwen3",
+      "license_id": "apache-2.0",
+      "weight_pattern": "model-*.safetensors",
+      "role": "reasoning",
+      "output_training_rights": "pending_per_model_review",
+      "runtime_status": "pending_loader_canary"
+    },
+    {
+      "alias": "ministral3-3b-instruct",
+      "repo": "mistralai/Ministral-3-3B-Instruct-2512",
+      "revision": "b35d4dfe56c142746f54dbd64f579faab2744308",
+      "family": "ministral3",
+      "license_id": "apache-2.0",
+      "weight_pattern": "model.safetensors",
+      "role": "general_multimodal",
+      "output_training_rights": "pending_per_model_review",
+      "runtime_status": "pending_loader_canary"
+    },
+    {
+      "alias": "ministral3-3b-reasoning",
+      "repo": "mistralai/Ministral-3-3B-Reasoning-2512",
+      "revision": "4a36357c811bf511a7b625d132e12f22408aac91",
+      "family": "ministral3",
+      "license_id": "apache-2.0",
+      "weight_pattern": "model-*.safetensors",
+      "role": "reasoning_multimodal",
+      "output_training_rights": "pending_per_model_review",
+      "runtime_status": "pending_loader_canary"
+    },
+    {
+      "alias": "phi4-mini-instruct",
+      "repo": "microsoft/Phi-4-mini-instruct",
+      "revision": "cfbefacb99257ffa30c83adab238a50856ac3083",
+      "family": "phi4",
+      "license_id": "mit",
+      "weight_pattern": "model-*.safetensors",
+      "role": "general",
+      "output_training_rights": "pending_per_model_review",
+      "runtime_status": "pending_loader_canary"
+    },
+    {
+      "alias": "phi4-mini-reasoning",
+      "repo": "microsoft/Phi-4-mini-reasoning",
+      "revision": "0e3b1e2d02ee478a3743abe3f629e9c0cb722e0a",
+      "family": "phi4",
+      "license_id": "mit",
+      "weight_pattern": "model-*.safetensors",
+      "role": "reasoning",
+      "output_training_rights": "pending_per_model_review",
+      "runtime_status": "pending_loader_canary"
+    },
+    {
+      "alias": "phi35-mini-instruct",
+      "repo": "microsoft/Phi-3.5-mini-instruct",
+      "revision": "2fe192450127e6a83f7441aef6e3ca586c338b77",
+      "family": "phi35",
+      "license_id": "mit",
+      "weight_pattern": "model-*.safetensors",
+      "role": "general",
+      "output_training_rights": "pending_per_model_review",
+      "runtime_status": "pending_loader_canary"
+    },
+    {
+      "alias": "phi4-mini-flash-reasoning",
+      "repo": "microsoft/Phi-4-mini-flash-reasoning",
+      "revision": "1dff8163d28ec880ca2411c474ddc0a927792810",
+      "family": "phi4flash",
+      "license_id": "mit",
+      "weight_pattern": "model-*.safetensors",
+      "role": "fast_reasoning",
+      "output_training_rights": "pending_per_model_review",
+      "runtime_status": "pending_loader_canary"
+    },
+    {
+      "alias": "smollm3-3b",
+      "repo": "HuggingFaceTB/SmolLM3-3B",
+      "revision": "a07cc9a04f16550a088caea529712d1d335b0ac1",
+      "family": "smollm3",
+      "license_id": "apache-2.0",
+      "weight_pattern": "model-*.safetensors",
+      "role": "general_reasoning",
+      "output_training_rights": "pending_per_model_review",
+      "runtime_status": "pending_loader_canary"
+    },
+    {
+      "alias": "minicpm3-4b",
+      "repo": "OpenBMB/MiniCPM3-4B",
+      "revision": "d6b14ddaefdb11c624dd75c3c779549bc90b08cb",
+      "family": "minicpm3",
+      "license_id": "apache-2.0",
+      "weight_pattern": "pytorch_model.bin",
+      "role": "general",
+      "output_training_rights": "pending_per_model_review",
+      "runtime_status": "pending_loader_canary"
+    }
+  ]
+}

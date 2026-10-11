@@ -1,5 +1,9 @@
 # VirtualV LLM model test roadmap
 
+## 2026-10-11 — Preschooler ten-model 3–4B teacher matrix
+
+The new [Preschooler matrix](PRESCHOOLER_TEN_MODEL_MATRIX.md) adds ten pinned local teacher candidates from Qwen3, Ministral3, Phi, SmolLM3 and MiniCPM3. Their weight downloads and loader canaries are separate from the existing GLM/K3/Qwen benchmark ownership. Full private comparisons follow the current owned run and use the same eight tasks, specialist/anti-contamination packs, 256-token measurement and GPU-board-energy method; no public full-suite run is scheduled. [llmwatch](https://github.com/HindrikStegenga/llmwatch) monitors vLLM and GPUs, with raw machine-readable system samples retained. Only after comparable item-level results exist are the 1,013 possible 2–10-model subsets scored as *offline oracle bounds*; top complementary mixtures receive fresh live tests. The initial Qwen loader attempt failed in the local 1Cat Ada kernel path, so it has no score yet.
+
 Status date: 2026-10-09 (older dated sections remain historical). This document separates measured local evidence from
 upstream reference numbers and from untested hypotheses.
 
