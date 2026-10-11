@@ -1,8 +1,8 @@
 {
   "schema": "preschooler-public-profile-summary/v1",
-  "generated_at": "2026-10-11T13:48:01.311008+00:00",
+  "generated_at": "2026-10-11T13:57:35.859851+00:00",
   "roster_count": 10,
-  "complete_profiles": 3,
+  "complete_profiles": 4,
   "pack_commitments": {
     "specialist_pack_sha256": {
       "chemistry": "935f7cb99a2aa47c9d25b325b3fdc8898ef1f976301cf58e6762c7c4003ea518",
@@ -73,6 +73,34 @@
       "reordered_option_original_accuracy": 0.8667,
       "reordered_option_accuracy": 0.6,
       "fresh_arithmetic_holdout_accuracy": 0.9091,
+      "promotion_eligible": false
+    },
+    {
+      "model": "phi35-mini-instruct",
+      "family": "phi35",
+      "revision": "2fe192450127e6a83f7441aef6e3ca586c338b77",
+      "engine": "transformers",
+      "physical_gpu_index": 0,
+      "protocol": "v3-private-specialist-anti-eight-gamedev-gamer-20261009",
+      "finished_at": "2026-10-11T13:57:26.910288+00:00",
+      "private_report_sha256": "c2b7d0b2a8c9220c9bdbdb773ade5788570860335aa6eca5fc5a451cdcb0d622",
+      "eight_task_mean": 0.6958,
+      "specialist_composite": 0.2333,
+      "specialist_ci95": [
+        0.1309,
+        0.3357
+      ],
+      "specialist_items": 44,
+      "specialist_lanes": 10,
+      "output_tokens_per_second_256": 36.244,
+      "throughput_scope": "request wall time including prefill",
+      "gpu_board_wh_per_answer": 0.101,
+      "gpu_board_wh_total": 14.111,
+      "requests": 140,
+      "canary_recall_rate": 0.0,
+      "reordered_option_original_accuracy": 0.8667,
+      "reordered_option_accuracy": 0.6667,
+      "fresh_arithmetic_holdout_accuracy": 0.8182,
       "promotion_eligible": false
     },
     {

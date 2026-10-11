@@ -1,7 +1,7 @@
 {
   "schema": "preschooler-teacher-roster/v1",
   "as_of": "2026-10-11",
-  "status": "three_of_ten_private_text_profiles_complete",
+  "status": "four_of_ten_private_text_profiles_complete",
   "selection": "Ten distinct 3-4B checkpoints from six architecture families; correlated variants do not count as independent evidence.",
   "models": [
     {
@@ -79,7 +79,7 @@
       "weight_pattern": "model-*.safetensors",
       "role": "general",
       "output_training_rights": "pending_per_model_review",
-      "runtime_status": "pending_loader_canary"
+      "runtime_status": "transformers_bf16_private_text_complete"
     },
     {
       "alias": "phi4-mini-flash-reasoning",

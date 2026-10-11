@@ -1,6 +1,6 @@
 # Preschooler 3–4B teacher matrix
 
-Status 2026-10-11: **three of ten private text profiles complete**, not a ten-model quality comparison. All ten pinned snapshots were downloaded and hash-verified on `claude-data`. The candidates are in [`config/preschooler_teacher_roster.json`](../config/preschooler_teacher_roster.json). The [scalar public summary](../reports/preschooler_public_profiles_20261011.json) and [partial offline oracle](../reports/preschooler_partial_oracle_20261011.json) omit raw private items. The associated Preschooler business concept lives in Toddler. New model releases enter by a new roster revision and repeat this protocol; no existing result row is silently replaced.
+Status 2026-10-11: **four of ten private text profiles complete**, not a ten-model quality comparison. All ten pinned snapshots were downloaded and hash-verified on `claude-data`. The candidates are in [`config/preschooler_teacher_roster.json`](../config/preschooler_teacher_roster.json). The [scalar public summary](../reports/preschooler_public_profiles_20261011.json) and [partial offline oracle](../reports/preschooler_partial_oracle_20261011.json) omit raw private items. The associated Preschooler business concept lives in Toddler. New model releases enter by a new roster revision and repeat this protocol; no existing result row is silently replaced.
 
 ## Measurement order
 
@@ -74,4 +74,15 @@ SmolLM3-3B then completed the same private text protocol on GPU 0, pinned revisi
 | Reordered-option robustness | 0.8667 → 0.6000 | 0.8667 → 0.6000 | 0.8000 → 0.8000 | 15 small-sample questions |
 | Fresh arithmetic holdout | 8/11 | 10/11 | 9/11 | Small sealed sample, not a general ranking |
 
-All three reports are `promotion_eligible: false`. The common item-level export currently shares **36 identical items across seven specialist lanes**. On precisely those items, the best fixed model is SmolLM3 at 20/36; the unattainable oracle over all three is also 20/36. Qwen and Phi add zero correct items beyond SmolLM3 on this observed intersection. Four FQ/video items lack the hash-bearing item keys expected by the oracle tool, and four gamer episodes use a separate trace schema; they are not included in that oracle claim. This is exploratory reuse of one private pack, not a fresh router evaluation; new sealed items are needed before ruling out complementary routes. Seven model profiles remain, and equal-budget student training has not begun.
+Phi-3.5-mini-Instruct completed the same pinned private text protocol on physical Ada GPU 0, revision `2fe192450127e6a83f7441aef6e3ca586c338b77`. The canary and 140-request battery passed. Its owner-only raw report SHA-256 is `c2b7d0b2a8c9220c9bdbdb773ade5788570860335aa6eca5fc5a451cdcb0d622`.
+
+| Measure | Qwen3-4B-Instruct | Phi-4-mini-Instruct | SmolLM3-3B | Phi-3.5-mini-Instruct | Scope |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Eight fixed tasks | 0.9792 | 0.7292 | 0.6250 | 0.6958 | Same eight-task battery |
+| Private specialist composite | 0.2500 | 0.3583 | 0.4667 | 0.2333 | Same 44 items; Phi-3.5 95% interval 0.1309–0.3357 |
+| 256-token output | 25.722 | 26.337 | 33.282 | 36.244 | Tokens/s over wall time including prefill |
+| GPU-board energy per answer | 0.091 | 0.062 | 0.076 | 0.101 | Wh on GPU 0; 140 requests each; host energy excluded |
+| Reordered-option robustness | 0.8667 → 0.6000 | 0.8667 → 0.6000 | 0.8000 → 0.8000 | 0.8667 → 0.6667 | 15 small-sample questions |
+| Fresh arithmetic holdout | 8/11 | 10/11 | 9/11 | 9/11 | Small sealed sample, not a general ranking |
+
+All four reports are `promotion_eligible: false`. The common item-level export shares **36 identical items across seven specialist lanes**. The best fixed model, SmolLM3, is correct on 20/36; the unattainable oracle over all four is correct on 22/36. Phi-3.5 supplies the two additional correct items, giving an **upper bound** of 5.56 percentage points on this small intersection. A real router may gain less or nothing after model calls, error detection, latency and energy. Four FQ/video items lack the hash-bearing item keys expected by the oracle tool, and four gamer episodes use a separate trace schema; they are excluded from this claim. This is exploratory reuse of one private pack, not a fresh router evaluation. Six model profiles remain, and equal-budget student training has not begun.
