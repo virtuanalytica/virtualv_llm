@@ -57,11 +57,11 @@ start_qwen36() {
   mkdir -p "$HF_HOME" "$XDG_CACHE_HOME" "$VLLM_CACHE_ROOT" "$TMPDIR"
   exec numactl --interleave=all "$VLLM_ENV/bin/vllm" serve "$VLLM_MODEL" \
     --served-model-name "$ALIAS" --trust-remote-code --dtype half --tensor-parallel-size 1 \
-    --attention-backend FLASH_ATTN_V100 --kv-cache-dtype fp8_e5m2 --max-model-len 8192 \
+    --attention-backend FLASH_ATTN_V100 --kv-cache-dtype fp8_e5m2 --max-model-len 32768 \
     --gpu-memory-utilization 0.80 --max-num-batched-tokens 4096 --max-num-seqs 1 \
     --enable-prefix-caching --mamba-cache-mode align --reasoning-parser qwen3 \
     --default-chat-template-kwargs '{"enable_thinking":false}' --generation-config vllm \
-    --enable-auto-tool-choice --tool-call-parser hermes \
+    --enable-auto-tool-choice --tool-call-parser qwen3_coder \
     --host 127.0.0.1 --port "$PORT"
 }
 
