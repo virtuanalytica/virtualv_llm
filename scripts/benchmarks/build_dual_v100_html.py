@@ -1686,7 +1686,12 @@ def mom_as_whole_section() -> str:
                       + "</tbody></table></div>" + note)
     if not blocks:
         return ""
-    return ("<h2 id='mom-als-geheel'>Mixture of models als geheel · alle leden op dezelfde vragen</h2>"
+    return ("<h2 id='mom-als-geheel'>Mixture of models als geheel · alle leden op dezelfde vragen "
+            "<small>(verouderd · afgesloten 12-10-2026)</small></h2>"
+            "<p class='warn'><strong>Verouderd en afgesloten.</strong> GSM8K, TruthfulQA, MMLU-Pro en IFEval "
+            "staan al jaren publiek online en kunnen in de trainingsdata van alle modellen zitten "
+            "(contaminatierisico). Deze tabel krijgt geen nieuwe rijen meer; nieuwe vergelijkingen lopen via "
+            "private specialisten-packs en verse, na de modelgewichten gemaakte items.</p>"
             "<p>Elk lid beantwoordde dezelfde publieke vragen met dezelfde prompts; per set telt de vaste "
             "test-helft (seed 20261012). Het orakel kiest per vraag het juiste lid en is dus een bovengrens. "
             "De selector neemt het lokale antwoord als de genoemde leden het eens zijn en vraagt anders "
