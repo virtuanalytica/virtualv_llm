@@ -50,7 +50,7 @@ def mcnemar(a: list[int], b: list[int]) -> dict:
     y = sum(1 for i, j in zip(a, b) if j and not i)
     n = x + y
     p = 1.0 if n == 0 else min(1.0, 2 * sum(comb(n, k) for k in range(min(x, y) + 1)) / 2 ** n)
-    return {"better": x, "worse": y, "p_exact": round(p, 4)}
+    return {"better": x, "worse": y, "p_exact": float(f"{p:.3g}")}  # keep small p visible (no rounding to 0)
 
 
 def load_members(results: Path, st: str) -> tuple[dict, list[str]]:

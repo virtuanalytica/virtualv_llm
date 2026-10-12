@@ -1674,7 +1674,7 @@ def mom_as_whole_section() -> str:
             rows.append("<tr><td><strong>" + html.escape(" + ".join(sel["members"])) + " eens, anders Haiku</strong></td>"
                         + "<td>—</td>" + pct1(sel.get("score"))
                         + pct1(sel.get("haiku_share"))
-                        + f"<td>{v.get('better', 0)} beter / {v.get('worse', 0)} slechter · p={v.get('p_exact', 1):.3f}</td>"
+                        + f"<td>{v.get('better', 0)} beter / {v.get('worse', 0)} slechter · p={v.get('p_exact', 1):.2g}</td>"
                         + "<td>" + html.escape(kind) + "</td></tr>")
         skipped = s.get("skipped") or []
         note = ("<p class='muted'>Niet meegeteld: " + html.escape("; ".join(skipped)) + "</p>") if skipped else ""
