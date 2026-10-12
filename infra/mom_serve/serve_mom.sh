@@ -54,8 +54,16 @@ start_router() {
 start_qwen36() {
   exec 9>"$V100_LOCK"
   flock -n 9 || { echo "V100 capacity is reserved by another job (lock $V100_LOCK)" >&2; exit 75; }
-  local tp=${MOM_TP:-2}
-  export CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=$([ "$tp" = 2 ] && echo 3,4 || echo 3) CUDA_HOME=/usr/local/cuda-12.9
+  # Select the V100s by name, not by a fixed index: indices shift when PCIe devices (dis)appear at
+  # boot, and on 2026-10-12 a cold boot came up with one V100 missing. nvidia-smi indices follow PCI
+  # bus order, the same order CUDA uses with CUDA_DEVICE_ORDER=PCI_BUS_ID (1Cat vLLM rejects UUIDs).
+  # TP2 only when two V100s are present.
+  local v100s; v100s=$(nvidia-smi --query-gpu=index,name --format=csv,noheader | awk -F', ' '/V100/{print $1}' | paste -sd,)
+  local n; n=$(echo "$v100s" | tr ',' '\n' | grep -c .)
+  [ "$n" -ge 1 ] || { echo "no V100 found" >&2; exit 1; }
+  local tp=${MOM_TP:-$([ "$n" -ge 2 ] && echo 2 || echo 1)}
+  [ "$tp" -le "$n" ] || { echo "MOM_TP=$tp but only $n V100 present" >&2; exit 1; }
+  export CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=$(echo "$v100s" | cut -d, -f1-"$tp") CUDA_HOME=/usr/local/cuda-12.9
   export PATH="$CUDA_HOME/bin:$VLLM_ENV/bin:$PATH" VLLM_WORKER_MULTIPROC_METHOD=spawn
   export HF_HOME=/media/knight2/EDS2/cache/huggingface-1cat HUGGINGFACE_HUB_CACHE=/media/knight2/EDS2/cache/huggingface-1cat/hub
   export XDG_CACHE_HOME=/media/knight2/EDS2/cache/xdg-1cat VLLM_CACHE_ROOT=/media/knight2/EDS2/cache/vllm-1cat TMPDIR=/media/knight2/EDS2/tmp/vllm-1cat
@@ -63,7 +71,7 @@ start_qwen36() {
   exec numactl --interleave=all "$VLLM_ENV/bin/vllm" serve "$VLLM_MODEL" \
     --served-model-name "$ALIAS" --trust-remote-code --dtype half --tensor-parallel-size "$tp" \
     --attention-backend FLASH_ATTN_V100 --kv-cache-dtype fp8_e5m2 --max-model-len 32768 \
-    --gpu-memory-utilization 0.80 --max-num-batched-tokens 4096 --max-num-seqs "$([ "$tp" = 2 ] && echo 4 || echo 1)" \
+    --gpu-memory-utilization 0.80 --max-num-batched-tokens 4096 --max-num-seqs "$([ "$tp" = 2 ] && echo 4 || echo 2)" \
     --enable-prefix-caching --mamba-cache-mode align --reasoning-parser qwen3 \
     --default-chat-template-kwargs '{"enable_thinking":false}' --generation-config vllm \
     --enable-auto-tool-choice --tool-call-parser qwen3_coder \
@@ -78,7 +86,7 @@ case "${1:-status}" in
       qwen36)
         ( start_qwen36 ) > "$LOG" 2>&1 &
         echo $! > "$PIDFILE"
-        for _ in $(seq 1 240); do served && { echo "mom-live up on :$PORT (qwen36 NVFP4, TP${MOM_TP:-2})"; start_router; exit 0; }; sleep 3; done
+        for _ in $(seq 1 240); do served && { echo "mom-live up on :$PORT (qwen36 NVFP4, $(nvidia-smi --query-gpu=name --format=csv,noheader | grep -c V100) V100 present)"; start_router; exit 0; }; sleep 3; done
         echo "mom-live did not become ready; see $LOG" >&2; exit 1 ;;
       kat-coder)
         CUDA_DEVICE_ORDER=PCI_BUS_ID CUDA_VISIBLE_DEVICES=1,2 nohup "$SERVER" \
