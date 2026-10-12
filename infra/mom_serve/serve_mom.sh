@@ -23,7 +23,9 @@ PIDFILE=${MOM_PIDFILE:-$HOME/.cache/mom-live.pid}
 LOG=${MOM_LOG:-$HOME/.cache/mom-live.log}
 MOM_DEFAULT=${MOM_DEFAULT:-qwen36}
 VLLM_ENV=/media/knight2/EDS2/envs/1cat-vllm-1.5.0
-VLLM_MODEL=/media/knight2/EDS2/models/1cat-vllm/Qwen3.6-35B-A3B-NVFP4
+# Weights: the eds1 copy (via the 1cat-vllm symlink) or, when eds1 is not mounted, the EDS2 copy.
+VLLM_MODEL=${MOM_VLLM_MODEL:-/media/knight2/EDS2/models/1cat-vllm/Qwen3.6-35B-A3B-NVFP4}
+[ -f "$VLLM_MODEL/config.json" ] || VLLM_MODEL=/media/knight2/EDS2/models/qwen36-35b-a3b-nvfp4
 V100_LOCK=/tmp/v100_exclusive.lock
 ROUTER_PORT=${MOM_ROUTER_PORT:-8031}
 ROUTER_PIDFILE=${MOM_ROUTER_PIDFILE:-$HOME/.cache/mom-router.pid}
@@ -61,7 +63,7 @@ start_qwen36() {
   exec numactl --interleave=all "$VLLM_ENV/bin/vllm" serve "$VLLM_MODEL" \
     --served-model-name "$ALIAS" --trust-remote-code --dtype half --tensor-parallel-size "$tp" \
     --attention-backend FLASH_ATTN_V100 --kv-cache-dtype fp8_e5m2 --max-model-len 32768 \
-    --gpu-memory-utilization 0.80 --max-num-batched-tokens 4096 --max-num-seqs "$([ "$tp" = 2 ] && echo 8 || echo 1)" \
+    --gpu-memory-utilization 0.80 --max-num-batched-tokens 4096 --max-num-seqs "$([ "$tp" = 2 ] && echo 4 || echo 1)" \
     --enable-prefix-caching --mamba-cache-mode align --reasoning-parser qwen3 \
     --default-chat-template-kwargs '{"enable_thinking":false}' --generation-config vllm \
     --enable-auto-tool-choice --tool-call-parser qwen3_coder \
