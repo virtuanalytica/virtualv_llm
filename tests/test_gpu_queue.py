@@ -93,3 +93,15 @@ def test_idle_lane_raises_an_alarm_with_a_reason(q, monkeypatch):
     text = gq.ALARM.read_text()
     assert "lane C" in text and "no pending work" in text
     assert "C:idle" in (q / "status.log").read_text()
+
+
+def test_one_running_job_per_shared_resource(q):
+    gq.submit(q, job("r1", [], "sleep 1", resource="mom-live", lane="A"))
+    gq.submit(q, job("r2", [], resource="mom-live", lane="A"))
+    gq.submit(q, job("other", [], lane="CPU"))
+    gq.tick(q)
+    assert sorted(p.stem for p in (q / "running").glob("*.json")) in (["other", "r1"], ["r1"])
+    assert (q / "pending/r2.json").exists()
+    assert wait_for(lambda: (q / "done/r1.json").exists())
+    gq.tick(q)
+    assert wait_for(lambda: (q / "done/r2.json").exists())

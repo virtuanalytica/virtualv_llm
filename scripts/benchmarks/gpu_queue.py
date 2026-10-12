@@ -18,6 +18,8 @@ Job fields:
   server      shell command that serves a model for cmd (optional; stopped when cmd ends)
   server_url  URL that answers 200 once the server is ready (required with server)
   priority    lower runs first (default 50)
+  resource    name of a shared server the job uses (e.g. "mom-live"); at most one running job per resource,
+              so batch jobs do not crowd out each other or interactive use of that server (optional)
 
 Idle report: every tick appends to <root>/status.log at most once an hour. A lane whose GPUs have
 been idle for more than 30 minutes gets a line in the alarm file, with the reason (no pending work,
@@ -127,7 +129,9 @@ def reap(d: dict[str, Path]) -> None:
 
 def startable(d: dict[str, Path], memory: dict[int, int]) -> list[Path]:
     done = {p.stem for p in d["done"].glob("*.json")}
-    busy = {g for p in d["running"].glob("*.json") for g in load(p).get("gpus", [])}
+    running = [load(p) for p in d["running"].glob("*.json")]
+    busy = {g for j in running for g in j.get("gpus", [])}
+    in_use = {j["resource"] for j in running if j.get("resource")}
     picked, claimed = [], set()
     jobs = sorted(d["pending"].glob("*.json"), key=lambda p: (load(p).get("priority", 50), p.stat().st_mtime))
     for path in jobs:
@@ -137,10 +141,14 @@ def startable(d: dict[str, Path], memory: dict[int, int]) -> list[Path]:
             continue
         if gpus & (busy | claimed):
             continue
+        if job.get("resource") and job["resource"] in in_use:
+            continue
         if any(memory.get(g, 0) > FREE_MIB or not lock_free(g) for g in gpus):
             continue
         picked.append(path)
         claimed |= gpus
+        if job.get("resource"):
+            in_use.add(job["resource"])
     return picked
 
 
