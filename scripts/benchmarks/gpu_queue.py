@@ -249,6 +249,9 @@ def stop(proc: subprocess.Popen | None) -> None:
 
 def run(path: Path) -> int:
     """Wrapper: hold the GPU locks, start the server, run cmd under the deadline, file the result."""
+    # A SIGTERM to the wrapper must still stop the server and the command (the finally block below);
+    # without this, killing a wrapper left its model server holding the GPUs.
+    signal.signal(signal.SIGTERM, lambda *_: (_ for _ in ()).throw(SystemExit(143)))
     d = dirs(path.parent.parent)
     job = load(path)
     handles = []
@@ -282,6 +285,9 @@ def run(path: Path) -> int:
         except subprocess.TimeoutExpired:
             stop(proc)
             code, reason = 124, "max_hours reached"
+        except SystemExit:
+            stop(proc)
+            code, reason = 143, "wrapper terminated"
         return code
     finally:
         stop(server)

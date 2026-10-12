@@ -105,3 +105,19 @@ def test_one_running_job_per_shared_resource(q):
     assert wait_for(lambda: (q / "done/r1.json").exists())
     gq.tick(q)
     assert wait_for(lambda: (q / "done/r2.json").exists())
+
+
+def test_terminating_the_wrapper_stops_its_server(q, tmp_path):
+    import os, signal as sig
+    srv = "python3 -m http.server 18766 --bind 127.0.0.1"
+    gq.submit(q, job("t", [5], "sleep 60", server=srv, server_url="http://127.0.0.1:18766/", max_hours=0.05))
+    gq.tick(q)
+    assert wait_for(lambda: json.loads((q / "running/t.json").read_text()).get("wrapper_pid") and gq.wait_ready(
+        "http://127.0.0.1:18766/", time.time() + 1, type("P", (), {"poll": lambda self: None})()), timeout=30)
+    os.kill(json.loads((q / "running/t.json").read_text())["wrapper_pid"], sig.SIGTERM)
+    assert wait_for(lambda: (q / "failed/t.json").exists(), timeout=30)
+    assert json.loads((q / "failed/t.json").read_text())["reason"] == "wrapper terminated"
+    from urllib.request import urlopen
+    time.sleep(1)
+    with pytest.raises(Exception):
+        urlopen("http://127.0.0.1:18766/", timeout=2)
