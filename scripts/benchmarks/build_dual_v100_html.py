@@ -1639,6 +1639,69 @@ onderling en de mix met het losse aggregatormodel.</div>
 """
 
 
+MOM_WHOLE_REPORT = "mom_as_whole_20261012.json"
+MOM_WHOLE_SETS = (("gsm8k", "GSM8K"), ("tqa_mc1", "TruthfulQA MC1"), ("mmlu_pro", "MMLU-Pro (1000-steekproef)"),
+                  ("ifeval", "IFEval"))
+
+
+def pct1(value: float | None) -> str:
+    """Percentage with one decimal: members of one set differ by less than a whole point."""
+    return "<td class='num'>—</td>" if value is None else f"<td class='num'>{100 * value:.1f}%</td>"
+
+
+def mom_as_whole_section() -> str:
+    """All MoM members on the same public items, combined offline (oracle and Haiku escalation)."""
+    data = load(MOM_WHOLE_REPORT)
+    sets = data.get("sets") or {}
+    if not sets:
+        return ""
+    blocks = []
+    for key, label in MOM_WHOLE_SETS:
+        s = sets.get(key) or {}
+        if not s.get("members"):
+            continue
+        rows = []
+        for m in s["members"]:
+            think = {True: "aan", False: "uit"}.get(m.get("thinking"), m.get("variant") or "—")
+            rows.append("<tr><td>" + html.escape(m["model"]) + "</td><td>" + html.escape(think) + "</td>"
+                        + pct1(m.get("score")) + "<td>—</td><td>—</td><td>lid</td></tr>")
+        rows.append("<tr><td><strong>Orakel van alle leden</strong></td><td>—</td>"
+                    + pct1(s.get("oracle_all_members")) + "<td>—</td><td>—</td><td>bovengrens</td></tr>")
+        for sel in s.get("selectors") or []:
+            v = sel.get("vs_haiku") or {}
+            kind = ("vooraf vastgelegd · " + ("geslaagd" if sel.get("passed") else "niet geslaagd")) \
+                if sel.get("preregistered") else "verkennend"
+            rows.append("<tr><td><strong>" + html.escape(" + ".join(sel["members"])) + " eens, anders Haiku</strong></td>"
+                        + "<td>—</td>" + pct1(sel.get("score"))
+                        + pct1(sel.get("haiku_share"))
+                        + f"<td>{v.get('better', 0)} beter / {v.get('worse', 0)} slechter · p={v.get('p_exact', 1):.2g}</td>"
+                        + "<td>" + html.escape(kind) + "</td></tr>")
+        skipped = s.get("skipped") or []
+        note = ("<p class='muted'>Niet meegeteld: " + html.escape("; ".join(skipped)) + "</p>") if skipped else ""
+        blocks.append(f"<h3>{html.escape(label)} · test-helft n={s.get('n_test')}</h3>"
+                      "<div class='tablewrap'><table class='sortable'><thead><tr>"
+                      + sortable_header("Systeem") + sortable_header("Thinking") + sortable_header("Score")
+                      + sortable_header("Aandeel naar Haiku") + sortable_header("Tegen Haiku (gepaard)")
+                      + sortable_header("Soort") + "</tr></thead><tbody>" + "".join(rows)
+                      + "</tbody></table></div>" + note)
+    if not blocks:
+        return ""
+    return ("<h2 id='mom-als-geheel'>Mixture of models als geheel · alle leden op dezelfde vragen "
+            "<small>(verouderd · afgesloten 12-10-2026)</small></h2>"
+            "<p class='warn'><strong>Verouderd en afgesloten.</strong> GSM8K, TruthfulQA, MMLU-Pro en IFEval "
+            "staan al jaren publiek online en kunnen in de trainingsdata van alle modellen zitten "
+            "(contaminatierisico). Deze tabel krijgt geen nieuwe rijen meer; nieuwe vergelijkingen lopen via "
+            "private specialisten-packs en verse, na de modelgewichten gemaakte items.</p>"
+            "<p>Elk lid beantwoordde dezelfde publieke vragen met dezelfde prompts; per set telt de vaste "
+            "test-helft (seed 20261012). Het orakel kiest per vraag het juiste lid en is dus een bovengrens. "
+            "De selector neemt het lokale antwoord als de genoemde leden het eens zijn en vraagt anders "
+            "Claude Haiku 5.5; het aandeel naar Haiku is het deel van de vragen dat de cloud nog nodig heeft. "
+            "Alleen de vooraf vastgelegde selector (KAT + Gemma4) is een toets; de andere paren zijn op "
+            "dezelfde test-helft gekozen en verkennend. Ontwikkelmeting op publieke sets, geen promotiebewijs. "
+            "Bron: <code>reports/" + MOM_WHOLE_REPORT + "</code>, gemaakt met "
+            "<code>scripts/benchmarks/mom_as_whole.py</code>.</p>" + "".join(blocks))
+
+
 def benchmark_section(rows: list[dict]) -> str:
     if not rows:
         return ""
@@ -1871,6 +1934,7 @@ tabel erboven bevat de bijbehorende prompt-snelheid, VRAM en GPU-utilisatie.</p>
 {qwen38_v151_batch_section()}
 {qwen38_day_batch_section()}
 {live_mixture_section()}
+{mom_as_whole_section()}
 {contamination_section()}
 {matrix_gate_section()}
 {hardware_scaling_section()}

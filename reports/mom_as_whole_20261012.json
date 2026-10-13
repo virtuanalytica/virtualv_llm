@@ -1,0 +1,511 @@
+{
+ "schema": "mom-as-whole/v1",
+ "created_utc": "2026-10-13T06:36:01+00:00",
+ "split": "fixed test half per set, seed 20261012",
+ "access": "public sets; development measurement",
+ "selector_note": "agree -> local answer of the first member, else Haiku 5.5; the pre-registered pair is fixed, best-k pairs are ranked on the same test half (exploratory)",
+ "sets": {
+  "gsm8k": {
+   "n_test": 660,
+   "haiku_score": 0.953,
+   "members": [
+    {
+     "name": "kat_off",
+     "model": "KAT-Coder-V2.5-Dev Q4_K_M",
+     "thinking": false,
+     "variant": "off",
+     "score": 0.9576,
+     "mean_tokens": 272.0
+    },
+    {
+     "name": "kat_on",
+     "model": "KAT-Coder-V2.5-Dev Q4_K_M",
+     "thinking": true,
+     "variant": "on",
+     "score": 0.9576,
+     "mean_tokens": 290.0
+    },
+    {
+     "name": "qwen38_off",
+     "model": "Qwen3.8 Flash-Next AP IQ2_S",
+     "thinking": false,
+     "variant": "off",
+     "score": 0.9576,
+     "mean_tokens": 342.2
+    },
+    {
+     "name": "gemma4_off",
+     "model": "Gemma4-26B-A4B Q4_K_M",
+     "thinking": false,
+     "variant": "off",
+     "score": 0.9561,
+     "mean_tokens": 281.1
+    },
+    {
+     "name": "haiku",
+     "model": "Claude Haiku 5.5 (cloud)",
+     "thinking": null,
+     "variant": "",
+     "score": 0.953,
+     "mean_tokens": 0.0
+    },
+    {
+     "name": "q36_off",
+     "model": "Qwen3.6-35B-A3B NVFP4 (mom-live)",
+     "thinking": false,
+     "variant": "off",
+     "score": 0.9485,
+     "mean_tokens": 332.7
+    },
+    {
+     "name": "q36_on",
+     "model": "Qwen3.6-35B-A3B NVFP4 (mom-live)",
+     "thinking": true,
+     "variant": "on",
+     "score": 0.9424,
+     "mean_tokens": 1459.2
+    },
+    {
+     "name": "nemotron_off",
+     "model": "Nemotron-3.5-Lightning-30B-A3B",
+     "thinking": false,
+     "variant": "off",
+     "score": 0.9318,
+     "mean_tokens": 159.3
+    },
+    {
+     "name": "q36_router",
+     "model": "Qwen3.6-35B-A3B NVFP4 (mom-live)",
+     "thinking": null,
+     "variant": "router",
+     "score": 0.9318,
+     "mean_tokens": 1421.4
+    },
+    {
+     "name": "nemotron_on",
+     "model": "Nemotron-3.5-Lightning-30B-A3B",
+     "thinking": true,
+     "variant": "on",
+     "score": 0.9303,
+     "mean_tokens": 875.2
+    }
+   ],
+   "oracle_all_members": 0.9848,
+   "selectors": [
+    {
+     "members": [
+      "kat_off",
+      "gemma4_off"
+     ],
+     "preregistered": true,
+     "score": 0.9621,
+     "haiku_share": 0.0394,
+     "vs_haiku": {
+      "better": 8,
+      "worse": 2,
+      "p_exact": 0.109
+     },
+     "rule": "pass if score >= Haiku - 0.01 and Haiku share <= 0.25",
+     "passed": true
+    },
+    {
+     "members": [
+      "kat_off",
+      "qwen38_off"
+     ],
+     "preregistered": false,
+     "score": 0.9621,
+     "haiku_share": 0.0439,
+     "vs_haiku": {
+      "better": 8,
+      "worse": 2,
+      "p_exact": 0.109
+     }
+    },
+    {
+     "members": [
+      "kat_off",
+      "qwen38_off",
+      "gemma4_off"
+     ],
+     "preregistered": false,
+     "score": 0.9621,
+     "haiku_share": 0.0561,
+     "vs_haiku": {
+      "better": 7,
+      "worse": 1,
+      "p_exact": 0.0703
+     }
+    }
+   ],
+   "skipped": []
+  },
+  "tqa_mc1": {
+   "n_test": 409,
+   "haiku_score": 0.7971,
+   "members": [
+    {
+     "name": "qwen38_off",
+     "model": "Qwen3.8 Flash-Next AP IQ2_S",
+     "thinking": false,
+     "variant": "off",
+     "score": 0.868,
+     "mean_tokens": 2.0
+    },
+    {
+     "name": "nemotron_on",
+     "model": "Nemotron-3.5-Lightning-30B-A3B",
+     "thinking": true,
+     "variant": "on",
+     "score": 0.8264,
+     "mean_tokens": 934.0
+    },
+    {
+     "name": "q36_on",
+     "model": "Qwen3.6-35B-A3B NVFP4 (mom-live)",
+     "thinking": true,
+     "variant": "on",
+     "score": 0.8166,
+     "mean_tokens": null
+    },
+    {
+     "name": "haiku",
+     "model": "Claude Haiku 5.5 (cloud)",
+     "thinking": null,
+     "variant": "",
+     "score": 0.7971,
+     "mean_tokens": null
+    },
+    {
+     "name": "kat_on",
+     "model": "KAT-Coder-V2.5-Dev Q4_K_M",
+     "thinking": true,
+     "variant": "on",
+     "score": 0.7922,
+     "mean_tokens": 180.2
+    },
+    {
+     "name": "kat_off",
+     "model": "KAT-Coder-V2.5-Dev Q4_K_M",
+     "thinking": false,
+     "variant": "off",
+     "score": 0.7897,
+     "mean_tokens": 2.2
+    },
+    {
+     "name": "gemma4_off",
+     "model": "Gemma4-26B-A4B Q4_K_M",
+     "thinking": false,
+     "variant": "off",
+     "score": 0.7775,
+     "mean_tokens": 2.3
+    },
+    {
+     "name": "q36_off",
+     "model": "Qwen3.6-35B-A3B NVFP4 (mom-live)",
+     "thinking": false,
+     "variant": "off",
+     "score": 0.7702,
+     "mean_tokens": null
+    },
+    {
+     "name": "gemma4_on",
+     "model": "Gemma4-26B-A4B Q4_K_M",
+     "thinking": true,
+     "variant": "on",
+     "score": 0.7262,
+     "mean_tokens": 1802.0
+    }
+   ],
+   "oracle_all_members": 0.9584,
+   "selectors": [
+    {
+     "members": [
+      "kat_off",
+      "gemma4_off"
+     ],
+     "preregistered": true,
+     "score": 0.8411,
+     "haiku_share": 0.2005,
+     "vs_haiku": {
+      "better": 33,
+      "worse": 15,
+      "p_exact": 0.0133
+     },
+     "rule": "pass if score >= Haiku - 0.01 and Haiku share <= 0.25",
+     "passed": true
+    },
+    {
+     "members": [
+      "qwen38_off",
+      "nemotron_on"
+     ],
+     "preregistered": false,
+     "score": 0.8802,
+     "haiku_share": 0.1687,
+     "vs_haiku": {
+      "better": 42,
+      "worse": 8,
+      "p_exact": 1.16e-06
+     }
+    },
+    {
+     "members": [
+      "qwen38_off",
+      "nemotron_on",
+      "q36_on"
+     ],
+     "preregistered": false,
+     "score": 0.8729,
+     "haiku_share": 0.2152,
+     "vs_haiku": {
+      "better": 38,
+      "worse": 7,
+      "p_exact": 3.12e-06
+     }
+    }
+   ],
+   "skipped": []
+  },
+  "mmlu_pro": {
+   "n_test": 500,
+   "haiku_score": 0.842,
+   "members": [
+    {
+     "name": "haiku",
+     "model": "Claude Haiku 5.5 (cloud)",
+     "thinking": null,
+     "variant": "",
+     "score": 0.842,
+     "mean_tokens": 0.0
+    },
+    {
+     "name": "gemma4_off",
+     "model": "Gemma4-26B-A4B Q4_K_M",
+     "thinking": false,
+     "variant": "off",
+     "score": 0.804,
+     "mean_tokens": 600.4
+    },
+    {
+     "name": "kat_off",
+     "model": "KAT-Coder-V2.5-Dev Q4_K_M",
+     "thinking": false,
+     "variant": "off",
+     "score": 0.788,
+     "mean_tokens": 729.1
+    },
+    {
+     "name": "qwen38_off",
+     "model": "Qwen3.8 Flash-Next AP IQ2_S",
+     "thinking": false,
+     "variant": "off",
+     "score": 0.766,
+     "mean_tokens": 931.4
+    },
+    {
+     "name": "kat_on",
+     "model": "KAT-Coder-V2.5-Dev Q4_K_M",
+     "thinking": true,
+     "variant": "on",
+     "score": 0.732,
+     "mean_tokens": 1052.8
+    },
+    {
+     "name": "q36_off",
+     "model": "Qwen3.6-35B-A3B NVFP4 (mom-live)",
+     "thinking": false,
+     "variant": "off",
+     "score": 0.73,
+     "mean_tokens": 951.9
+    },
+    {
+     "name": "nemotron_off",
+     "model": "Nemotron-3.5-Lightning-30B-A3B",
+     "thinking": false,
+     "variant": "off",
+     "score": 0.694,
+     "mean_tokens": 312.8
+    },
+    {
+     "name": "nemotron_on",
+     "model": "Nemotron-3.5-Lightning-30B-A3B",
+     "thinking": true,
+     "variant": "on",
+     "score": 0.662,
+     "mean_tokens": 2296.8
+    },
+    {
+     "name": "q36_router",
+     "model": "Qwen3.6-35B-A3B NVFP4 (mom-live)",
+     "thinking": null,
+     "variant": "router",
+     "score": 0.662,
+     "mean_tokens": 2082.2
+    },
+    {
+     "name": "q36_on",
+     "model": "Qwen3.6-35B-A3B NVFP4 (mom-live)",
+     "thinking": true,
+     "variant": "on",
+     "score": 0.622,
+     "mean_tokens": 3225.1
+    },
+    {
+     "name": "gemma4_on",
+     "model": "Gemma4-26B-A4B Q4_K_M",
+     "thinking": true,
+     "variant": "on",
+     "score": 0.308,
+     "mean_tokens": 4954.9
+    }
+   ],
+   "oracle_all_members": 0.936,
+   "selectors": [
+    {
+     "members": [
+      "kat_off",
+      "gemma4_off"
+     ],
+     "preregistered": true,
+     "score": 0.844,
+     "haiku_share": 0.194,
+     "vs_haiku": {
+      "better": 14,
+      "worse": 13,
+      "p_exact": 1.0
+     },
+     "rule": "pass if score >= Haiku - 0.01 and Haiku share <= 0.25",
+     "passed": true
+    },
+    {
+     "members": [
+      "gemma4_off",
+      "kat_off"
+     ],
+     "preregistered": false,
+     "score": 0.848,
+     "haiku_share": 0.194,
+     "vs_haiku": {
+      "better": 14,
+      "worse": 11,
+      "p_exact": 0.69
+     }
+    },
+    {
+     "members": [
+      "gemma4_off",
+      "kat_off",
+      "qwen38_off"
+     ],
+     "preregistered": false,
+     "score": 0.854,
+     "haiku_share": 0.254,
+     "vs_haiku": {
+      "better": 11,
+      "worse": 5,
+      "p_exact": 0.21
+     }
+    }
+   ],
+   "skipped": []
+  },
+  "ifeval": {
+   "n_test": 271,
+   "haiku_score": 0.8081,
+   "members": [
+    {
+     "name": "gemma4_off",
+     "model": "Gemma4-26B-A4B Q4_K_M",
+     "thinking": false,
+     "variant": "off",
+     "score": 0.8745,
+     "mean_tokens": 301.8
+    },
+    {
+     "name": "q36_off",
+     "model": "Qwen3.6-35B-A3B NVFP4 (mom-live)",
+     "thinking": false,
+     "variant": "off",
+     "score": 0.8561,
+     "mean_tokens": 307.3
+    },
+    {
+     "name": "q36_router",
+     "model": "Qwen3.6-35B-A3B NVFP4 (mom-live)",
+     "thinking": null,
+     "variant": "router",
+     "score": 0.8413,
+     "mean_tokens": 499.7
+    },
+    {
+     "name": "kat_off",
+     "model": "KAT-Coder-V2.5-Dev Q4_K_M",
+     "thinking": false,
+     "variant": "off",
+     "score": 0.8376,
+     "mean_tokens": 334.4
+    },
+    {
+     "name": "q36_on",
+     "model": "Qwen3.6-35B-A3B NVFP4 (mom-live)",
+     "thinking": true,
+     "variant": "on",
+     "score": 0.8376,
+     "mean_tokens": 2721.8
+    },
+    {
+     "name": "qwen38_off",
+     "model": "Qwen3.8 Flash-Next AP IQ2_S",
+     "thinking": false,
+     "variant": "off",
+     "score": 0.8376,
+     "mean_tokens": 318.8
+    },
+    {
+     "name": "haiku",
+     "model": "Claude Haiku 5.5 (cloud)",
+     "thinking": null,
+     "variant": "",
+     "score": 0.8081,
+     "mean_tokens": 0.0
+    },
+    {
+     "name": "nemotron_on",
+     "model": "Nemotron-3.5-Lightning-30B-A3B",
+     "thinking": true,
+     "variant": "on",
+     "score": 0.8044,
+     "mean_tokens": 2622.3
+    },
+    {
+     "name": "nemotron_off",
+     "model": "Nemotron-3.5-Lightning-30B-A3B",
+     "thinking": false,
+     "variant": "off",
+     "score": 0.7675,
+     "mean_tokens": 357.6
+    },
+    {
+     "name": "kat_on",
+     "model": "KAT-Coder-V2.5-Dev Q4_K_M",
+     "thinking": true,
+     "variant": "on",
+     "score": 0.7601,
+     "mean_tokens": 813.8
+    },
+    {
+     "name": "gemma4_on",
+     "model": "Gemma4-26B-A4B Q4_K_M",
+     "thinking": true,
+     "variant": "on",
+     "score": 0.6642,
+     "mean_tokens": 3192.7
+    }
+   ],
+   "oracle_all_members": 0.9815,
+   "selectors": [],
+   "skipped": []
+  }
+ }
+}
