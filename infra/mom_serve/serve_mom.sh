@@ -30,6 +30,9 @@ V100_LOCK=/tmp/v100_exclusive.lock
 ROUTER_PORT=${MOM_ROUTER_PORT:-8031}
 ROUTER_PIDFILE=${MOM_ROUTER_PIDFILE:-$HOME/.cache/mom-router.pid}
 ROUTER_LOG=${MOM_ROUTER_LOG:-$HOME/.cache/mom-router.log}
+# Reviewed project-knowledge bundle (private, outside git). Measured on the knowledge holdout v1.2:
+# 0.361 -> 0.465 with retrieval, no extra latency. MOM_KNOWLEDGE_BUNDLE= (empty) turns it off.
+KNOWLEDGE_BUNDLE=${MOM_KNOWLEDGE_BUNDLE-/media/knight2/EDS2/projects/virtualv_llm/data/eval_cache/knowledge_holdout/v1.2/bundle.json}
 REPO_ROOT=$(cd "$(dirname "$0")/../.." && pwd)
 
 # vLLM answers /health with an empty 200, llama.cpp with {"status":"ok"}: check the status code only
@@ -41,9 +44,10 @@ start_router() {
   [ "${MOM_ROUTER:-1}" = "0" ] && return 0
   router_up && { echo "mom-router already answers on :$ROUTER_PORT"; return 0; }
   nohup python3 "$REPO_ROOT/scripts/benchmarks/mixture_proxy.py" --port "$ROUTER_PORT" --name mom-router \
-    --aggregator "mom=http://127.0.0.1:$PORT/v1#$ALIAS" --thinking-router > "$ROUTER_LOG" 2>&1 &
+    --aggregator "mom=http://127.0.0.1:$PORT/v1#$ALIAS" --thinking-router \
+    $([ -n "$KNOWLEDGE_BUNDLE" ] && [ -r "$KNOWLEDGE_BUNDLE" ] && echo --knowledge-bundle "$KNOWLEDGE_BUNDLE") > "$ROUTER_LOG" 2>&1 &
   echo $! > "$ROUTER_PIDFILE"
-  for _ in $(seq 1 20); do router_up && { echo "mom-router up on :$ROUTER_PORT (thinking for calculation, code)"; return 0; }; sleep 0.5; done
+  for _ in $(seq 1 20); do router_up && { echo "mom-router up on :$ROUTER_PORT (thinking for calculation, code; knowledge bundle: ${KNOWLEDGE_BUNDLE:-off})"; return 0; }; sleep 0.5; done
   echo "mom-router did not start; see $ROUTER_LOG" >&2; return 1
 }
 

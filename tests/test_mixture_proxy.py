@@ -272,3 +272,44 @@ def test_thinking_router_turns_thinking_off_when_the_prompt_cannot_be_counted():
     assert headers["X-MoM-Thinking"] == "code:on:no-room-off" and seen[2]["chat_template_kwargs"] == {"enable_thinking": False}
     for s in servers:
         s.shutdown()
+
+
+def test_knowledge_bundle_adds_retrieved_records_to_the_system_message():
+    import knowledge_layer as kl
+    bundle = kl.build([{"id": "K1", "kind": "fact", "text": "The mom-live router listens on port 8031 for omp.",
+                        "source": "infra/mom_serve/serve_mom.sh", "publish_allowed": False}],
+                      bundle_id="t", scope="private")
+    seen = []
+    url, servers = _router(["4", "8031"], seen, knowledge_bundle=bundle, thinking_router=False)
+    headers, _ = _post(url, {"messages": [{"role": "system", "content": "You are helpful."},
+                                          {"role": "user", "content": "Which port does the mom-live router listen on?"}]})
+    assert headers["X-MoM-Knowledge"] == "K1"
+    system = seen[-1]["messages"][0]
+    assert system["role"] == "system" and system["content"].startswith("You are helpful.") and "[K1]" in system["content"]
+    assert sum(1 for m in seen[-1]["messages"] if m["role"] == "system") == 1
+    for s in servers:
+        s.shutdown()
+
+
+def test_knowledge_bundle_reports_none_and_leaves_the_request_alone_without_a_match():
+    import knowledge_layer as kl
+    bundle = kl.build([{"id": "K1", "kind": "fact", "text": "The mom-live router listens on port 8031.",
+                        "source": "x", "publish_allowed": False}], bundle_id="t", scope="private")
+    seen = []
+    url, servers = _router(["ok"], seen, knowledge_bundle=bundle, thinking_router=False)
+    headers, _ = _post(url, {"messages": [{"role": "user", "content": "hello there"}]})
+    assert headers["X-MoM-Knowledge"] == "none" and seen[-1]["messages"] == [{"role": "user", "content": "hello there"}]
+    for s in servers:
+        s.shutdown()
+
+
+def test_task_scoped_records_are_found_without_a_task_label():
+    import knowledge_layer as kl
+    bundle = kl.build([{"id": "K2", "kind": "fact", "text": "The gpu queue ticks every two minutes from cron.",
+                        "source": "x", "publish_allowed": False, "tasks": ["project_facts"]}], bundle_id="t", scope="private")
+    seen = []
+    url, servers = _router(["ok"], seen, knowledge_bundle=bundle, thinking_router=False)
+    headers, _ = _post(url, {"messages": [{"role": "user", "content": "How often does the gpu queue tick from cron?"}]})
+    assert headers["X-MoM-Knowledge"] == "K2"
+    for s in servers:
+        s.shutdown()
