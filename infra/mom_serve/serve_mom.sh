@@ -53,7 +53,8 @@ start_router() {
 # (2026-10-06 record harness), 8-task battery 0.854 in both layouts. MOM_TP=1 keeps the old one-V100 layout.
 start_qwen36() {
   exec 9>"$V100_LOCK"
-  flock -n 9 || { echo "V100 capacity is reserved by another job (lock $V100_LOCK)" >&2; exit 75; }
+  # wait up to 2 minutes: workers of a just-stopped server can keep the lock for a while
+  flock -w 120 9 || { echo "V100 capacity is reserved by another job (lock $V100_LOCK)" >&2; exit 75; }
   # Select the V100s by name, not by a fixed index: indices shift when PCIe devices (dis)appear at
   # boot, and on 2026-10-12 a cold boot came up with one V100 missing. nvidia-smi indices follow PCI
   # bus order, the same order CUDA uses with CUDA_DEVICE_ORDER=PCI_BUS_ID (1Cat vLLM rejects UUIDs).
