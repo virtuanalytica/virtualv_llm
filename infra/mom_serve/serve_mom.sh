@@ -27,6 +27,9 @@ VLLM_ENV=/media/knight2/EDS2/envs/1cat-vllm-1.5.0
 VLLM_MODEL=${MOM_VLLM_MODEL:-/media/knight2/EDS2/models/1cat-vllm/Qwen3.6-35B-A3B-NVFP4}
 [ -f "$VLLM_MODEL/config.json" ] || VLLM_MODEL=/media/knight2/EDS2/models/qwen36-35b-a3b-nvfp4
 V100_LOCK=/tmp/v100_exclusive.lock
+# Context window of mom-live. The KV cache holds ~1.8M tokens on two V100s (fp8, TP2) and the model
+# supports 262k, so agent harnesses with long system prompts can raise this (e.g. 131072).
+MAX_MODEL_LEN=${MOM_MAX_MODEL_LEN:-32768}
 ROUTER_PORT=${MOM_ROUTER_PORT:-8031}
 ROUTER_PIDFILE=${MOM_ROUTER_PIDFILE:-$HOME/.cache/mom-router.pid}
 ROUTER_LOG=${MOM_ROUTER_LOG:-$HOME/.cache/mom-router.log}
@@ -75,7 +78,7 @@ start_qwen36() {
   mkdir -p "$HF_HOME" "$XDG_CACHE_HOME" "$VLLM_CACHE_ROOT" "$TMPDIR"
   exec numactl --interleave=all "$VLLM_ENV/bin/vllm" serve "$VLLM_MODEL" \
     --served-model-name "$ALIAS" --trust-remote-code --dtype half --tensor-parallel-size "$tp" \
-    --attention-backend FLASH_ATTN_V100 --kv-cache-dtype fp8_e5m2 --max-model-len 32768 \
+    --attention-backend FLASH_ATTN_V100 --kv-cache-dtype fp8_e5m2 --max-model-len "$MAX_MODEL_LEN" \
     --gpu-memory-utilization 0.80 --max-num-batched-tokens 4096 --max-num-seqs "$([ "$tp" = 2 ] && echo 4 || echo 2)" \
     --enable-prefix-caching --mamba-cache-mode align --reasoning-parser qwen3 \
     --default-chat-template-kwargs '{"enable_thinking":false}' --generation-config vllm \
