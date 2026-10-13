@@ -301,3 +301,15 @@ def test_knowledge_bundle_reports_none_and_leaves_the_request_alone_without_a_ma
     assert headers["X-MoM-Knowledge"] == "none" and seen[-1]["messages"] == [{"role": "user", "content": "hello there"}]
     for s in servers:
         s.shutdown()
+
+
+def test_task_scoped_records_are_found_without_a_task_label():
+    import knowledge_layer as kl
+    bundle = kl.build([{"id": "K2", "kind": "fact", "text": "The gpu queue ticks every two minutes from cron.",
+                        "source": "x", "publish_allowed": False, "tasks": ["project_facts"]}], bundle_id="t", scope="private")
+    seen = []
+    url, servers = _router(["ok"], seen, knowledge_bundle=bundle, thinking_router=False)
+    headers, _ = _post(url, {"messages": [{"role": "user", "content": "How often does the gpu queue tick from cron?"}]})
+    assert headers["X-MoM-Knowledge"] == "K2"
+    for s in servers:
+        s.shutdown()
